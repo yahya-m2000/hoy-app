@@ -1,0 +1,96 @@
+{
+  "common": {
+    "appName": "Hoy",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "submit": "Submit"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "continueWith": "Continue with {{provider}}",
+    "alreadyHaveAccount": "Already have an account? Sign in",
+    "dontHaveAccount": "Don't have an account? Sign up"
+  },
+  "navigation": {
+    "home": "Home",
+    "search": "Search",
+    "bookings": "Bookings",
+    "inbox": "Inbox",
+    "account": "Account"
+  },
+  "home": {
+    "welcome": "Welcome to Hoy",
+    "exploreTitle": "Explore rentals",
+    "featuredTitle": "Featured properties",
+    "recommendedTitle": "Recommended for you"
+  },
+  "search": {
+    "title": "Find your perfect stay",
+    "location": "Location",
+    "dates": "Dates",
+    "guests": "Guests",
+    "filters": "Filters",
+    "apply": "Apply",
+    "clear": "Clear",
+    "noResults": "No results found",
+    "tryDifferent": "Try different search criteria"
+  },
+  "property": {
+    "book": "Book now",
+    "perNight": "per night",
+    "aboutTitle": "About this place",
+    "amenitiesTitle": "Amenities",
+    "locationTitle": "Location",
+    "reviewsTitle": "Reviews",
+    "hostTitle": "Hosted by",
+    "viewAll": "View all",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "availability": "Availability"
+  },
+  "booking": {
+    "title": "Your bookings",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "cancelled": "Cancelled",
+    "noBookings": "No bookings found",
+    "checkIn": "Check-in",
+    "checkOut": "Check-out",
+    "guests": "Guests",
+    "total": "Total",
+    "status": "Status",
+    "viewDetails": "View details",
+    "cancelBooking": "Cancel booking"
+  },
+  "inbox": {
+    "title": "Messages",
+    "noMessages": "No messages",
+    "newMessage": "New message",
+    "search": "Search messages",
+    "yourHosts": "Your Hosts"
+  },
+  "account": {
+    "title": "Account",
+    "profile": "Profile",
+    "payments": "Payments",
+    "notifications": "Notifications",
+    "language": "Language",
+    "theme": "Theme",
+    "help": "Help & Support",
+    "legal": "Legal",
+    "logout": "Log out",
+    "personalInfo": "Personal information",
+    "hostSettings": "Host settings"
+  }
+}

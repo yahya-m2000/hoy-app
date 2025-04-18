@@ -1,0 +1,96 @@
+{
+  "common": {
+    "appName": "هوي",
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ ما",
+    "retry": "إعادة المحاولة",
+    "close": "إغلاق",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "submit": "إرسال"
+  },
+  "auth": {
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "signOut": "تسجيل الخروج",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "continueWith": "المتابعة باستخدام {{provider}}",
+    "alreadyHaveAccount": "لديك حساب بالفعل؟ تسجيل الدخول",
+    "dontHaveAccount": "ليس لديك حساب؟ إنشاء حساب"
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "search": "البحث",
+    "bookings": "الحجوزات",
+    "inbox": "الرسائل",
+    "account": "الحساب"
+  },
+  "home": {
+    "welcome": "مرحبًا بك في هوي",
+    "exploreTitle": "استكشف الإيجارات",
+    "featuredTitle": "العقارات المميزة",
+    "recommendedTitle": "موصى به لك"
+  },
+  "search": {
+    "title": "ابحث عن إقامتك المثالية",
+    "location": "الموقع",
+    "dates": "التواريخ",
+    "guests": "الضيوف",
+    "filters": "المرشحات",
+    "apply": "تطبيق",
+    "clear": "مسح",
+    "noResults": "لم يتم العثور على نتائج",
+    "tryDifferent": "جرب معايير بحث مختلفة"
+  },
+  "property": {
+    "book": "احجز الآن",
+    "perNight": "لليلة الواحدة",
+    "aboutTitle": "عن هذا المكان",
+    "amenitiesTitle": "المرافق",
+    "locationTitle": "الموقع",
+    "reviewsTitle": "التقييمات",
+    "hostTitle": "يستضيفه",
+    "viewAll": "عرض الكل",
+    "showMore": "عرض المزيد",
+    "showLess": "عرض أقل",
+    "availability": "التوفر"
+  },
+  "booking": {
+    "title": "حجوزاتك",
+    "upcoming": "القادمة",
+    "past": "السابقة",
+    "cancelled": "الملغاة",
+    "noBookings": "لم يتم العثور على حجوزات",
+    "checkIn": "تسجيل الوصول",
+    "checkOut": "تسجيل المغادرة",
+    "guests": "الضيوف",
+    "total": "المجموع",
+    "status": "الحالة",
+    "viewDetails": "عرض التفاصيل",
+    "cancelBooking": "إلغاء الحجز"
+  },
+  "inbox": {
+    "title": "الرسائل",
+    "noMessages": "لا توجد رسائل",
+    "newMessage": "رسالة جديدة",
+    "search": "البحث في الرسائل",
+    "yourHosts": "المضيفون الخاصون بك"
+  },
+  "account": {
+    "title": "الحساب",
+    "profile": "الملف الشخصي",
+    "payments": "المدفوعات",
+    "notifications": "الإشعارات",
+    "language": "اللغة",
+    "theme": "المظهر",
+    "help": "المساعدة والدعم",
+    "legal": "القانونية",
+    "logout": "تسجيل الخروج",
+    "personalInfo": "المعلومات الشخصية",
+    "hostSettings": "إعدادات المضيف"
+  }
+}
