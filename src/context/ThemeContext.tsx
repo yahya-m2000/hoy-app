@@ -3,13 +3,7 @@
  * Provides theme access and toggling capabilities throughout the app
  */
 
-import {
-  createContext,
-  useState,
-  useContext,
-  ReactNode,
-  useEffect,
-} from "react";
+import { createContext, useState, useContext, ReactNode } from "react";
 import { useColorScheme } from "react-native";
 import { theme } from "../constants/colors";
 

@@ -25,6 +25,19 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "apiUrl": "https://d339-109-147-151-140.ngrok-free.app/api/v1/",
+      "mapboxApiKey": "sk.eyJ1IjoieW0yMDAwIiwiYSI6ImNtOXg2ZDMzajB4ZmQyaXM2cWNnamEzOHUifQ.PxAYNN4I-PHTU3MDjxZRYA",      "cacheVersion": "1.1.0",
+      "cacheTTL": 5000,
+      "sessionTTL": 43200000,
+      "enableDataIntegrityChecks": true,
+      "disableSearchResultsCache": true,
+      "forceFetchOnSearchResults": true,
+      "bypassSearchLoadingDelay": true
+    },
+    "plugins": [
+      "expo-secure-store"
+    ]
   }
 }

@@ -5,7 +5,7 @@
 
 // Import typography and spacing constants
 import { fontSize, fontWeight } from "./typography";
-import spacing from "./spacing";
+import { spacing } from "./spacing";
 
 // Primary brand colors
 export const primary = {

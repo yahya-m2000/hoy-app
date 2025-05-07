@@ -3,15 +3,17 @@
  */
 
 export interface PropertyType {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   images: string[];
   price: number;
   currency?: string;
-  location: string;
+  location: string | any; // Can be a string or an object
+  locationString?: string; // Added locationString property
   city?: string;
   country?: string;
+  address?: string;
   rating: number;
   reviewCount: number;
   isSuperHost?: boolean;

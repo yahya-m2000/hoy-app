@@ -6,9 +6,9 @@
 import React from "react";
 import { View, Text, StyleSheet, ViewStyle, TextStyle } from "react-native";
 import { useTheme } from "../context/ThemeContext";
-import radius from "../constants/radius";
-import typography, { fontSize, fontWeight } from "../constants/typography";
-import spacing from "../constants/spacing";
+import { radius } from "../constants/radius";
+import { fontSize, fontWeight } from "../constants/typography";
+import { spacing } from "../constants/spacing";
 
 type BadgeVariant =
   | "primary"

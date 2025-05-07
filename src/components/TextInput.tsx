@@ -15,9 +15,9 @@ import {
   TextStyle,
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
-import spacing from "../constants/spacing";
-import radius from "../constants/radius";
-import typography, { fontSize, fontWeight } from "../constants/typography";
+import { spacing } from "../constants/spacing";
+import { radius } from "../constants/radius";
+import { fontSize, fontWeight } from "../constants/typography";
 
 interface TextInputProps extends RNTextInputProps {
   label?: string;

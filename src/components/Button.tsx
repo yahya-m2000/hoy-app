@@ -14,9 +14,9 @@ import {
   View,
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
-import spacing from "../constants/spacing";
-import radius from "../constants/radius";
-import typography, { fontSize, fontWeight } from "../constants/typography";
+import { spacing } from "../constants/spacing";
+import { radius } from "../constants/radius";
+import { fontSize, fontWeight } from "../constants/typography";
 
 type ButtonVariant = "primary" | "secondary" | "outline" | "ghost";
 type ButtonSize = "small" | "medium" | "large";

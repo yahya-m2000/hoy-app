@@ -4,15 +4,21 @@
  */
 
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ImageSourcePropType,
+} from "react-native";
 import { useTheme } from "../context/ThemeContext";
-import radius from "../constants/radius";
+import { radius } from "../constants/radius";
 
 type AvatarSize = "xs" | "sm" | "md" | "lg" | "xl";
 
 interface AvatarProps {
   size?: AvatarSize;
-  source?: string | null;
+  source?: string | ImageSourcePropType | null;
   name?: string;
   showBorder?: boolean;
   status?: "online" | "offline" | "away" | "busy" | null;
@@ -116,12 +122,11 @@ const Avatar: React.FC<AvatarProps> = ({
   const dimension = getSizeDimensions();
   const textSize = getTextSize();
   const statusSize = dimension * 0.3;
-
   return (
     <View style={{ width: dimension, height: dimension }}>
       {source ? (
         <Image
-          source={{ uri: source }}
+          source={typeof source === "string" ? { uri: source } : source}
           style={[
             styles.image,
             {

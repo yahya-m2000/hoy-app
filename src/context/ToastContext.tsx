@@ -22,9 +22,9 @@ import {
   ViewStyle,
 } from "react-native";
 import { useTheme } from "./ThemeContext";
-import spacing from "../constants/spacing";
-import radius from "../constants/radius";
-import typography, { fontSize, fontWeight } from "../constants/typography";
+import { spacing } from "../constants/spacing";
+import { radius } from "../constants/radius";
+import { fontSize, fontWeight } from "../constants/typography";
 
 type ToastType = "success" | "error" | "warning" | "info";
 
@@ -81,6 +81,7 @@ const ToastItem: React.FC<{
 
       return () => clearTimeout(timer);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleHide = () => {

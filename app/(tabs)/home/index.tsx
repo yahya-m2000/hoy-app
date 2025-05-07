@@ -4,66 +4,110 @@
  */
 
 import React from "react";
-import { View, Text, StyleSheet, FlatList, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { useTheme } from "../../../src/context/ThemeContext";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { StatusBar } from "expo-status-bar";
 import { fontSize, fontWeight } from "../../../src/constants/typography";
-import spacing from "../../../src/constants/spacing";
+import { spacing } from "../../../src/constants/spacing";
+import { radius } from "../../../src/constants/radius";
 import PropertyCard from "../../../src/components/PropertyCard";
-import SearchBar from "../../../src/components/SearchBar";
-import { mockProperties } from "../../../src/utils/mockData";
+import {
+  useFeaturedProperties,
+  useProperties,
+} from "../../../src/hooks/useProperties";
+import { PropertyType } from "../../../src/types/property";
 import LoadingSkeleton from "../../../src/components/LoadingSkeleton";
+import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { useDateSelection } from "../../../src/context/DateSelectionContext";
 
 export default function HomeScreen() {
   const { theme, isDark } = useTheme();
   const { t } = useTranslation();
-  const [isLoading, setIsLoading] = React.useState(false);
+  const {
+    properties: featured,
+    loading: loadingFeatured,
+    // error: featuredError,
+    // fetchProperties: fetchFeatured,
+  } = useFeaturedProperties();
+  const {
+    properties: topRated,
+    loading: loadingTop,
+    // error: topRatedError,
+    // fetchProperties: fetchTopRated,
+  } = useProperties({
+    sort: { field: "rating", order: "desc" }, // Sort by rating in descending order to get top-rated properties
+  });
+  const router = useRouter();
+  const { propertyDates } = useDateSelection();
 
+  // Log featured properties once loaded
   React.useEffect(() => {
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
+    if (!loadingFeatured && featured.length > 0) {
+      console.log("Featured properties loaded:", featured.length);
+      console.log(
+        "First featured property:",
+        featured[0].title,
+        featured[0].images?.length || 0,
+        "images"
+      );
+    }
+  }, [featured, loadingFeatured]);
 
-    return () => clearTimeout(timer);
-  }, []);
+  // Handle property card press - navigate to property details
+  const handlePropertyPress = (property: PropertyType) => {
+    // Get optimal dates that were pre-fetched when card was rendered
+    const savedDates = propertyDates.get(property._id)?.selectedDates;
 
-  const renderCategory = ({ item }: { item: string }) => (
-    <View
-      style={[
-        styles.categoryItem,
-        {
-          backgroundColor: isDark
-            ? theme.colors.gray[800]
-            : theme.colors.gray[100],
-          borderColor: isDark ? theme.colors.gray[700] : theme.colors.gray[200],
-        },
-      ]}
-    >
-      <Text
-        style={[
-          styles.categoryText,
-          { color: isDark ? theme.colors.gray[50] : theme.colors.gray[900] },
-        ]}
-      >
-        {item}
-      </Text>
-    </View>
-  );
+    // Navigate to property modal with property data and dates
+    router.push({
+      pathname: "/(screens)/PropertyModalScreen",
+      params: {
+        property: JSON.stringify(property),
+        startDate: savedDates?.startDate
+          ? savedDates.startDate.toISOString()
+          : undefined,
+        endDate: savedDates?.endDate
+          ? savedDates.endDate.toISOString()
+          : undefined,
+      },
+    });
+  };
 
-  const categories = [
-    t("categories.trending"),
-    t("categories.beachfront"),
-    t("categories.cabins"),
-    t("categories.design"),
-    t("categories.countryside"),
-    t("categories.mansions"),
-  ];
+  // Render a category item
+  // const renderCategory = ({ item }: { item: string }) => (
+  //   <View
+  //     style={[
+  //       styles.categoryItem,
+  //       {
+  //         backgroundColor: isDark
+  //           ? theme.colors.gray[800]
+  //           : theme.colors.gray[100],
+  //         borderColor: isDark ? theme.colors.gray[700] : theme.colors.gray[200],
+  //       },
+  //     ]}
+  //   >
+  //     <Text
+  //       style={[
+  //         styles.categoryText,
+  //         { color: isDark ? theme.colors.gray[300] : theme.colors.gray[600] },
+  //       ]}
+  //     >
+  //       {item}
+  //     </Text>
+  //   </View>
+  // );
 
   return (
-    <SafeAreaView
+    <View
       style={[
         styles.container,
         {
@@ -75,43 +119,65 @@ export default function HomeScreen() {
     >
       <StatusBar style={isDark ? "light" : "dark"} />
 
-      <View style={styles.header}>
-        <Text
-          style={[
-            styles.title,
-            { color: isDark ? theme.colors.gray[50] : theme.colors.gray[900] },
-          ]}
-        >
-          {t("home.title")}
-        </Text>
-        <SearchBar
-          placeholder={t("home.searchPlaceholder")}
-          onPress={() => {
-            // Navigate to search screen
-            console.log("Navigate to search screen");
-          }}
-          editable={false}
-        />
-      </View>
+      {/* Header */}
+      <SafeAreaView edges={["top"]}>
+        <View style={styles.header}>
+          <Text
+            style={[
+              styles.title,
+              {
+                color: isDark ? theme.colors.gray[50] : theme.colors.gray[900],
+              },
+            ]}
+          >
+            {t("home.title")}
+          </Text>
 
-      {/* Categories */}
-      <View style={styles.categoriesContainer}>
-        <FlatList
-          data={categories}
-          renderItem={renderCategory}
-          keyExtractor={(item) => item}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.categoriesContent}
-        />
-      </View>
+          <TouchableOpacity
+            style={[
+              styles.searchButton,
+              {
+                backgroundColor: isDark
+                  ? theme.colors.gray[800]
+                  : theme.colors.gray[200],
+                borderColor: isDark
+                  ? theme.colors.gray[700]
+                  : theme.colors.gray[300],
+              },
+            ]}
+            activeOpacity={0.7}
+            onPress={() => router.push("/(tabs)/search")}
+          >
+            <Ionicons
+              name="search"
+              size={18}
+              color={isDark ? theme.colors.gray[400] : theme.colors.gray[500]}
+              style={styles.searchIcon}
+            />
+            <Text
+              style={[
+                styles.searchButtonText,
+                {
+                  color: isDark
+                    ? theme.colors.gray[300]
+                    : theme.colors.gray[600],
+                },
+              ]}
+            >
+              {t("home.searchPlaceholder") || "Make your search"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
 
-      {/* Featured Properties */}
+      {/* Content */}
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.content}
       >
+        {/* Categories (empty in original) */}
+        {/* Featured Properties */}
         <View style={styles.sectionHeader}>
           <Text
             style={[
@@ -121,14 +187,14 @@ export default function HomeScreen() {
               },
             ]}
           >
-            {t("home.featuredProperties")}
+            {t("home.featuredTitle")}
           </Text>
           <Text style={[styles.seeAll, { color: theme.colors.primary[500] }]}>
             {t("common.seeAll")}
           </Text>
         </View>
 
-        {isLoading ? (
+        {loadingFeatured ? (
           <View style={styles.skeletonContainer}>
             <LoadingSkeleton height={220} width="100%" borderRadius={8} />
             <View style={styles.skeletonDetails}>
@@ -145,21 +211,44 @@ export default function HomeScreen() {
                 borderRadius={4}
                 style={{ marginTop: 4 }}
               />
-            </View>
+            </View>{" "}
+          </View>
+        ) : featured.length === 0 ? (
+          <View style={styles.emptyStateContainer}>
+            <Text
+              style={[
+                styles.emptyStateText,
+                {
+                  color: isDark
+                    ? theme.colors.gray[300]
+                    : theme.colors.gray[600],
+                },
+              ]}
+            >
+              {t("home.noFeaturedProperties")}
+            </Text>
           </View>
         ) : (
-          mockProperties.slice(0, 3).map((property) => (
-            <PropertyCard
-              key={property.id}
-              {...property}
-              style={styles.propertyCard}
-              onPress={() => {
-                console.log(`Navigate to property ${property.id}`);
-              }}
-            />
-          ))
+          featured.map((property, i) => {
+            if (!property || !property._id) {
+              console.error("Invalid property object at index", i, property);
+              return null;
+            }
+
+            return (
+              <PropertyCard
+                key={i}
+                {...property}
+                city={property.city}
+                address={property.address || property.location}
+                style={styles.propertyCard}
+                onPress={() => handlePropertyPress(property)}
+              />
+            );
+          })
         )}
 
+        {/* Top Rated Properties */}
         <View style={styles.sectionHeader}>
           <Text
             style={[
@@ -176,7 +265,7 @@ export default function HomeScreen() {
           </Text>
         </View>
 
-        {isLoading ? (
+        {loadingTop ? (
           <View style={styles.skeletonContainer}>
             <LoadingSkeleton height={220} width="100%" borderRadius={8} />
             <View style={styles.skeletonDetails}>
@@ -196,19 +285,19 @@ export default function HomeScreen() {
             </View>
           </View>
         ) : (
-          mockProperties.slice(3, 6).map((property) => (
+          topRated.map((property, i) => (
             <PropertyCard
-              key={property.id}
+              key={i}
               {...property}
+              city={property.city}
+              address={property.address || property.location}
               style={styles.propertyCard}
-              onPress={() => {
-                console.log(`Navigate to property ${property.id}`);
-              }}
+              onPress={() => handlePropertyPress(property)}
             />
           ))
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -217,6 +306,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
+    alignItems: "center",
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,
     paddingBottom: spacing.xs,
@@ -225,6 +315,24 @@ const styles = StyleSheet.create({
     fontSize: fontSize.xl,
     fontWeight: "700",
     marginBottom: spacing.sm,
+  },
+  searchButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    height: 44,
+    borderRadius: 30,
+    paddingHorizontal: spacing.md,
+    width: "100%",
+    borderWidth: 1,
+    marginBottom: spacing.sm,
+  },
+  searchButtonText: {
+    flex: 1,
+    fontSize: fontSize.md,
+    textAlign: "left",
+  },
+  searchIcon: {
+    marginRight: spacing.xs,
   },
   categoriesContainer: {
     marginVertical: spacing.sm,
@@ -274,5 +382,23 @@ const styles = StyleSheet.create({
   skeletonDetails: {
     marginTop: spacing.sm,
     gap: spacing.xs,
+  },
+  emptyStateContainer: {
+    padding: spacing.lg,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderStyle: "dashed",
+    marginVertical: spacing.md,
+  },
+  emptyStateText: {
+    fontSize: fontSize.md,
+    textAlign: "center",
+
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderStyle: "dashed",
+    marginVertical: spacing.md,
   },
 });

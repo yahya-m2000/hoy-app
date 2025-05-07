@@ -9,14 +9,13 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Pressable,
   ViewStyle,
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
-import radius from "../constants/radius";
-import spacing from "../constants/spacing";
-import typography, { fontSize } from "../constants/typography";
+import { radius } from "../constants/radius";
+import { spacing } from "../constants/spacing";
+import { fontSize } from "../constants/typography";
 
 interface SearchBarProps {
   placeholder?: string;
@@ -43,10 +42,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
 }) => {
   const { theme, isDark } = useTheme();
 
-  const Container = onPress ? Pressable : View;
+  // Always use TouchableOpacity for better touch response when onPress is provided
+  const Container = onPress ? TouchableOpacity : View;
 
   return (
     <Container
+      activeOpacity={0.7}
       style={[
         styles.container,
         {

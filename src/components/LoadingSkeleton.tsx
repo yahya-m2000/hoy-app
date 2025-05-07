@@ -6,7 +6,7 @@
 import React, { useEffect } from "react";
 import { View, StyleSheet, Animated, ViewStyle } from "react-native";
 import { useTheme } from "../context/ThemeContext";
-import radius from "../constants/radius";
+import { radius } from "../constants/radius";
 
 interface LoadingSkeletonProps {
   width?: number | string;
@@ -22,6 +22,7 @@ const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
   style,
 }) => {
   const { theme, isDark } = useTheme();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const shimmerAnim = new Animated.Value(0);
 
   // Base color for skeleton based on theme
@@ -46,7 +47,7 @@ const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
     return () => {
       shimmerAnim.stopAnimation();
     };
-  }, []);
+  }, [shimmerAnim]);
 
   // Ensure width/height are valid DimensionValue (number or 'auto'/'100%')
   const resolvedWidth =
