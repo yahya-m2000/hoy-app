@@ -1,24 +1,34 @@
-/**
- * Root layout for the Hoy application
- * Sets up providers and global navigation structure
- */
+// Localization and API initialization (must be first)
+import "@common/locales/i18n";
+import "@common-services/apiInit";
 
+// React imports
+import React from "react";
+
+// Third-party libraries
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { ThemeProvider } from "../src/context/ThemeContext";
-import { ToastProvider } from "../src/context/ToastContext";
-import "../src/locales/i18n";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider } from "../src/context/AuthContext";
-import { CurrencyProvider } from "../src/context/CurrencyContext";
-import { DateSelectionProvider } from "../src/context/DateSelectionContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { NetworkProvider } from "../src/context/NetworkContext";
-import OfflineNotice from "../src/components/OfflineNotice";
 
-// Import API initialization (sets up interceptors)
-import "../src/services/apiInit";
-import { MessageProvider } from "src/context/MessageContext";
+// App context providers
+import { ThemeProvider } from "@common-context/ThemeContext";
+import { ToastProvider } from "@common-context/ToastContext";
+import { AuthProvider } from "@common-context/AuthContext";
+import { CurrencyProvider } from "@common-context/CurrencyContext";
+import { DateSelectionProvider } from "@common-context/DateSelectionContext";
+import { NetworkProvider } from "@common-context/NetworkContext";
+import { UserRoleProvider, useUserRole } from "@common-context/UserRoleContext";
+import { ChatProvider } from "@common-context/ChatContext";
+
+// App components
+import OfflineNotice from "@common-components/OfflineNotice";
+import RoleChangeLoadingOverlay from "@common-components/RoleChangeLoadingOverlay";
+
+const RoleChangeLoadingOverlayWrapper = () => {
+  const { isRoleLoading } = useUserRole();
+  return <RoleChangeLoadingOverlay visible={isRoleLoading} />;
+};
 
 // Create a client
 const queryClient = new QueryClient();
@@ -31,146 +41,41 @@ export default function RootLayout() {
         <AuthProvider>
           <NetworkProvider>
             <CurrencyProvider>
-              <MessageProvider>
-                <ThemeProvider>
+              {/* <ChatProvider> */}
+              <ThemeProvider>
+                <UserRoleProvider>
                   <DateSelectionProvider>
                     <ToastProvider>
                       <StatusBar style="auto" />
                       <OfflineNotice />
+                      <RoleChangeLoadingOverlayWrapper />
                       <Stack>
+                        <Stack.Screen name="index" />
                         <Stack.Screen
                           name="(tabs)"
                           options={{ headerShown: false }}
                         />
                         <Stack.Screen
-                          name="(screens)/PropertyModalScreen"
-                          options={{
-                            presentation: "modal",
-                            title: "Property Details",
-                            headerShown: false,
-                          }}
+                          name="(screens)"
+                          options={{ headerShown: false }}
                         />
                         <Stack.Screen
-                          name="(modals)/SearchLocationModal"
-                          options={{
-                            presentation: "modal",
-                            contentStyle: { backgroundColor: "transparent" },
-                            animation: "slide_from_bottom",
-                            headerShown: false,
-                          }}
+                          name="(modals)"
+                          options={{ headerShown: false }}
                         />
-                        <Stack.Screen
-                          name="(modals)/SearchDateModal"
-                          options={{
-                            presentation: "modal",
-                            contentStyle: { backgroundColor: "transparent" },
-                            animation: "slide_from_bottom",
-                            headerShown: false,
-                          }}
-                        />
-                        <Stack.Screen
-                          name="(modals)/SearchTravelersModal"
-                          options={{
-                            presentation: "modal",
-                            contentStyle: { backgroundColor: "transparent" },
-                            animation: "slide_from_bottom",
-                            headerShown: false,
-                          }}
-                        />
-                        <Stack.Screen
-                          name="(modals)/ReservationModal"
-                          options={{
-                            presentation: "modal",
-                            title: "Reservation",
-                            headerShown: false,
-                          }}
-                        />
-                        <Stack.Screen
-                          name="(modals)/AuthModal"
-                          options={{
-                            presentation: "modal",
-                            title: "Sign In",
-                            headerShown: false,
-                          }}
-                        />
-                        <Stack.Screen
-                          name="(modals)/ForgotPasswordModal"
-                          options={{
-                            presentation: "modal",
-                            title: "Reset Password",
-                            headerShown: false,
-                          }}
-                        />
-                        <Stack.Screen
-                          name="(modals)/ChangePasswordModal"
-                          options={{
-                            presentation: "modal",
-                            title: "Change Password",
-                            headerShown: false,
-                          }}
-                        />
-                        <Stack.Screen
-                          name="(modals)/LanguageModal"
-                          options={{
-                            presentation: "modal",
-                            title: "Language",
-                            headerShown: false,
-                          }}
-                        />
-                        <Stack.Screen
-                          name="(modals)/CurrencyModal"
-                          options={{
-                            presentation: "modal",
-                            title: "Currency",
-                            headerShown: false,
-                          }}
-                        />
-                        <Stack.Screen
-                          name="(modals)/PropertyTypeModal"
-                          options={{
-                            presentation: "modal",
-                            title: "Property Type",
-                            headerShown: false,
-                          }}
-                        />
-                        <Stack.Screen
-                          name="(modals)/CreateReviewModal"
-                          options={{
-                            presentation: "modal",
-                            title: "Write a Review",
-                            headerShown: false,
-                          }}
-                        />
-                        <Stack.Screen
-                          name="(screens)/BookingConfirmationScreen"
-                          options={{
-                            title: "Booking Confirmed",
-                          }}
-                        />
-                        <Stack.Screen
-                          name="(screens)/PersonalInfoScreen"
-                          options={{
-                            title: "Personal Information",
-                          }}
-                        />
-                        <Stack.Screen
-                          name="(screens)/PrivacySecurityScreen"
-                          options={{
-                            title: "Privacy & Security",
-                          }}
-                        />{" "}
-                        <Stack.Screen
-                          name="(screens)/Results"
-                          options={{
-                            title: "Search Results",
-                            headerShown: false,
-                          }}
-                        />
+                        {/* <Stack.Screen
+                            name="(screens)/common/conversation/[id]"
+                            options={{
+                              headerTitle: "Conversation",
+                              headerShown: true,
+                            }}
+                          /> */}
                       </Stack>
                     </ToastProvider>
                   </DateSelectionProvider>
-                </ThemeProvider>
-              </MessageProvider>
+                </UserRoleProvider>
+              </ThemeProvider>
+              {/* </ChatProvider> */}
             </CurrencyProvider>
           </NetworkProvider>
         </AuthProvider>

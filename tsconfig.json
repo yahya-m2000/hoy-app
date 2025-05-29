@@ -5,12 +5,28 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "*": [
-        "*"
-      ],
-      "@/*": [
-        "*"
-      ]
+      "*": ["*"],
+      "@/*": ["*"],
+      "@common/*": ["src/common/*"],
+      "@constants/*": ["src/common/constants/*"],
+      "@assets/*": ["src/common/assets/*"],
+      "@types/*": ["src/common/types/*"],
+      "@common-components/*": ["src/common/components/*"],
+      "@common-hooks/*": ["src/common/hooks/*"],
+      "@common-services/*": ["src/common/services/*"],
+      "@common-utils/*": ["src/common/utils/*"],
+      "@common-screens/*": ["src/common/screens/*"],
+      "@common-context/*": ["src/common/context/*"],
+      "@host/*": ["src/host/*"],
+      "@host-components/*": ["src/host/components/*"],
+      "@host-hooks/*": ["src/host/hooks/*"],
+      "@host-services/*": ["src/host/services/*"],
+      "@host-screens/*": ["src/host/screens/*"],
+      "@traveler/*": ["src/traveler/*"],
+      "@traveler-components/*": ["src/traveler/components/*"],
+      "@traveler-hooks/*": ["src/traveler/hooks/*"],
+      "@traveler-services/*": ["src/traveler/services/*"],
+      "@traveler-screens/*": ["src/traveler/screens/*"],
     },
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -19,5 +35,5 @@
   "include": [
     "**/*.ts",
     "**/*.tsx"
-, "app/_layout.tsx.old"  ]
+, "app/_layout.tsx.old", "../junk/(tabs)/inbox.tsx"  ]
 }
