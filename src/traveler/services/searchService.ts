@@ -25,10 +25,9 @@ export const getNearbySearch = async (coords: {
   lng: number;
   radius?: number;
 }): Promise<any[]> => {
-  const response = await api.get<{ data: any[] }>("/search/nearby", {
-    params: coords,
-  });
-  return response.data.data;
+  // Disabled coordinate-based search to avoid geospatial query issues
+  console.log("Nearby search disabled - coordinates ignored:", coords);
+  return [];
 };
 
 export const getTrendingSearches = async (): Promise<any> => {

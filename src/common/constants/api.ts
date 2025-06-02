@@ -1,5 +1,6 @@
 // API constants
-export const API_BASE_URL = "https://api.hoy.com/api/v1"; // Replace with your actual API URL
+export const API_BASE_URL =
+  "https://41ea-109-147-151-140.ngrok-free.app/api/v1"; // Replace with your actual API URL
 
 // API endpoints
 export const ENDPOINTS = {

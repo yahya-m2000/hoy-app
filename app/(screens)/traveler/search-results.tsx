@@ -4,33 +4,27 @@
  */
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  ActivityIndicator,
-  RefreshControl,
-} from "react-native";
-import { useTheme } from "@common-context/ThemeContext";
+import { StyleSheet } from "react-native";
+import { useTheme } from "@common/context/ThemeContext";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { StatusBar } from "expo-status-bar";
-import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter, Stack } from "expo-router";
-import { fontSize } from "@common/constants/typography";
-import { spacing } from "@common/constants/spacing";
-import { radius } from "@common/constants/radius";
-import PropertyCard from "@common-components/PropertyCard";
 import type { PropertyType } from "@common/types/property";
-import { useProperties } from "@common-hooks/useProperties";
-import { searchProperties } from "@host-services/propertyService";
-import { formatCoordinateParams } from "@common-utils/validation/coordinateValidation";
-
-// Available filter and sort options
-type FilterOption = "all" | "price" | "rating" | "newest";
-type SortOrder = "asc" | "desc";
+import { useProperties } from "@common/hooks/useProperties";
+import { searchProperties } from "@host/services/propertyService";
+import { formatCoordinateParams } from "@common/utils/validation/coordinateValidation";
+import {
+  SearchResultsHeader,
+  SearchSummary,
+  FiltersBar,
+  PropertyList,
+  LoadingState,
+  EmptyState,
+  type FilterOption,
+  type SortOrder,
+} from "src/traveler/components/screens/SearchResults";
+import { parseLocation } from "@common/utils/locationParser";
 
 export default function SearchResultsScreen() {
   const { theme, isDark } = useTheme();
@@ -71,16 +65,18 @@ export default function SearchResultsScreen() {
     if (hasCoordinates) {
       console.log(`Coordinates: ${latitude}, ${longitude}`);
     }
-  }, [location, hasCoordinates, latitude, longitude]);
+  }, [location, hasCoordinates, latitude, longitude]); // Parse location string into city, state, and country components
+  const { city, state, country } = useMemo(() => {
+    if (!location) return { city: "", state: "", country: "" };
 
-  // Extract city and country from location string if available
-  const [city, country] = useMemo(() => {
-    if (!location) return ["", ""];
-    const parts = location.split(",").map((part) => part.trim());
-    if (parts.length >= 2) {
-      return [parts[0], parts[parts.length - 1]]; // First part as city, last part as country
-    }
-    return [location, ""]; // If there's only one part, use it as city
+    const parsed = parseLocation(location);
+    console.log(`Parsed location "${location}":`, {
+      city: parsed.city,
+      state: parsed.state,
+      country: parsed.country,
+    });
+
+    return parsed;
   }, [location]);
 
   const propertyType =
@@ -92,12 +88,10 @@ export default function SearchResultsScreen() {
   const [showMap, setShowMap] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [manualResults, setManualResults] = useState<PropertyType[]>([]);
-  const [isDirectLoaded, setIsDirectLoaded] = useState(false);
-
-  // Use custom hook to fetch properties
+  const [isDirectLoaded, setIsDirectLoaded] = useState(false); // Use custom hook to fetch properties - only pass parsed components, not the full location
   const { properties, loading, error, fetchProperties } = useProperties({
-    location,
     city,
+    state,
     country,
     startDate,
     endDate,
@@ -127,10 +121,9 @@ export default function SearchResultsScreen() {
 
         try {
           // Create the search query
-          const searchQuery: any = {};
-
-          // Add city/country if available
+          const searchQuery: any = {}; // Add city/state/country if available
           if (city) searchQuery.city = city;
+          if (state) searchQuery.state = state;
           if (country) searchQuery.country = country;
 
           // Add coordinates if available
@@ -154,18 +147,66 @@ export default function SearchResultsScreen() {
               console.error("Invalid coordinates, skipping coordinate search");
             }
           }
+          console.log("Directly calling searchProperties API with:", {
+            ...searchQuery,
+            debug: `Parsed from "${location}" -> city: "${city}", state: "${state}", country: "${country}"`,
+          }); // Make the API call directly with fallback strategy
+          let results = await searchProperties(searchQuery);
 
-          console.log(
-            "Directly calling searchProperties API with:",
-            searchQuery
-          );
-
-          // Make the API call directly
-          const results = await searchProperties(searchQuery);
-          if (isMounted) {
+          // If no results found with specific search, try fallback strategies
+          if (results.length === 0 && isMounted) {
             console.log(
-              `Direct API call returned ${results.length} properties`
+              "No results with specific search, trying fallback strategies..."
             );
+
+            // Fallback 1: Try state + country only (remove city filter)
+            if (city && state && country) {
+              console.log("Fallback 1: Searching by state + country only");
+              const fallbackQuery1 = {
+                state: searchQuery.state,
+                country: searchQuery.country,
+                ...(searchQuery.lat && {
+                  lat: searchQuery.lat,
+                  lng: searchQuery.lng,
+                  radius: searchQuery.radius,
+                }),
+              };
+              results = await searchProperties(fallbackQuery1);
+              console.log(`Fallback 1 returned ${results.length} properties`);
+            }
+
+            // Fallback 2: Try country only if still no results
+            if (results.length === 0 && country) {
+              console.log("Fallback 2: Searching by country only");
+              const fallbackQuery2 = {
+                country: searchQuery.country,
+                ...(searchQuery.lat && {
+                  lat: searchQuery.lat,
+                  lng: searchQuery.lng,
+                  radius: searchQuery.radius,
+                }),
+              };
+              results = await searchProperties(fallbackQuery2);
+              console.log(`Fallback 2 returned ${results.length} properties`);
+            }
+
+            // Fallback 3: Try coordinate-based search only if we have coordinates
+            if (results.length === 0 && hasCoordinates && searchQuery.lat) {
+              console.log(
+                "Fallback 3: Searching by coordinates only with larger radius"
+              );
+              const fallbackQuery3 = {
+                lat: searchQuery.lat,
+                lng: searchQuery.lng,
+                radius: 50, // Increase radius to 50km
+              };
+              results = await searchProperties(fallbackQuery3);
+              console.log(`Fallback 3 returned ${results.length} properties`);
+            }
+          }
+
+          if (isMounted) {
+            console.log(`Final search result: ${results.length} properties`);
             directSearchCompleted = true;
 
             // Store results in our local state
@@ -174,6 +215,8 @@ export default function SearchResultsScreen() {
               setIsDirectLoaded(true);
               // Also call fetchProperties to update the loading state
               fetchProperties();
+            } else {
+              console.log("No properties found even with fallback strategies");
             }
           }
         } catch (err: any) {
@@ -200,7 +243,16 @@ export default function SearchResultsScreen() {
       isMounted = false;
       clearTimeout(timer);
     };
-  }, [city, country, hasCoordinates, latitude, longitude, fetchProperties]);
+  }, [
+    location,
+    city,
+    state,
+    country,
+    hasCoordinates,
+    latitude,
+    longitude,
+    fetchProperties,
+  ]);
 
   // Handle refresh
   const onRefresh = useCallback(() => {
@@ -300,193 +352,27 @@ export default function SearchResultsScreen() {
       params: { property: JSON.stringify(property) },
     });
   };
-
   // Toggle map view
   const toggleMapView = () => {
     setShowMap(!showMap);
   };
 
-  // Filter options
-  const filterOptions = [
-    { id: "all", label: t("search.filters.all") },
-    { id: "price", label: t("search.filters.price") },
-    { id: "rating", label: t("search.filters.rating") },
-    { id: "newest", label: t("search.filters.newest") },
-  ];
-
-  // Render filter option button
-  const renderFilterOption = ({
-    item,
-  }: {
-    item: { id: string; label: string };
-  }) => {
-    const isActive = activeFilter === item.id;
-    return (
-      <TouchableOpacity
-        style={[
-          styles.filterOption,
-          {
-            backgroundColor: isActive
-              ? theme.colors.primary
-              : isDark
-              ? theme.colors.grayPalette[800]
-              : theme.colors.grayPalette[50],
-            borderColor: isActive
-              ? theme.colors.primary
-              : isDark
-              ? theme.colors.grayPalette[700]
-              : theme.colors.grayPalette[300],
-            shadowColor: theme.colors.grayPalette[900],
-            shadowOffset: { width: 0, height: 1 },
-            shadowOpacity: isDark ? 0.2 : 0.1,
-            shadowRadius: 2,
-            elevation: isActive ? 3 : 0,
-          },
-        ]}
-        onPress={() => applyFilter(item.id as FilterOption)}
-      >
-        {isActive && item.id !== "all" && (
-          <Ionicons
-            name={sortOrder === "asc" ? "arrow-up" : "arrow-down"}
-            size={12}
-            color={theme.colors.white}
-            style={{ marginRight: 4 }}
-          />
-        )}
-        <Text
-          style={[
-            styles.filterOptionText,
-            {
-              color: isActive
-                ? theme.colors.white
-                : isDark
-                ? theme.colors.grayPalette[300]
-                : theme.colors.grayPalette[700],
-              fontWeight: isActive ? "600" : "normal",
-            },
-          ]}
-        >
-          {item.label}
-        </Text>
-      </TouchableOpacity>
-    );
-  };
-
-  // Render empty state or error
-  const renderEmptyState = () => {
-    if (error) {
-      return (
-        <View style={styles.emptyStateContainer}>
-          <Ionicons
-            name="alert-circle-outline"
-            size={48}
-            color={
-              isDark
-                ? theme.colors.errorPalette[400]
-                : theme.colors.errorPalette[500]
-            }
-          />
-          <Text
-            style={[
-              styles.emptyStateText,
-              {
-                color: isDark
-                  ? theme.colors.grayPalette[400]
-                  : theme.colors.grayPalette[600],
-              },
-            ]}
-          >
-            {error || t("search.errorLoading") || "Error loading properties"}
-          </Text>
-          <Text
-            style={[
-              styles.emptyStateSubtext,
-              {
-                color: isDark
-                  ? theme.colors.grayPalette[500]
-                  : theme.colors.grayPalette[500],
-                marginTop: 8,
-              },
-            ]}
-          >
-            {t("search.checkParameters") ||
-              "Please check your search parameters"}
-          </Text>
-          <TouchableOpacity
-            style={[
-              styles.retryButton,
-              {
-                backgroundColor: theme.colors.primary,
-                shadowColor: theme.colors.grayPalette[900],
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.2,
-                shadowRadius: 3,
-                elevation: 2,
-              },
-            ]}
-            onPress={() => fetchProperties()}
-          >
-            <Text style={styles.retryButtonText}>
-              {t("search.retry") || "Retry"}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      );
-    }
-
-    return (
-      <View style={styles.emptyStateContainer}>
-        <Ionicons
-          name="search-outline"
-          size={48}
-          color={
-            isDark
-              ? theme.colors.grayPalette[700]
-              : theme.colors.grayPalette[400]
-          }
-        />
-        <Text
-          style={[
-            styles.emptyStateText,
-            {
-              color: isDark
-                ? theme.colors.grayPalette[400]
-                : theme.colors.grayPalette[600],
-            },
-          ]}
-        >
-          {t("search.noResults") || "No properties found"}
-        </Text>
-        <Text
-          style={[
-            styles.emptyStateSubtext,
-            {
-              color: isDark
-                ? theme.colors.grayPalette[500]
-                : theme.colors.grayPalette[500],
-            },
-          ]}
-        >
-          {t("search.tryDifferentSearch") || "Try adjusting your search"}
-        </Text>
-      </View>
-    );
-  };
-
   // Show loading or property list
   const showLoading =
     loading && !refreshing && filteredAndSortedProperties.length === 0;
-  const showPropertyList =
-    !showLoading || filteredAndSortedProperties.length > 0;
+  const showEmpty =
+    !loading && !refreshing && filteredAndSortedProperties.length === 0;
 
+  // Calculate total guests for summary
+  const totalGuests = adults + children;
   return (
     <SafeAreaView
       style={[
         styles.container,
         {
           backgroundColor: isDark
-            ? theme.colors.grayPalette[900]
-            : theme.colors.grayPalette[50],
+            ? theme.colors.gray[900]
+            : theme.colors.gray[50],
         },
       ]}
     >
@@ -497,211 +383,45 @@ export default function SearchResultsScreen() {
         }}
       />
 
-      {/* Custom Header */}
-      <View
-        style={[
-          styles.customHeader,
-          {
-            borderBottomWidth: 1,
-            borderBottomColor: isDark
-              ? theme.colors.grayPalette[800]
-              : theme.colors.grayPalette[200],
-          },
-        ]}
-      >
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={styles.backButton}
-        >
-          <Ionicons
-            name="arrow-back"
-            size={24}
-            color={
-              isDark
-                ? theme.colors.grayPalette[100]
-                : theme.colors.grayPalette[800]
-            }
-          />
-        </TouchableOpacity>
-
-        <View style={styles.headerTitleContainer}>
-          <Text
-            style={[
-              styles.headerTitle,
-              {
-                color: isDark
-                  ? theme.colors.grayPalette[100]
-                  : theme.colors.grayPalette[800],
-              },
-            ]}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-          >
-            {city && country ? `${city}, ${country}` : location}
-          </Text>
-        </View>
-      </View>
-
-      {/* Loading indicator */}
-      {showLoading && (
-        <View style={styles.loadingContainer}>
-          <View
-            style={[
-              styles.loadingCard,
-              {
-                backgroundColor: isDark
-                  ? theme.colors.grayPalette[800]
-                  : theme.colors.grayPalette[50],
-                borderColor: isDark
-                  ? theme.colors.grayPalette[700]
-                  : theme.colors.grayPalette[200],
-                shadowColor: theme.colors.grayPalette[900],
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: isDark ? 0.3 : 0.1,
-                shadowRadius: 8,
-                elevation: 5,
-              },
-            ]}
-          >
-            <ActivityIndicator size="large" color={theme.colors.primary} />
-            <Text
-              style={[
-                styles.loadingText,
-                {
-                  color: isDark
-                    ? theme.colors.grayPalette[100]
-                    : theme.colors.grayPalette[800],
-                },
-              ]}
-            >
-              {t("search.finding") || "Finding perfect properties..."}
-            </Text>
-            {__DEV__ && (
-              <TouchableOpacity
-                style={{
-                  marginTop: 20,
-                  backgroundColor: theme.colors.primary,
-                  padding: 8,
-                  borderRadius: 4,
-                }}
-                onPress={() => {
-                  console.log("Debug: Force refreshing UI");
-                  fetchProperties();
-                }}
-              >
-                <Text style={{ color: "white" }}>Debug: Force Refresh</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        </View>
-      )}
-
-      {/* Search summary bar */}
-      <View
-        style={[
-          styles.searchSummary,
-          {
-            backgroundColor: isDark
-              ? theme.colors.grayPalette[800]
-              : theme.colors.grayPalette[50],
-            borderColor: isDark
-              ? theme.colors.grayPalette[700]
-              : theme.colors.grayPalette[300],
-          },
-        ]}
+      <SearchResultsHeader
+        title={city && country ? `${city}, ${country}` : location}
       />
 
-      {/* Filters row */}
-      <View
-        style={[
-          styles.filtersContainer,
-          {
-            borderBottomColor: isDark
-              ? theme.colors.grayPalette[700]
-              : theme.colors.grayPalette[200],
-          },
-        ]}
-      >
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={filterOptions}
-          keyExtractor={(item) => item.id}
-          renderItem={renderFilterOption}
-          contentContainerStyle={styles.filtersList}
+      <SearchSummary
+        location={location}
+        guests={totalGuests}
+        resultsCount={filteredAndSortedProperties.length}
+        dates={startDate && endDate ? `${startDate} - ${endDate}` : undefined}
+      />
+
+      <FiltersBar
+        activeFilter={activeFilter}
+        sortOrder={sortOrder}
+        showMap={showMap}
+        onFilterChange={applyFilter}
+        onToggleMap={toggleMapView}
+      />
+
+      {showLoading && (
+        <LoadingState
+          message={t("search.finding") || "Finding perfect properties..."}
         />
+      )}
 
-        <TouchableOpacity
-          style={[
-            styles.mapButton,
-            {
-              backgroundColor: isDark
-                ? theme.colors.grayPalette[700]
-                : theme.colors.grayPalette[50],
-              borderColor: isDark
-                ? theme.colors.grayPalette[600]
-                : theme.colors.grayPalette[300],
-              shadowColor: theme.colors.grayPalette[900],
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: isDark ? 0.2 : 0.1,
-              shadowRadius: 2,
-              elevation: 1,
-            },
-          ]}
-          onPress={toggleMapView}
-        >
-          <Ionicons
-            name={showMap ? "list" : "map"}
-            size={16}
-            color={
-              isDark
-                ? theme.colors.grayPalette[300]
-                : theme.colors.grayPalette[700]
-            }
-          />
-        </TouchableOpacity>
-      </View>
+      {showEmpty && (
+        <EmptyState
+          isError={!!error}
+          errorMessage={error || undefined}
+          onRetry={error ? onRefresh : undefined}
+        />
+      )}
 
-      {/* Properties list */}
-      {showPropertyList && (
-        <FlatList
-          data={filteredAndSortedProperties}
-          keyExtractor={(item) => item._id || Math.random().toString()}
-          renderItem={({ item }) => {
-            // Make sure we have a valid location string
-            const locationText =
-              typeof item.location === "string"
-                ? item.location
-                : item.locationString ||
-                  `${item.city || ""}, ${item.country || ""}`;
-
-            return (
-              <PropertyCard
-                _id={item._id}
-                title={item.title}
-                location={locationText}
-                price={item.price}
-                imageUrl={item.images?.[0]}
-                images={item.images}
-                rating={item.rating}
-                reviewCount={item.reviewCount}
-                onPress={() => handlePropertyPress(item)}
-                style={styles.propertyCard}
-              />
-            );
-          }}
-          contentContainerStyle={styles.listContent}
-          ListEmptyComponent={renderEmptyState}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              colors={[theme.colors.primary]}
-              tintColor={
-                isDark ? theme.colors.grayPalette[300] : theme.colors.primary
-              }
-            />
-          }
+      {!showLoading && !showEmpty && (
+        <PropertyList
+          properties={filteredAndSortedProperties}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          onPropertyPress={handlePropertyPress}
         />
       )}
     </SafeAreaView>
@@ -711,165 +431,5 @@ export default function SearchResultsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  customHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    alignContent: "center",
-    paddingTop: spacing.lg,
-    paddingBottom: spacing.md,
-    paddingHorizontal: spacing.md,
-  },
-  headerTitleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-    alignContent: "center",
-    width: "100%",
-    justifyContent: "center",
-  },
-  headerTitle: {
-    fontSize: fontSize.xl,
-    fontWeight: "700",
-    color: "black", // Will be styled dynamically
-  },
-  headerSubtitle: {
-    fontSize: fontSize.md,
-    fontWeight: "400",
-    marginTop: spacing.xs,
-    color: "black", // Will be styled dynamically
-  },
-  backButton: {
-    padding: spacing.sm,
-    marginLeft: -spacing.xs,
-    alignSelf: "flex-start",
-  },
-  closeButton: {
-    position: "absolute",
-    top: spacing.lg + 40, // Account for status bar and header
-    right: spacing.md,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 100,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: spacing.lg,
-  },
-  loadingCard: {
-    padding: spacing.xl,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    alignItems: "center",
-    width: "80%",
-  },
-  loadingText: {
-    marginTop: spacing.md,
-    fontSize: fontSize.md,
-    fontWeight: "500",
-    textAlign: "center",
-  },
-  searchSummary: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  searchDetails: {
-    flex: 1,
-  },
-  searchDetailsText: {
-    fontSize: fontSize.xs,
-    marginBottom: 2,
-  },
-  searchQuery: {
-    fontSize: fontSize.md,
-    fontWeight: "600",
-  },
-  filterButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.sm,
-    borderRadius: radius.md,
-    borderWidth: 1,
-  },
-  filterButtonText: {
-    fontSize: fontSize.xs,
-    marginLeft: spacing.xs,
-    fontWeight: "500",
-  },
-  filtersContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: spacing.xs,
-    borderBottomWidth: 1,
-  },
-  filtersList: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-    flex: 1,
-  },
-  filterOption: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.sm,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    marginRight: spacing.sm,
-  },
-  filterOptionText: {
-    fontSize: fontSize.xs,
-    marginRight: 4,
-  },
-  mapButton: {
-    width: 32,
-    height: 32,
-    borderRadius: radius.md,
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: spacing.md,
-    borderWidth: 1,
-  },
-  listContent: {
-    padding: spacing.md,
-    paddingBottom: spacing.xxl,
-  },
-  propertyCard: {
-    marginBottom: spacing.md,
-  },
-  emptyStateContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: spacing.xxl * 2,
-  },
-  emptyStateText: {
-    fontSize: fontSize.lg,
-    fontWeight: "600",
-    marginTop: spacing.md,
-    textAlign: "center",
-  },
-  emptyStateSubtext: {
-    fontSize: fontSize.md,
-    marginTop: spacing.xs,
-    textAlign: "center",
-  },
-  retryButton: {
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
-    borderRadius: radius.md,
-    marginTop: spacing.md,
-  },
-  retryButtonText: {
-    color: "#FFFFFF",
-    fontSize: fontSize.md,
-    fontWeight: "600",
   },
 });

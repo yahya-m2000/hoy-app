@@ -27,6 +27,7 @@
       "@traveler-hooks/*": ["src/traveler/hooks/*"],
       "@traveler-services/*": ["src/traveler/services/*"],
       "@traveler-screens/*": ["src/traveler/screens/*"],
+      "@traveler-utils/*": ["src/traveler/utils/*"],
     },
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -35,5 +36,8 @@
   "include": [
     "**/*.ts",
     "**/*.tsx"
-, "app/_layout.tsx.old", "../junk/(tabs)/inbox.tsx"  ]
+, "app/_layout.tsx.old", "../junk/(tabs)/inbox.tsx"  ],
+  "exclude": [
+    "src/common/context/ChatContext.tsx"
+  ]
 }

@@ -59,10 +59,28 @@ const BookingsScreen = () => {
   const { theme, isDark } = useTheme();
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
-  const { user } = useAuth(); // Get all bookings (we'll filter them client-side for more flexibility)
-  const { data = [], isLoading, refetch, isRefetching } = useUserBookings();
+  const { user } = useAuth();
+  // Get all bookings (we'll filter them client-side for more flexibility)
+  const { data, isLoading, refetch, isRefetching, error } = useUserBookings();
 
-  const allBookings = (data as any[]) || [];
+  // Log when data changes
+  React.useEffect(() => {
+    console.log("📋 Bookings data updated:", {
+      data: data,
+      dataType: typeof data,
+      isArray: Array.isArray(data),
+      isLoading,
+      error: error?.message || error,
+    });
+  }, [data, isLoading, error]);
+
+  // Safely handle the data
+  const allBookings = React.useMemo(() => {
+    if (isLoading) return [];
+    if (error) return [];
+    if (!Array.isArray(data)) return [];
+    return data as any[];
+  }, [data, isLoading, error]);
 
   // Refresh control handler
   const onRefresh = useCallback(() => {

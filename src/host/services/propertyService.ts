@@ -3,7 +3,6 @@ import api from "@common/services/api";
 import { PropertyType } from "@common/types/property";
 import { isNetworkError, logErrorWithContext } from "@common/utils/error";
 import { addToRetryQueue } from "@common/utils/network";
-import { formatCoordinateParams } from "@common/utils/validation";
 
 export interface PropertyFilters {
   [key: string]: any;
@@ -121,7 +120,9 @@ export const searchProperties = async (
         validParams.city = query.location;
         validParams.keyword = validParams.keyword || query.location;
       }
-    } // Handle coordinate-based search
+    } // Handle coordinate-based search - DISABLED to avoid geospatial query issues
+    // Only use location text-based matching now
+    /*
     if (query.latitude !== undefined && query.longitude !== undefined) {
       // Use the coordinate validation utility
       const validCoords = formatCoordinateParams(
@@ -149,10 +150,10 @@ export const searchProperties = async (
         return [];
       }
     }
-
-    // Separate handling for city and country if provided directly
+    */ // Separate handling for city, state, and country if provided directly
     if (query.country) validParams.country = query.country;
     if (query.city) validParams.city = query.city;
+    if (query.state) validParams.state = query.state;
 
     // Handle numeric parameters with proper conversion
     if (query.guests && !isNaN(Number(query.guests))) {
@@ -486,3 +487,62 @@ export function getPropertyHostInfo(property: PropertyType) {
     hostImage: property.hostImage || "",
   };
 }
+
+/**
+ * Fetch detailed host information for a property
+ */
+export const fetchPropertyHostInfo = async (propertyId: string) => {
+  try {
+    const response = await api.get<{ data: any }>(
+      `/properties/${propertyId}/host`
+    );
+    return response.data.data;
+  } catch (error: any) {
+    logErrorWithContext("fetchPropertyHostInfo", error);
+
+    // Return default host info if fetch fails
+    return {
+      hostId: "",
+      hostName: "",
+      hostImage: "",
+      phone: "",
+      email: "",
+      hostType: "individual",
+      isSuperHost: false,
+      responseRate: "New Host",
+      responseTime: "New Host",
+    };
+  }
+};
+
+/**
+ * Fetch public host profile information
+ */
+export const fetchPublicHostProfile = async (hostId: string) => {
+  try {
+    const response = await api.get<{ data: any }>(
+      `/properties/host/${hostId}/profile`
+    );
+    return response.data.data;
+  } catch (error: any) {
+    logErrorWithContext("fetchPublicHostProfile", error);
+
+    // Return default host profile if fetch fails
+    return {
+      hostId,
+      hostName: "",
+      hostImage: "",
+      phone: "",
+      email: "",
+      hostType: "individual",
+      isSuperHost: false,
+      totalProperties: 0,
+      totalReviews: 0,
+      avgRating: 0,
+      responseRate: "New Host",
+      responseTime: "New Host",
+      joinedDate: new Date(),
+      isVerified: false,
+    };
+  }
+};

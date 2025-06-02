@@ -3,9 +3,11 @@ import Constants from "expo-constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { eventEmitter, AppEvents } from "@common/utils/eventEmitter";
 import NetInfo from "@react-native-community/netinfo";
+import { API_BASE_URL, ENDPOINTS } from "../constants/api";
 
 // Use expoConfig for baseURL, fallback to localhost
 const apiBaseUrl =
+  API_BASE_URL ||
   Constants.expoConfig?.extra?.apiUrl ||
   process.env.EXPO_PUBLIC_API_URL ||
   "http://localhost:3000/api/v1";
@@ -176,7 +178,6 @@ api.interceptors.response.use(
           return Promise.reject(err);
         });
     }
-
     isRefreshing = true;
 
     // Try to refresh the token
@@ -187,58 +188,28 @@ api.interceptors.response.use(
 
           if (!refreshToken) {
             // No refresh token available, redirect to login
-            await AsyncStorage.removeItem("accessToken"); // Signal auth context to update
+            await AsyncStorage.removeItem("accessToken");
             eventEmitter.emit(AppEvents.AUTH_LOGOUT);
             processQueue(new Error("No refresh token available"));
             reject(error);
             return;
           }
 
-          // Prepare URL variations - we'll try multiple endpoint patterns
-          const apiBaseWithoutV1 = apiBaseUrl.replace(/\/api\/v1\/?$/, "");
-          const baseUrlIndex = apiBaseUrl.indexOf("/api/v1");
-          const baseUrl =
-            baseUrlIndex !== -1
-              ? apiBaseUrl.substring(0, baseUrlIndex)
-              : apiBaseUrl;
+          // Use the correct refresh token endpoint directly
+          // Since apiBaseUrl already includes /api/v1, we need to build the full URL correctly
+          const refreshEndpoint = `${apiBaseUrl}${ENDPOINTS.AUTH.REFRESH_TOKEN}`;
 
-          // Define the endpoints to try (in order)
-          const endpoints = [
-            `${apiBaseWithoutV1}/auth/refresh`,
-            `${apiBaseWithoutV1}/auth/refresh-token`,
-            `${baseUrl}/auth/refresh`,
-          ];
-
-          let response = null;
-          let lastError = null;
-
-          // Try each endpoint in sequence
-          for (let i = 0; i < endpoints.length; i++) {
-            try {
-              console.log(`Attempting token refresh at: ${endpoints[i]}`);
-              response = await axios.post(
-                endpoints[i],
-                { refreshToken },
-                {
-                  headers: { "Content-Type": "application/json" },
-                  withCredentials: true,
-                }
-              );
-              console.log(
-                `Token refresh successful using endpoint: ${endpoints[i]}`
-              );
-              break; // Break the loop if successful
-            } catch (error: any) {
-              lastError = error;
-              console.log(`Endpoint ${i + 1} failed: ${error.message}`);
-              // Continue to next endpoint
+          console.log(`Attempting token refresh at: ${refreshEndpoint}`);
+          const response = await axios.post(
+            refreshEndpoint,
+            { refreshToken },
+            {
+              headers: { "Content-Type": "application/json" },
+              withCredentials: true,
             }
-          }
+          );
 
-          // If all endpoints failed
-          if (!response) {
-            throw lastError || new Error("All token refresh attempts failed");
-          }
+          console.log("Token refresh successful");
 
           // Define proper interface for token response
           interface TokenResponse {
@@ -289,7 +260,7 @@ api.interceptors.response.use(
           ) {
             // Failed to refresh token, clean up and redirect to login
             await AsyncStorage.removeItem("accessToken");
-            await AsyncStorage.removeItem("refreshToken"); // Signal auth context to update
+            await AsyncStorage.removeItem("refreshToken");
             eventEmitter.emit(AppEvents.AUTH_LOGOUT);
           }
 

@@ -11,8 +11,55 @@ export const useUserBookings = (status?: string) => {
 
   return useQuery({
     queryKey: ["bookings", { status }],
-    queryFn: () =>
-      withTokenRefresh(() => bookingService.getUserBookings(status)),
+    queryFn: async () => {
+      try {
+        console.log("🔍 Fetching user bookings with status:", status);
+        const result = await withTokenRefresh(() =>
+          bookingService.getUserBookings(status)
+        );
+        console.log(
+          "✅ Bookings service returned. Type:",
+          typeof result,
+          "IsArray:",
+          Array.isArray(result),
+          "Length:",
+          Array.isArray(result) ? result.length : "N/A"
+        );
+        return result;
+      } catch (error) {
+        console.error("❌ Bookings fetch failed:", error);
+        throw error;
+      }
+    },
+    select: (data) => {
+      console.log(
+        "📊 React Query select function received. Type:",
+        typeof data,
+        "IsArray:",
+        Array.isArray(data),
+        "Length:",
+        Array.isArray(data) ? data.length : "N/A",
+        "Value:",
+        data
+      );
+
+      // At this point, data should be the bookings array directly
+      if (Array.isArray(data)) {
+        console.log(
+          "✅ Select returning bookings array with",
+          data.length,
+          "items"
+        );
+        return data;
+      }
+
+      console.log(
+        "⚠️ Select received non-array, returning empty array. Received:",
+        typeof data,
+        data
+      );
+      return [];
+    },
   });
 };
 
@@ -36,6 +83,21 @@ export const useBookingDetails = (bookingId: string) => {
     queryFn: () =>
       withTokenRefresh(() => bookingService.getBookingById(bookingId)),
     enabled: !!bookingId,
+  });
+};
+
+export const useBookingById = (bookingId: string) => {
+  const { withTokenRefresh } = useTokenRefresh();
+
+  return useQuery({
+    queryKey: ["booking", bookingId],
+    queryFn: async () => {
+      if (!bookingId) {
+        throw new Error("Booking ID is required");
+      }
+      return withTokenRefresh(() => bookingService.getBookingById(bookingId));
+    },
+    enabled: !!bookingId, // Only run query if bookingId exists
   });
 };
 

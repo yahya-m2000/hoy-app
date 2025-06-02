@@ -9,7 +9,6 @@ import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 // Third-party libraries
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
-import { Calendar } from "react-native-calendars";
 import { format, addDays, differenceInDays } from "date-fns";
 
 // App context
@@ -18,6 +17,7 @@ import { useDateSelection } from "@common-context/DateSelectionContext";
 
 // App components
 import BottomSheetModal from "@common-components/BottomSheetModal";
+import { Calendar } from "@common/components";
 
 // App hooks
 import { useSearchForm } from "@common-hooks/useSearchForm";
@@ -27,23 +27,13 @@ import { fontSize } from "@common/constants/typography";
 import { spacing } from "@common/constants/spacing";
 import { radius } from "@common/constants/radius";
 
-type DateType = {
-  timestamp: number;
-  dateString: string;
-  day: number;
-  month: number;
-  year: number;
-};
-
 export default function SearchDateModal() {
   const { theme, isDark } = useTheme();
   const params = useLocalSearchParams();
   const { searchState, updateSearchState } = useSearchForm();
   const { selectDatesForProperty } = useDateSelection();
-
   // Check if this is for a specific property
   const propertyId = params.propertyId as string;
-  const returnTo = params.returnTo as string;
   const isPropertyContext = !!propertyId;
 
   // Format today and tomorrow dates
@@ -70,81 +60,11 @@ export default function SearchDateModal() {
     (typeof params.endDate === "string"
       ? params.endDate
       : format(tomorrow, "yyyy-MM-dd"));
-
   const [startDate, setStartDate] = useState<string>(initialStartDate);
   const [endDate, setEndDate] = useState<string>(initialEndDate);
-  const [selecting, setSelecting] = useState<"start" | "end">("start");
-
   // Calculate number of nights
   const nights = differenceInDays(new Date(endDate), new Date(startDate));
 
-  const getMarkedDates = () => {
-    const result: any = {};
-
-    if (startDate) {
-      result[startDate] = {
-        startingDay: true,
-        color: theme.colors.primary,
-        textColor: "white",
-      };
-    }
-
-    // If we have both dates, fill the range
-    if (startDate && endDate) {
-      // Add middle days
-      const start = new Date(startDate);
-      const end = new Date(endDate);
-      let currentDate = addDays(start, 1);
-
-      while (currentDate < end) {
-        const dateString = format(currentDate, "yyyy-MM-dd");
-        result[dateString] = {
-          color: theme.colors.primaryPalette[200],
-          textColor: isDark
-            ? theme.colors.grayPalette[900]
-            : theme.colors.grayPalette[900],
-        };
-        currentDate = addDays(currentDate, 1);
-      }
-
-      // End date
-      result[endDate] = {
-        endingDay: true,
-        color: theme.colors.primary,
-        textColor: "white",
-      };
-    }
-
-    return result;
-  };
-
-  const handleDayPress = (day: DateType) => {
-    const selectedDate = day.dateString;
-
-    if (selecting === "start") {
-      setStartDate(selectedDate);
-      // If the selected start date is after the current end date,
-      // reset the end date to be the day after
-      if (new Date(selectedDate) >= new Date(endDate)) {
-        const newEndDate = format(
-          addDays(new Date(selectedDate), 1),
-          "yyyy-MM-dd"
-        );
-        setEndDate(newEndDate);
-      }
-      setSelecting("end");
-    } else {
-      // Make sure end date isn't before start date
-      if (new Date(selectedDate) <= new Date(startDate)) {
-        // If the selected end date is before the start date, swap them
-        setEndDate(startDate);
-        setStartDate(selectedDate);
-      } else {
-        setEndDate(selectedDate);
-      }
-      setSelecting("start");
-    }
-  };
   const handleApply = () => {
     // Format the dates for display
     const formattedStart = format(new Date(startDate), "MMM dd");
@@ -192,22 +112,18 @@ export default function SearchDateModal() {
       onSave={handleApply}
     >
       <View style={styles.container}>
+        {" "}
         {/* Date selection info */}
         <View style={styles.dateInfoContainer}>
           <View
             style={[
               styles.dateBox,
-              selecting === "start"
-                ? {
-                    borderColor: theme.colors.primary,
-                    borderWidth: 2,
-                  }
-                : {
-                    borderColor: isDark
-                      ? theme.colors.grayPalette[700]
-                      : theme.colors.gray[300],
-                    borderWidth: 1,
-                  },
+              {
+                borderColor: isDark
+                  ? theme.colors.grayPalette[700]
+                  : theme.colors.gray[300],
+                borderWidth: 1,
+              },
             ]}
           >
             <Text
@@ -235,29 +151,22 @@ export default function SearchDateModal() {
               {format(new Date(startDate), "E, MMM d")}
             </Text>
           </View>
-
           <View style={styles.arrowContainer}>
             <Ionicons
               name="arrow-forward"
               size={20}
               color={isDark ? theme.colors.gray[500] : theme.colors.gray[400]}
             />
-          </View>
-
+          </View>{" "}
           <View
             style={[
               styles.dateBox,
-              selecting === "end"
-                ? {
-                    borderColor: theme.colors.primary,
-                    borderWidth: 2,
-                  }
-                : {
-                    borderColor: isDark
-                      ? theme.colors.grayPalette[700]
-                      : theme.colors.gray[300],
-                    borderWidth: 1,
-                  },
+              {
+                borderColor: isDark
+                  ? theme.colors.grayPalette[700]
+                  : theme.colors.gray[300],
+                borderWidth: 1,
+              },
             ]}
           >
             <Text
@@ -286,7 +195,6 @@ export default function SearchDateModal() {
             </Text>
           </View>
         </View>
-
         {/* Nights count */}
         <View style={styles.nightsContainer}>
           <Text
@@ -299,40 +207,20 @@ export default function SearchDateModal() {
           >
             {nights} {nights === 1 ? "night" : "nights"}
           </Text>
-        </View>
-
+        </View>{" "}
         {/* Calendar */}
         <Calendar
-          onDayPress={handleDayPress}
-          markedDates={getMarkedDates()}
-          minDate={format(today, "yyyy-MM-dd")}
-          enableSwipeMonths={true}
-          markingType="period"
-          theme={{
-            calendarBackground: isDark ? theme.colors.gray[800] : "#FFFFFF",
-            textSectionTitleColor: isDark
-              ? theme.colors.gray[300]
-              : theme.colors.gray[600],
-            selectedDayBackgroundColor: theme.colors.primary,
-            selectedDayTextColor: theme.colors.white,
-            todayTextColor: theme.colors.primary,
-            dayTextColor: isDark
-              ? theme.colors.white
-              : theme.colors.grayPalette[900],
-            textDisabledColor: isDark
-              ? theme.colors.gray[600]
-              : theme.colors.gray[400],
-            arrowColor: theme.colors.primary,
-            monthTextColor: isDark
-              ? theme.colors.white
-              : theme.colors.grayPalette[900],
-            textMonthFontWeight: "600",
-            textDayFontSize: 14,
-            textMonthFontSize: 16,
-            textDayHeaderFontSize: 14,
+          enableRangeSelection={true}
+          initialStartDate={new Date(startDate)}
+          initialEndDate={new Date(endDate)}
+          minDate={today}
+          onDateSelect={(start: Date, end?: Date) => {
+            setStartDate(format(start, "yyyy-MM-dd"));
+            if (end) {
+              setEndDate(format(end, "yyyy-MM-dd"));
+            }
           }}
         />
-
         {/* Quick selection buttons */}
         <View style={styles.quickSelectContainer}>
           {[0, 2, 7, 14].map((days) => {
@@ -357,7 +245,6 @@ export default function SearchDateModal() {
                   const newEndDate = format(end, "yyyy-MM-dd");
                   setStartDate(newStartDate);
                   setEndDate(newEndDate);
-                  setSelecting("start");
                 }}
               >
                 <Text

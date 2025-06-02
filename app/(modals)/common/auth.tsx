@@ -6,41 +6,36 @@
 import React, { useState } from "react";
 import {
   View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ActivityIndicator,
   ScrollView,
-  TextInput,
   KeyboardAvoidingView,
   Platform,
+  StyleSheet,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
 // Context and hooks
-import { useTheme } from "@common/context/ThemeContext";
 import { useAuth } from "@common/context/AuthContext";
 import { useToast } from "@common/context/ToastContext";
-// import { useTranslation } from "react-i18next";
 
 // Components
 import BottomSheetModal from "@common/components/BottomSheetModal";
+import {
+  AuthForm,
+  AuthToggle,
+  ErrorMessage,
+  SocialLogin,
+  TermsText,
+} from "src/common/components/Modals/Auth";
 
 // Services
 import * as authService from "@common/services/authService";
 
 // Constants
-import { fontSize } from "@common/constants/typography";
 import { spacing } from "@common/constants/spacing";
-import { radius } from "@common/constants/radius";
-import { useTranslation } from "node_modules/react-i18next";
 
 type AuthView = "login" | "register";
 
 export default function AuthModal() {
-  const { theme, isDark } = useTheme();
-  const { t } = useTranslation();
   const { login } = useAuth();
   const { showToast } = useToast();
 
@@ -61,6 +56,7 @@ export default function AuthModal() {
   // Password visibility toggle
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   // Form validation for login form
   const validateLoginForm = () => {
     if (!email.trim()) return "Email is required";
@@ -157,7 +153,7 @@ export default function AuthModal() {
 
   return (
     <BottomSheetModal
-      title={authView === "login" ? t("auth.login") : t("auth.register")}
+      title={authView === "login" ? "Login" : "Register"}
       showSaveButton={false}
       fullHeight={authView === "register"}
     >
@@ -169,465 +165,39 @@ export default function AuthModal() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
         >
-          {/* Auth Form */}
           <View style={styles.formContainer}>
             {/* Error Message */}
-            {error ? (
-              <View
-                style={[
-                  styles.errorContainer,
-                  {
-                    backgroundColor: isDark
-                      ? theme.colors.errorPalette[900]
-                      : theme.colors.errorPalette[50],
-                    borderColor: theme.colors.error,
-                  },
-                ]}
-              >
-                <Ionicons
-                  name="alert-circle-outline"
-                  size={20}
-                  color={theme.colors.error}
-                />
-                <Text
-                  style={[
-                    styles.errorText,
-                    {
-                      color: isDark
-                        ? theme.colors.error[100]
-                        : theme.colors.error[700],
-                    },
-                  ]}
-                >
-                  {error}
-                </Text>
-              </View>
-            ) : null}
+            <ErrorMessage error={error} />
 
-            {/* Email Field */}
-            <View style={styles.inputContainer}>
-              <Text
-                style={[
-                  styles.inputLabel,
-                  {
-                    color: isDark
-                      ? theme.colors.gray[300]
-                      : theme.colors.gray[700],
-                  },
-                ]}
-              >
-                {t("auth.email")}
-              </Text>
-              <TextInput
-                style={[
-                  styles.input,
-                  {
-                    backgroundColor: isDark
-                      ? theme.colors.gray[800]
-                      : theme.white,
-                    borderColor: isDark
-                      ? theme.colors.gray[700]
-                      : theme.colors.gray[300],
-                    color: isDark ? theme.white : theme.colors.gray[900],
-                  },
-                ]}
-                placeholder={t("auth.emailPlaceholder")}
-                placeholderTextColor={
-                  isDark ? theme.colors.gray[500] : theme.colors.gray[400]
-                }
-                autoCapitalize="none"
-                keyboardType="email-address"
-                value={email}
-                onChangeText={setEmail}
-                editable={!loading}
-              />
-            </View>
-
-            {/* Registration fields */}
-            {authView === "register" && (
-              <>
-                <View style={styles.nameContainer}>
-                  {/* First Name */}
-                  <View
-                    style={[
-                      styles.inputContainer,
-                      { flex: 1, marginRight: spacing.sm },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.inputLabel,
-                        {
-                          color: isDark
-                            ? theme.colors.gray[300]
-                            : theme.colors.gray[700],
-                        },
-                      ]}
-                    >
-                      {t("auth.firstName")}
-                    </Text>
-                    <TextInput
-                      style={[
-                        styles.input,
-                        {
-                          backgroundColor: isDark
-                            ? theme.colors.gray[800]
-                            : theme.white,
-                          borderColor: isDark
-                            ? theme.colors.gray[700]
-                            : theme.colors.gray[300],
-                          color: isDark ? theme.white : theme.colors.gray[900],
-                        },
-                      ]}
-                      placeholder={t("auth.firstNamePlaceholder")}
-                      placeholderTextColor={
-                        isDark ? theme.colors.gray[500] : theme.colors.gray[400]
-                      }
-                      value={firstName}
-                      onChangeText={setFirstName}
-                      editable={!loading}
-                    />
-                  </View>
-
-                  {/* Last Name */}
-                  <View style={[styles.inputContainer, { flex: 1 }]}>
-                    <Text
-                      style={[
-                        styles.inputLabel,
-                        {
-                          color: isDark
-                            ? theme.colors.gray[300]
-                            : theme.colors.gray[700],
-                        },
-                      ]}
-                    >
-                      {t("auth.lastName")}
-                    </Text>
-                    <TextInput
-                      style={[
-                        styles.input,
-                        {
-                          backgroundColor: isDark
-                            ? theme.colors.gray[800]
-                            : theme.white,
-                          borderColor: isDark
-                            ? theme.colors.gray[700]
-                            : theme.colors.gray[300],
-                          color: isDark ? theme.white : theme.colors.gray[900],
-                        },
-                      ]}
-                      placeholder={t("auth.lastNamePlaceholder")}
-                      placeholderTextColor={
-                        isDark ? theme.colors.gray[500] : theme.colors.gray[400]
-                      }
-                      value={lastName}
-                      onChangeText={setLastName}
-                      editable={!loading}
-                    />
-                  </View>
-                </View>
-              </>
-            )}
-
-            {/* Password Field */}
-            <View style={styles.inputContainer}>
-              <Text
-                style={[
-                  styles.inputLabel,
-                  {
-                    color: isDark
-                      ? theme.colors.gray[300]
-                      : theme.colors.gray[700],
-                  },
-                ]}
-              >
-                {t("auth.password")}
-              </Text>
-              <View style={styles.passwordContainer}>
-                <TextInput
-                  style={[
-                    styles.passwordInput,
-                    {
-                      backgroundColor: isDark
-                        ? theme.colors.gray[800]
-                        : theme.white,
-                      borderColor: isDark
-                        ? theme.colors.gray[700]
-                        : theme.colors.gray[300],
-                      color: isDark ? theme.white : theme.colors.gray[900],
-                    },
-                  ]}
-                  placeholder={t("auth.passwordPlaceholder")}
-                  placeholderTextColor={
-                    isDark ? theme.colors.gray[500] : theme.colors.gray[400]
-                  }
-                  secureTextEntry={!showPassword}
-                  value={password}
-                  onChangeText={setPassword}
-                  editable={!loading}
-                />
-                <TouchableOpacity
-                  style={styles.passwordVisibilityBtn}
-                  onPress={() => setShowPassword(!showPassword)}
-                >
-                  <Ionicons
-                    name={showPassword ? "eye-off-outline" : "eye-outline"}
-                    size={20}
-                    color={
-                      isDark ? theme.colors.gray[400] : theme.colors.gray[600]
-                    }
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* Confirm Password (Register only) */}
-            {authView === "register" && (
-              <View style={styles.inputContainer}>
-                <Text
-                  style={[
-                    styles.inputLabel,
-                    {
-                      color: isDark
-                        ? theme.colors.gray[300]
-                        : theme.colors.gray[700],
-                    },
-                  ]}
-                >
-                  {t("auth.confirmPassword")}
-                </Text>
-                <View style={styles.passwordContainer}>
-                  <TextInput
-                    style={[
-                      styles.passwordInput,
-                      {
-                        backgroundColor: isDark
-                          ? theme.colors.gray[800]
-                          : theme.white,
-                        borderColor: isDark
-                          ? theme.colors.gray[700]
-                          : theme.colors.gray[300],
-                        color: isDark ? theme.white : theme.colors.gray[900],
-                      },
-                    ]}
-                    placeholder={t("auth.confirmPasswordPlaceholder")}
-                    placeholderTextColor={
-                      isDark ? theme.colors.gray[500] : theme.colors.gray[400]
-                    }
-                    secureTextEntry={!showConfirmPassword}
-                    value={confirmPassword}
-                    onChangeText={setConfirmPassword}
-                    editable={!loading}
-                  />
-                  <TouchableOpacity
-                    style={styles.passwordVisibilityBtn}
-                    onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-                  >
-                    <Ionicons
-                      name={
-                        showConfirmPassword ? "eye-off-outline" : "eye-outline"
-                      }
-                      size={20}
-                      color={
-                        isDark ? theme.colors.gray[400] : theme.colors.gray[600]
-                      }
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
-
-            {/* Forgot Password (Login only) */}
-            {authView === "login" && (
-              <TouchableOpacity
-                style={styles.forgotPasswordBtn}
-                onPress={() => router.push("/(modals)/common/forgot-password")}
-              >
-                <Text
-                  style={[
-                    styles.forgotPasswordText,
-                    { color: theme.colors.primary },
-                  ]}
-                >
-                  {t("auth.forgotPassword")}
-                </Text>
-              </TouchableOpacity>
-            )}
-
-            {/* Submit Button */}
-            <TouchableOpacity
-              style={[
-                styles.submitButton,
-                {
-                  backgroundColor: theme.colors.primary,
-                  opacity: loading ? 0.7 : 1,
-                },
-              ]}
-              onPress={authView === "login" ? handleLogin : handleRegister}
-              disabled={loading}
-            >
-              {loading ? (
-                <ActivityIndicator color={theme.white} size="small" />
-              ) : (
-                <Text style={styles.submitButtonText}>
-                  {authView === "login"
-                    ? t("auth.login")
-                    : t("auth.createAccount")}
-                </Text>
-              )}
-            </TouchableOpacity>
+            {/* Auth Form */}
+            <AuthForm
+              authView={authView}
+              loading={loading}
+              email={email}
+              setEmail={setEmail}
+              password={password}
+              setPassword={setPassword}
+              firstName={firstName}
+              setFirstName={setFirstName}
+              lastName={lastName}
+              setLastName={setLastName}
+              confirmPassword={confirmPassword}
+              setConfirmPassword={setConfirmPassword}
+              showPassword={showPassword}
+              setShowPassword={setShowPassword}
+              showConfirmPassword={showConfirmPassword}
+              setShowConfirmPassword={setShowConfirmPassword}
+              onSubmit={authView === "login" ? handleLogin : handleRegister}
+            />
 
             {/* Toggle between login/register views */}
-            <View style={styles.toggleContainer}>
-              <Text
-                style={[
-                  styles.toggleText,
-                  {
-                    color: isDark
-                      ? theme.colors.gray[300]
-                      : theme.colors.gray[700],
-                  },
-                ]}
-              >
-                {authView === "login"
-                  ? t("auth.noAccount")
-                  : t("auth.alreadyHaveAccount")}
-              </Text>
-              <TouchableOpacity onPress={toggleAuthView}>
-                <Text
-                  style={[
-                    styles.toggleActionText,
-                    { color: theme.colors.primary },
-                  ]}
-                >
-                  {authView === "login" ? t("auth.register") : t("auth.login")}
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <AuthToggle authView={authView} onToggle={toggleAuthView} />
 
-            {/* Social Login Options - Placeholder */}
-            <View style={styles.dividerContainer}>
-              <View
-                style={[
-                  styles.divider,
-                  {
-                    backgroundColor: isDark
-                      ? theme.colors.gray[700]
-                      : theme.colors.gray[300],
-                  },
-                ]}
-              />
-              <Text
-                style={[
-                  styles.dividerText,
-                  {
-                    color: isDark
-                      ? theme.colors.gray[400]
-                      : theme.colors.gray[600],
-                    backgroundColor: isDark
-                      ? theme.colors.gray[900]
-                      : theme.colors.gray[50],
-                  },
-                ]}
-              >
-                {t("auth.orContinueWith")}
-              </Text>
-              <View
-                style={[
-                  styles.divider,
-                  {
-                    backgroundColor: isDark
-                      ? theme.colors.gray[700]
-                      : theme.colors.gray[300],
-                  },
-                ]}
-              />
-            </View>
-
-            <View style={styles.socialButtonsContainer}>
-              <TouchableOpacity
-                style={[
-                  styles.socialButton,
-                  {
-                    backgroundColor: isDark
-                      ? theme.colors.gray[800]
-                      : theme.white,
-                    borderColor: isDark
-                      ? theme.colors.gray[700]
-                      : theme.colors.gray[300],
-                  },
-                ]}
-                disabled={loading}
-              >
-                <Ionicons name="logo-google" size={20} color="#DB4437" />
-                <Text
-                  style={[
-                    styles.socialButtonText,
-                    {
-                      color: isDark
-                        ? theme.colors.gray[300]
-                        : theme.colors.gray[700],
-                    },
-                  ]}
-                >
-                  Google
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[
-                  styles.socialButton,
-                  {
-                    backgroundColor: isDark
-                      ? theme.colors.gray[800]
-                      : theme.white,
-                    borderColor: isDark
-                      ? theme.colors.gray[700]
-                      : theme.colors.gray[300],
-                  },
-                ]}
-                disabled={loading}
-              >
-                <Ionicons
-                  name="logo-apple"
-                  size={20}
-                  color={isDark ? theme.white : "#000000"}
-                />
-                <Text
-                  style={[
-                    styles.socialButtonText,
-                    {
-                      color: isDark
-                        ? theme.colors.gray[300]
-                        : theme.colors.gray[700],
-                    },
-                  ]}
-                >
-                  Apple
-                </Text>
-              </TouchableOpacity>
-            </View>
+            {/* Social Login Options */}
+            <SocialLogin loading={loading} />
 
             {/* Terms & Privacy */}
-            <Text
-              style={[
-                styles.termsText,
-                {
-                  color: isDark
-                    ? theme.colors.gray[400]
-                    : theme.colors.gray[600],
-                },
-              ]}
-            >
-              {t("auth.termsAgreement")}
-              <Text style={{ color: theme.colors.primary }}>
-                {t("auth.termsOfService")}
-              </Text>
-              {t("auth.and")}
-              <Text style={{ color: theme.colors.primary }}>
-                {t("auth.privacyPolicy")}
-              </Text>
-            </Text>
+            <TermsText />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -645,126 +215,4 @@ const styles = StyleSheet.create({
   formContainer: {
     padding: spacing.md,
   },
-  errorContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: spacing.sm,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    marginBottom: spacing.md,
-  },
-  errorText: {
-    marginLeft: spacing.xs,
-    fontSize: fontSize.sm,
-    flex: 1,
-  },
-  inputContainer: {
-    marginBottom: spacing.md,
-  },
-  nameContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  inputLabel: {
-    fontSize: fontSize.sm,
-    fontWeight: "500",
-    marginBottom: spacing.xs,
-  },
-  input: {
-    height: 48,
-    borderWidth: 1,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.md,
-    fontSize: fontSize.md,
-  },
-  passwordContainer: {
-    position: "relative",
-  },
-  passwordInput: {
-    height: 48,
-    borderWidth: 1,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.md,
-    fontSize: fontSize.md,
-    paddingRight: spacing.xl * 2,
-  },
-  passwordVisibilityBtn: {
-    position: "absolute",
-    right: spacing.md,
-    height: 48,
-    justifyContent: "center",
-  },
-  forgotPasswordBtn: {
-    alignSelf: "flex-end",
-    marginBottom: spacing.md,
-  },
-  forgotPasswordText: {
-    fontSize: fontSize.sm,
-    fontWeight: "500",
-  },
-  submitButton: {
-    height: 48,
-    borderRadius: radius.md,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: spacing.sm,
-    marginBottom: spacing.lg,
-  },
-  submitButtonText: {
-    color: "white",
-    fontSize: fontSize.md,
-    fontWeight: "600",
-  },
-  toggleContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginBottom: spacing.lg,
-  },
-  toggleText: {
-    fontSize: fontSize.sm,
-  },
-  toggleActionText: {
-    fontSize: fontSize.sm,
-    fontWeight: "600",
-    marginLeft: spacing.xs,
-  },
-  dividerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: spacing.md,
-  },
-  divider: {
-    flex: 1,
-    height: 1,
-  },
-  dividerText: {
-    paddingHorizontal: spacing.md,
-    fontSize: fontSize.sm,
-  },
-  socialButtonsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: spacing.md,
-  },
-  socialButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    height: 48,
-    borderWidth: 1,
-    borderRadius: radius.md,
-    flex: 1,
-    marginHorizontal: spacing.xs,
-  },
-  socialButtonText: {
-    marginLeft: spacing.xs,
-    fontSize: fontSize.md,
-    fontWeight: "500",
-  },
-  termsText: {
-    fontSize: fontSize.xs,
-    textAlign: "center",
-    marginTop: spacing.md,
-  },
 });
-

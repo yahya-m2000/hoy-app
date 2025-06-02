@@ -191,14 +191,112 @@ export const createBooking = async (
 export const getUserBookings = async (status?: string): Promise<Booking[]> => {
   return enqueueRequest(async () => {
     try {
-      const response: AxiosResponse<ApiResponse<Booking[]>> = await api.get(
-        BASE_URL,
-        {
-          params: { status },
-        }
+      console.log(
+        "🔄 Making API call to get user bookings with status:",
+        status
       );
-      return response.data.data;
+      const response: AxiosResponse<any> = await api.get(BASE_URL, {
+        params: { status },
+      });
+      console.log("📨 Raw API response structure:", {
+        hasData: !!response.data,
+        dataType: typeof response.data,
+        dataKeys: response.data ? Object.keys(response.data) : [],
+        hasDataProperty: !!(response.data && response.data.data),
+        dataPropertyType:
+          response.data && response.data.data
+            ? typeof response.data.data
+            : "undefined",
+        hasDataDataProperty: !!(
+          response.data &&
+          response.data.data &&
+          response.data.data.data
+        ),
+        dataDataType:
+          response.data && response.data.data && response.data.data.data
+            ? typeof response.data.data.data
+            : "undefined",
+        isDataDataArray: !!(
+          response.data &&
+          response.data.data &&
+          response.data.data.data &&
+          Array.isArray(response.data.data.data)
+        ),
+        arrayLength:
+          response.data &&
+          response.data.data &&
+          response.data.data.data &&
+          Array.isArray(response.data.data.data)
+            ? response.data.data.data.length
+            : 0,
+      });
+
+      const responseData = response.data;
+
+      // Handle the actual API response format: {success: true, data: {data: [...bookings...], pagination: {...}}}
+      if (
+        responseData &&
+        responseData.data &&
+        responseData.data.data &&
+        Array.isArray(responseData.data.data)
+      ) {
+        console.log(
+          "✅ Successfully extracted bookings array from response.data.data:",
+          responseData.data.data.length,
+          "items"
+        );
+        const bookingsArray = responseData.data.data;
+        console.log(
+          "🔍 Returning bookings array. Length:",
+          bookingsArray.length,
+          "Type:",
+          typeof bookingsArray,
+          "IsArray:",
+          Array.isArray(bookingsArray)
+        );
+        return bookingsArray; // This should return the array directly
+      }
+
+      // Fallback: Handle format {data: [...bookings...], pagination: {...}}
+      if (
+        responseData &&
+        responseData.data &&
+        Array.isArray(responseData.data)
+      ) {
+        console.log(
+          "✅ Successfully extracted bookings array from response.data:",
+          responseData.data.length,
+          "items"
+        );
+        const bookingsArray = responseData.data;
+        console.log(
+          "🔍 Returning bookings array. Length:",
+          bookingsArray.length,
+          "Type:",
+          typeof bookingsArray,
+          "IsArray:",
+          Array.isArray(bookingsArray)
+        );
+        return bookingsArray; // This should return the array directly
+      }
+
+      // Fallback: if the response itself is an array
+      if (Array.isArray(responseData)) {
+        console.log(
+          "✅ Response is direct array:",
+          responseData.length,
+          "items"
+        );
+        return responseData;
+      }
+
+      console.log(
+        "⚠️ No bookings array found in response, returning empty array"
+      );
+      console.log("Response structure:", JSON.stringify(responseData, null, 2));
+      return [];
     } catch (error) {
+      console.error("❌ Error in getUserBookings:", error);
       throw formatError(error, "Could not fetch bookings");
     }
   });

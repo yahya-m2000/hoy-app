@@ -4,6 +4,7 @@ import Constants from "expo-constants";
 import { eventEmitter, AppEvents } from "@common/utils/eventEmitter";
 import { isValidDate } from "@common/utils/formatting/dateUtils";
 import { isValidObjectId } from "@common/utils/api/mongoUtils";
+import { API_BASE_URL } from "../constants/api";
 
 // Define new app events for socket communication
 export const SocketEvents = {
@@ -26,6 +27,7 @@ let socket: Socket | null = null;
 const getSocketUrl = (): string => {
   try {
     const apiUrl =
+      API_BASE_URL ||
       Constants.expoConfig?.extra?.apiUrl ||
       process.env.EXPO_PUBLIC_API_URL ||
       "http://localhost:3000/api/v1/";

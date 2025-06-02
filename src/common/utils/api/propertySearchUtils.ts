@@ -48,11 +48,11 @@ export const searchWithCoordinates = async (
     const results = await searchProperties(searchQuery);
 
     return results;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error in coordinate search:", error);
 
     // Add detailed error logging for API errors
-    if (error.response) {
+    if (error?.response) {
       console.error("API Error Response:", {
         status: error.response.status,
         data: error.response.data,

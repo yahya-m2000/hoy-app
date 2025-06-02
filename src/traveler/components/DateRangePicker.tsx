@@ -3,7 +3,7 @@
  * Allows users to select check-in and check-out dates
  */
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { useTheme } from "@common/context/ThemeContext";
 // import { useTranslation } from "react-i18next";
-import { Calendar } from "react-native-calendars";
+import { Calendar } from "@common/components";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import * as bookingService from "@traveler/services/bookingService";
@@ -83,12 +83,6 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   );
   const [bookedDates, setBookedDates] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState(false);
-
-  // Format date to YYYY-MM-DD
-  const formatCalendarDate = (date: Date) => {
-    return format(date, "yyyy-MM-dd");
-  };
-
   // Fetch booked dates for the property
   useEffect(() => {
     if (propertyId) {
@@ -137,74 +131,6 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
       setLoading(false);
     }
   };
-
-  // Create marked dates for the calendar
-  const getMarkedDates = useCallback(() => {
-    const markedDates: Record<string, any> = { ...bookedDates };
-
-    if (selectedStartDate && selectedEndDate) {
-      // Mark the range of dates
-      const start = formatCalendarDate(selectedStartDate);
-      const end = formatCalendarDate(selectedEndDate);
-      markedDates[start] = {
-        startingDay: true,
-        color: theme.colors.primary,
-        textColor: "white",
-      };
-
-      markedDates[end] = {
-        endingDay: true,
-        color: theme.colors.primary,
-        textColor: "white",
-      };
-
-      // Fill in the days in between
-      let currentDate = new Date(selectedStartDate);
-      currentDate.setDate(currentDate.getDate() + 1);
-      while (currentDate < selectedEndDate) {
-        const dateString = formatCalendarDate(currentDate);
-        if (!bookedDates[dateString]) {
-          markedDates[dateString] = {
-            color: theme.colors.primaryPalette[200],
-            textColor: isDark ? theme.colors.gray[900] : "white",
-          };
-        }
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-    } else if (selectedStartDate) {
-      // Just mark the start date
-      const start = formatCalendarDate(selectedStartDate);
-      markedDates[start] = {
-        selected: true,
-        color: theme.colors.primary,
-        textColor: "white",
-      };
-    }
-
-    return markedDates;
-  }, [selectedStartDate, selectedEndDate, bookedDates, theme, isDark]);
-
-  // Handle date selection
-  const handleDayPress = (day: any) => {
-    const selectedDate = new Date(day.dateString);
-
-    if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
-      // Start a new selection
-      setSelectedStartDate(selectedDate);
-      setSelectedEndDate(null);
-    } else {
-      // Complete the range selection
-      if (selectedDate < selectedStartDate) {
-        setSelectedStartDate(selectedDate);
-        setSelectedEndDate(selectedStartDate);
-      } else {
-        setSelectedEndDate(selectedDate);
-        // Notify parent component of the selection
-        onSelectRange(selectedStartDate, selectedDate);
-      }
-    }
-  };
-
   // Reset selection
   const resetSelection = () => {
     setSelectedStartDate(null);
@@ -301,29 +227,22 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
             )}
           </View>{" "}
           <Calendar
-            minDate={formatCalendarDate(minDate)}
-            maxDate={maxDate ? formatCalendarDate(maxDate) : undefined}
-            onDayPress={handleDayPress}
-            markedDates={getMarkedDates()}
-            markingType="period"
-            theme={{
-              calendarBackground: isDark ? theme.colors.gray[900] : theme.white,
-              textSectionTitleColor: isDark
-                ? theme.colors.gray[300]
-                : theme.colors.gray[700],
-              selectedDayBackgroundColor: theme.colors.primary,
-              selectedDayTextColor: theme.white,
-              todayTextColor: theme.colors.primary,
-              dayTextColor: isDark ? theme.white : theme.colors.gray[800],
-              textDisabledColor: isDark
-                ? theme.colors.gray[700]
-                : theme.colors.gray[400],
-              dotColor: theme.colors.primary,
-              monthTextColor: isDark ? theme.white : theme.colors.gray[900],
-              arrowColor: theme.colors.primary,
-              textDayFontSize: 14,
-              textMonthFontSize: 16,
-              textDayHeaderFontSize: 14,
+            enableRangeSelection={true}
+            initialStartDate={selectedStartDate || undefined}
+            initialEndDate={selectedEndDate || undefined}
+            minDate={minDate}
+            maxDate={maxDate}
+            blockedDates={Object.keys(bookedDates).map(
+              (dateStr) => new Date(dateStr)
+            )}
+            onDateSelect={(startDate: Date, endDate?: Date) => {
+              setSelectedStartDate(startDate);
+              if (endDate) {
+                setSelectedEndDate(endDate);
+                onSelectRange(startDate, endDate);
+              } else {
+                setSelectedEndDate(null);
+              }
             }}
           />
         </>

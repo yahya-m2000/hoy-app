@@ -12,19 +12,19 @@ import {
   TextInput,
   ScrollView,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import { useTheme } from "@common-context/ThemeContext";
-import { SafeAreaView } from "react-native-safe-area-context";
+// import { View } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
-import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import { fontSize } from "@common/constants/typography";
 import { spacing } from "@common/constants/spacing";
 import { radius } from "@common/constants/radius";
 import { useCurrentUser, useUpdateProfile } from "@common-hooks/useUser";
 import { useToast } from "@common-context/ToastContext";
 import Avatar from "@common-components/Avatar";
+import CustomHeader from "@common-components/CustomHeader";
 import type { User } from "@common/types/user";
 
 // Add additional user properties that are not in the User type
@@ -105,34 +105,37 @@ export default function PersonalInfoScreen() {
     }
     setIsEditing(false);
   };
-
   if (userLoading) {
     return (
-      <SafeAreaView
+      <View
         style={[
           styles.container,
           {
             backgroundColor: isDark
               ? theme.colors.grayPalette[900]
               : theme.colors.grayPalette[50],
-            justifyContent: "center",
-            alignItems: "center",
           },
         ]}
       >
-        <StatusBar style={isDark ? "light" : "dark"} />
-        <ActivityIndicator size="large" color={theme.colors.primary} />
-        <Text
-          style={[
-            styles.loadingText,
-            {
-              color: isDark ? theme.colors.grayPalette[300] : theme.colors.grayPalette[700],
-            },
-          ]}
-        >
-          {t("common.loading")}
-        </Text>
-      </SafeAreaView>
+        <CustomHeader title={t("account.personalInfo")} />
+
+        {/* Loading Content */}
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+          <Text
+            style={[
+              styles.loadingText,
+              {
+                color: isDark
+                  ? theme.colors.grayPalette[300]
+                  : theme.colors.grayPalette[700],
+              },
+            ]}
+          >
+            {t("common.loading")}
+          </Text>
+        </View>
+      </View>
     );
   }
 
@@ -148,7 +151,9 @@ export default function PersonalInfoScreen() {
           style={[
             styles.inputLabel,
             {
-              color: isDark ? theme.colors.grayPalette[300] : theme.colors.grayPalette[700],
+              color: isDark
+                ? theme.colors.grayPalette[300]
+                : theme.colors.grayPalette[700],
             },
           ]}
         >
@@ -177,9 +182,8 @@ export default function PersonalInfoScreen() {
       </View>
     );
   };
-
   return (
-    <SafeAreaView
+    <View
       style={[
         styles.container,
         {
@@ -189,111 +193,87 @@ export default function PersonalInfoScreen() {
         },
       ]}
     >
-      <StatusBar style={isDark ? "light" : "dark"} />
-
-      {/* Header */}
-      <View
-        style={[
-          styles.header,
-          {
-            borderBottomColor: isDark
-              ? theme.colors.gray[800]
-              : theme.colors.gray[200],
-          },
-        ]}
-      >
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons
-            name="chevron-back"
-            size={28}
-            color={isDark ? theme.colors.grayPalette[300] : theme.colors.grayPalette[700]}
-          />
-        </TouchableOpacity>
-        <Text
-          style={[
-            styles.headerTitle,
-            {
-              color: isDark ? theme.colors.gray[100] : theme.colors.grayPalette[900],
-            },
-          ]}
-        >
-          {t("account.personalInfo")}
-        </Text>
-        <TouchableOpacity
-          style={styles.editButton}
-          onPress={() => {
-            if (isEditing) {
-              handleSave();
-            } else {
-              setIsEditing(true);
-            }
-          }}
-          disabled={isUpdating}
-        >
-          {isUpdating ? (
-            <ActivityIndicator size="small" color={theme.colors.primary} />
-          ) : (
-            <Text
-              style={[
-                styles.editButtonText,
-                { color: theme.colors.primary },
-              ]}
-            >
-              {isEditing ? t("common.save") : t("common.edit")}
-            </Text>
-          )}
-        </TouchableOpacity>
-      </View>
+      <CustomHeader title={t("account.personalInfo")} />
 
       {/* Profile Picture Section */}
-      <View style={styles.profileSection}>
-        <Avatar
-          size="xl"
-          source={user?.avatarUrl || null}
-          name={`${user?.firstName || ""} ${user?.lastName || ""}`}
-          showBorder
-        />
-        {isEditing && (
-          <TouchableOpacity
-            style={[
-              styles.changePhotoButton,
-              {
-                backgroundColor: isDark
-                  ? theme.colors.gray[800]
-                  : theme.colors.gray[200],
-              },
-            ]}
-          >
-            <Text
-              style={[
-                styles.changePhotoText,
-                {
-                  color: isDark
-                    ? theme.colors.grayPalette[300]
-                    : theme.colors.grayPalette[700],
-                },
-              ]}
-            >
-              {t("profile.changePhoto")}
-            </Text>
-          </TouchableOpacity>
-        )}
-      </View>
-
       <ScrollView
         style={styles.formContainer}
         showsVerticalScrollIndicator={false}
       >
+        <View style={styles.profileSection}>
+          <Avatar
+            size="xl"
+            source={user?.avatarUrl || null}
+            name={`${user?.firstName || ""} ${user?.lastName || ""}`}
+            showBorder
+          />
+          {isEditing && (
+            <TouchableOpacity
+              style={[
+                styles.changePhotoButton,
+                {
+                  backgroundColor: isDark
+                    ? theme.colors.gray[800]
+                    : theme.colors.gray[200],
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.changePhotoText,
+                  {
+                    color: isDark
+                      ? theme.colors.grayPalette[300]
+                      : theme.colors.grayPalette[700],
+                  },
+                ]}
+              >
+                {t("profile.changePhoto")}
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {/* Edit Button */}
+        <View style={styles.editButtonContainer}>
+          <TouchableOpacity
+            style={[
+              styles.editButton,
+              {
+                backgroundColor: theme.colors.primary,
+              },
+            ]}
+            onPress={() => {
+              if (isEditing) {
+                handleSave();
+              } else {
+                setIsEditing(true);
+              }
+            }}
+            disabled={isUpdating}
+          >
+            <Text
+              style={[
+                styles.editButtonText,
+                {
+                  color: theme.white,
+                },
+              ]}
+            >
+              {isEditing ? t("common.done") : t("common.edit")}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
         {/* Personal Information Form */}
         <View style={styles.section}>
           <Text
             style={[
               styles.sectionTitle,
               {
-                color: isDark ? theme.colors.grayPalette[300] : theme.colors.grayPalette[700],
+                color: isDark
+                  ? theme.colors.grayPalette[300]
+                  : theme.colors.grayPalette[700],
               },
             ]}
           >
@@ -332,10 +312,7 @@ export default function PersonalInfoScreen() {
             {!isVerified && (
               <TouchableOpacity>
                 <Text
-                  style={[
-                    styles.verifyLink,
-                    { color: theme.colors.primary },
-                  ]}
+                  style={[styles.verifyLink, { color: theme.colors.primary }]}
                 >
                   {t("profile.verifyNow")}
                 </Text>
@@ -376,7 +353,7 @@ export default function PersonalInfoScreen() {
 
         <View style={styles.spacer} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -385,11 +362,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: Platform.OS === "ios" ? 88 : 80,
+    zIndex: 10,
     flexDirection: "row",
     alignItems: "center",
+
     justifyContent: "space-between",
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+    paddingTop: Platform.OS === "ios" ? 44 : 10,
+    paddingHorizontal: 15,
+
     borderBottomWidth: 1,
   },
   backButton: {
@@ -400,15 +385,22 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   editButton: {
-    padding: spacing.xs,
+    alignItems: "center",
+    padding: spacing.md,
+    borderRadius: radius.md,
+    width: "100%",
   },
   editButtonText: {
     fontSize: fontSize.md,
-    fontWeight: "500",
+    fontWeight: "600",
   },
   profileSection: {
     alignItems: "center",
     paddingVertical: spacing.lg,
+  },
+  editButtonContainer: {
+    paddingHorizontal: spacing.lg,
+    paddingBottom: spacing.md,
   },
   changePhotoButton: {
     paddingVertical: spacing.xs,
@@ -422,6 +414,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flex: 1,
+    marginTop: spacing.xxl,
     padding: spacing.lg,
   },
   section: {
@@ -479,5 +472,9 @@ const styles = StyleSheet.create({
     fontSize: fontSize.md,
     marginTop: spacing.sm,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
-

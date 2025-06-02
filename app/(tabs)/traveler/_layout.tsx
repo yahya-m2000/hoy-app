@@ -119,7 +119,7 @@ const TravelerLayout = () => {
         options={{
           title: t("navigation.account"),
           tabBarLabel: t("navigation.account"),
-          headerTitle: t("navigation.account"),
+          headerShown: true,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" size={size} color={color} />
           ),

@@ -19,7 +19,6 @@ import { CurrencyProvider } from "@common-context/CurrencyContext";
 import { DateSelectionProvider } from "@common-context/DateSelectionContext";
 import { NetworkProvider } from "@common-context/NetworkContext";
 import { UserRoleProvider, useUserRole } from "@common-context/UserRoleContext";
-import { ChatProvider } from "@common-context/ChatContext";
 
 // App components
 import OfflineNotice from "@common-components/OfflineNotice";
@@ -30,8 +29,26 @@ const RoleChangeLoadingOverlayWrapper = () => {
   return <RoleChangeLoadingOverlay visible={isRoleLoading} />;
 };
 
-// Create a client
-const queryClient = new QueryClient();
+// Create a client with better error handling
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: (failureCount, error: any) => {
+        // Don't retry on auth errors
+        if (
+          error?.response?.status === 401 ||
+          error?.response?.status === 403
+        ) {
+          return false;
+        }
+        // Retry up to 3 times for other errors
+        return failureCount < 3;
+      },
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 5, // 5 minutes
+    },
+  },
+});
 
 // Root layout component
 export default function RootLayout() {
@@ -41,7 +58,6 @@ export default function RootLayout() {
         <AuthProvider>
           <NetworkProvider>
             <CurrencyProvider>
-              {/* <ChatProvider> */}
               <ThemeProvider>
                 <UserRoleProvider>
                   <DateSelectionProvider>
@@ -57,11 +73,16 @@ export default function RootLayout() {
                         />
                         <Stack.Screen
                           name="(screens)"
-                          options={{ headerShown: false }}
+                          options={{
+                            headerShown: false,
+                          }}
                         />
                         <Stack.Screen
                           name="(modals)"
-                          options={{ headerShown: false }}
+                          options={{
+                            headerShown: false,
+                            presentation: "modal",
+                          }}
                         />
                         {/* <Stack.Screen
                             name="(screens)/common/conversation/[id]"
@@ -75,7 +96,6 @@ export default function RootLayout() {
                   </DateSelectionProvider>
                 </UserRoleProvider>
               </ThemeProvider>
-              {/* </ChatProvider> */}
             </CurrencyProvider>
           </NetworkProvider>
         </AuthProvider>

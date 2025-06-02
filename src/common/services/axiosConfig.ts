@@ -10,10 +10,12 @@ import {
   logResponse,
   logError,
 } from "../utils/network/networkLogger";
+import { API_BASE_URL } from "../constants/api";
 
 // Get API base URL from environment or use default - ensure proper URL formatting
-const API_BASE_URL = formatApiUrl(
-  Constants.expoConfig?.extra?.apiUrl ||
+const AXIOS_API_BASE_URL = formatApiUrl(
+  API_BASE_URL ||
+    Constants.expoConfig?.extra?.apiUrl ||
     process.env.EXPO_PUBLIC_API_URL ||
     "http://localhost:3000/api/v1"
 );
@@ -31,7 +33,7 @@ function formatApiUrl(url: string): string {
 
 // Create axios instance with baseURL
 const axiosInstance = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: AXIOS_API_BASE_URL,
   timeout: 10000,
 });
 

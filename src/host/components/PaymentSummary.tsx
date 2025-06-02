@@ -227,7 +227,7 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: spacing.lg,
+    // Removed marginBottom since this is now wrapped in PaymentSummaryCard
   },
   section: {
     marginBottom: spacing.md,

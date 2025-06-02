@@ -25,8 +25,7 @@ import { useAuth } from "@common/context/AuthContext";
 import { useToast } from "@common/context/ToastContext";
 import { useDateSelection } from "@common/context/DateSelectionContext";
 import { useCurrency } from "@common/hooks/useCurrency";
-import { showAuthPrompt } from "@common/utils/authUtils";
-// import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 // Components
 import BottomSheetModal from "@common/components/BottomSheetModal";
@@ -50,8 +49,8 @@ import { radius } from "@common/constants/radius";
 
 export default function ReservationModal() {
   const { theme, isDark } = useTheme();
-  // const { t } = useTranslation();
-  const { user, accessToken } = useAuth();
+  const { t } = useTranslation();
+  const { user } = useAuth();
   const { showToast } = useToast();
   const { currency, getSymbol } = useCurrency();
   const params = useLocalSearchParams();
@@ -606,31 +605,19 @@ export default function ReservationModal() {
       setTimeout(() => router.back(), 100);
     }
   };
-  // Check if authenticated
-  useEffect(() => {
-    if (!user && !accessToken) {
-      // Show auth prompt using the modular utility
-      showAuthPrompt({
-        title: "Sign in Required",
-        message: "You need to sign in to make a reservation.",
-        onCancel: () => router.back(),
-      });
-    }
-  }, [user, accessToken]);
-
   // Modal title based on current step
   const getModalTitle = () => {
     switch (step) {
       case 1:
-        return "Select Dates";
+        return t("reservation.selectDates");
       case 2:
-        return "Guest Details";
+        return t("reservation.guestDetails");
       case 3:
-        return "Payment Method";
+        return t("reservation.paymentMethod");
       case 4:
-        return "Confirm Reservation";
+        return t("reservation.confirmReservation");
       default:
-        return "Reservation";
+        return t("reservation.reservation");
     }
   };
 
@@ -651,7 +638,7 @@ export default function ReservationModal() {
                   },
                 ]}
               >
-                Pre-selected Dates:
+                {t("reservation.preSelectedDates")}
               </Text>
               <Text
                 style={[
@@ -892,7 +879,9 @@ export default function ReservationModal() {
                 ]}
                 onPress={() => setStep(3)}
               >
-                <Text style={styles.continueButtonText}>Continue</Text>
+                <Text style={styles.continueButtonText}>
+                  {t("common.continue")}
+                </Text>
                 <Ionicons name="arrow-forward" size={20} color={theme.white} />
               </TouchableOpacity>
             </View>
@@ -984,6 +973,7 @@ export default function ReservationModal() {
               </Text>
             </TouchableOpacity>
             <View style={styles.buttonContainer}>
+              {" "}
               <TouchableOpacity
                 style={styles.backButton}
                 onPress={() => setStep(2)}
@@ -999,10 +989,9 @@ export default function ReservationModal() {
                     { color: theme.colors.grayPalette[700] },
                   ]}
                 >
-                  Back
+                  {t("common.back")}
                 </Text>
               </TouchableOpacity>
-
               <TouchableOpacity
                 style={[
                   styles.continueButton,
@@ -1327,7 +1316,7 @@ export default function ReservationModal() {
                     },
                   ]}
                 >
-                  Total
+                  {t("reservation.total")}
                 </Text>
                 <Text
                   style={[
@@ -1369,7 +1358,7 @@ export default function ReservationModal() {
                   },
                 ]}
               >
-                Payment Method
+                {t("reservation.paymentMethod")}
               </Text>
 
               <View
@@ -1433,6 +1422,7 @@ export default function ReservationModal() {
             </View>
 
             <View style={styles.buttonContainer}>
+              {" "}
               <TouchableOpacity
                 style={styles.backButton}
                 onPress={() => setStep(3)}
@@ -1448,10 +1438,9 @@ export default function ReservationModal() {
                     { color: theme.colors.grayPalette[700] },
                   ]}
                 >
-                  Back
+                  {t("common.back")}
                 </Text>
               </TouchableOpacity>
-
               <TouchableOpacity
                 style={[
                   styles.reserveButton,
@@ -1464,8 +1453,9 @@ export default function ReservationModal() {
                   <ActivityIndicator size="small" color={theme.white} />
                 ) : (
                   <>
+                    {" "}
                     <Text style={styles.reserveButtonText}>
-                      Confirm and Pay
+                      {t("reservation.confirmAndPay")}
                     </Text>
                     <Ionicons name="checkmark" size={20} color={theme.white} />
                   </>

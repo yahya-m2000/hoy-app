@@ -135,7 +135,7 @@ const PropertySummary = ({ isLoading, data }: PropertySummaryProps) => {
                 { color: isDark ? theme.colors.white : theme.colors.black },
               ]}
             >
-              {data.properties.occupancyRate.toFixed(0)}%
+              {data?.properties?.occupancyRate?.toFixed(0) || "0"}%
             </Text>
           </View>
 
@@ -160,8 +160,10 @@ const PropertySummary = ({ isLoading, data }: PropertySummaryProps) => {
           icon="business-outline"
           title={t("host.noProperties")}
           message={t("host.noPropertiesMessage")}
-          buttonText={t("host.addProperty")}
-          onPress={() => router.push("/host/add-property")}
+          action={{
+            label: t("host.addProperty"),
+            onPress: () => router.push("/host/add-property"),
+          }}
         />
       )}
     </Card>

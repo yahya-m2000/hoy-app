@@ -19,7 +19,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import { fontSize } from "@common/constants/typography";
 import { spacing } from "@common/constants/spacing";
 import { radius } from "@common/constants/radius";
@@ -48,57 +47,77 @@ export default function PrivacySecurityScreen() {
     marketingNotifications: false,
   };
 
-  // Handle toggling notification preferences
-  const toggleNotificationPreference = async (key: string, value: boolean) => {
+  // Helper functions
+  const handleTogglePreference = async (key: string, value: boolean) => {
     setIsLoadingPrefs(true);
     try {
       await updatePrefs.mutateAsync({
         notifications: {
-          ...preferences?.notifications,
+          ...notificationPrefs,
           [key]: value,
         },
       });
-
       showToast({
-        type: "success",
-        message: t("privacy.settingsSaved"),
+        message: t("account.settings.updated"),
+        type: "success"
       });
     } catch (error) {
-      console.error("Error updating preferences:", error);
+      console.error("Error updating preference:", error);
       showToast({
-        type: "error",
-        message: t("privacy.settingsError"),
+        message: t("account.settings.updateError"),
+        type: "error"
       });
     } finally {
       setIsLoadingPrefs(false);
     }
   };
 
-  // Handle password change
   const handleChangePassword = () => {
-    router.push("/(modals)/common/change-password");
+    // TODO: Implement password change flow
+    Alert.alert(
+      t("account.security.changePassword"),
+      t("account.security.changePasswordDescription"),
+      [
+        { text: t("common.cancel"), style: "cancel" },
+        { text: t("common.continue"), onPress: () => {} },
+      ]
+    );
   };
 
-  // Handle account deletion
+  const handleTwoFactorAuth = () => {
+    // TODO: Implement 2FA setup
+    Alert.alert(
+      t("account.security.twoFactorAuth"),
+      t("account.security.twoFactorAuthDescription"),
+      [
+        { text: t("common.cancel"), style: "cancel" },
+        { text: t("account.security.setupTwoFactor"), onPress: () => {} },
+      ]
+    );
+  };
+
   const handleDeleteAccount = () => {
     Alert.alert(
-      t("privacy.deleteAccountTitle"),
-      t("privacy.deleteAccountConfirmation"),
+      t("account.security.deleteAccount"),
+      t("account.security.deleteAccountWarning"),
       [
-        {
-          text: t("common.cancel"),
-          style: "cancel",
-        },
+        { text: t("common.cancel"), style: "cancel" },
         {
           text: t("common.delete"),
           style: "destructive",
           onPress: () => {
-            // This would typically call a service to delete the account
+            // TODO: Implement account deletion
             Alert.alert(
-              t("common.comingSoon"),
-              t("common.featureNotAvailable", {
-                feature: t("privacy.deleteAccount"),
-              })
+              t("account.security.deleteAccount"),
+              t("account.security.deleteAccountConfirmation"),
+              [
+                { text: t("common.cancel"), style: "cancel" },
+                {
+                  text: t("common.delete"),
+                  style: "destructive",
+                  onPress: () => {},
+                },
+              ]
             );
           },
         },
@@ -106,386 +125,225 @@ export default function PrivacySecurityScreen() {
     );
   };
 
-  if (userLoading || isLoadingPrefs) {
-    return (
-      <SafeAreaView
-        style={[
-          styles.container,
-          {
-            backgroundColor: isDark
-              ? theme.colors.grayPalette[900]
-              : theme.colors.grayPalette[50],
-            justifyContent: "center",
-            alignItems: "center",
-          },
-        ]}
-      >
-        <StatusBar style={isDark ? "light" : "dark"} />
-        <ActivityIndicator size="large" color={theme.colors.primary} />
-        <Text
-          style={[
-            styles.loadingText,
-            {
-              color: isDark
-                ? theme.colors.grayPalette[300]
-                : theme.colors.grayPalette[700],
-            },
-          ]}
-        >
-          {t("common.loading")}
-        </Text>
-      </SafeAreaView>
-    );
-  }
-
-  // Toggle setting item renderer
-  const renderToggleSetting = (
-    title: string,
-    description: string,
-    value: boolean,
-    onToggle: (value: boolean) => void,
-    disabled = false
-  ) => (
-    <View
-      style={[
-        styles.settingItem,
-        {
-          borderBottomColor: isDark
-            ? theme.colors.gray[800]
-            : theme.colors.gray[200],
-        },
-      ]}
-    >
-      <View style={styles.settingContent}>
-        <Text
-          style={[
-            styles.settingTitle,
-            {
-              color: isDark
-                ? disabled
-                  ? theme.colors.gray[500]
-                  : theme.colors.gray[100]
-                : disabled
-                ? theme.colors.gray[400]
-                : theme.colors.grayPalette[900],
-            },
-          ]}
-        >
-          {title}
-        </Text>
-        <Text
-          style={[
-            styles.settingDescription,
-            {
-              color: isDark
-                ? disabled
-                  ? theme.colors.gray[600]
-                  : theme.colors.gray[400]
-                : disabled
-                ? theme.colors.gray[500]
-                : theme.colors.gray[600],
-            },
-          ]}
-        >
-          {description}
-        </Text>
-      </View>
-      <Switch
-        value={value}
-        onValueChange={disabled ? undefined : onToggle}
-        disabled={disabled}
-        trackColor={{
-          false: isDark
-            ? theme.colors.grayPalette[700]
-            : theme.colors.grayPalette[300],
-          true: theme.colors.primary,
-        }}
-        thumbColor={theme.white}
-      />
+  const renderSection = (title: string, children: React.ReactNode) => (
+    <View style={[styles.section, { backgroundColor: theme.surface }]}>
+      <Text style={[styles.sectionTitle, { color: theme.text.primary }]}>
+        {title}
+      </Text>
+      {children}
     </View>
   );
 
-  // Action setting item renderer
-  const renderActionSetting = (
+  const renderSettingItem = (
+    icon: string,
     title: string,
-    description: string,
-    iconName: any, // Using 'any' to accommodate Ionicons name prop
-    onPress: () => void,
-    isDanger = false
+    subtitle?: string,
+    onPress?: () => void,
+    rightElement?: React.ReactNode
   ) => (
     <TouchableOpacity
       style={[
         styles.settingItem,
         {
-          borderBottomColor: isDark
-            ? theme.colors.gray[800]
-            : theme.colors.gray[200],
+          backgroundColor: theme.surface,
+          borderBottomColor: theme.divider,
         },
       ]}
       onPress={onPress}
+      disabled={!onPress}
     >
-      <View style={styles.settingIconContainer}>
+      <View style={styles.settingItemLeft}>
         <Ionicons
-          name={iconName}
+          name={icon as any}
           size={24}
-          color={
-            isDanger
-              ? theme.colors.error[500]
-              : isDark
-              ? theme.colors.grayPalette[300]
-              : theme.colors.grayPalette[700]
-          }
+          color={theme.primary}
+          style={styles.settingIcon}
         />
+        <View style={styles.settingTextContainer}>
+          <Text style={[styles.settingTitle, { color: theme.text.primary }]}>
+            {title}
+          </Text>
+          {subtitle && (
+            <Text
+              style={[styles.settingSubtitle, { color: theme.text.secondary }]}
+            >
+              {subtitle}
+            </Text>
+          )}
+        </View>
       </View>
-      <View style={styles.settingContent}>
-        <Text
-          style={[
-            styles.settingTitle,
-            {
-              color: isDanger
-                ? theme.colors.error[500]
-                : isDark
-                ? theme.colors.gray[100]
-                : theme.colors.grayPalette[900],
-            },
-          ]}
-        >
-          {title}
-        </Text>
-        <Text
-          style={[
-            styles.settingDescription,
-            {
-              color: isDark ? theme.colors.gray[400] : theme.colors.gray[600],
-            },
-          ]}
-        >
-          {description}
-        </Text>
+      <View style={styles.settingItemRight}>
+        <Ionicons
+          name="chevron-forward"
+          size={20}
+          color={theme.text.secondary}
+        />
+        {rightElement}
       </View>
-      <Ionicons
-        name="chevron-forward"
-        size={20}
-        color={isDark ? theme.colors.gray[500] : theme.colors.gray[400]}
-      />
     </TouchableOpacity>
   );
 
-  return (
-    <SafeAreaView
+  const renderToggleItem = (
+    icon: string,
+    title: string,
+    subtitle: string,
+    value: boolean,
+    onToggle: (value: boolean) => void
+  ) => (
+    <View
       style={[
-        styles.container,
+        styles.settingItem,
         {
-          backgroundColor: isDark
-            ? theme.colors.grayPalette[900]
-            : theme.colors.grayPalette[50],
+          backgroundColor: theme.surface,
+          borderBottomColor: theme.divider,
         },
       ]}
     >
-      <StatusBar style={isDark ? "light" : "dark"} />
-
-      {/* Header */}
-      <View
-        style={[
-          styles.header,
-          {
-            borderBottomColor: isDark
-              ? theme.colors.gray[800]
-              : theme.colors.gray[200],
-          },
-        ]}
-      >
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons
-            name="chevron-back"
-            size={28}
-            color={
-              isDark
-                ? theme.colors.grayPalette[300]
-                : theme.colors.grayPalette[700]
-            }
-          />
-        </TouchableOpacity>
-        <Text
-          style={[
-            styles.headerTitle,
-            {
-              color: isDark
-                ? theme.colors.gray[100]
-                : theme.colors.grayPalette[900],
-            },
-          ]}
-        >
-          {t("account.privacySecurity")}
-        </Text>
-        <View style={styles.emptyRight} />
-      </View>
-
-      <ScrollView
-        style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Password & Authentication Section */}
-        <View style={styles.section}>
-          <Text
-            style={[
-              styles.sectionTitle,
-              {
-                color: isDark
-                  ? theme.colors.grayPalette[300]
-                  : theme.colors.grayPalette[700],
-              },
-            ]}
-          >
-            {t("privacy.passwordAuth")}
+      <View style={styles.settingItemLeft}>
+        <Ionicons
+          name={icon as any}
+          size={24}
+          color={theme.primary}
+          style={styles.settingIcon}
+        />
+        <View style={styles.settingTextContainer}>
+          <Text style={[styles.settingTitle, { color: theme.text.primary }]}>
+            {title}
           </Text>
-          <View
-            style={[
-              styles.sectionContent,
-              {
-                backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
-                borderColor: isDark
-                  ? theme.colors.grayPalette[700]
-                  : theme.colors.gray[200],
-              },
-            ]}
+          <Text
+            style={[styles.settingSubtitle, { color: theme.text.secondary }]}
           >
-            {renderActionSetting(
-              t("privacy.changePassword"),
-              t("privacy.changePasswordDesc"),
-              "lock-closed-outline",
+            {subtitle}
+          </Text>
+        </View>
+      </View>
+      <Switch
+        value={value}
+        onValueChange={onToggle}
+        trackColor={{
+          false: theme.divider,
+          true: theme.primary,
+        }}
+        thumbColor={value ? theme.primary : theme.text.secondary}
+        disabled={isLoadingPrefs}
+      />
+    </View>
+  );
+
+  if (userLoading) {
+    return (
+      <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+        <StatusBar style={isDark ? "light" : "dark"} />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={theme.primary} />
+          <Text style={[styles.loadingText, { color: theme.text.primary }]}>
+            {t("common.loading")}
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+      <StatusBar style={isDark ? "light" : "dark"} />
+      
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        {/* Privacy Settings */}
+        {renderSection(
+          t("account.privacy.title"),
+          <>
+            {renderToggleItem(
+              "mail",
+              t("account.privacy.emailNotifications"),
+              t("account.privacy.emailNotificationsDescription"),
+              notificationPrefs.emailNotifications,
+              (value) => handleTogglePreference("emailNotifications", value)
+            )}
+            {renderToggleItem(
+              "notifications",
+              t("account.privacy.pushNotifications"),
+              t("account.privacy.pushNotificationsDescription"),
+              notificationPrefs.pushNotifications,
+              (value) => handleTogglePreference("pushNotifications", value)
+            )}
+            {renderToggleItem(
+              "megaphone",
+              t("account.privacy.marketingNotifications"),
+              t("account.privacy.marketingNotificationsDescription"),
+              notificationPrefs.marketingNotifications,
+              (value) => handleTogglePreference("marketingNotifications", value)
+            )}
+            {renderSettingItem(
+              "eye",
+              t("account.privacy.dataVisibility"),
+              t("account.privacy.dataVisibilityDescription"),
+              () => {
+                // TODO: Navigate to data visibility settings
+              }
+            )}
+            {renderSettingItem(
+              "download",
+              t("account.privacy.downloadData"),
+              t("account.privacy.downloadDataDescription"),
+              () => {
+                // TODO: Implement data download
+                Alert.alert(
+                  t("account.privacy.downloadData"),
+                  t("account.privacy.downloadDataInfo")
+                );
+              }
+            )}
+          </>
+        )}
+
+        {/* Security Settings */}
+        {renderSection(
+          t("account.security.title"),
+          <>
+            {renderSettingItem(
+              "key",
+              t("account.security.changePassword"),
+              t("account.security.changePasswordDescription"),
               handleChangePassword
             )}
-
-            {renderActionSetting(
-              t("privacy.twoFactorAuth"),
-              t("privacy.twoFactorAuthDesc"),
-              "shield-checkmark-outline",
-              () =>
-                Alert.alert(
-                  t("common.comingSoon"),
-                  t("common.featureNotAvailable", {
-                    feature: t("privacy.twoFactorAuth"),
-                  })
-                )
+            {renderSettingItem(
+              "shield-checkmark",
+              t("account.security.twoFactorAuth"),
+              t("account.security.twoFactorAuthDescription"),
+              handleTwoFactorAuth
             )}
-          </View>
-        </View>
-
-        {/* Notifications Section */}
-        <View style={styles.section}>
-          <Text
-            style={[
-              styles.sectionTitle,
-              {
-                color: isDark
-                  ? theme.colors.grayPalette[300]
-                  : theme.colors.grayPalette[700],
-              },
-            ]}
-          >
-            {t("privacy.notifications")}
-          </Text>
-          <View
-            style={[
-              styles.sectionContent,
-              {
-                backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
-                borderColor: isDark
-                  ? theme.colors.grayPalette[700]
-                  : theme.colors.gray[200],
-              },
-            ]}
-          >
-            {renderToggleSetting(
-              t("privacy.emailNotifications"),
-              t("privacy.emailNotificationsDesc"),
-              notificationPrefs.emailNotifications,
-              (value) =>
-                toggleNotificationPreference("emailNotifications", value)
+            {renderSettingItem(
+              "phone-portrait",
+              t("account.security.loginActivity"),
+              t("account.security.loginActivityDescription"),
+              () => {
+                // TODO: Navigate to login activity
+              }
             )}
-
-            {renderToggleSetting(
-              t("privacy.pushNotifications"),
-              t("privacy.pushNotificationsDesc"),
-              notificationPrefs.pushNotifications,
-              (value) =>
-                toggleNotificationPreference("pushNotifications", value)
+            {renderSettingItem(
+              "business",
+              t("account.security.connectedApps"),
+              t("account.security.connectedAppsDescription"),
+              () => {
+                // TODO: Navigate to connected apps
+              }
             )}
+          </>
+        )}
 
-            {renderToggleSetting(
-              t("privacy.marketingEmails"),
-              t("privacy.marketingEmailsDesc"),
-              notificationPrefs.marketingNotifications || false,
-              (value) =>
-                toggleNotificationPreference("marketingNotifications", value)
+        {/* Danger Zone */}
+        {renderSection(
+          t("account.security.dangerZone"),
+          <>
+            {renderSettingItem(
+              "trash",
+              t("account.security.deleteAccount"),
+              t("account.security.deleteAccountDescription"),
+              handleDeleteAccount
             )}
-          </View>
-        </View>
-
-        {/* Data & Privacy Section */}
-        <View style={styles.section}>
-          <Text
-            style={[
-              styles.sectionTitle,
-              {
-                color: isDark
-                  ? theme.colors.grayPalette[300]
-                  : theme.colors.grayPalette[700],
-              },
-            ]}
-          >
-            {t("privacy.dataPrivacy")}
-          </Text>
-          <View
-            style={[
-              styles.sectionContent,
-              {
-                backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
-                borderColor: isDark
-                  ? theme.colors.grayPalette[700]
-                  : theme.colors.gray[200],
-              },
-            ]}
-          >
-            {renderActionSetting(
-              t("privacy.privacyPolicy"),
-              t("privacy.privacyPolicyDesc"),
-              "document-text-outline",
-              () =>
-                Alert.alert(
-                  t("common.comingSoon"),
-                  t("common.featureNotAvailable", {
-                    feature: t("privacy.privacyPolicy"),
-                  })
-                )
-            )}
-
-            {renderActionSetting(
-              t("privacy.dataDownload"),
-              t("privacy.dataDownloadDesc"),
-              "download-outline",
-              () =>
-                Alert.alert(
-                  t("common.comingSoon"),
-                  t("common.featureNotAvailable", {
-                    feature: t("privacy.dataDownload"),
-                  })
-                )
-            )}
-
-            {renderActionSetting(
-              t("privacy.deleteAccount"),
-              t("privacy.deleteAccountDesc"),
-              "trash-outline",
-              handleDeleteAccount,
-              true
-            )}
-          </View>
-        </View>
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -495,66 +353,55 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    flexDirection: "row",
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
-  },
-  backButton: {
-    padding: spacing.xs,
-  },
-  emptyRight: {
-    width: 44,
-  },
-  headerTitle: {
-    fontSize: fontSize.lg,
-    fontWeight: "600",
+    gap: spacing.md,
+  },  loadingText: {
+    fontSize: fontSize.md,
   },
   scrollView: {
     flex: 1,
   },
   section: {
-    marginHorizontal: spacing.lg,
-    marginTop: spacing.lg,
-    marginBottom: spacing.md,
-  },
-  sectionTitle: {
-    fontSize: fontSize.sm,
-    fontWeight: "500",
-    marginBottom: spacing.xs,
-    paddingHorizontal: spacing.xs,
-  },
-  sectionContent: {
+    marginVertical: spacing.sm,
+    marginHorizontal: spacing.md,
     borderRadius: radius.md,
     overflow: "hidden",
-    borderWidth: 1,
+  },  sectionTitle: {
+    fontSize: fontSize.lg,
+    fontWeight: "600",
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   settingItem: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: spacing.md,
     paddingVertical: spacing.md,
-    paddingHorizontal: spacing.lg,
-    borderBottomWidth: 1,
-  },
-  settingIconContainer: {
-    marginRight: spacing.sm,
-  },
-  settingContent: {
+    borderBottomWidth: 0.5,
+  },  settingItemLeft: {
+    flexDirection: "row",
+    alignItems: "center",
     flex: 1,
   },
-  settingTitle: {
+  settingItemRight: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  settingIcon: {
+    marginRight: spacing.md,
+  },
+  settingTextContainer: {
+    flex: 1,
+  },  settingTitle: {
     fontSize: fontSize.md,
     fontWeight: "500",
-    marginBottom: 2,
   },
-  settingDescription: {
+  settingSubtitle: {
     fontSize: fontSize.sm,
-  },
-  loadingText: {
-    fontSize: fontSize.md,
-    marginTop: spacing.sm,
+    marginTop: spacing.xs,
   },
 });

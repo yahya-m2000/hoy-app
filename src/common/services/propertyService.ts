@@ -10,5 +10,7 @@ export {
   fetchProperties,
   fetchPropertyById,
   getPropertyHostInfo,
+  fetchPropertyHostInfo,
+  fetchPublicHostProfile,
   type PropertyFilters,
 } from "../../host/services/propertyService";

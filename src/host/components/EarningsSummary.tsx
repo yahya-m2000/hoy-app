@@ -63,7 +63,7 @@ const EarningsSummary = ({ isLoading, data }: EarningsSummaryProps) => {
                 ]}
               >
                 {getSymbol()}
-                {data?.earnings?.thisMonth.toFixed(2) || "0.00"}
+                {data?.earnings?.thisMonth?.toFixed(2) || "0.00"}
               </Text>
             </View>
             <View style={styles.earningsColumn}>
@@ -86,7 +86,7 @@ const EarningsSummary = ({ isLoading, data }: EarningsSummaryProps) => {
                 ]}
               >
                 {getSymbol()}
-                {data?.earnings?.lastMonth.toFixed(2) || "0.00"}
+                {data?.earnings?.lastMonth?.toFixed(2) || "0.00"}
               </Text>
             </View>
           </View>
@@ -123,7 +123,7 @@ const EarningsSummary = ({ isLoading, data }: EarningsSummaryProps) => {
                 ]}
               >
                 {getSymbol()}
-                {data?.earnings?.yearToDate.toFixed(2) || "0.00"}
+                {data?.earnings?.yearToDate?.toFixed(2) || "0.00"}
               </Text>
             </View>
             <View style={styles.earningsColumn}>
@@ -146,7 +146,7 @@ const EarningsSummary = ({ isLoading, data }: EarningsSummaryProps) => {
                 ]}
               >
                 {getSymbol()}
-                {data?.earnings?.upcoming.toFixed(2) || "0.00"}
+                {data?.earnings?.upcoming?.toFixed(2) || "0.00"}
               </Text>
             </View>
           </View>

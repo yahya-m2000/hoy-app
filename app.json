@@ -26,7 +26,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },    "extra": {
-      "apiUrl": "https://3a26-109-147-151-140.ngrok-free.app/api/v1/",
+      "apiUrl": "https://41ea-109-147-151-140.ngrok-free.app/api/v1",
       "wsUrl": "wss://adb5-109-147-151-140.ngrok-free.app/ws",
       "mapboxApiKey": "sk.eyJ1IjoieW0yMDAwIiwiYSI6ImNtOXg2ZDMzajB4ZmQyaXM2cWNnamEzOHUifQ.PxAYNN4I-PHTU3MDjxZRYA",      
       "cacheVersion": "1.1.0",

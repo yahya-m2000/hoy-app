@@ -26,7 +26,7 @@ export const useRefreshControl = (onRefresh: () => Promise<void>) => {
     onRefresh: handleRefresh,
     tintColor: theme.colors.primary,
     colors: [theme.colors.primary],
-    progressBackgroundColor: theme.colors.card,
+    progressBackgroundColor: theme.colors.white,
   };
 
   // Return props that can be used to create a RefreshControl component

@@ -208,4 +208,3 @@ const styles = StyleSheet.create({
     fontSize: fontSize.md,
   },
 });
-

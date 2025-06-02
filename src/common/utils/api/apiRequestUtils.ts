@@ -6,9 +6,12 @@
  */
 
 import axios from "axios";
-import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import { getTokenFromStorage } from "../storage/authStorage";
 import { handleApiError } from "./apiErrorHandler";
+
+// Use simplified types to avoid axios version conflicts
+type AxiosRequestConfig = any;
+type AxiosResponse<T = any> = any;
 
 // Default request timeout in milliseconds
 const DEFAULT_TIMEOUT = 15000;

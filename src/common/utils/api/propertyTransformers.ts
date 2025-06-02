@@ -83,13 +83,12 @@ export const transformPropertyData = (apiProperty: any): PropertyType => {
     console.log(
       "Problem property:",
       JSON.stringify(apiProperty?._id || "unknown")
-    );
-
-    // Return a basic property object to avoid app crashes
+    ); // Return a basic property object to avoid app crashes
     return {
       _id: apiProperty?._id || "error",
       title:
         apiProperty?.name || apiProperty?.title || "Error loading property",
+      description: apiProperty?.description || "No description available",
       price: 0,
       location: "",
       rating: 0,

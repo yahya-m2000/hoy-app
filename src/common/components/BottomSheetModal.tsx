@@ -77,7 +77,10 @@ const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
     <View style={styles.container}>
       <StatusBar style={isDark ? "light" : "dark"} />
       <TouchableOpacity
-        style={styles.overlay}
+        style={[
+          styles.overlay,
+          // { backgroundColor: theme.colors. },
+        ]}
         activeOpacity={1}
         onPress={handleClose}
       />
@@ -105,7 +108,11 @@ const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
               <Ionicons
                 name="close"
                 size={24}
-                color={isDark ? theme.colors.grayPalette[400] : theme.colors.grayPalette[600]}
+                color={
+                  isDark
+                    ? theme.colors.grayPalette[400]
+                    : theme.colors.grayPalette[600]
+                }
               />
             </TouchableOpacity>
             <Text
@@ -163,7 +170,8 @@ const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-end",
+
+    height: "100%",
   },
   keyboardView: {
     width: "100%",
@@ -171,17 +179,11 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    // backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modal: {
     borderTopLeftRadius: radius.lg,
     borderTopRightRadius: radius.lg,
     overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
   },
   handle: {
     width: 40,
@@ -225,5 +227,3 @@ const styles = StyleSheet.create({
 });
 
 export default BottomSheetModal;
-
-

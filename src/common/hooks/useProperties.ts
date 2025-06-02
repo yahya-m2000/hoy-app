@@ -72,6 +72,7 @@ const transformPropertyData = (apiProperty: any): PropertyType => {
 export interface SearchParams {
   location?: string;
   city?: string;
+  state?: string;
   country?: string;
   startDate?: string;
   endDate?: string;
@@ -184,39 +185,25 @@ export function useProperties(params: SearchParams = {}): PropertiesHookReturn {
 
   // Create a memoized search query object
   const searchQuery = useMemo(() => {
-    const query: Record<string, any> = {};
-
-    // Enhanced location handling
+    const query: Record<string, any> = {}; // Enhanced location handling
     if (params.location && params.location.trim() !== "") {
-      // Use location as a keyword for searching
+      // Use location as a keyword for comprehensive searching
       query.keyword = params.location;
 
-      // Split location string to extract parts
-      const locationParts = params.location
-        .split(",")
-        .map((part: string) => part.trim());
-
-      // If we have multiple parts, use the first as city and last as country
-      if (locationParts.length > 1) {
-        query.city = locationParts[0];
-        query.country = locationParts[locationParts.length - 1];
-      }
+      // Don't set separate city/country when we have a full location string
+      // This prevents conflicts between keyword search and field-specific search
     }
 
-    // Add explicit city/country if provided
-    if (params.city) query.city = params.city;
-    if (params.country) query.country = params.country;
-
-    // Add coordinates-based search if available
-    if (params.coordinates) {
-      query.latitude = params.coordinates.latitude;
-      query.longitude = params.coordinates.longitude;
-      if (params.coordinates.radius) {
-        query.radius = params.coordinates.radius;
-      } else {
-        query.radius = 10; // Default 10km radius
-      }
+    // Add explicit city/country/state only if no location keyword is provided
+    // This supports advanced search with separate fields
+    if (!query.keyword) {
+      if (params.city) query.city = params.city;
+      if (params.country) query.country = params.country;
+      if (params.state) query.state = params.state;
     }
+
+    // Removed coordinate-based search to avoid geospatial query issues
+    // Only use text-based location matching
 
     // The API expects 'type', not 'propertyType'
     if (params.propertyType && params.propertyType.trim() !== "") {
@@ -258,7 +245,6 @@ export function useProperties(params: SearchParams = {}): PropertiesHookReturn {
     if (params.sort) {
       query.sort = `${params.sort.field}_${params.sort.order}`;
     }
-
     return query;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -274,9 +260,6 @@ export function useProperties(params: SearchParams = {}): PropertiesHookReturn {
     params.amenities,
     params.rooms,
     params.sort,
-    params.coordinates?.latitude,
-    params.coordinates?.longitude,
-    params.coordinates?.radius,
   ]);
 
   // Function to fetch properties based on search params
@@ -292,51 +275,16 @@ export function useProperties(params: SearchParams = {}): PropertiesHookReturn {
           "🔍 TOP RATED SEARCH - Query being sent:",
           JSON.stringify(searchQuery, null, 2)
         );
+      } // Always use normal search endpoint (removed nearby search logic)
+      console.log("Final search query:", JSON.stringify(searchQuery, null, 2));
+      const properties = await searchPropertiesApi(searchQuery);
+
+      console.log(`Found ${properties.length} matching properties`);
+      if (properties.length > 0) {
+        console.log("First property data example:", properties[0]._id);
       }
 
-      // Check if we have meaningful search parameters
-      const hasParams = Object.keys(searchQuery).length > 0;
-      const hasCoordinates = params.coordinates !== undefined;
-
-      // If there are no search parameters but coordinates exist, use nearby endpoint
-      if (!hasParams && hasCoordinates && params.coordinates) {
-        console.log(
-          "Using nearby search with coordinates:",
-          params.coordinates
-        );
-
-        // Here we would call a different API endpoint for nearby properties
-        // For now we'll use the regular search with coordinates only
-        const nearbyParams = {
-          latitude: params.coordinates.latitude,
-          longitude: params.coordinates.longitude,
-          radius: params.coordinates.radius || 10,
-        };
-
-        console.log("Nearby search params:", nearbyParams);
-        const properties = await searchPropertiesApi(nearbyParams);
-
-        console.log(`Found ${properties.length} nearby properties`);
-        if (properties.length > 0) {
-          console.log("First nearby property:", properties[0]._id);
-        }
-
-        setProperties(properties.map(transformPropertyData));
-      } else {
-        // Normal search with parameters
-        console.log(
-          "Final search query:",
-          JSON.stringify(searchQuery, null, 2)
-        );
-        const properties = await searchPropertiesApi(searchQuery);
-
-        console.log(`Found ${properties.length} matching properties`);
-        if (properties.length > 0) {
-          console.log("First property data example:", properties[0]._id);
-        }
-
-        setProperties(properties.map(transformPropertyData));
-      }
+      setProperties(properties.map(transformPropertyData));
 
       setError(null);
     } catch (err) {
@@ -369,7 +317,7 @@ export function useProperties(params: SearchParams = {}): PropertiesHookReturn {
     } finally {
       setLoading(false);
     }
-  }, [searchQuery, params.coordinates, params.sort?.field, params.sort?.order]);
+  }, [searchQuery, params.sort?.field, params.sort?.order]);
 
   // Fetch properties on mount only, not when fetchProperties reference changes
   useEffect(() => {

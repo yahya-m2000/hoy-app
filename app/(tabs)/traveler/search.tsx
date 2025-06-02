@@ -1,84 +1,35 @@
 /**
  * Search screen for the Hoy application
- * Expedia-style search interface with property types and recent searches
+ * Clean, modular search interface with recent searches functionality
  * Allows travelers to search for accommodations by location, dates, and guest count
  */
 
 // React Native core
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  Dimensions,
-} from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 
 // Expo and third-party libraries
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 
 // App context and hooks
-import { useTheme } from "@common/context/ThemeContext";
-import { useToast } from "@common/context/ToastContext";
-import { useSearchForm } from "@common/hooks/useSearchForm";
+import { useTheme } from "@common-context/ThemeContext";
+import { useToast } from "@common-context/ToastContext";
+import { useSearchForm } from "@common-hooks/useSearchForm";
+
+// Search components
+import {
+  SearchForm,
+  RecentSearches,
+  RecentSearchManager,
+  type RecentSearch,
+} from "@traveler/components";
 
 // Constants
-import { fontSize } from "@constants/typography";
-import { spacing } from "@constants/spacing";
-import { radius } from "@constants/radius";
-
-// Get screen dimensions for responsive grid
-const { width } = Dimensions.get("window");
-const itemWidth = (width - spacing.lg * 3) / 2; // 2 items per row, 3 paddings (left, right, middle)
-
-// Mock recent searches
-interface RecentSearch {
-  id: string;
-  city: string;
-  date: string;
-  guests: number;
-  rooms: number;
-  timestamp: number;
-}
-
-const mockRecentSearches: RecentSearch[] = [
-  {
-    id: "1",
-    city: "Paris",
-    date: "Apr 25 - Apr 30",
-    guests: 2,
-    rooms: 1,
-    timestamp: Date.now() - 86400000 * 2, // 2 days ago
-  },
-  {
-    id: "2",
-    city: "London",
-    date: "May 10 - May 15",
-    guests: 4,
-    rooms: 2,
-    timestamp: Date.now() - 86400000 * 5, // 5 days ago
-  },
-  {
-    id: "3",
-    city: "New York",
-    date: "Jun 5 - Jun 12",
-    guests: 1,
-    rooms: 1,
-    timestamp: Date.now() - 86400000 * 7, // 7 days ago
-  },
-];
-
-// Property type definition
-interface PropertyTypeItem {
-  id: string;
-  title: string;
-  icon: string; // Ionicons name
-}
+import { fontSize } from "@common/constants/typography";
+import { spacing } from "@common/constants/spacing";
 
 export default function SearchScreen() {
   const { theme, isDark } = useTheme();
@@ -87,87 +38,91 @@ export default function SearchScreen() {
   const { searchState, updateSearchState } = useSearchForm();
   const { showToast } = useToast();
 
-  // Use values from centralized state first, fallback to URL params if needed
-  const location = searchState?.location || "";
-  const dates = searchState?.displayDates || "";
-  const travelers = searchState?.displayTravelers || "2 guests, 1 room";
-  const propertyType = searchState?.propertyType || "";
+  // Recent searches state
+  const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
+
+  // Load recent searches on component mount
+  useEffect(() => {
+    const loadRecentSearches = async () => {
+      const searches = await RecentSearchManager.getRecentSearches();
+      setRecentSearches(searches);
+    };
+    loadRecentSearches();
+  }, []);
 
   // Show a toast message when location is selected but search hasn't been performed yet
   useEffect(() => {
+    const location = searchState?.location || "";
+    const dates = searchState?.displayDates || "";
+
     if (location && !dates) {
       showToast({
         message:
+          t("search.locationSelectedHint") ||
           "Location selected! Now you can add dates and guests before searching.",
         type: "info",
         duration: 4000,
       });
     }
-  }, [location, dates, showToast]);
-
-  const [recentSearches, setRecentSearches] =
-    useState<RecentSearch[]>(mockRecentSearches);
-
-  // Property types for the 2x3 grid
-  const propertyTypes: PropertyTypeItem[] = [
-    { id: "hotel", title: t("propertyTypes.hotel"), icon: "business" },
-    { id: "apartment", title: t("propertyTypes.apartment"), icon: "home" },
-    { id: "villa", title: t("propertyTypes.villa"), icon: "home-outline" },
-    { id: "cottage", title: t("propertyTypes.cottage"), icon: "bed-outline" },
-    {
-      id: "cabin",
-      title: t("propertyTypes.cabin"),
-      icon: "trail-sign-outline",
-    },
-    {
-      id: "resort",
-      title: t("propertyTypes.resort"),
-      icon: "umbrella-outline",
-    },
-  ];
-
-  // Open property type modal
-  const openPropertyTypeModal = (type: PropertyTypeItem) => {
-    updateSearchState({ propertyType: type.id });
-
-    router.push({
-      pathname: "/(modals)/host/property-type",
-      params: {
-        type: type.id,
-      },
-    });
-  };
+  }, [searchState?.location, searchState?.displayDates, showToast, t]);
 
   // Handle recent search selection
   const handleRecentSearchSelect = (search: RecentSearch) => {
-    // Update the centralized state with all the information from the recent search
     updateSearchState({
-      location: search.city,
-      displayDates: search.date,
-      adults: search.guests,
+      location: search.location,
+      displayDates: search.displayDates,
+      startDate: search.startDate,
+      endDate: search.endDate,
+      adults: search.adults,
+      children: search.children,
       rooms: search.rooms,
-      displayTravelers: `${search.guests} ${
-        search.guests === 1 ? t("search.guest") : t("search.guests")
-      }, ${search.rooms} ${
-        search.rooms === 1 ? t("search.room") : t("search.rooms")
-      }`,
+      displayTravelers: search.displayTravelers,
+      coordinates: search.coordinates,
     });
   };
 
+  // Remove a single recent search
+  const removeRecentSearch = async (id: string) => {
+    await RecentSearchManager.removeRecentSearch(id);
+    const updatedSearches = await RecentSearchManager.getRecentSearches();
+    setRecentSearches(updatedSearches);
+  };
+
   // Clear all recent searches
-  const clearAllRecentSearches = () => {
+  const clearAllRecentSearches = async () => {
+    await RecentSearchManager.clearAllRecentSearches();
     setRecentSearches([]);
   };
 
-  // Remove a single recent search
-  const removeRecentSearch = (id: string) => {
-    setRecentSearches(recentSearches.filter((item) => item.id !== id));
-  }; // Handle search submission
-  const handleSearch = () => {
+  // Handle search submission
+  const handleSearch = async () => {
+    const location = searchState?.location || "";
+
     if (!location) {
       // Open location modal if no location selected
       router.push("/(modals)/traveler/search-location");
       return;
+    }
+
+    // Add to recent searches when user performs a search (only if location exists)
+    if (searchState.location) {
+      const searchData = {
+        location: searchState.location,
+        displayDates: searchState.displayDates || "",
+        startDate: searchState.startDate,
+        endDate: searchState.endDate,
+        adults: searchState.adults || 2,
+        children: searchState.children || 0,
+        rooms: searchState.rooms || 1,
+        displayTravelers: searchState.displayTravelers || "2 guests, 1 room",
+        coordinates: searchState.coordinates,
+      };
+
+      await RecentSearchManager.addRecentSearch(searchData);
+
+      // Refresh recent searches list
+      const updatedSearches = await RecentSearchManager.getRecentSearches();
+      setRecentSearches(updatedSearches);
     }
 
     // Create a timestamp to force a new search (prevents caching issues)
@@ -178,12 +133,11 @@ export default function SearchScreen() {
       location,
       startDate: searchState?.startDate || "",
       endDate: searchState?.endDate || "",
-      displayDates: dates || "",
+      displayDates: searchState?.displayDates || "",
       adults: searchState?.adults ? String(searchState.adults) : "2",
       children: searchState?.children ? String(searchState.children) : "0",
       rooms: searchState?.rooms ? String(searchState.rooms) : "1",
-      propertyType: propertyType || "",
-      displayTravelers: travelers || "2 guests, 1 room",
+      displayTravelers: searchState?.displayTravelers || "2 guests, 1 room",
       // Add timestamp to force a fresh search (avoids caching issues with same parameters)
       _ts: timestamp.toString(),
     };
@@ -199,7 +153,7 @@ export default function SearchScreen() {
 
     // Show toast to indicate search is in progress
     showToast({
-      message: "Searching for properties...",
+      message: t("search.searchingProperties") || "Searching for properties...",
       type: "info",
       duration: 2000,
     });
@@ -208,456 +162,23 @@ export default function SearchScreen() {
       pathname: "/(screens)/traveler/search-results",
       params: searchParams,
     });
-  }; // Render property type grid item
-  const renderPropertyTypeItem = (item: PropertyTypeItem) => (
-    <TouchableOpacity
-      key={item.id}
-      style={[
-        styles.propertyTypeItem,
-        {
-          backgroundColor: isDark
-            ? theme.colors.gray[800]
-            : theme.colors.gray[100],
-          borderColor:
-            propertyType === item.id
-              ? theme.colors.primary[500]
-              : isDark
-              ? theme.colors.gray[700]
-              : theme.colors.gray[300],
-          borderWidth: propertyType === item.id ? 2 : 1,
-          shadowColor: theme.colors.gray[900],
-          shadowOffset: { width: 0, height: 1 },
-          shadowOpacity: isDark ? 0.2 : 0.1,
-          shadowRadius: 2,
-          elevation: propertyType === item.id ? 3 : 1,
-        },
-      ]}
-      onPress={() => openPropertyTypeModal(item)}
-      activeOpacity={0.7}
-    >
-      <View style={styles.propertyTypeIconContainer}>
-        <Ionicons
-          name={item.icon as any}
-          size={32}
-          color={
-            propertyType === item.id
-              ? theme.colors.primary[500]
-              : isDark
-              ? theme.colors.gray[400]
-              : theme.colors.gray[600]
-          }
-        />
-      </View>
-      <Text
-        style={[
-          styles.propertyTypeText,
-          {
-            color: isDark ? theme.colors.gray[50] : theme.colors.gray[900],
-            fontWeight: propertyType === item.id ? "600" : "500",
-          },
-        ]}
-      >
-        {item.title}
-      </Text>
-    </TouchableOpacity>
-  );
-  // Render recent search item
-  const renderRecentSearchItem = (item: RecentSearch) => (
-    <TouchableOpacity
-      key={item.id}
-      style={[
-        styles.recentSearchItem,
-        {
-          backgroundColor: isDark
-            ? theme.colors.gray[800]
-            : theme.colors.gray[50],
-          borderColor: isDark ? theme.colors.gray[700] : theme.colors.gray[300],
-          shadowColor: theme.colors.gray[900],
-          shadowOffset: { width: 0, height: 1 },
-          shadowOpacity: isDark ? 0.2 : 0.1,
-          shadowRadius: 2,
-          elevation: 1,
-        },
-      ]}
-      onPress={() => handleRecentSearchSelect(item)}
-      activeOpacity={0.7}
-    >
-      <View style={styles.recentSearchContent}>
-        <View
-          style={[
-            styles.recentSearchIcon,
-            {
-              backgroundColor: isDark
-                ? theme.colors.primary[900]
-                : theme.colors.primary[50],
-              borderRadius: 20,
-              padding: 6,
-            },
-          ]}
-        >
-          <Ionicons
-            name="calendar-outline"
-            size={18}
-            color={theme.colors.primary[500]}
-          />
-        </View>
-        <View style={styles.recentSearchTextContainer}>
-          <Text
-            style={[
-              styles.recentSearchCity,
-              {
-                color: isDark ? theme.colors.gray[50] : theme.colors.gray[900],
-                fontWeight: "600",
-              },
-            ]}
-          >
-            {item.city}
-          </Text>
-          <View
-            style={{ flexDirection: "row", alignItems: "center", marginTop: 2 }}
-          >
-            <Ionicons
-              name="calendar-outline"
-              size={12}
-              color={isDark ? theme.colors.gray[400] : theme.colors.gray[600]}
-              style={{ marginRight: 4 }}
-            />
-            <Text
-              style={[
-                styles.recentSearchDetails,
-                {
-                  color: isDark
-                    ? theme.colors.gray[400]
-                    : theme.colors.gray[600],
-                },
-              ]}
-            >
-              {item.date}
-            </Text>
-          </View>
-          <View
-            style={{ flexDirection: "row", alignItems: "center", marginTop: 2 }}
-          >
-            <Ionicons
-              name="people-outline"
-              size={12}
-              color={isDark ? theme.colors.gray[400] : theme.colors.gray[600]}
-              style={{ marginRight: 4 }}
-            />
-            <Text
-              style={[
-                styles.recentSearchDetails,
-                {
-                  color: isDark
-                    ? theme.colors.gray[400]
-                    : theme.colors.gray[600],
-                },
-              ]}
-            >
-              {`${item.guests} ${
-                item.guests === 1 ? t("search.guest") : t("search.guests")
-              } - ${item.rooms} ${
-                item.rooms === 1 ? t("search.room") : t("search.rooms")
-              }`}
-            </Text>
-          </View>
-        </View>
-      </View>
-      <TouchableOpacity
-        style={styles.recentSearchDelete}
-        onPress={() => removeRecentSearch(item.id)}
-      >
-        <Ionicons
-          name="close"
-          size={16}
-          color={isDark ? theme.colors.gray[500] : theme.colors.gray[400]}
-        />
-      </TouchableOpacity>
-    </TouchableOpacity>
-  );
+  };
+
   // Create the content for the FlatList's ListHeaderComponent
   const renderHeader = () => (
     <>
-      {/* Search Form Card */}
-      <View
-        style={[
-          styles.searchCard,
-          {
-            backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
-            borderColor: isDark
-              ? theme.colors.gray[700]
-              : theme.colors.gray[300],
-            shadowColor: theme.colors.gray[900],
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: isDark ? 0.3 : 0.1,
-            shadowRadius: 4,
-            elevation: 3,
-          },
-        ]}
-      >
-        {/* Location Input */}
-        <TouchableOpacity
-          style={[
-            styles.searchInput,
-            {
-              borderColor: isDark
-                ? theme.colors.gray[700]
-                : theme.colors.gray[300],
-              backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
-            },
-          ]}
-          onPress={() => router.push("/(modals)/traveler/search-location")}
-        >
-          <View
-            style={{
-              backgroundColor: isDark
-                ? theme.colors.primary[900]
-                : theme.colors.primary[50],
-              borderRadius: 20,
-              padding: 6,
-              marginRight: spacing.md,
-            }}
-          >
-            <Ionicons
-              name="location-outline"
-              size={20}
-              color={theme.colors.primary[500]}
-            />
-          </View>
-          <View style={styles.searchInputContent}>
-            <Text
-              style={[
-                styles.searchInputLabel,
-                {
-                  color: isDark
-                    ? theme.colors.gray[400]
-                    : theme.colors.gray[600],
-                },
-              ]}
-            >
-              {t("search.goingTo")}
-            </Text>
-            <Text
-              style={[
-                styles.searchInputValue,
-                {
-                  color: location
-                    ? isDark
-                      ? theme.colors.gray[50]
-                      : theme.colors.gray[900]
-                    : isDark
-                    ? theme.colors.gray[500]
-                    : theme.colors.gray[500],
-                  fontWeight: location ? "500" : "400",
-                },
-              ]}
-              numberOfLines={1}
-            >
-              {location || t("search.searchDestination")}
-            </Text>
-          </View>
-          <Ionicons
-            name="chevron-forward"
-            size={20}
-            color={isDark ? theme.colors.gray[500] : theme.colors.gray[400]}
-          />
-        </TouchableOpacity>
-        {/* Dates Input */}
-        <TouchableOpacity
-          style={[
-            styles.searchInput,
-            {
-              borderColor: isDark
-                ? theme.colors.gray[700]
-                : theme.colors.gray[300],
-            },
-          ]}
-          onPress={() => router.push("/(modals)/traveler/search-dates")}
-        >
-          <View
-            style={{
-              backgroundColor: isDark
-                ? theme.colors.primary[900]
-                : theme.colors.primary[50],
-              borderRadius: 20,
-              padding: 6,
-              marginRight: spacing.md,
-            }}
-          >
-            <Ionicons
-              name="calendar-outline"
-              size={20}
-              color={theme.colors.primary[500]}
-            />
-          </View>
-          <View style={styles.searchInputContent}>
-            <Text
-              style={[
-                styles.searchInputLabel,
-                {
-                  color: isDark
-                    ? theme.colors.gray[400]
-                    : theme.colors.gray[600],
-                },
-              ]}
-            >
-              {t("search.dates")}
-            </Text>
-            <Text
-              style={[
-                styles.searchInputValue,
-                {
-                  color: dates
-                    ? isDark
-                      ? theme.colors.gray[50]
-                      : theme.colors.gray[900]
-                    : isDark
-                    ? theme.colors.gray[500]
-                    : theme.colors.gray[500],
-                  fontWeight: dates ? "500" : "400",
-                },
-              ]}
-              numberOfLines={1}
-            >
-              {dates || t("search.selectDates")}
-            </Text>
-          </View>
-          <Ionicons
-            name="chevron-forward"
-            size={20}
-            color={isDark ? theme.colors.gray[500] : theme.colors.gray[400]}
-          />
-        </TouchableOpacity>
-        {/* Travelers Input */}
-        <TouchableOpacity
-          style={[
-            styles.searchInput,
-            {
-              borderColor: isDark
-                ? theme.colors.gray[700]
-                : theme.colors.gray[300],
-              borderBottomWidth: 0,
-            },
-          ]}
-          onPress={() => router.push("/(modals)/traveler/search-travelers")}
-        >
-          <View
-            style={{
-              backgroundColor: isDark
-                ? theme.colors.primary[900]
-                : theme.colors.primary[50],
-              borderRadius: 20,
-              padding: 6,
-              marginRight: spacing.md,
-            }}
-          >
-            <Ionicons
-              name="people-outline"
-              size={20}
-              color={theme.colors.primary[500]}
-            />
-          </View>
-          <View style={styles.searchInputContent}>
-            <Text
-              style={[
-                styles.searchInputLabel,
-                {
-                  color: isDark
-                    ? theme.colors.gray[400]
-                    : theme.colors.gray[600],
-                },
-              ]}
-            >
-              {t("search.travelers")}
-            </Text>
-            <Text
-              style={[
-                styles.searchInputValue,
-                {
-                  color: isDark
-                    ? theme.colors.gray[50]
-                    : theme.colors.gray[900],
-                  fontWeight: "500",
-                },
-              ]}
-              numberOfLines={1}
-            >
-              {travelers}
-            </Text>
-          </View>
-          <Ionicons
-            name="chevron-forward"
-            size={20}
-            color={isDark ? theme.colors.gray[500] : theme.colors.gray[400]}
-          />
-        </TouchableOpacity>
-        {/* Search Button */}
-        <TouchableOpacity
-          style={[
-            styles.searchButton,
-            {
-              backgroundColor: theme.colors.primary[500],
-              // Make the button more prominent when location is selected
-              transform: location ? [{ scale: 1.03 }] : [],
-              shadowOpacity: location ? 0.25 : 0.1,
-              elevation: location ? 5 : 3,
-            },
-          ]}
-          onPress={handleSearch}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.searchButtonText}>
-            {location
-              ? t("search.searchNow") || "Search Now"
-              : t("search.search") || "Search"}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      {/* Property Types Section */}
-      <View style={styles.section}>
-        <Text
-          style={[
-            styles.sectionTitle,
-            {
-              color: isDark ? theme.colors.gray[50] : theme.colors.gray[900],
-            },
-          ]}
-        >
-          {t("search.propertyTypes")}
-        </Text>
-        <View style={styles.propertyTypesGrid}>
-          {propertyTypes.map(renderPropertyTypeItem)}
-        </View>
-      </View>
+      {/* Search Form */}
+      <SearchForm onSearch={handleSearch} />
+
       {/* Recent Searches Section */}
       {recentSearches.length > 0 && (
         <View style={styles.section}>
-          <View style={styles.recentSearchesHeader}>
-            <Text
-              style={[
-                styles.sectionTitle,
-                {
-                  color: isDark
-                    ? theme.colors.gray[50]
-                    : theme.colors.gray[900],
-                },
-              ]}
-            >
-              {t("search.recentSearches")}
-            </Text>
-            <TouchableOpacity onPress={clearAllRecentSearches}>
-              <Text
-                style={[styles.clearAll, { color: theme.colors.primary[500] }]}
-              >
-                {t("search.clearAll")}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.recentSearchesList}>
-            {recentSearches
-              .sort((a, b) => b.timestamp - a.timestamp)
-              .map(renderRecentSearchItem)}
-          </View>
+          <RecentSearches
+            searches={recentSearches}
+            onSearchSelect={handleRecentSearchSelect}
+            onRemoveSearch={removeRecentSearch}
+            onClearAll={clearAllRecentSearches}
+          />
         </View>
       )}
     </>
@@ -718,108 +239,8 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: spacing.xxl * 2,
   },
-  searchCard: {
-    marginHorizontal: spacing.lg,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    overflow: "hidden",
-  },
-  searchInput: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: spacing.md,
-    borderBottomWidth: 1,
-  },
-  searchInputIcon: {
-    marginRight: spacing.md,
-  },
-  searchInputContent: {
-    flex: 1,
-  },
-  searchInputLabel: {
-    fontSize: fontSize.xs,
-    marginBottom: 2,
-  },
-  searchInputValue: {
-    fontSize: fontSize.md,
-  },
-  searchButton: {
-    padding: spacing.md,
-    alignItems: "center",
-  },
-  searchButtonText: {
-    color: "white",
-    fontSize: fontSize.md,
-    fontWeight: "600",
-  },
   section: {
     marginTop: spacing.xl,
     paddingHorizontal: spacing.lg,
-  },
-  sectionTitle: {
-    fontSize: fontSize.lg,
-    fontWeight: "600",
-    marginBottom: spacing.md,
-  },
-  propertyTypesGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-  },
-  propertyTypeItem: {
-    width: itemWidth,
-    borderRadius: radius.md,
-    paddingVertical: spacing.md,
-    marginBottom: spacing.md,
-    alignItems: "center",
-    borderWidth: 1,
-  },
-  propertyTypeIconContainer: {
-    marginBottom: spacing.sm,
-  },
-  propertyTypeText: {
-    fontSize: fontSize.sm,
-  },
-  recentSearchesHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: spacing.md,
-  },
-  clearAll: {
-    fontSize: fontSize.sm,
-    fontWeight: "500",
-  },
-  recentSearchesList: {
-    gap: spacing.md,
-  },
-  recentSearchItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderRadius: radius.md,
-    borderWidth: 1,
-    padding: spacing.md,
-  },
-  recentSearchContent: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  recentSearchIcon: {
-    marginRight: spacing.md,
-  },
-  recentSearchTextContainer: {
-    flex: 1,
-  },
-  recentSearchCity: {
-    fontSize: fontSize.md,
-    fontWeight: "500",
-    marginBottom: 2,
-  },
-  recentSearchDetails: {
-    fontSize: fontSize.sm,
-  },
-  recentSearchDelete: {
-    padding: spacing.xs,
   },
 });

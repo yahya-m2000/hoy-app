@@ -5,6 +5,7 @@
 
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import type { LanguageDetectorAsyncModule } from "i18next";
 import * as Localization from "expo-localization";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -14,8 +15,6 @@ import fr from "./fr/translation.json";
 import ar from "./ar/translation.json";
 
 const LANGUAGE_STORAGE_KEY = "hoy_language";
-
-import type { LanguageDetectorAsyncModule } from "i18next";
 
 // Create language detection plugin
 const languageDetector: LanguageDetectorAsyncModule = {
@@ -58,6 +57,7 @@ i18n
       ar: { translation: ar },
     },
     fallbackLng: "en",
+    debug: false,
     interpolation: {
       escapeValue: false,
     },

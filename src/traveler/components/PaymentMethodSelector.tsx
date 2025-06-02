@@ -1,9 +1,9 @@
 /**
  * Payment Method Selector component for the Hoy application
- * Allows users to select payment methods for reservations
+ * Allows users to select payment methods for reservations (ZAAD-only)
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -17,23 +17,17 @@ import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useAuth } from "@common/context/AuthContext";
-import * as userService from "@common/services/userService";
-import CardLogo from "./CardLogo";
 import { fontSize } from "@common/constants/typography";
 import { spacing } from "@common/constants/spacing";
 import { radius } from "@common/constants/radius";
 
 interface PaymentMethod {
   id: string;
-  type: "card" | "paypal" | "bank" | "zaad" | "other";
+  type: "zaad";
   isDefault: boolean;
   details: {
-    brand?: string;
-    last4?: string;
-    expiry?: string;
-    logo?: string;
-    name?: string;
-    phone?: string; // For ZAAD payments
+    name: string;
+    phone: string;
   };
 }
 
@@ -53,13 +47,32 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  useEffect(() => {
-    fetchPaymentMethods();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+  // Helper function to format phone number with country code
+  const formatPhoneNumber = useCallback((phone: string): string => {
+    const cleanPhone = phone.replace(/\D/g, ""); // Remove non-digits
+
+    // If phone already starts with country code (252 for Somalia), keep as is
+    if (cleanPhone.startsWith("252")) {
+      return `+${cleanPhone}`;
+    }
+
+    // If phone starts with +, assume it already has country code
+    if (phone.startsWith("+")) {
+      return phone;
+    }
+
+    // If phone starts with 0, remove it and add +252
+    if (cleanPhone.startsWith("0")) {
+      return `+252${cleanPhone.substring(1)}`;
+    }
+
+    // Otherwise, assume it's a local number and add +252
+    return `+252${cleanPhone}`;
   }, []);
 
   // Fetch user's payment methods
-  const fetchPaymentMethods = async () => {
+  const fetchPaymentMethods = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -68,65 +81,67 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
         throw new Error("User not authenticated");
       }
 
-      const methods = await userService.getPaymentMethods();
-      setPaymentMethods(methods);
+      // Debug: Log user object to see what phone field is available
+      console.log("User object in PaymentMethodSelector:", {
+        phoneNumber: user.phoneNumber,
+        phone: (user as any).phone,
+        fullUser: JSON.stringify(user, null, 2),
+      });
 
-      // If no payment method is selected yet but there's a default one, select it
-      if (!selectedMethod && methods.length > 0) {
-        const defaultMethod = methods.find((m) => m.isDefault) || methods[0];
-        onSelect(defaultMethod);
+      // Check if user has a phone number for ZAAD
+      // Try multiple field names for compatibility
+      const phoneNumber =
+        user.phoneNumber ||
+        (user as any).phone ||
+        (user as any).phoneNumer || // Check for typos
+        (user as any).phone_number ||
+        ((user as any).data && (user as any).data.phoneNumber) ||
+        ((user as any)._source && (user as any)._source.phoneNumber);
+
+      console.log("Extracted phone number:", phoneNumber);
+
+      if (!phoneNumber || phoneNumber.trim() === "") {
+        console.log("No phone number found for user");
+        setPaymentMethods([]);
+        setError(null); // We'll handle this case in the UI
+        return;
+      }
+
+      const formattedPhone = formatPhoneNumber(phoneNumber);
+
+      // Create ZAAD payment method using user's phone number
+      const zaadMethod: PaymentMethod = {
+        id: "zaad_payment_method",
+        type: "zaad",
+        isDefault: true,
+        details: {
+          name: "ZAAD",
+          phone: formattedPhone,
+        },
+      };
+
+      setPaymentMethods([zaadMethod]);
+
+      // Auto-select if no method is currently selected
+      if (!selectedMethod) {
+        onSelect(zaadMethod);
       }
     } catch (err) {
       console.error("Error fetching payment methods:", err);
-      setError("Failed to load payment methods"); // Demo payment methods when API fails or for development
-      const demoMethods: PaymentMethod[] = [
-        {
-          id: "pm_123456abcdef",
-          type: "card",
-          isDefault: true,
-          details: {
-            brand: "Visa",
-            last4: "4242",
-            expiry: "04/2026",
-          },
-        },
-        {
-          id: "pm_789012ghijkl",
-          type: "card",
-          isDefault: false,
-          details: {
-            brand: "Mastercard",
-            last4: "8888",
-            expiry: "12/2025",
-          },
-        },
-        {
-          id: "zaad_payment_method",
-          type: "zaad",
-          isDefault: false,
-          details: {
-            name: "ZAAD",
-            phone: "123456789",
-          },
-        },
-      ];
-
-      setPaymentMethods(demoMethods);
-      if (!selectedMethod) {
-        onSelect(demoMethods[0]);
-      }
+      setError("Failed to load payment methods");
+      setPaymentMethods([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, [user, onSelect, selectedMethod, formatPhoneNumber]);
+
+  useEffect(() => {
+    fetchPaymentMethods();
+  }, [fetchPaymentMethods]);
 
   // Handle selection of a payment method
   const handleSelectMethod = (method: PaymentMethod) => {
     onSelect(method);
-  };
-  // Navigate to add payment method
-  const handleAddPaymentMethod = () => {
-    router.push("/(screens)/AddPaymentMethodScreen");
   };
 
   if (loading) {
@@ -192,143 +207,122 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
         showsVerticalScrollIndicator={false}
         style={styles.methodsList}
       >
-        {paymentMethods.map((method) => (
-          <TouchableOpacity
-            key={method.id}
+        {paymentMethods.length === 0 && !error ? (
+          // Show message when user has no phone number for ZAAD
+          <View
             style={[
-              styles.methodItem,
+              styles.noPhoneContainer,
               {
-                backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
-                borderColor:
-                  method.id === selectedMethod?.id
-                    ? theme.colors.primary
-                    : isDark
-                    ? theme.colors.gray[700]
-                    : theme.colors.gray[300],
-                borderWidth: method.id === selectedMethod?.id ? 2 : 1,
+                backgroundColor: isDark
+                  ? theme.colors.gray[800]
+                  : theme.colors.gray[50],
+                borderColor: isDark
+                  ? theme.colors.gray[700]
+                  : theme.colors.gray[300],
               },
             ]}
-            onPress={() => handleSelectMethod(method)}
           >
-            <View style={styles.methodContent}>
-              {method.type === "card" && (
-                <>
-                  {method.details.brand && (
-                    <CardLogo brand={method.details.brand} size="medium" />
-                  )}
-                  <View style={styles.cardDetails}>
-                    <Text
-                      style={[
-                        styles.cardBrand,
-                        {
-                          color: isDark ? theme.white : theme.colors.gray[900],
-                        },
-                      ]}
-                    >
-                      {method.details.brand} •••• {method.details.last4}
-                    </Text>
-                    {method.details.expiry && (
-                      <Text
-                        style={[
-                          styles.cardExpiry,
-                          {
-                            color: isDark
-                              ? theme.colors.gray[400]
-                              : theme.colors.gray[600],
-                          },
-                        ]}
-                      >
-                        {t("payment.expires")} {method.details.expiry}
-                      </Text>
-                    )}
-                    {method.isDefault && (
-                      <View
-                        style={[
-                          styles.defaultBadge,
-                          { backgroundColor: theme.colors.primary },
-                        ]}
-                      >
-                        <Text style={styles.defaultBadgeText}>
-                          {t("payment.default")}
-                        </Text>
-                      </View>
-                    )}
-                  </View>
-                </>
-              )}
-
-              {method.type === "zaad" && (
-                <>
-                  <View
-                    style={[styles.zaadLogo, { backgroundColor: "#00A651" }]}
+            <Ionicons
+              name="phone-portrait-outline"
+              size={48}
+              color={isDark ? theme.colors.gray[400] : theme.colors.gray[500]}
+              style={styles.noPhoneIcon}
+            />
+            <Text
+              style={[
+                styles.noPhoneTitle,
+                { color: isDark ? theme.white : theme.colors.gray[900] },
+              ]}
+            >
+              {t("reservation.noPaymentMethodTitle")}
+            </Text>
+            <Text
+              style={[
+                styles.noPhoneDescription,
+                {
+                  color: isDark
+                    ? theme.colors.gray[400]
+                    : theme.colors.gray[600],
+                },
+              ]}
+            >
+              {t("reservation.noPaymentMethodDescription")}
+            </Text>
+            <TouchableOpacity
+              style={[
+                styles.goToProfileButton,
+                { backgroundColor: theme.colors.primary },
+              ]}
+              onPress={() => router.push("/(screens)/common/personal-info")}
+            >
+              <Text style={styles.goToProfileButtonText}>
+                {t("reservation.goToProfile")}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          paymentMethods.map((method) => (
+            <TouchableOpacity
+              key={method.id}
+              style={[
+                styles.methodItem,
+                {
+                  backgroundColor: isDark
+                    ? theme.colors.gray[800]
+                    : theme.white,
+                  borderColor:
+                    method.id === selectedMethod?.id
+                      ? theme.colors.primary
+                      : isDark
+                      ? theme.colors.gray[700]
+                      : theme.colors.gray[300],
+                  borderWidth: method.id === selectedMethod?.id ? 2 : 1,
+                },
+              ]}
+              onPress={() => handleSelectMethod(method)}
+            >
+              <View style={styles.methodContent}>
+                <View style={[styles.zaadLogo, { backgroundColor: "#00A651" }]}>
+                  <Text style={styles.zaadLogoText}>ZAAD</Text>
+                </View>
+                <View style={styles.paymentDetails}>
+                  <Text
+                    style={[
+                      styles.paymentBrand,
+                      {
+                        color: isDark ? theme.white : theme.colors.gray[900],
+                      },
+                    ]}
                   >
-                    <Text style={styles.zaadLogoText}>ZAAD</Text>
-                  </View>
-                  <View style={styles.cardDetails}>
-                    <Text
-                      style={[
-                        styles.cardBrand,
-                        {
-                          color: isDark ? theme.white : theme.colors.gray[900],
-                        },
-                      ]}
-                    >
-                      ZAAD Mobile Payment
-                    </Text>
-                    {method.details.phone && (
-                      <Text
-                        style={[
-                          styles.cardExpiry,
-                          {
-                            color: isDark
-                              ? theme.colors.gray[400]
-                              : theme.colors.gray[600],
-                          },
-                        ]}
-                      >
-                        {t("payment.phone")}: {method.details.phone}
-                      </Text>
-                    )}
-                  </View>
-                </>
-              )}
-            </View>
-
-            {method.id === selectedMethod?.id && (
-              <View style={styles.checkmarkContainer}>
-                <Ionicons
-                  name="checkmark-circle"
-                  size={24}
-                  color={theme.colors.primary}
-                />
+                    ZAAD Mobile Payment
+                  </Text>
+                  <Text
+                    style={[
+                      styles.paymentPhone,
+                      {
+                        color: isDark
+                          ? theme.colors.gray[400]
+                          : theme.colors.gray[600],
+                      },
+                    ]}
+                  >
+                    {t("payment.phone")}: {method.details.phone}
+                  </Text>
+                </View>
               </View>
-            )}
-          </TouchableOpacity>
-        ))}
 
-        <TouchableOpacity
-          style={[
-            styles.addMethodButton,
-            {
-              borderColor: isDark
-                ? theme.colors.gray[700]
-                : theme.colors.gray[300],
-              borderStyle: "dashed",
-            },
-          ]}
-          onPress={handleAddPaymentMethod}
-        >
-          <Ionicons
-            name="add-circle-outline"
-            size={24}
-            color={theme.colors.primary}
-          />
-          <Text
-            style={[styles.addMethodText, { color: theme.colors.primary }]}
-          >
-            {t("payment.addNewMethod")}
-          </Text>
-        </TouchableOpacity>
+              {method.id === selectedMethod?.id && (
+                <View style={styles.checkmarkContainer}>
+                  <Ionicons
+                    name="checkmark-circle"
+                    size={24}
+                    color={theme.colors.primary}
+                  />
+                </View>
+              )}
+            </TouchableOpacity>
+          ))
+        )}
       </ScrollView>
     </View>
   );
@@ -381,46 +375,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     flex: 1,
-  }, // The CardLogo component handles its own styling
-  cardDetails: {
+  },
+  paymentDetails: {
     flex: 1,
   },
-  cardBrand: {
+  paymentBrand: {
     fontSize: fontSize.md,
     fontWeight: "500",
     marginBottom: 2,
   },
-  cardExpiry: {
+  paymentPhone: {
     fontSize: fontSize.sm,
-  },
-  defaultBadge: {
-    paddingHorizontal: spacing.xs,
-    paddingVertical: 2,
-    borderRadius: radius.sm,
-    alignSelf: "flex-start",
-    marginTop: spacing.xs,
-  },
-  defaultBadgeText: {
-    color: "white",
-    fontSize: fontSize.xs,
-    fontWeight: "600",
   },
   checkmarkContainer: {
     paddingLeft: spacing.md,
-  },
-  addMethodButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: spacing.md,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    marginTop: spacing.sm,
-  },
-  addMethodText: {
-    marginLeft: spacing.xs,
-    fontWeight: "500",
-    fontSize: fontSize.md,
   },
   zaadLogo: {
     width: 40,
@@ -434,6 +402,38 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "700",
     fontSize: fontSize.sm,
+  },
+  noPhoneContainer: {
+    alignItems: "center",
+    padding: spacing.xl,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    marginBottom: spacing.md,
+  },
+  noPhoneIcon: {
+    marginBottom: spacing.md,
+  },
+  noPhoneTitle: {
+    fontSize: fontSize.lg,
+    fontWeight: "600",
+    marginBottom: spacing.sm,
+    textAlign: "center",
+  },
+  noPhoneDescription: {
+    fontSize: fontSize.md,
+    textAlign: "center",
+    marginBottom: spacing.lg,
+    lineHeight: 20,
+  },
+  goToProfileButton: {
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.md,
+  },
+  goToProfileButtonText: {
+    color: "white",
+    fontSize: fontSize.md,
+    fontWeight: "600",
   },
 });
 
