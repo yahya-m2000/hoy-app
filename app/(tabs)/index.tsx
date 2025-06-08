@@ -7,7 +7,7 @@
 import { Redirect } from "expo-router";
 
 // App context
-import { useUserRole } from "@common-context/UserRoleContext";
+import { useUserRole } from "@shared/context";
 
 export default function TabsIndex() {
   const { isHost } = useUserRole();

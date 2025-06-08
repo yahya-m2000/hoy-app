@@ -5,8 +5,8 @@
  */
 
 // React Native core
-import React from "react";
-import { Platform } from "react-native";
+import React, { useRef, useState } from "react";
+import { Platform, Animated, Easing } from "react-native";
 
 // Expo and third-party libraries
 import { useTranslation } from "react-i18next";
@@ -15,8 +15,7 @@ import { Tabs, Redirect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 // App context
-import { useTheme } from "@common-context/ThemeContext";
-import { useUserRole } from "@common-context/UserRoleContext";
+import { useTheme, useUserRole } from "@shared/context";
 
 const TravelerLayout = () => {
   const { t } = useTranslation();
@@ -24,11 +23,86 @@ const TravelerLayout = () => {
   const { isHost, isRoleLoading } = useUserRole();
   const insets = useSafeAreaInsets();
 
+  // Animated values for tab bar slide animation and icon opacity
+  const tabBarTranslateY = useRef(new Animated.Value(0)).current;
+  const tabIconOpacity = useRef(new Animated.Value(1)).current;
+  const [shouldHideTabBar, setShouldHideTabBar] = useState(false);
+
   // Adjusted tab bar height including bottom inset for safe area
   const tabBarHeight = Platform.OS === "ios" ? 50 + insets.bottom : 60;
-  // Use declarative Redirect instead of imperative navigation
+
+  // Function to animate tab bar with smooth easing
+  const animateTabBar = (hide: boolean) => {
+    if (hide === shouldHideTabBar) return; // Don't animate if already in the desired state
+
+    setShouldHideTabBar(hide);
+
+    // Animate both tab bar position and icon opacity
+    Animated.parallel([
+      Animated.timing(tabBarTranslateY, {
+        toValue: hide ? tabBarHeight + 20 : 0, // Add extra 20px to fully hide
+        duration: 400, // 0.4 seconds for smooth animation
+        easing: Easing.bezier(0.25, 0.1, 0.25, 1), // Ease in-out cubic bezier
+        useNativeDriver: true,
+      }),
+      Animated.timing(tabIconOpacity, {
+        toValue: hide ? 0 : 1, // Fade out icons when hiding
+        duration: hide ? 200 : 400, // Faster fade out, slower fade in
+        easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  // Animated Icon Wrapper Component
+  const AnimatedTabIcon = ({
+    name,
+    color,
+    size,
+  }: {
+    name: any;
+    color: string;
+    size: number;
+  }) => (
+    <Animated.View style={{ opacity: tabIconOpacity }}>
+      <Ionicons name={name} size={size} color={color} />
+    </Animated.View>
+  );
+
+  // Helper function to check if we're on a property details screen
+  const isOnPropertyDetailsScreen = (navigationState: any) => {
+    try {
+      if (!navigationState) return false;
+
+      const currentTabRoute = navigationState.routes[navigationState.index];
+      if (!currentTabRoute?.state) return false;
+
+      const tabState = currentTabRoute.state;
+      const currentScreenIndex = tabState.index;
+
+      if (
+        currentScreenIndex === undefined ||
+        !tabState.routes[currentScreenIndex]
+      ) {
+        return false;
+      }
+
+      const currentScreenRoute = tabState.routes[currentScreenIndex];
+      const routeName = currentScreenRoute?.name || "";
+
+      // Pattern matching for property details screens
+      const isPropertyDetails =
+        routeName === "[id]" || // Direct [id] routes (home/[id], search/[id], etc.)
+        routeName.includes("property") || // wishlist/property, bookings/property
+        (currentScreenRoute?.params && "id" in currentScreenRoute.params); // Any screen with id param
+
+      return isPropertyDetails;
+    } catch {
+      return false;
+    }
+  }; // Use declarative Redirect instead of imperative navigation
   if (!isRoleLoading && isHost) {
-    return <Redirect href="/(tabs)/host/dashboard" />;
+    return <Redirect href="/(tabs)/host/today" />;
   }
 
   // Show nothing while loading to avoid flicker
@@ -39,28 +113,43 @@ const TravelerLayout = () => {
     <Tabs
       initialRouteName="home"
       screenOptions={{
+        animation: "fade",
         tabBarActiveTintColor: theme.colors.primary,
         tabBarInactiveTintColor: isDark
           ? theme.colors.gray[400]
           : theme.colors.gray[500],
-        tabBarStyle: {
-          backgroundColor: isDark ? theme.colors.gray[900] : theme.white,
-          borderTopColor: isDark
-            ? theme.colors.gray[800]
-            : theme.colors.gray[200],
-          height: tabBarHeight,
-          paddingBottom: insets.bottom,
-        },
+        tabBarStyle: [
+          {
+            backgroundColor: isDark ? theme.colors.gray[900] : theme.white,
+            borderTopColor: isDark
+              ? theme.colors.gray[800]
+              : theme.colors.gray[200],
+            height: tabBarHeight,
+            paddingBottom: insets.bottom,
+            position: "absolute",
+          },
+          {
+            transform: [{ translateY: tabBarTranslateY }],
+          },
+        ],
         tabBarShowLabel: true,
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: "500",
         },
+        tabBarHideOnKeyboard: true,
         headerStyle: {
           backgroundColor: isDark ? theme.colors.gray[900] : theme.white,
         },
         headerTintColor: isDark ? theme.white : theme.colors.gray[900],
         headerShadowVisible: false,
+      }}
+      screenListeners={{
+        state: (e) => {
+          // Check if we should hide the tab bar based on current navigation state
+          const shouldHide = isOnPropertyDetailsScreen(e.data.state);
+          animateTabBar(shouldHide);
+        },
       }}
     >
       <Tabs.Screen
@@ -69,7 +158,7 @@ const TravelerLayout = () => {
           href: null, // This completely hides the tab from the tab bar
           headerShown: false,
         }}
-      />
+      />{" "}
       <Tabs.Screen
         name="home"
         options={{
@@ -77,7 +166,7 @@ const TravelerLayout = () => {
           tabBarLabel: t("navigation.home"),
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" size={size} color={color} />
+            <AnimatedTabIcon name="home-outline" size={size} color={color} />
           ),
         }}
       />
@@ -88,7 +177,7 @@ const TravelerLayout = () => {
           tabBarLabel: t("navigation.search"),
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="search-outline" size={size} color={color} />
+            <AnimatedTabIcon name="search-outline" size={size} color={color} />
           ),
         }}
       />
@@ -97,31 +186,42 @@ const TravelerLayout = () => {
         options={{
           title: t("navigation.bookings"),
           tabBarLabel: t("navigation.bookings"),
-          headerTitle: t("navigation.bookings"),
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar-outline" size={size} color={color} />
+            <AnimatedTabIcon
+              name="calendar-outline"
+              size={size}
+              color={color}
+            />
           ),
         }}
       />
-      {/* <Tabs.Screen
-        name="inbox"
+      <Tabs.Screen
+        name="wishlist"
         options={{
-          title: t("navigation.inbox"),
-          tabBarLabel: t("navigation.inbox"),
-          headerTitle: t("navigation.inbox"),
+          title: t("navigation.wishlist"),
+          tabBarLabel: t("navigation.wishlist"),
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="chatbubble-outline" size={size} color={color} />
+            <AnimatedTabIcon name="heart-outline" size={size} color={color} />
           ),
         }}
-      /> */}
+      />
+      <Tabs.Screen
+        name="properties"
+        options={{
+          href: null, // This completely hides the tab from the tab bar
+          headerShown: false,
+        }}
+      />
       <Tabs.Screen
         name="account"
         options={{
           title: t("navigation.account"),
           tabBarLabel: t("navigation.account"),
-          headerShown: true,
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" size={size} color={color} />
+            <AnimatedTabIcon name="person-outline" size={size} color={color} />
           ),
         }}
       />

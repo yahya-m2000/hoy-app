@@ -1,6 +1,6 @@
-// Localization and API initialization (must be first)
-import "@common/locales/i18n";
-import "@common-services/apiInit";
+﻿// Localization and API initialization (must be first)
+import "@shared/locales/i18n";
+import "@shared/services/api/";
 
 // React imports
 import React from "react";
@@ -10,23 +10,67 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+
+// App navigation theming
+import { useThemedScreenOptions } from "@shared/navigation";
 
 // App context providers
-import { ThemeProvider } from "@common-context/ThemeContext";
-import { ToastProvider } from "@common-context/ToastContext";
-import { AuthProvider } from "@common-context/AuthContext";
-import { CurrencyProvider } from "@common-context/CurrencyContext";
-import { DateSelectionProvider } from "@common-context/DateSelectionContext";
-import { NetworkProvider } from "@common-context/NetworkContext";
-import { UserRoleProvider, useUserRole } from "@common-context/UserRoleContext";
+import {
+  ThemeProvider,
+  ToastProvider,
+  AuthProvider,
+  useAuth,
+  CurrencyProvider,
+  DateSelectionProvider,
+  NetworkProvider,
+  UserRoleProvider,
+  useUserRole,
+} from "@shared/context";
 
 // App components
-import OfflineNotice from "@common-components/OfflineNotice";
-import RoleChangeLoadingOverlay from "@common-components/RoleChangeLoadingOverlay";
+import {
+  OfflineNotice,
+  RoleChangeLoadingOverlay,
+  AuthLoadingOverlay,
+} from "@shared/components/common";
 
 const RoleChangeLoadingOverlayWrapper = () => {
   const { isRoleLoading } = useUserRole();
   return <RoleChangeLoadingOverlay visible={isRoleLoading} />;
+};
+
+const AuthLoadingOverlayWrapper = () => {
+  const { isAuthChecked } = useAuth();
+  return <AuthLoadingOverlay visible={!isAuthChecked} />;
+};
+
+// Themed Stack component for root navigation
+const ThemedRootStack = () => {
+  const themedOptions = useThemedScreenOptions();
+
+  return (
+    <Stack screenOptions={themedOptions}>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="(stack)"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="(overlays)"
+        options={{
+          headerShown: false,
+          presentation: "modal",
+          contentStyle: { backgroundColor: "transparent" },
+          headerStyle: {
+            backgroundColor: "transparent",
+          },
+        }}
+      />
+    </Stack>
+  );
 };
 
 // Create a client with better error handling
@@ -53,53 +97,31 @@ const queryClient = new QueryClient({
 // Root layout component
 export default function RootLayout() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <NetworkProvider>
-            <CurrencyProvider>
-              <ThemeProvider>
-                <UserRoleProvider>
-                  <DateSelectionProvider>
-                    <ToastProvider>
-                      <StatusBar style="auto" />
-                      <OfflineNotice />
-                      <RoleChangeLoadingOverlayWrapper />
-                      <Stack>
-                        <Stack.Screen name="index" />
-                        <Stack.Screen
-                          name="(tabs)"
-                          options={{ headerShown: false }}
-                        />
-                        <Stack.Screen
-                          name="(screens)"
-                          options={{
-                            headerShown: false,
-                          }}
-                        />
-                        <Stack.Screen
-                          name="(modals)"
-                          options={{
-                            headerShown: false,
-                            presentation: "modal",
-                          }}
-                        />
-                        {/* <Stack.Screen
-                            name="(screens)/common/conversation/[id]"
-                            options={{
-                              headerTitle: "Conversation",
-                              headerShown: true,
-                            }}
-                          /> */}
-                      </Stack>
-                    </ToastProvider>
-                  </DateSelectionProvider>
-                </UserRoleProvider>
-              </ThemeProvider>
-            </CurrencyProvider>
-          </NetworkProvider>
-        </AuthProvider>
-      </QueryClientProvider>
-    </GestureHandlerRootView>
+    <SafeAreaProvider>
+      <GestureHandlerRootView>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <NetworkProvider>
+              <CurrencyProvider>
+                <ThemeProvider>
+                  <UserRoleProvider>
+                    <DateSelectionProvider>
+                      <ToastProvider>
+                        {" "}
+                        <StatusBar style="auto" />
+                        <OfflineNotice />
+                        <RoleChangeLoadingOverlayWrapper />
+                        <AuthLoadingOverlayWrapper />
+                        <ThemedRootStack />
+                      </ToastProvider>
+                    </DateSelectionProvider>
+                  </UserRoleProvider>
+                </ThemeProvider>
+              </CurrencyProvider>
+            </NetworkProvider>
+          </AuthProvider>
+        </QueryClientProvider>
+      </GestureHandlerRootView>
+    </SafeAreaProvider>
   );
 }

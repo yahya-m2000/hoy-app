@@ -1,11 +1,4 @@
-/**
- * Settings screen for the Hoy application in host mode
- * Shows host profile and settings with account management options
- * Includes theme switching, currency selection, and hosting preferences
- */
-
-// React Native core
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -14,174 +7,326 @@ import {
   TouchableOpacity,
   Switch,
   Alert,
+  Image,
 } from "react-native";
-
-// Expo and third-party libraries
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useTranslation } from "react-i18next";
-import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
-import { router, useFocusEffect } from "expo-router";
-import { format } from "date-fns";
+import { useAuth, useTheme, useUserRole } from "@shared/context";
+import { LoadingSpinner } from "@shared/components";
+// import {
+// getUserProfile,
+// updateUserProfile,
+// getUserPreferences,
+// updateUserPreferences,
+// } from "../../../src/host/services/hostService";
+import {
+  getCurrentUser as getUserProfile,
+  updateProfile as updateUserProfile,
+  getUserPreferences,
+  updateUserPreferences,
+} from "@shared/services";
 
-// App context and hooks
-import { useTheme } from "@common-context/ThemeContext";
-import { useAuth } from "@common-context/AuthContext";
-import { useCurrentUser } from "@common-hooks/useUser";
-import { useUserRole } from "@common-context/UserRoleContext";
-import { useCurrency } from "@common-hooks/useCurrency";
-
-// Components
-import Avatar from "@common-components/Avatar";
-import LoadingSkeleton from "@common-components/LoadingSkeleton";
-
-// Utils
-import { showCleanSlateAlert } from "@common-utils/network/cacheBuster";
-
-// Constants
-import { fontSize } from "@constants/typography";
-import { spacing } from "@constants/spacing";
-import { radius } from "@constants/radius";
+import type { User } from "@shared/types";
+import { router } from "expo-router";
 
 interface SettingsItem {
   id: string;
-  icon: string;
   title: string;
   subtitle?: string;
-  action?: () => void;
-  rightElement?: React.ReactNode;
-  isDanger?: boolean;
+  icon: keyof typeof Ionicons.glyphMap;
+  type: "navigation" | "toggle" | "action";
+  value?: boolean;
+  onPress?: () => void;
+  onToggle?: (value: boolean) => void;
 }
 
-export default function HostSettingsScreen() {
-  const { theme, isDark, toggleTheme, mode } = useTheme();
-  const { t, i18n } = useTranslation();
-  const { user, logout, loading: authLoading } = useAuth();
-  const {
-    data: currentUser,
-    isLoading: userLoading,
-    refetch,
-  } = useCurrentUser();
-  const { currency, getSymbol } = useCurrency();
-  const { isHost, toggleUserRole, isRoleLoading } = useUserRole();
-  const [showDevOptions, setShowDevOptions] = useState(false);
+export default function HostSettings() {
+  const { markAsUnauthenticated } = useAuth();
+  const { theme, isDark, toggleTheme } = useTheme();
+  const { toggleUserRole } = useUserRole();
+  const [loading, setLoading] = useState(false);
+  const [hostProfile, setHostProfile] = useState<User | null>(null);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [autoAcceptBookings, setAutoAcceptBookings] = useState(false);
 
-  // Check if dev mode was previously enabled
-  useEffect(() => {
-    const checkDevMode = async () => {
-      try {
-        const storedCount = await AsyncStorage.getItem("devTapCount");
-        const devTapCount = parseInt(storedCount || "0", 10) || 0;
-        if (devTapCount >= 10) {
-          setShowDevOptions(true);
-        }
-      } catch (error) {
-        console.error("Error checking dev mode:", error);
+  const loadHostProfile = useCallback(async () => {
+    try {
+      setLoading(true);
+      console.log("📋 Loading host profile from API...");
+
+      // Load both profile and preferences
+      const [profileResponse, preferencesResponse] = await Promise.allSettled([
+        getUserProfile(),
+        getUserPreferences(),
+      ]);
+
+      if (profileResponse.status === "fulfilled") {
+        console.log("✅ Host profile loaded:", profileResponse.value);
+        const userData =
+          (profileResponse.value as any)?.data || profileResponse.value;
+        setHostProfile(userData as User);
+      } else {
+        console.error("❌ Error loading profile:", profileResponse.reason);
       }
-    };
-
-    checkDevMode();
+      if (preferencesResponse.status === "fulfilled") {
+        const preferences = preferencesResponse.value as any;
+        setNotificationsEnabled(preferences?.notifications?.enabled ?? true);
+        setAutoAcceptBookings(preferences?.autoAcceptBookings ?? false);
+      } else {
+        console.error(
+          "❌ Error loading preferences:",
+          preferencesResponse.reason
+        );
+      }
+    } catch (error) {
+      console.error("❌ Error loading host data:", error);
+      Alert.alert(
+        "Error",
+        "Failed to load profile data. Please check your connection and try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  const [lastRefresh, setLastRefresh] = useState<number>(Date.now()); // Track last refresh time
-
-  // Use useFocusEffect for screen focus behavior
-  useFocusEffect(
-    React.useCallback(() => {
-      console.log("Host settings screen focused - refreshing user data");
-      refetch();
-      setLastRefresh(Date.now());
-
-      // No cleanup needed for useFocusEffect
-    }, [refetch])
-  );
-
-  // Also refresh on initial mount
   useEffect(() => {
-    refetch();
-  }, [refetch]);
+    loadHostProfile();
+  }, [loadHostProfile]);
 
-  // Format joined date if available
-  const joinedDate = currentUser?.joinedDate
-    ? format(new Date(currentUser.joinedDate), "MMMM yyyy")
-    : "";
+  const handleEditProfile = async () => {
+    if (!hostProfile) return;
 
-  // Show "coming soon" alert for unimplemented features
-  const showComingSoonAlert = (featureName: string) => {
-    Alert.alert(
-      t("common.comingSoon"),
-      t("common.featureNotAvailable", { feature: featureName }),
-      [{ text: t("common.ok") }]
+    Alert.prompt(
+      "Edit Name",
+      "Enter your new name:",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Save",
+          onPress: async (newName) => {
+            if (!newName || newName.trim() === "") return;
+            try {
+              setLoading(true);
+              const updatedProfile = await updateUserProfile({
+                name: newName.trim(),
+              });
+
+              const userData = (updatedProfile as any)?.data || updatedProfile;
+              setHostProfile(userData);
+              Alert.alert("Success", "Profile updated successfully!");
+            } catch (error) {
+              console.error("Error updating profile:", error);
+              Alert.alert(
+                "Error",
+                "Failed to update profile. Please try again."
+              );
+            } finally {
+              setLoading(false);
+            }
+          },
+        },
+      ],
+      "plain-text",
+      (hostProfile as any)?.name || ""
     );
   };
 
-  // Function to render a settings section
-  const renderSettingsSection = (title: string, items: SettingsItem[]) => {
-    return (
-      <View style={styles.section}>
-        <Text
-          style={[
-            styles.sectionTitle,
-            {
-              color: isDark ? theme.colors.gray[300] : theme.colors.gray[700],
-            },
-          ]}
-        >
-          {title}
-        </Text>
-        <View
-          style={[
-            styles.sectionContent,
-            {
-              backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
-              borderColor: isDark
-                ? theme.colors.gray[700]
-                : theme.colors.gray[200],
-            },
-          ]}
-        >
-          {items.map((item) => (
-            <TouchableOpacity
-              key={item.id}
-              style={styles.settingsItem}
-              onPress={item.action}
-              disabled={!item.action}
-            >
-              <View
-                style={[
-                  styles.settingsIconContainer,
-                  {
-                    backgroundColor: isDark
-                      ? theme.colors.gray[700]
-                      : theme.colors.gray[100],
-                  },
-                ]}
-              >
-                <Ionicons
-                  name={item.icon as any}
-                  size={20}
-                  color={
-                    item.isDanger
-                      ? theme.colors.error[500]
-                      : isDark
-                      ? theme.colors.gray[300]
-                      : theme.colors.gray[600]
-                  }
-                />
-              </View>
-              <View style={styles.settingsContent}>
+  const handleHostTools = () => {
+    Alert.alert(
+      "Host Tools",
+      "Advanced host tools coming soon!\n\n• Bulk pricing updates\n• Analytics dashboard\n• Performance insights\n• Marketing tools",
+      [{ text: "OK" }]
+    );
+  };
+
+  const handleEarnings = () => {
+    Alert.alert(
+      "Earnings",
+      "Earnings dashboard coming soon!\n\n• Revenue reports\n• Payout history\n• Tax documents\n• Financial insights",
+      [{ text: "OK" }]
+    );
+  };
+
+  const handleSupport = () => {
+    Alert.alert(
+      "Support",
+      "Host support coming soon!\n\n• 24/7 host support\n• Resource center\n• Community forum\n• Contact us",
+      [{ text: "OK" }]
+    );
+  };
+  const handleSwitchToTraveler = () => {
+    Alert.alert(
+      "Switch to Traveler Mode",
+      "Are you sure you want to switch back to Traveler mode?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Switch",
+          onPress: async () => {
+            try {
+              await toggleUserRole();
+              // Force navigation to traveler home after role switch
+              // Use replace to reset navigation stack
+              if (router.canGoBack()) {
+                router.dismissAll();
+              }
+              router.replace("/(tabs)/traveler/home");
+            } catch (error) {
+              console.error("Error switching to traveler mode:", error);
+              Alert.alert("Error", "Failed to switch modes. Please try again.");
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  const handleNotificationToggle = async (value: boolean) => {
+    try {
+      setNotificationsEnabled(value);
+      await updateUserPreferences({
+        notifications: { enabled: value },
+      });
+    } catch (error) {
+      console.error("Error updating notification preference:", error);
+      // Revert on error
+      setNotificationsEnabled(!value);
+      Alert.alert("Error", "Failed to update notification settings.");
+    }
+  };
+
+  const handleAutoAcceptToggle = async (value: boolean) => {
+    try {
+      setAutoAcceptBookings(value);
+      await updateUserPreferences({
+        autoAcceptBookings: value,
+      });
+    } catch (error) {
+      console.error("Error updating auto-accept preference:", error);
+      // Revert on error
+      setAutoAcceptBookings(!value);
+      Alert.alert("Error", "Failed to update auto-accept settings.");
+    }
+  };
+  const handleLogout = () => {
+    Alert.alert("Logout", "Are you sure you want to logout?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Logout",
+        style: "destructive",
+        onPress: markAsUnauthenticated,
+      },
+    ]);
+  };
+
+  const profileSettings: SettingsItem[] = [
+    {
+      id: "edit-profile",
+      title: "Edit Profile",
+      subtitle: "Update your host information",
+      icon: "person-outline",
+      type: "navigation",
+      onPress: handleEditProfile,
+    },
+    {
+      id: "host-tools",
+      title: "Host Tools",
+      subtitle: "Advanced hosting features",
+      icon: "build-outline",
+      type: "navigation",
+      onPress: handleHostTools,
+    },
+    {
+      id: "earnings",
+      title: "Earnings",
+      subtitle: "View your revenue and payouts",
+      icon: "card-outline",
+      type: "navigation",
+      onPress: handleEarnings,
+    },
+  ];
+  const accountSettings: SettingsItem[] = [
+    {
+      id: "notifications",
+      title: "Notifications",
+      subtitle: "Push notifications for bookings",
+      icon: "notifications-outline",
+      type: "toggle",
+      value: notificationsEnabled,
+      onToggle: handleNotificationToggle,
+    },
+    {
+      id: "auto-accept",
+      title: "Auto-accept Bookings",
+      subtitle: "Automatically accept qualified bookings",
+      icon: "checkmark-circle-outline",
+      type: "toggle",
+      value: autoAcceptBookings,
+      onToggle: handleAutoAcceptToggle,
+    },
+    {
+      id: "dark-mode",
+      title: "Dark Mode",
+      subtitle: "Toggle app appearance",
+      icon: "moon-outline",
+      type: "toggle",
+      value: isDark,
+      onToggle: toggleTheme,
+    },
+  ];
+
+  const supportSettings: SettingsItem[] = [
+    {
+      id: "support",
+      title: "Support & Help",
+      subtitle: "Get help with hosting",
+      icon: "help-circle-outline",
+      type: "navigation",
+      onPress: handleSupport,
+    },
+    {
+      id: "switch-mode",
+      title: "Switch to Traveler Mode",
+      subtitle: "Browse and book as a guest",
+      icon: "swap-horizontal-outline",
+      type: "action",
+      onPress: handleSwitchToTraveler,
+    },
+    {
+      id: "logout",
+      title: "Logout",
+      subtitle: "Sign out of your account",
+      icon: "log-out-outline",
+      type: "action",
+      onPress: handleLogout,
+    },
+  ];
+  const renderSettingsSection = (title: string, items: SettingsItem[]) => (
+    <View style={styles.section}>
+      <Text style={[styles.sectionTitle, { color: theme.text.secondary }]}>
+        {title}
+      </Text>
+      <View style={[styles.sectionContent, { backgroundColor: theme.surface }]}>
+        {items.map((item, index) => (
+          <TouchableOpacity
+            key={item.id}
+            style={[
+              styles.settingsItem,
+              index < items.length - 1 && styles.settingsItemBorder,
+              { borderBottomColor: theme.border },
+            ]}
+            onPress={item.onPress}
+            disabled={item.type === "toggle"}
+          >
+            <View style={styles.settingsItemLeft}>
+              <Ionicons
+                name={item.icon}
+                size={24}
+                color={theme.primary}
+                style={styles.settingsIcon}
+              />
+              <View style={styles.settingsText}>
                 <Text
-                  style={[
-                    styles.settingsTitle,
-                    {
-                      color: item.isDanger
-                        ? theme.colors.error[500]
-                        : isDark
-                        ? theme.colors.gray[100]
-                        : theme.colors.gray[900],
-                    },
-                  ]}
+                  style={[styles.settingsTitle, { color: theme.text.primary }]}
                 >
                   {item.title}
                 </Text>
@@ -189,632 +334,99 @@ export default function HostSettingsScreen() {
                   <Text
                     style={[
                       styles.settingsSubtitle,
-                      {
-                        color: isDark
-                          ? theme.colors.gray[400]
-                          : theme.colors.gray[600],
-                      },
+                      { color: theme.text.secondary },
                     ]}
                   >
                     {item.subtitle}
                   </Text>
                 )}
               </View>
-              {item.rightElement ? (
-                item.rightElement
-              ) : (
-                <Ionicons
-                  name="chevron-forward"
-                  size={18}
-                  color={
-                    isDark ? theme.colors.gray[500] : theme.colors.gray[400]
-                  }
-                />
-              )}
-            </TouchableOpacity>
-          ))}
-        </View>
+            </View>
+
+            {item.type === "toggle" ? (
+              <Switch
+                value={item.value}
+                onValueChange={item.onToggle}
+                trackColor={{ false: theme.border, true: theme.primary }}
+                thumbColor={theme.background}
+              />
+            ) : (
+              <Ionicons
+                name="chevron-forward"
+                size={20}
+                color={theme.text.secondary}
+              />
+            )}
+          </TouchableOpacity>
+        ))}
       </View>
-    );
-  };
-
-  // Host Account settings
-  const accountSettings: SettingsItem[] = [
-    {
-      id: "profile",
-      icon: "person-outline",
-      title: t("account.personalInfo"),
-      action: () => router.push("/(screens)/common/personal-info"),
-    },
-    {
-      id: "payment",
-      icon: "card-outline",
-      title: t("account.paymentMethods"),
-      action: () => showComingSoonAlert(t("account.paymentMethods")),
-    },
-    {
-      id: "notifications",
-      icon: "notifications-outline",
-      title: t("account.notifications"),
-      action: () => showComingSoonAlert(t("account.notifications")),
-    },
-    {
-      id: "privacy",
-      icon: "lock-closed-outline",
-      title: t("account.privacySecurity"),
-      action: () => router.push("/(screens)/common/privacy-security"),
-    },
-  ];
-
-  // Host-specific settings
-  const hostSettings: SettingsItem[] = [
-    {
-      id: "properties",
-      icon: "business-outline",
-      title: t("host.manageProperties") || "Manage Properties",
-      action: () => router.push("/host/properties"),
-    },
-    {
-      id: "reservations",
-      icon: "calendar-outline",
-      title: t("host.manageReservations") || "Manage Reservations",
-      action: () => router.push("/host/reservations"),
-    },
-    {
-      id: "earnings",
-      icon: "wallet-outline",
-      title: t("host.viewEarnings") || "View Earnings",
-      action: () => router.push("/host/earnings"),
-    },
-    {
-      id: "addProperty",
-      icon: "add-circle-outline",
-      title: t("host.addNewProperty") || "Add New Property",
-      action: () =>
-        showComingSoonAlert(t("host.addNewProperty") || "Add New Property"),
-    },
-  ];
-
-  // Preferences settings
-  const preferenceSettings: SettingsItem[] = [
-    {
-      id: "language",
-      icon: "language-outline",
-      title: t("account.language"),
-      subtitle:
-        i18n.language === "en"
-          ? "English"
-          : i18n.language === "fr"
-          ? "Français"
-          : "العربية",
-      action: () => router.push("/(modals)/common/language"),
-    },
-    {
-      id: "currency",
-      icon: "cash-outline",
-      title: t("account.currency"),
-      subtitle: `${currency} (${getSymbol(currency)})`,
-      action: () => router.push("/(modals)/common/currency"),
-    },
-    {
-      id: "theme",
-      icon: isDark ? "moon-outline" : "sunny-outline",
-      title: t("account.theme"),
-      subtitle:
-        mode === "system"
-          ? t("account.themeSystem")
-          : isDark
-          ? t("account.themeDark")
-          : t("account.themeLight"),
-      action: () => toggleTheme(),
-      rightElement: (
-        <Switch
-          value={isDark}
-          onValueChange={toggleTheme}
-          trackColor={{
-            false: isDark ? theme.colors.gray[700] : theme.colors.gray[300],
-            true: theme.colors.primary[500],
-          }}
-          thumbColor={theme.white}
-        />
-      ),
-    },
-    {
-      id: "travelerMode",
-      icon: "airplane-outline",
-      title: t("account.travelerMode") || "Traveler Mode",
-      subtitle: !isHost
-        ? t("account.travelerModeOn") || "On"
-        : t("account.travelerModeOff") || "Off",
-      action: () => toggleUserRole(),
-      rightElement: (
-        <Switch
-          value={!isHost}
-          onValueChange={toggleUserRole}
-          trackColor={{
-            false: isDark ? theme.colors.gray[700] : theme.colors.gray[300],
-            true: theme.colors.primary[500],
-          }}
-          thumbColor={theme.white}
-          disabled={isRoleLoading}
-        />
-      ),
-    },
-  ];
-
-  // Support settings
-  const supportSettings: SettingsItem[] = [
-    {
-      id: "help",
-      icon: "help-circle-outline",
-      title: t("account.helpCenter"),
-      action: () => showComingSoonAlert(t("account.helpCenter")),
-    },
-    {
-      id: "feedback",
-      icon: "chatbubble-outline",
-      title: t("account.giveFeedback"),
-      action: () => showComingSoonAlert(t("account.giveFeedback")),
-    },
-    {
-      id: "resetApp",
-      icon: "refresh-circle-outline",
-      title: t("account.resetApp") || "Reset App Data",
-      subtitle:
-        t("account.resetAppDesc") || "Fix issues by clearing cached data",
-      action: () => showCleanSlateAlert(),
-    },
-    {
-      id: "terms",
-      icon: "document-text-outline",
-      title: t("account.termsOfService"),
-      action: () => showComingSoonAlert(t("account.termsOfService")),
-    },
-    ...(showDevOptions
-      ? [
-          {
-            id: "dev-refresh",
-            icon: "refresh-circle-outline",
-            title: "🛠️ Force Refresh User Data",
-            subtitle: `Last refresh: ${new Date(
-              lastRefresh
-            ).toLocaleTimeString()}`,
-            action: () => {
-              refetch();
-              setLastRefresh(Date.now());
-              Alert.alert(
-                "Refresh Triggered",
-                "User data has been forcibly refreshed from the server."
-              );
-            },
-          },
-        ]
-      : []),
-  ];
-
-  // Legal and account management
-  const legalSettings: SettingsItem[] = [
-    {
-      id: "logout",
-      icon: "log-out-outline",
-      title: t("account.signOut"),
-      isDanger: true,
-      action: logout,
-    },
-  ];
-
-  // Generate general settings for non-authenticated users
-  const guestPreferenceSettings: SettingsItem[] = [
-    {
-      id: "language",
-      icon: "language-outline",
-      title: t("account.language"),
-      subtitle:
-        i18n.language === "en"
-          ? "English"
-          : i18n.language === "fr"
-          ? "Français"
-          : "العربية",
-      action: () => router.push("/(modals)/common/language"),
-    },
-    {
-      id: "currency",
-      icon: "cash-outline",
-      title: t("account.currency"),
-      subtitle: `${currency} (${getSymbol(currency)})`,
-      action: () => router.push("/(modals)/common/currency"),
-    },
-    {
-      id: "theme",
-      icon: isDark ? "moon-outline" : "sunny-outline",
-      title: t("account.theme"),
-      subtitle:
-        mode === "system"
-          ? t("account.themeSystem")
-          : isDark
-          ? t("account.themeDark")
-          : t("account.themeLight"),
-      action: () => toggleTheme(),
-      rightElement: (
-        <Switch
-          value={isDark}
-          onValueChange={toggleTheme}
-          trackColor={{
-            false: isDark ? theme.colors.gray[700] : theme.colors.gray[300],
-            true: theme.colors.primary[500],
-          }}
-          thumbColor={theme.white}
-        />
-      ),
-    },
-  ];
-
-  // Guest support settings
-  const guestSupportSettings: SettingsItem[] = [
-    {
-      id: "help",
-      icon: "help-circle-outline",
-      title: t("account.helpCenter"),
-      action: () => showComingSoonAlert(t("account.helpCenter")),
-    },
-    {
-      id: "feedback",
-      icon: "chatbubble-outline",
-      title: t("account.giveFeedback"),
-      action: () => showComingSoonAlert(t("account.giveFeedback")),
-    },
-    {
-      id: "terms",
-      icon: "document-text-outline",
-      title: t("account.termsOfService"),
-      action: () => showComingSoonAlert(t("account.termsOfService")),
-    },
-  ];
-
-  // Show settings with sign-in prompt for non-authenticated users
-  if (!user && !authLoading) {
+    </View>
+  );
+  if (loading) {
     return (
-      <SafeAreaView
+      <View
         style={[
           styles.container,
-          {
-            backgroundColor: isDark
-              ? theme.colors.gray[900]
-              : theme.colors.gray[50],
-          },
+          styles.centered,
+          { backgroundColor: theme.background },
         ]}
       >
-        <StatusBar style={isDark ? "light" : "dark"} />
-
-        {/* Guest header */}
-        <View
-          style={[
-            styles.guestHeader,
-            {
-              backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
-              borderColor: isDark
-                ? theme.colors.gray[700]
-                : theme.colors.gray[200],
-            },
-          ]}
-        >
-          <Ionicons
-            name="person-circle-outline"
-            size={60}
-            color={isDark ? theme.colors.gray[500] : theme.colors.gray[400]}
-          />
-          <View style={styles.guestHeaderContent}>
-            <Text
-              style={[
-                styles.guestTitle,
-                {
-                  color: isDark
-                    ? theme.colors.gray[100]
-                    : theme.colors.gray[900],
-                },
-              ]}
-            >
-              {t("account.signInRequired")}
-            </Text>
-            <Text
-              style={[
-                styles.guestSubtitle,
-                {
-                  color: isDark
-                    ? theme.colors.gray[400]
-                    : theme.colors.gray[600],
-                },
-              ]}
-            >
-              {t("account.signInPrompt")}
-            </Text>
-          </View>
-        </View>
-
-        {/* Sign in button */}
-        <TouchableOpacity
-          style={[
-            styles.signInButtonContainer,
-            {
-              backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
-              borderColor: isDark
-                ? theme.colors.gray[700]
-                : theme.colors.gray[200],
-            },
-          ]}
-          onPress={() => router.push("/(modals)/common/auth")}
-        >
-          <View
-            style={[
-              styles.settingsIconContainer,
-              {
-                backgroundColor: isDark
-                  ? theme.colors.primary[900]
-                  : theme.colors.primary[100],
-              },
-            ]}
-          >
-            <Ionicons
-              name="log-in-outline"
-              size={20}
-              color={theme.colors.primary[500]}
-            />
-          </View>
-          <View style={styles.settingsContent}>
-            <Text
-              style={[
-                styles.settingsTitle,
-                {
-                  color: isDark
-                    ? theme.colors.gray[100]
-                    : theme.colors.gray[900],
-                },
-              ]}
-            >
-              {t("account.signIn")}
-            </Text>
-            <Text
-              style={[
-                styles.settingsSubtitle,
-                {
-                  color: isDark
-                    ? theme.colors.gray[400]
-                    : theme.colors.gray[600],
-                },
-              ]}
-            >
-              {t("account.signInToAccess")}
-            </Text>
-          </View>
-          <Ionicons
-            name="chevron-forward"
-            size={18}
-            color={isDark ? theme.colors.gray[500] : theme.colors.gray[400]}
-          />
-        </TouchableOpacity>
-
-        <ScrollView
-          style={styles.scrollView}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}
-        >
-          {/* General Settings Available Without Login */}
-          {renderSettingsSection(
-            t("account.preferences"),
-            guestPreferenceSettings
-          )}
-          {renderSettingsSection(
-            t("account.supportLegal"),
-            guestSupportSettings
-          )}
-
-          {/* App version */}
-          <View style={styles.versionContainer}>
-            <Text
-              style={[
-                styles.versionText,
-                {
-                  color: isDark
-                    ? theme.colors.gray[500]
-                    : theme.colors.gray[500],
-                },
-              ]}
-            >
-              Hoy v1.0.0
-            </Text>
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+        <LoadingSpinner />
+      </View>
     );
   }
 
   return (
-    <SafeAreaView
-      style={[
-        styles.container,
-        {
-          backgroundColor: isDark
-            ? theme.colors.gray[900]
-            : theme.colors.gray[50],
-        },
-      ]}
+    <ScrollView
+      style={[styles.container, { backgroundColor: theme.background }]}
     >
-      <StatusBar style={isDark ? "light" : "dark"} />
-
-      {userLoading ? (
-        <View
-          style={[
-            styles.loadingContainer,
-            {
-              backgroundColor: isDark
-                ? theme.colors.gray[900]
-                : theme.colors.gray[50],
-            },
-          ]}
-        >
-          <LoadingSkeleton
-            circle
-            width={80}
-            height={80}
-            style={{ marginBottom: spacing.md }}
-          />
-          <LoadingSkeleton
-            width={200}
-            height={24}
-            style={{ marginBottom: spacing.sm }}
-          />
-          <LoadingSkeleton width={150} height={18} />
-        </View>
-      ) : (
-        <View style={styles.profileContainer}>
-          <View style={styles.avatarContainer}>
-            <Avatar
-              size="lg"
-              source={currentUser?.profilePicture}
-              name={`${currentUser?.firstName} ${currentUser?.lastName}`}
+      {/* Profile Header */}
+      <View style={[styles.profileHeader, { backgroundColor: theme.surface }]}>
+        <View style={styles.profileImageContainer}>
+          {hostProfile?.profileImage ? (
+            <Image
+              source={{ uri: hostProfile.profileImage }}
+              style={styles.profileImage}
             />
-
-            <View style={styles.profileInfo}>
-              <Text
-                style={[
-                  styles.profileName,
-                  {
-                    color: isDark
-                      ? theme.colors.gray[100]
-                      : theme.colors.gray[900],
-                  },
-                ]}
-              >
-                {currentUser?.firstName} {currentUser?.lastName}
-              </Text>
-              <Text
-                style={[
-                  styles.profileBadge,
-                  {
-                    color: theme.colors.primary[500],
-                    backgroundColor: isDark
-                      ? theme.colors.primary[900]
-                      : theme.colors.primary[50],
-                  },
-                ]}
-              >
-                {t("host.hostProfile") || "Host"}
-              </Text>
-              {joinedDate && (
-                <Text
-                  style={[
-                    styles.profileDetail,
-                    {
-                      color: isDark
-                        ? theme.colors.gray[400]
-                        : theme.colors.gray[600],
-                    },
-                  ]}
-                >
-                  {t("account.memberSince")} {joinedDate}
-                </Text>
-              )}
-              {currentUser?.email && (
-                <Text
-                  style={[
-                    styles.profileDetail,
-                    {
-                      color: isDark
-                        ? theme.colors.gray[400]
-                        : theme.colors.gray[600],
-                    },
-                  ]}
-                >
-                  {currentUser.email}
-                </Text>
-              )}
-            </View>
-          </View>
-          <TouchableOpacity
-            style={[
-              styles.editButton,
-              {
-                backgroundColor: isDark
-                  ? theme.colors.gray[700]
-                  : theme.colors.gray[100],
-              },
-            ]}
-            onPress={() => showComingSoonAlert(t("account.editProfile"))}
-          >
-            <Text
+          ) : (
+            <View
               style={[
-                styles.editButtonText,
-                {
-                  color: isDark
-                    ? theme.colors.gray[100]
-                    : theme.colors.gray[900],
-                },
+                styles.profileImagePlaceholder,
+                { backgroundColor: theme.primary },
               ]}
             >
-              {t("account.editProfile")}
-            </Text>
-          </TouchableOpacity>
+              <Ionicons name="person" size={40} color={theme.background} />
+            </View>
+          )}
         </View>
-      )}
-
-      <ScrollView
-        style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-      >
-        {/* Settings Sections */}
-        {renderSettingsSection(
-          t("host.hostSettings") || "Host Settings",
-          hostSettings
-        )}
-        {renderSettingsSection(t("account.accountSettings"), accountSettings)}
-        {renderSettingsSection(t("account.preferences"), preferenceSettings)}
-        {renderSettingsSection(t("account.supportLegal"), supportSettings)}
-        {renderSettingsSection(t("account.legal"), legalSettings)}
-
-        {/* App version with secret tap counter for dev tools */}
-        <TouchableOpacity
-          style={styles.versionContainer}
-          onPress={async () => {
-            try {
-              const storedCount = await AsyncStorage.getItem("devTapCount");
-              const currentCount = parseInt(storedCount || "0", 10) || 0;
-              const newCount = currentCount + 1;
-              await AsyncStorage.setItem("devTapCount", newCount.toString());
-
-              // At 10 taps, enable dev options
-              if (newCount === 10) {
-                setShowDevOptions(true);
-                Alert.alert(
-                  "Developer Mode Enabled",
-                  "You now have access to developer options.",
-                  [{ text: "OK" }]
-                );
-              } else if (newCount >= 5 && newCount < 10) {
-                // Give feedback between 5-9 taps
-                console.log(
-                  `Developer mode: ${10 - newCount} more taps needed`
-                );
-              }
-            } catch (error) {
-              console.error("Error updating dev tap count:", error);
-            }
-          }}
-        >
-          <Text
-            style={[
-              styles.versionText,
-              {
-                color: isDark ? theme.colors.gray[500] : theme.colors.gray[500],
-              },
-            ]}
-          >
-            Hoy v1.0.0
-            {showDevOptions ? " (Dev Mode)" : ""}
+        <View style={styles.profileInfo}>
+          <Text style={[styles.profileName, { color: theme.text.primary }]}>
+            {hostProfile?.firstName} {hostProfile?.lastName}
           </Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </SafeAreaView>
+          <Text style={[styles.profileEmail, { color: theme.text.secondary }]}>
+            {hostProfile?.email}
+          </Text>
+          <View style={styles.hostBadge}>
+            <Ionicons name="home" size={16} color={theme.primary} />
+            <Text style={[styles.hostBadgeText, { color: theme.primary }]}>
+              Host Mode
+            </Text>
+          </View>
+        </View>
+      </View>
+
+      {/* Settings Sections */}
+      {renderSettingsSection("Profile & Tools", profileSettings)}
+      {renderSettingsSection("Account Settings", accountSettings)}
+      {renderSettingsSection("Support & Actions", supportSettings)}
+
+      {/* App Version */}
+      <View style={styles.footer}>
+        <Text style={[styles.versionText, { color: theme.text.secondary }]}>
+          Hoy Host App v1.0.0
+        </Text>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -822,163 +434,113 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  loadingContainer: {
-    padding: spacing.lg,
+  centered: {
+    justifyContent: "center",
     alignItems: "center",
   },
-  profileContainer: {
-    padding: spacing.lg,
-  },
-  avatarContainer: {
+  profileHeader: {
     flexDirection: "row",
+    alignItems: "center",
+    padding: 20,
+    marginHorizontal: 16,
+    marginTop: 16,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  profileImageContainer: {
+    marginRight: 16,
+  },
+  profileImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+  },
+  profileImagePlaceholder: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    justifyContent: "center",
     alignItems: "center",
   },
   profileInfo: {
-    marginLeft: spacing.md,
     flex: 1,
   },
   profileName: {
-    fontSize: fontSize.xl,
-    fontWeight: "600",
-    marginBottom: 2,
-  },
-  profileBadge: {
-    fontSize: fontSize.xs,
-    fontWeight: "600",
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 2,
-    borderRadius: radius.sm,
-    alignSelf: "flex-start",
-    marginTop: 4,
+    fontSize: 24,
+    fontWeight: "bold",
     marginBottom: 4,
   },
-  profileDetail: {
-    fontSize: fontSize.sm,
-    marginTop: 2,
+  profileEmail: {
+    fontSize: 16,
+    marginBottom: 8,
   },
-  editButton: {
+  hostBadge: {
+    flexDirection: "row",
+    alignItems: "center",
     alignSelf: "flex-start",
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.md,
-    borderRadius: radius.md,
-    marginTop: spacing.md,
   },
-  editButtonText: {
-    fontSize: fontSize.sm,
-    fontWeight: "500",
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingBottom: spacing.xxl,
+  hostBadgeText: {
+    fontSize: 14,
+    fontWeight: "600",
+    marginLeft: 4,
   },
   section: {
-    marginBottom: spacing.lg,
-    paddingHorizontal: spacing.lg,
+    marginTop: 24,
+    marginHorizontal: 16,
   },
   sectionTitle: {
-    fontSize: fontSize.sm,
+    fontSize: 16,
     fontWeight: "600",
-    marginBottom: spacing.sm,
+    marginBottom: 8,
     textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
   sectionContent: {
-    borderRadius: radius.md,
-    borderWidth: 1,
-    overflow: "hidden",
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   settingsItem: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: "transparent",
+    justifyContent: "space-between",
+    padding: 16,
   },
-  settingsIconContainer: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+  settingsItemBorder: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  settingsItemLeft: {
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    marginRight: spacing.sm,
+    flex: 1,
   },
-  settingsContent: {
+  settingsIcon: {
+    marginRight: 12,
+  },
+  settingsText: {
     flex: 1,
   },
   settingsTitle: {
-    fontSize: fontSize.md,
+    fontSize: 16,
     fontWeight: "500",
+    marginBottom: 2,
   },
   settingsSubtitle: {
-    fontSize: fontSize.sm,
-    marginTop: 2,
+    fontSize: 14,
   },
-  versionContainer: {
+  footer: {
     alignItems: "center",
-    marginTop: spacing.md,
+    padding: 24,
+    marginTop: 24,
   },
   versionText: {
-    fontSize: fontSize.xs,
-  },
-  loadingText: {
-    fontSize: fontSize.md,
-    marginTop: spacing.sm,
-  },
-  signInTitle: {
-    fontSize: fontSize.xl,
-    fontWeight: "600",
-    marginTop: spacing.lg,
-    textAlign: "center",
-  },
-  signInSubtitle: {
-    fontSize: fontSize.md,
-    textAlign: "center",
-    marginTop: spacing.sm,
-    marginBottom: spacing.xl,
-  },
-  signInButton: {
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.xl,
-    borderRadius: radius.md,
-  },
-  signInButtonText: {
-    color: "white",
-    fontSize: fontSize.md,
-    fontWeight: "600",
-  },
-  // Guest view specific styles
-  guestHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginHorizontal: spacing.lg,
-    marginTop: spacing.lg,
-    marginBottom: spacing.md,
-    padding: spacing.lg,
-    borderRadius: radius.md,
-    borderWidth: 1,
-  },
-  guestHeaderContent: {
-    marginLeft: spacing.md,
-    flex: 1,
-  },
-  guestTitle: {
-    fontSize: fontSize.lg,
-    fontWeight: "600",
-    marginBottom: spacing.xs,
-  },
-  guestSubtitle: {
-    fontSize: fontSize.sm,
-    lineHeight: fontSize.sm * 1.4,
-  },
-  signInButtonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginHorizontal: spacing.lg,
-    marginBottom: spacing.md,
-    padding: spacing.md,
-    borderRadius: radius.md,
-    borderWidth: 1,
+    fontSize: 12,
   },
 });

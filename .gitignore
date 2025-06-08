@@ -49,5 +49,8 @@ yarn-error.*
 .env.staging.local
 .env.test.local
 
+# Secure configuration files - NEVER COMMIT THESE
+src/shared/config/secure.config.ts
+
 # typescript
 *.tsbuildinfo

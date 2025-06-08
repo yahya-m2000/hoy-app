@@ -1,0 +1,98 @@
+{
+  "common": {
+    "appName": "Hoy",
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "retry": "Réessayer",
+    "close": "Fermer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "submit": "Soumettre"
+  },
+  "auth": {
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "signOut": "Se déconnecter",
+    "email": "Courriel",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié?",
+    "continueWith": "Continuer avec {{provider}}",
+    "alreadyHaveAccount": "Vous avez déjà un compte? Connectez-vous",
+    "dontHaveAccount": "Vous n'avez pas de compte? Inscrivez-vous"
+  },  "navigation": {
+    "home": "Accueil",
+    "search": "Rechercher",
+    "bookings": "Réservations",
+    "wishlist": "Liste de souhaits",
+    "inbox": "Messages",
+    "account": "Compte"
+  },
+  "home": {
+    "welcome": "Bienvenue sur Hoy",
+    "exploreTitle": "Explorez les locations",
+    "featuredTitle": "Propriétés en vedette",
+    "recommendedTitle": "Recommandé pour vous"
+  },
+  "search": {
+    "title": "Trouvez votre séjour parfait",
+    "location": "Emplacement",
+    "dates": "Dates",
+    "guests": "Voyageurs",
+    "filters": "Filtres",
+    "apply": "Appliquer",
+    "clear": "Effacer",
+    "noResults": "Aucun résultat trouvé",
+    "tryDifferent": "Essayez différents critères de recherche"
+  },
+  "property": {
+    "book": "Réserver maintenant",
+    "perNight": "par nuit",
+    "aboutTitle": "À propos de ce lieu",
+    "amenitiesTitle": "Équipements",
+    "locationTitle": "Emplacement",
+    "reviewsTitle": "Commentaires",
+    "hostTitle": "Hébergé par",
+    "viewAll": "Voir tout",
+    "showMore": "Voir plus",
+    "showLess": "Voir moins",
+    "availability": "Disponibilité"
+  },
+  "booking": {
+    "title": "Vos réservations",
+    "upcoming": "À venir",
+    "past": "Passées",
+    "cancelled": "Annulées",
+    "noBookings": "Aucune réservation trouvée",
+    "checkIn": "Arrivée",
+    "checkOut": "Départ",
+    "guests": "Voyageurs",
+    "total": "Total",
+    "status": "Statut",
+    "viewDetails": "Voir les détails",
+    "cancelBooking": "Annuler la réservation"
+  },
+  "inbox": {
+    "title": "Messages",
+    "noMessages": "Pas de messages",
+    "newMessage": "Nouveau message",
+    "search": "Rechercher des messages",
+    "yourHosts": "Vos hôtes"  },
+  "wishlist": {
+    "manageCollections": "Gérer les Collections"
+  },
+  "account": {
+    "title": "Compte",
+    "profile": "Profil",
+    "payments": "Paiements",
+    "notifications": "Notifications",
+    "language": "Langue",
+    "theme": "Thème",
+    "help": "Aide et Support",
+    "legal": "Mentions légales",
+    "logout": "Se déconnecter",
+    "personalInfo": "Informations personnelles",
+    "hostSettings": "Paramètres d'hôte"
+  }
+}
