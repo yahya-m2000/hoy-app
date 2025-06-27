@@ -5,7 +5,8 @@ import React from "react";
 import { StyleSheet } from "react-native";
 
 // Context
-import { useNetwork, useTheme } from "@shared/context";
+import { useNetwork } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Base components
 import { Container } from "../../base/Container";
@@ -30,7 +31,7 @@ const OfflineNotice: React.FC = () => {
           ? theme.colors.error[800]
           : theme.colors.error[500],
       }}
-      padding="small"
+      padding="sm"
     >
       <Text
         variant="body"

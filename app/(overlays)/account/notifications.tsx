@@ -12,7 +12,8 @@ import {
   ActivityIndicator,
   Switch,
 } from "react-native";
-import { useTheme, useToast } from "@shared/context";
+import { useToast } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";

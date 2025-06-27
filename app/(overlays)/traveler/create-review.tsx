@@ -22,7 +22,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 
 // App context and hooks
-import { useTheme, useToast } from "@shared/context";
+import { useToast } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 import { useCreateBookingReview } from "@shared/hooks";
 
 // Components
@@ -181,8 +182,8 @@ export default function CreateReviewModal() {
                 star <= currentRating
                   ? theme.colors.warning
                   : isDark
-                  ? theme.colors.grayPalette[600]
-                  : theme.colors.grayPalette[400]
+                  ? theme.colors.gray[600]
+                  : theme.colors.gray[400]
               }
             />
           </TouchableOpacity>
@@ -276,8 +277,8 @@ export default function CreateReviewModal() {
                   styles.ratingItemValue,
                   {
                     color: isDark
-                      ? theme.colors.grayPalette[400]
-                      : theme.colors.grayPalette[600],
+                      ? theme.colors.gray[400]
+                      : theme.colors.gray[600],
                   },
                 ]}
               >
@@ -289,8 +290,8 @@ export default function CreateReviewModal() {
                 styles.ratingItemDescription,
                 {
                   color: isDark
-                    ? theme.colors.grayPalette[400]
-                    : theme.colors.grayPalette[600],
+                    ? theme.colors.gray[400]
+                    : theme.colors.gray[600],
                 },
               ]}
             >
@@ -334,7 +335,7 @@ export default function CreateReviewModal() {
           ]}
           placeholder={t("review.reviewPlaceholder")}
           placeholderTextColor={
-            isDark ? theme.colors.gray[500] : theme.colors.grayPalette[400]
+            isDark ? theme.colors.gray[500] : theme.colors.gray[400]
           }
           multiline
           numberOfLines={6}
@@ -348,9 +349,7 @@ export default function CreateReviewModal() {
           style={[
             styles.characterCount,
             {
-              color: isDark
-                ? theme.colors.grayPalette[400]
-                : theme.colors.grayPalette[600],
+              color: isDark ? theme.colors.gray[400] : theme.colors.gray[600],
             },
           ]}
         >

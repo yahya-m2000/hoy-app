@@ -7,7 +7,8 @@ import React from "react";
 import { Switch } from "react-native";
 import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
-import { useTheme, useUserRole } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
+import { useUserRole } from "@shared/context";
 
 import { useCurrency } from "@shared/hooks";
 
@@ -70,7 +71,7 @@ export default function PreferencesSection({
           onValueChange={toggleTheme}
           trackColor={{
             false: isDark ? theme.colors.gray[700] : theme.colors.gray[300],
-            true: theme.colors.primary[500],
+            true: theme.colors.primaryPalette[500],
           }}
           thumbColor={theme.white}
         />
@@ -95,7 +96,7 @@ export default function PreferencesSection({
                   false: isDark
                     ? theme.colors.gray[700]
                     : theme.colors.gray[300],
-                  true: theme.colors.primary[500],
+                  true: theme.colors.primaryPalette[500],
                 }}
                 thumbColor={theme.white}
                 disabled={isRoleLoading}

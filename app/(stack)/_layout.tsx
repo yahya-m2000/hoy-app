@@ -1,6 +1,6 @@
 import React from "react";
 import { Stack } from "expo-router";
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 export default function StackLayout() {
   const { theme } = useTheme();
@@ -10,7 +10,7 @@ export default function StackLayout() {
       screenOptions={{
         headerShown: false,
         contentStyle: { backgroundColor: theme.background },
-        animation: "slide_from_right",
+        animation: "default",
       }}
     >
       <Stack.Screen name="bookings" options={{ headerShown: false }} />

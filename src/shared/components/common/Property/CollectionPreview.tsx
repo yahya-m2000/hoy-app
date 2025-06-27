@@ -4,8 +4,9 @@
  */
 
 import React from "react";
-import { View, Image, Text, StyleSheet } from "react-native";
-import { useTheme } from "src/shared/context";
+import { View, Image, StyleSheet } from "react-native";
+import { Text } from "@shared/components/base/Text";
+import { useTheme } from "@shared/hooks/useTheme";
 import { spacing, fontSize } from "src/shared/constants";
 import { Icon } from "src/shared/components/base/Icon";
 

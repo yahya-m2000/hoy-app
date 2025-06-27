@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Utility for handling coordinate-based property searches.
  * Ensures validation and proper error handling.
  */

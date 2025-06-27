@@ -7,10 +7,11 @@
 import React from "react";
 
 // React Native
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Image, StyleSheet } from "react-native";
+import { Text } from "@shared/components/base/Text";
 
 // Context
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Constants
 import { radius } from "@shared/constants/radius";
@@ -93,9 +94,7 @@ const Avatar: React.FC<AvatarProps> = ({
       case "online":
         return theme.colors.success;
       case "offline":
-        return isDark
-          ? theme.colors.grayPalette[500]
-          : theme.colors.grayPalette[400];
+        return isDark ? theme.colors.gray[500] : theme.colors.gray[400];
       case "away":
         return theme.colors.warning;
       case "busy":
@@ -109,7 +108,7 @@ const Avatar: React.FC<AvatarProps> = ({
   const getBackgroundColor = () => {
     const displayName = userName || "";
     if (!displayName)
-      return isDark ? theme.colors.grayPalette[700] : theme.colors.gray[300];
+      return isDark ? theme.colors.gray[700] : theme.colors.gray[300];
 
     // Simple hash function to generate consistent color for the same name
     const hash = displayName.split("").reduce((acc: number, char: string) => {
@@ -145,7 +144,7 @@ const Avatar: React.FC<AvatarProps> = ({
               height: dimension,
               borderRadius: radius.circle,
               borderWidth: showBorder ? 2 : 0,
-              borderColor: isDark ? theme.colors.grayPalette[700] : theme.white,
+              borderColor: isDark ? theme.colors.gray[700] : theme.white,
             },
           ]}
           resizeMode="cover"
@@ -160,7 +159,7 @@ const Avatar: React.FC<AvatarProps> = ({
               borderRadius: radius.circle,
               backgroundColor: getBackgroundColor(),
               borderWidth: showBorder ? 2 : 0,
-              borderColor: isDark ? theme.colors.grayPalette[700] : theme.white,
+              borderColor: isDark ? theme.colors.gray[700] : theme.white,
             },
           ]}
         >

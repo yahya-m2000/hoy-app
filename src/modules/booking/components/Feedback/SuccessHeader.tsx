@@ -4,11 +4,12 @@
  */
 
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { Text } from "@shared/components/base/Text";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 // Context
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Constants
 import { fontSize, spacing, radius } from "@shared/constants";
@@ -30,7 +31,7 @@ const SuccessHeader: React.FC = () => {
       <Text
         style={[
           styles.title,
-          { color: isDark ? theme.white : theme.colors.grayPalette[900] },
+          { color: isDark ? theme.white : theme.colors.gray[900] },
         ]}
       >
         {t("booking.bookingConfirmed")}

@@ -4,7 +4,8 @@
  */
 
 import React from "react";
-import { Text, TextStyle } from "react-native";
+import { TextStyle } from "react-native";
+import { Text } from "@shared/components/base/Text";
 import { useTheme, useDateSelection } from "src/shared/context";
 import { fontSize, fontWeight } from "src/shared/constants";
 
@@ -49,7 +50,7 @@ const PropertyAvailability: React.FC<PropertyAvailabilityProps> = ({
       style={[
         {
           fontSize: textSize,
-          fontWeight: String(fontWeight.normal) as any,
+          fontWeight: fontWeight.normal,
           color: textColor,
           lineHeight: textSize * 1.1,
         },

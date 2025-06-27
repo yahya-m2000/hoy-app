@@ -12,7 +12,7 @@ import React, {
   useCallback,
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Alert } from "react-native";
+import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "./AuthContext";
 import { eventEmitter, AppEvents } from "../utils/eventEmitter";
 
@@ -31,7 +31,8 @@ const UserRoleContext = createContext<UserRoleContextType | undefined>(
 );
 
 export const UserRoleProvider = ({ children }: { children: ReactNode }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, checkAuthenticationState } = useAuth();
+  const queryClient = useQueryClient();
   const [userRole, setUserRoleState] = useState<UserRoleType>("traveler");
   const [isRoleLoading, setIsRoleLoading] = useState<boolean>(false);
 
@@ -61,51 +62,39 @@ export const UserRoleProvider = ({ children }: { children: ReactNode }) => {
       setUserRoleState("traveler");
       AsyncStorage.setItem("@userRole", "traveler").catch(console.error);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated]); // Save user role when it changes
+  const setUserRole = useCallback(
+    async (newRole: UserRoleType) => {
+      setIsRoleLoading(true);
+      try {
+        await AsyncStorage.setItem("@userRole", newRole);
+        setUserRoleState(newRole);
 
-  // Save user role when it changes
-  const setUserRole = useCallback(async (newRole: UserRoleType) => {
-    setIsRoleLoading(true);
-    try {
-      await AsyncStorage.setItem("@userRole", newRole);
-      setUserRoleState(newRole);
+        // Emit event for any components that need to react to role changes
+        eventEmitter.emit(AppEvents.USER_ROLE_CHANGED, { newRole });
 
-      // Emit event for any components that need to react to role changes
-      eventEmitter.emit(AppEvents.USER_ROLE_CHANGED, { newRole });
+        // Invalidate user-related queries to prevent stale data issues
+        queryClient.invalidateQueries({ queryKey: ["user"] });
 
-      // Simulate a delay to ensure UI components have time to adjust
-      await new Promise((resolve) => setTimeout(resolve, 500));
-    } catch (error) {
-      console.error("Failed to save user role:", error);
-    } finally {
-      setIsRoleLoading(false);
-    }
-  }, []);
-  // Toggle between traveler and host
-  // Original function - temporarily commented out
-  /*
+        // Add longer delay to ensure all navigation and auth states are stable
+        // This prevents race conditions with API calls during role switching
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        // Refresh authentication state to ensure tokens are valid after role switch
+        if (isAuthenticated) {
+          await checkAuthenticationState();
+        }
+      } catch (error) {
+        console.error("Failed to save user role:", error);
+      } finally {
+        setIsRoleLoading(false);
+      }
+    },
+    [checkAuthenticationState, isAuthenticated, queryClient]
+  ); // Toggle between traveler and host with setup flow
   const toggleUserRole = useCallback(async () => {
     const newRole = userRole === "traveler" ? "host" : "traveler";
     await setUserRole(newRole);
-  }, [userRole, setUserRole]);
-  */
-  // Temporary function that shows an alert instead of switching roles
-  const toggleUserRole = useCallback(async () => {
-    Alert.alert(
-      "Host Mode Under Development",
-      "The Host mode functionality is currently under development. Please check back soon!",
-      [
-        {
-          text: "OK",
-          onPress: () => console.log("Host mode alert acknowledged"),
-        },
-      ]
-    );
-
-    // Keep user in traveler mode
-    if (userRole === "host") {
-      await setUserRole("traveler");
-    }
   }, [userRole, setUserRole]);
 
   return (

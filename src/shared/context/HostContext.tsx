@@ -1,4 +1,4 @@
-﻿import React, { createContext, useContext, useState, useMemo } from "react";
+import React, { createContext, useContext, useState, useMemo } from "react";
 import * as hostService from "@shared/services/hostService";
 
 const HostContext = createContext<any>(null);

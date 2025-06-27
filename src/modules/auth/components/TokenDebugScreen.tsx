@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Button, ScrollView } from "react-native";
+import { View, StyleSheet, Button, ScrollView } from "react-native";
+import { Text } from "@shared/components/base/Text";
 import { validateTokenRefreshFlow } from "@shared/services/core/client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 

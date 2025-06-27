@@ -16,7 +16,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
 // Context and hooks
-import { useTheme, useToast } from "@shared/context";
+import { useToast } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 import { useTranslation } from "react-i18next";
 
 // Components
@@ -89,7 +90,7 @@ export default function ForgotPasswordModal() {
                 styles.successTitle,
                 {
                   color: isDark
-                    ? theme.colors.grayPalette[100]
+                    ? theme.colors.gray[100]
                     : theme.colors.gray[900],
                 },
               ]}

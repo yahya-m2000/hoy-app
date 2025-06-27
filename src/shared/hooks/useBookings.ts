@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Custom hook for booking functionalities
  */
 

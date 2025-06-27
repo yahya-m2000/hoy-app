@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Constants
 import { fontSize, spacing, radius, fontWeight } from "@shared/constants";

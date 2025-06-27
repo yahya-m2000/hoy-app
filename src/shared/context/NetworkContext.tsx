@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import NetInfo, { NetInfoState } from "@react-native-community/netinfo";
+import NetInfo, { NetInfoState } from "../utils/network/netInfoCompat";
 import { Alert } from "react-native";
 
 interface NetworkContextType {

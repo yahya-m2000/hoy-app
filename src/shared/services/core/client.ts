@@ -2,8 +2,8 @@ import axios from "axios";
 import Constants from "expo-constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { eventEmitter, AppEvents } from "@shared/utils/eventEmitter";
-import NetInfo from "@react-native-community/netinfo";
-import { API_BASE_URL, ENDPOINTS } from "../../constants/api";
+import NetInfo from "../../utils/network/netInfoCompat";
+import { API_BASE_URL, ENDPOINTS, isPublicEndpoint } from "../../constants/api";
 import { jwtDecode } from "jwt-decode";
 import {
   hasValidAuthentication,
@@ -11,10 +11,62 @@ import {
   clearTokenInvalidation,
 } from "@shared/utils/storage/authStorage";
 
+// Request validation utilities
+const validateRequest = (config: any): { isValid: boolean; error?: string } => {
+  // Check if URL is properly formatted
+  if (!config.url && !config.baseURL) {
+    return { isValid: false, error: "No URL provided for request" };
+  }
+
+  // Check if method is valid
+  const validMethods = ["GET", "POST", "PUT", "DELETE", "PATCH"];
+  if (config.method && !validMethods.includes(config.method.toUpperCase())) {
+    return { isValid: false, error: `Invalid HTTP method: ${config.method}` };
+  }
+
+  // Validate headers
+  if (config.headers) {
+    // Check for potential security issues
+    const dangerousHeaders = ["x-forwarded-for", "x-real-ip"];
+    for (const header of dangerousHeaders) {
+      if (config.headers[header.toLowerCase()]) {
+        console.warn(`⚠️ Potentially dangerous header detected: ${header}`);
+      }
+    }
+  }
+
+  return { isValid: true };
+};
+
+// Enhanced error classification
+const classifyError = (
+  error: any
+): { type: string; severity: "low" | "medium" | "high"; retry: boolean } => {
+  if (!error.response) {
+    // Network error
+    return { type: "network", severity: "high", retry: true };
+  }
+
+  const status = error.response.status;
+
+  if (status >= 500) {
+    return { type: "server", severity: "high", retry: true };
+  } else if (status === 429) {
+    return { type: "rate_limit", severity: "medium", retry: true };
+  } else if (status === 401) {
+    return { type: "authentication", severity: "medium", retry: false };
+  } else if (status === 403) {
+    return { type: "authorization", severity: "medium", retry: false };
+  } else if (status >= 400) {
+    return { type: "client", severity: "low", retry: false };
+  }
+
+  return { type: "unknown", severity: "medium", retry: false };
+};
+
 // Use expoConfig for baseURL, fallback to localhost
 const apiBaseUrl =
   API_BASE_URL ||
-  Constants.expoConfig?.extra?.apiUrl ||
   process.env.EXPO_PUBLIC_API_URL ||
   "http://localhost:3000/api/v1";
 
@@ -29,6 +81,66 @@ const MAX_RETRIES = 3;
 // Initial retry delay in ms (will be increased exponentially)
 const INITIAL_RETRY_DELAY = 1000;
 
+// Circuit breaker pattern for failing endpoints
+const endpointFailures = new Map<
+  string,
+  { count: number; lastFailure: number }
+>();
+const CIRCUIT_BREAKER_THRESHOLD = 5; // Fail after 5 consecutive failures
+const CIRCUIT_BREAKER_TIMEOUT = 60000; // Reset after 1 minute
+
+const isCircuitBreakerOpen = (url: string): boolean => {
+  const failures = endpointFailures.get(url);
+  if (!failures) return false;
+
+  const now = Date.now();
+
+  // Reset if enough time has passed
+  if (now - failures.lastFailure > CIRCUIT_BREAKER_TIMEOUT) {
+    endpointFailures.delete(url);
+    return false;
+  }
+
+  return failures.count >= CIRCUIT_BREAKER_THRESHOLD;
+};
+
+const recordEndpointFailure = (url: string): void => {
+  const failures = endpointFailures.get(url) || { count: 0, lastFailure: 0 };
+  failures.count += 1;
+  failures.lastFailure = Date.now();
+  endpointFailures.set(url, failures);
+
+  if (failures.count >= CIRCUIT_BREAKER_THRESHOLD) {
+    console.warn(
+      `🔥 Circuit breaker OPEN for ${url} (${failures.count} failures)`
+    );
+  }
+};
+
+const recordEndpointSuccess = (url: string): void => {
+  endpointFailures.delete(url);
+};
+
+// Clear circuit breaker state for auth endpoints (they should never be blocked)
+const clearAuthEndpointFailures = (): void => {
+  const authEndpoints = [
+    `${apiBaseUrl}${ENDPOINTS.AUTH.LOGIN}`,
+    `${apiBaseUrl}${ENDPOINTS.AUTH.REGISTER}`,
+    `${apiBaseUrl}${ENDPOINTS.AUTH.REFRESH_TOKEN}`,
+    `${apiBaseUrl}${ENDPOINTS.AUTH.FORGOT_PASSWORD}`,
+    `${apiBaseUrl}${ENDPOINTS.AUTH.RESET_PASSWORD}`,
+  ];
+
+  authEndpoints.forEach((endpoint) => {
+    endpointFailures.delete(endpoint);
+  });
+
+  console.log("🔧 Cleared circuit breaker state for auth endpoints");
+};
+
+// Clear auth endpoint failures on startup
+clearAuthEndpointFailures();
+
 const api = axios.create({
   baseURL: apiBaseUrl,
   timeout: 15000, // 15 seconds timeout
@@ -38,6 +150,8 @@ const api = axios.create({
     "Cache-Control": "no-cache, no-store, must-revalidate",
     Pragma: "no-cache",
     Expires: "0",
+    // Add ngrok header to skip browser warning
+    "ngrok-skip-browser-warning": "true",
   },
 });
 
@@ -110,29 +224,46 @@ api.interceptors.request.use(
       Expires: "0",
       "X-User-Cache-Key":
         (await AsyncStorage.getItem("currentUserId")) || "none",
-    }; // Check if this is a request that requires authentication
-    // Skip token checks for auth endpoints to prevent infinite loops
+    }; // Validate the request first
+    const validation = validateRequest(config);
+    if (!validation.isValid) {
+      console.error("Invalid request:", validation.error);
+      return Promise.reject(new Error(validation.error));
+    } // Check circuit breaker before making request (but skip for auth endpoints)
+    const requestUrl = config.url || config.baseURL || "";
+    const isAuthRequest =
+      config.url &&
+      (config.url.includes(ENDPOINTS.AUTH.LOGIN) ||
+        config.url.includes(ENDPOINTS.AUTH.REGISTER) ||
+        config.url.includes(ENDPOINTS.AUTH.REFRESH_TOKEN) ||
+        config.url.includes(ENDPOINTS.AUTH.FORGOT_PASSWORD) ||
+        config.url.includes(ENDPOINTS.AUTH.RESET_PASSWORD));
+
+    if (!isAuthRequest && isCircuitBreakerOpen(requestUrl)) {
+      console.warn(
+        `🔥 Circuit breaker OPEN for ${requestUrl} - request blocked`
+      );
+      const error = new Error(`Service temporarily unavailable: ${requestUrl}`);
+      error.name = "CircuitBreakerError";
+      return Promise.reject(error);
+    }
+
+    // Check if this is a request that requires authentication    // Skip token checks for auth endpoints to prevent infinite loops
     const isAuthEndpoint =
       config.url &&
       (config.url.includes(ENDPOINTS.AUTH.LOGIN) ||
         config.url.includes(ENDPOINTS.AUTH.REGISTER) ||
         config.url.includes(ENDPOINTS.AUTH.REFRESH_TOKEN));
 
-    // Define endpoints that don't require authentication
-    const isPublicEndpoint =
-      config.url &&
-      ((config.url.includes("/properties") &&
-        config.method?.toLowerCase() === "get" &&
-        !config.url.includes("/bookings")) ||
-        config.url.includes("/search") ||
-        config.url.includes("/public"));
-
-    if (!isAuthEndpoint && !isPublicEndpoint) {
+    // Use the improved public endpoint detection
+    const isPublic = config.url && isPublicEndpoint(config.url, config.method);
+    if (!isAuthEndpoint && !isPublic) {
       // Check if user has valid authentication before making the request
       const hasValidAuth = await hasValidAuthentication();
+
       if (!hasValidAuth) {
         console.log(
-          "🚫 Authentication invalid - blocking API request to:",
+          "Authentication invalid - blocking API request to:",
           config.url
         );
         const error = new Error("Authentication required - user not logged in");
@@ -188,9 +319,7 @@ api.interceptors.request.use(
                 ).toFixed(1)}s ago)`
               );
             }
-          }
-
-          // If we have a token, always add it to the request
+          } // If we have a token, always add it to the request
           if (!config.headers["Authorization"] && accessToken) {
             config.headers["Authorization"] = `Bearer ${accessToken}`;
           }
@@ -210,11 +339,28 @@ api.interceptors.request.use(
 // Response interceptor to handle token expiration and check user data integrity
 api.interceptors.response.use(
   async (response: any) => {
+    // Record successful request for circuit breaker (excluding auth endpoints)
+    const requestUrl = response?.config?.url || response?.config?.baseURL || "";
+    const isAuthRequest =
+      response?.config?.url &&
+      (response.config.url.includes(ENDPOINTS.AUTH.LOGIN) ||
+        response.config.url.includes(ENDPOINTS.AUTH.REGISTER) ||
+        response.config.url.includes(ENDPOINTS.AUTH.REFRESH_TOKEN) ||
+        response.config.url.includes(ENDPOINTS.AUTH.FORGOT_PASSWORD) ||
+        response.config.url.includes(ENDPOINTS.AUTH.RESET_PASSWORD));
+
+    if (requestUrl && !isAuthRequest) {
+      recordEndpointSuccess(requestUrl);
+    }
+
     // Check if this is a user data response and verify it's for the correct user
     try {
       if (
         response?.config?.url?.includes("/users/me") &&
-        response?.data?.data
+        response?.data?.data &&
+        // Only check user profile endpoints, not other user-related endpoints
+        (response?.config?.url === "/users/me" ||
+          response?.config?.url?.endsWith("/users/me"))
       ) {
         const userId = await AsyncStorage.getItem("currentUserId"); // If we have a user ID stored and this doesn't match, something's wrong
         if (
@@ -243,8 +389,37 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // If no config, can't retry - reject immediately
+    if (!originalRequest) {
+      console.error("API error (no config) - cannot retry request");
+      return Promise.reject(error);
+    }
+
+    // Classify the error for better handling
+    const errorInfo = classifyError(error);
+    console.log(
+      `📊 Error classified as: ${errorInfo.type} (severity: ${errorInfo.severity})`
+    );
+
     // If error is not 401 or request has already been retried, reject
     if (error.response?.status !== 401 || originalRequest._retry) {
+      // Log detailed error information for debugging
+      if (error.response) {
+        console.error(`API Error ${error.response.status}:`, {
+          url: originalRequest.url,
+          method: originalRequest.method,
+          status: error.response.status,
+          message: error.response.data?.message || "Unknown error",
+          type: errorInfo.type,
+        });
+      } else {
+        console.error(`Network Error:`, {
+          url: originalRequest.url,
+          method: originalRequest.method,
+          message: error.message,
+          type: errorInfo.type,
+        });
+      }
       return Promise.reject(error);
     }
 
@@ -428,15 +603,61 @@ api.interceptors.response.use(
     return response;
   },
   async (error) => {
-    const originalRequest = error.config;
+    const originalRequest = error.config; // Record endpoint failure for circuit breaker (but not for auth endpoints or circuit breaker errors)
+    if (originalRequest && error.name !== "CircuitBreakerError") {
+      const requestUrl = originalRequest.url || originalRequest.baseURL || "";
+      const isAuthRequest =
+        originalRequest.url &&
+        (originalRequest.url.includes(ENDPOINTS.AUTH.LOGIN) ||
+          originalRequest.url.includes(ENDPOINTS.AUTH.REGISTER) ||
+          originalRequest.url.includes(ENDPOINTS.AUTH.REFRESH_TOKEN) ||
+          originalRequest.url.includes(ENDPOINTS.AUTH.FORGOT_PASSWORD) ||
+          originalRequest.url.includes(ENDPOINTS.AUTH.RESET_PASSWORD));
 
-    // Check if this is a network error
+      if (requestUrl && !isAuthRequest) {
+        recordEndpointFailure(requestUrl);
+      }
+    }
+
+    // If no config, can't retry - reject immediately
+    if (!originalRequest) {
+      console.error("API error (no config) - cannot retry request");
+      return Promise.reject(error);
+    } // Check if this is a network error
     const isNetworkError = !error.response;
+    const errorInfo = classifyError(error);
+
+    // Log error information for debugging
+    console.log(
+      `📊 Error classified as: ${errorInfo.type} (severity: ${errorInfo.severity}, retry: ${errorInfo.retry})`
+    );
 
     if (isNetworkError) {
+      console.log(
+        `🔄 Network error detected, retry count: ${
+          originalRequest._retryCount || 0
+        }/${MAX_RETRIES}`
+      );
+
       // If we haven't retried yet, let's retry the request
       if (!originalRequest._retry) {
         originalRequest._retry = true;
+
+        // Check network connectivity before retry
+        try {
+          await checkConnection();
+          console.log("📡 Network connectivity confirmed, retrying request");
+        } catch (connectionError) {
+          const errorMsg =
+            connectionError instanceof Error
+              ? connectionError.message
+              : "Unknown connection error";
+          console.error(
+            "📵 No network connectivity, aborting retry:",
+            errorMsg
+          );
+          return Promise.reject(error);
+        }
 
         // Retry the request after a delay
         await new Promise((resolve) =>
@@ -454,9 +675,31 @@ api.interceptors.response.use(
         const retryDelay =
           INITIAL_RETRY_DELAY * 2 ** originalRequest._retryCount;
 
+        console.log(
+          `⏰ Retrying in ${retryDelay}ms (attempt ${originalRequest._retryCount}/${MAX_RETRIES})`
+        );
+
         // Retry the request after the calculated delay
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
 
+        return api(originalRequest);
+      }
+
+      console.error(
+        `❌ Max retries (${MAX_RETRIES}) exceeded for network error`
+      );
+    }
+
+    // For rate limiting errors, add special handling
+    if (error.response?.status === 429) {
+      const retryAfter = error.response.headers["retry-after"];
+      const delay = retryAfter ? parseInt(retryAfter) * 1000 : 5000; // Default 5 seconds
+
+      if ((originalRequest._retryCount || 0) < MAX_RETRIES) {
+        originalRequest._retryCount = (originalRequest._retryCount || 0) + 1;
+        console.log(`⏳ Rate limited, retrying after ${delay}ms`);
+
+        await new Promise((resolve) => setTimeout(resolve, delay));
         return api(originalRequest);
       }
     }

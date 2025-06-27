@@ -4,40 +4,30 @@
  */
 
 import React, { useCallback } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  RefreshControl,
-  ScrollView,
-  ActivityIndicator,
-  TouchableOpacity,
-} from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { RefreshControl, ScrollView } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useTranslation } from "react-i18next";
 
 // Context
-import { useTheme, useAuth } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
+import { useAuth } from "@shared/context";
 
 // Hooks
-import { useUserBookings, useCurrentUser } from "@shared/hooks";
+import { useUserBookings } from "@shared/hooks";
 import { useRouter } from "expo-router";
 
-// Components
-import { EmptyState } from "@shared/components/common";
-import { BookingsSection, type PopulatedBooking } from "@modules/booking";
+// Base Components
+import { Container, Text, Button, Header } from "@shared/components/base";
+import { EmptyState, LoadingSpinner } from "@shared/components/common";
 
-// Constants
-import { spacing, fontSize, fontWeight } from "@shared/constants";
+// Module Components
+import { BookingsSection, type PopulatedBooking } from "@modules/booking";
 
 const BookingsScreen = () => {
   const router = useRouter();
   const { theme, isDark } = useTheme();
-  const insets = useSafeAreaInsets();
-  const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
-  const { data: user } = useCurrentUser();
+  const { t } = useTranslation();
 
   // Get all bookings (we'll filter them client-side for more flexibility)
   const { data, isLoading, refetch, isRefetching, error } = useUserBookings();
@@ -52,6 +42,7 @@ const BookingsScreen = () => {
       error: error?.message || error,
     });
   }, [data, isLoading, error]);
+
   // Safely handle the data and transform to PopulatedBooking format
   const allBookings = React.useMemo(() => {
     if (isLoading) return [];
@@ -99,174 +90,173 @@ const BookingsScreen = () => {
   const upcomingBookings = allBookings.filter(
     (booking) =>
       (booking.bookingStatus === "confirmed" ||
-        booking.bookingStatus === "pending") &&
+        booking.bookingStatus === "pending" ||
+        booking.bookingStatus === "in-progress") &&
       new Date(booking.checkIn) >= new Date()
   );
 
   const pastBookings = allBookings.filter(
     (booking) =>
-      booking.bookingStatus === "completed" &&
-      new Date(booking.checkOut) < new Date()
+      booking.bookingStatus === "completed" ||
+      booking.bookingStatus === "cancelled" ||
+      (new Date(booking.checkOut) < new Date() &&
+        booking.bookingStatus !== "in-progress")
   );
 
   // Show loading state
   if (isLoading) {
     return (
-      <View
-        style={[
-          styles.container,
-          styles.centered,
-          { backgroundColor: theme.background },
-        ]}
-      >
-        <ActivityIndicator size="large" color={theme.primary} />{" "}
-        <Text style={[styles.loadingText, { color: theme.text.primary }]}>
-          Loading your bookings...
-        </Text>
-      </View>
+      <Container flex={1} backgroundColor="background">
+        <Header title="Bookings" />
+        <Container flex={1} justifyContent="center" alignItems="center">
+          <LoadingSpinner size="large" />
+          <Container marginTop="md">
+            <Text
+              variant="body"
+              color="secondary"
+              style={{ textAlign: "center" }}
+            >
+              Loading your bookings...
+            </Text>
+          </Container>
+        </Container>
+      </Container>
     );
   }
 
   // If not logged in, show auth prompt
-  if (!user) {
+  if (!isAuthenticated) {
     return (
-      <View
-        style={[
-          styles.container,
-          {
-            backgroundColor: theme.background,
-            flex: 1,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          },
-        ]}
-      >
-        <EmptyState
-          icon="calendar-outline"
-          title="Log in to view your bookings"
-          message="Sign in to see your upcoming and past trips"
-          action={{
-            label: "Log In",
-            onPress: () => router.push("/auth/login"),
-          }}
-        />
-      </View>
+      <Container flex={1} backgroundColor="background">
+        <Header title="Bookings" />
+        <Container flex={1} justifyContent="center" alignItems="center">
+          <EmptyState
+            icon="calendar-outline"
+            title="Log in to view your bookings"
+            message="Sign in to see your upcoming and past trips"
+            action={{
+              label: "Log In",
+              onPress: () => router.push("/auth/login"),
+            }}
+          />
+        </Container>
+      </Container>
     );
   }
 
-  // Show empty state if no collections
+  // Show empty state if no bookings
   if (!isLoading && data?.length === 0) {
     return (
-      <View style={[styles.container, { backgroundColor: theme.background }]}>
-        <EmptyState
-          icon="heart-outline"
-          title="No bookings found"
-          message="Start exploring to find and save properties to your bookings"
-        />
-      </View>
+      <Container flex={1} backgroundColor="background">
+        <Header title="Bookings" />
+        <Container flex={1} justifyContent="center" alignItems="center">
+          <EmptyState
+            icon="heart-outline"
+            title="No bookings found"
+            message="Start exploring to find and save properties to your bookings"
+          />
+        </Container>
+      </Container>
     );
   }
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: isDark
-            ? theme.colors.gray[900]
-            : theme.colors.gray[50],
-          paddingTop: insets.top + spacing.xxl,
-        },
-      ]}
-    >
+    <Container flex={1} backgroundColor={theme.background}>
+      <Header title="Bookings" />
       <StatusBar style={isDark ? "light" : "dark"} />
 
+      {/* Error Banner */}
       {error && (
-        <View
-          style={[
-            styles.errorContainer,
-            { backgroundColor: theme.error + "20" },
-          ]}
+        <Container
+          marginHorizontal="md"
+          marginTop="md"
+          padding="md"
+          backgroundColor="error"
+          borderRadius="md"
+          style={{ opacity: 0.1 }}
         >
-          {" "}
-          <Text style={[styles.errorText, { color: theme.error }]}>
-            {error instanceof Error ? error.message : String(error)}
-          </Text>
-          <TouchableOpacity>
-            <Text style={[styles.retryText, { color: theme.primary }]}>
-              Retry
-            </Text>
-          </TouchableOpacity>
-        </View>
+          <Container
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Container flex={1}>
+              <Text variant="body" color="error">
+                {error instanceof Error ? error.message : String(error)}
+              </Text>
+            </Container>
+            <Button
+              title="Retry"
+              variant="ghost"
+              size="small"
+              onPress={onRefresh}
+            />
+          </Container>
+        </Container>
       )}
 
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefetching}
-            onRefresh={onRefresh}
-            colors={[theme.colors.primary]}
-            tintColor={isDark ? theme.white : theme.colors.primary}
+      {/* Bookings Content */}
+      <Container flex={1}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefetching}
+              onRefresh={onRefresh}
+              colors={[theme.colors.primary]}
+              tintColor={isDark ? theme.white : theme.colors.primary}
+            />
+          }
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 100 }}
+        >
+          {/* Upcoming Bookings Section */}
+          <BookingsSection
+            title={t("booking.upcoming")}
+            bookings={upcomingBookings}
+            isUpcoming={true}
+            isLoading={isLoading}
           />
-        }
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-      >
-        {/* Upcoming Bookings Section */}
-        <BookingsSection
-          title={t("booking.upcoming")}
-          bookings={upcomingBookings}
-          isUpcoming={true}
-          isLoading={isLoading}
-        />
 
-        {/* Past Bookings Section */}
-        <BookingsSection
-          title={t("booking.past")}
-          bookings={pastBookings}
-          isUpcoming={false}
-          isLoading={isLoading}
-        />
-      </ScrollView>
-    </View>
+          {/* View All Past Bookings Button */}
+          {pastBookings.length > 3 && (
+            <Container marginHorizontal="md" marginVertical="md">
+              <Button
+                title={`View All Past Bookings (${pastBookings.length})`}
+                onPress={() => router.push("/(tabs)/traveler/bookings/past")}
+                variant="outline"
+                size="medium"
+                style={{
+                  backgroundColor: isDark
+                    ? theme.colors.gray[800]
+                    : theme.colors.gray[100],
+                  borderColor: isDark
+                    ? theme.colors.gray[600]
+                    : theme.colors.gray[300],
+                }}
+              />
+              <Container marginTop="xs">
+                <Text
+                  variant="caption"
+                  color="secondary"
+                  style={{ textAlign: "center" }}
+                >
+                  See your complete booking history
+                </Text>
+              </Container>
+            </Container>
+          )}
+
+          {/* Past Bookings Section (Limited) */}
+          <BookingsSection
+            title={t("booking.past")}
+            bookings={pastBookings.slice(0, 3)} // Show only first 3 past bookings
+            isUpcoming={false}
+            isLoading={isLoading}
+          />
+        </ScrollView>
+      </Container>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingHorizontal: spacing.md,
-    paddingBottom: 100,
-  },
-
-  loadingText: {
-    marginTop: spacing.md,
-    fontSize: fontSize.md,
-    textAlign: "center",
-  },
-  errorContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    margin: spacing.md,
-    padding: spacing.md,
-    borderRadius: 8,
-  },
-  errorText: {
-    flex: 1,
-    fontSize: fontSize.sm,
-  },
-  retryText: {
-    fontSize: fontSize.sm,
-    fontWeight: fontWeight.medium,
-  },
-  centered: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
 
 export default BookingsScreen;

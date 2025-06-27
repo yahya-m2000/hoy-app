@@ -1,2 +1,9 @@
-export { default as CollectionCard } from "./CollectionCard";
-export { default as PropertyCard } from "./PropertyCard";
+/**
+ * Cards Components Barrel Export
+ */
+
+// Property Card
+export { PropertyCard } from "./property-card";
+
+// Collection Card
+export { CollectionCard } from "./collection-card";

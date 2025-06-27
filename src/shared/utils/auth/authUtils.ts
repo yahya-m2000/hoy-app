@@ -92,22 +92,47 @@ export const useAuthAction = (options: AuthPromptOptions = {}) => {
  */
 export const performLogout = async (): Promise<void> => {
   try {
+    console.log("🔓 Starting complete logout process...");
+
     // Call server logout endpoint
-    await authService.logout();
-  } catch (error) {
-    console.warn("Server logout failed:", error);
-    // Continue with local logout even if server call fails
-  }
-  try {
+    try {
+      await authService.logout();
+      console.log("✅ Server logout successful");
+    } catch (error) {
+      console.warn(
+        "⚠️ Server logout failed, continuing with local logout:",
+        error
+      );
+      // Continue with local logout even if server call fails
+    }
+
     // Clear all local auth data
     await clearTokensFromStorage();
+    console.log("✅ Local tokens cleared");
 
     // Emit logout event to update app state
     eventEmitter.emit(AppEvents.AUTH_LOGOUT);
+    console.log("✅ Logout event emitted");
+
+    // Small delay to ensure event handlers complete
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    // Emit logout complete event
+    eventEmitter.emit(AppEvents.AUTH_LOGOUT_COMPLETE);
+    console.log("✅ Logout complete event emitted");
 
     console.log("✅ Logout completed successfully");
   } catch (error) {
     console.error("❌ Error during logout:", error);
+
+    // Even if there's an error, emit the logout event to ensure app state updates
+    try {
+      eventEmitter.emit(AppEvents.AUTH_LOGOUT);
+      eventEmitter.emit(AppEvents.AUTH_LOGOUT_COMPLETE);
+    } catch (eventError) {
+      console.error("❌ Error emitting logout events:", eventError);
+    }
+
     throw error;
   }
 };

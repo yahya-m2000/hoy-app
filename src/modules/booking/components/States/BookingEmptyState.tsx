@@ -1,7 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { Text } from "@shared/components/base/Text";
 import { useTranslation } from "react-i18next";
-import { useTheme } from "@shared/context/ThemeContext";
+import { useTheme } from "@shared/hooks/useTheme";
 import { spacing } from "@shared/constants/spacing";
 import { fontSize } from "@shared/constants/typography";
 import { LoadingSpinner } from "@shared/components/common";
@@ -25,7 +26,6 @@ const BookingEmptyState: React.FC<BookingEmptyStateProps> = ({
       </View>
     );
   }
-
   const title = isUpcoming
     ? t("bookings.empty.upcoming.title", "No upcoming bookings")
     : t("bookings.empty.past.title", "No past bookings");

@@ -4,25 +4,19 @@
  */
 
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  ActivityIndicator,
-  RefreshControl,
-  TouchableOpacity,
-} from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { FlatList, RefreshControl, View } from "react-native";
 import { useRouter } from "expo-router";
 
 // Context
-import { useTheme } from "@shared/context";
-import { useCurrentUser } from "@shared/hooks";
+import { useTheme } from "@shared/hooks/useTheme";
+import { useAuth } from "@shared/context";
 
-// Components
-import { EmptyState } from "@shared/components";
-import { CollectionCard, CollectionsModal } from "@modules/properties";
+// Base Components
+import { Container, Text, Header, Button } from "@shared/components/base";
+import { EmptyState, LoadingSpinner } from "@shared/components/common";
+
+// Module Components
+import { CollectionsModal, CollectionCard } from "@modules/properties";
 
 // Services
 import {
@@ -30,22 +24,19 @@ import {
   WishlistCollection,
 } from "@shared/services/";
 
-// Constants
-import { fontSize, fontWeight, spacing } from "@shared/constants";
-
 export default function WishlistIndex() {
   const { theme } = useTheme();
-  const { data: user } = useCurrentUser();
+  const { isAuthenticated } = useAuth();
   const router = useRouter();
-  const insets = useSafeAreaInsets();
 
   const [collections, setCollections] = useState<WishlistCollection[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showCollectionsModal, setShowCollectionsModal] = useState(false);
+
   const loadCollections = useCallback(async () => {
-    if (!user) {
+    if (!isAuthenticated) {
       setIsLoading(false);
       return;
     }
@@ -61,11 +52,11 @@ export default function WishlistIndex() {
       setIsLoading(false);
       setIsRefreshing(false);
     }
-  }, [user]);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     loadCollections();
-  }, [user, loadCollections]);
+  }, [isAuthenticated, loadCollections]);
 
   const handleRefresh = () => {
     setIsRefreshing(true);
@@ -91,185 +82,141 @@ export default function WishlistIndex() {
   // Show loading state
   if (isLoading && !isRefreshing) {
     return (
-      <View
-        style={[
-          styles.container,
-          styles.centered,
-          { backgroundColor: theme.background },
-        ]}
-      >
-        <ActivityIndicator size="large" color={theme.primary} />{" "}
-        <Text style={[styles.loadingText, { color: theme.text.primary }]}>
-          Loading your collections...
-        </Text>
-      </View>
+      <Container flex={1} backgroundColor="background">
+        <Header title="Wishlist" />
+        <Container flex={1} justifyContent="center" alignItems="center">
+          <LoadingSpinner size="large" />
+          <Container marginTop="md">
+            <Text
+              variant="body"
+              color="secondary"
+              style={{ textAlign: "center" }}
+            >
+              Loading your collections...
+            </Text>
+          </Container>
+        </Container>
+      </Container>
     );
   }
 
   // Show login prompt for unauthenticated users
-  if (!user) {
+  if (!isAuthenticated) {
     return (
-      <View
-        style={[
-          styles.container,
-          {
-            backgroundColor: theme.background,
-            flex: 1,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          },
-        ]}
-      >
-        <EmptyState
-          icon="heart-outline"
-          title="Log in to view your wishlist"
-          message="Save your favorite properties to view them later"
-          action={{
-            label: "Log In",
-            onPress: () => router.push("/auth/login"),
-          }}
-        />
-      </View>
+      <Container flex={1} backgroundColor="background">
+        <Header title="Wishlist" />
+        <Container flex={1} justifyContent="center" alignItems="center">
+          <EmptyState
+            icon="heart-outline"
+            title="Log in to view your wishlist"
+            message="Save your favorite properties to view them later"
+            action={{
+              label: "Log In",
+              onPress: () => router.push("/auth/login"),
+            }}
+          />
+        </Container>
+      </Container>
     );
   }
 
   // Show empty state if no collections
   if (!isLoading && collections.length === 0) {
     return (
-      <View style={[styles.container, { backgroundColor: theme.background }]}>
-        <EmptyState
-          icon="heart-outline"
-          title="Create your first wishlist"
-          message="As you search, tap the heart icon to save your favorite places to a wishlist"
-          action={{
-            label: "Create Wishlist",
-            onPress: handleCreateCollection,
-          }}
-        />
+      <Container flex={1} backgroundColor="background">
+        <Header title="Wishlist" />
+        <Container flex={1} justifyContent="center" alignItems="center">
+          <EmptyState
+            icon="heart-outline"
+            title="Create your first wishlist"
+            message="As you search, tap the heart icon to save your favorite places to a wishlist"
+            action={{
+              label: "Create Wishlist",
+              onPress: handleCreateCollection,
+            }}
+          />
+        </Container>
         <CollectionsModal
           visible={showCollectionsModal}
           onClose={() => setShowCollectionsModal(false)}
           onCollectionToggle={onCollectionsUpdate}
         />
-      </View>
+      </Container>
     );
   }
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: theme.background,
-          paddingTop: insets.top + spacing.xxl,
-        },
-      ]}
-    >
+    <Container flex={1} backgroundColor="background">
+      <Header title="Wishlist" />
+
+      {/* Error Banner */}
       {error && (
         <View
-          style={[
-            styles.errorContainer,
-            { backgroundColor: theme.error + "20" },
-          ]}
+          style={{
+            marginHorizontal: 16,
+            marginTop: 16,
+            padding: 16,
+            backgroundColor: `${theme.colors.error}20`,
+            borderRadius: 8,
+          }}
         >
-          <Text style={[styles.errorText, { color: theme.error }]}>
-            {error}
-          </Text>
-          <TouchableOpacity onPress={loadCollections}>
-            <Text style={[styles.retryText, { color: theme.primary }]}>
-              Retry
-            </Text>
-          </TouchableOpacity>
+          <Container
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <View style={{ flex: 1 }}>
+              <Text variant="body" color="error">
+                {error}
+              </Text>
+            </View>
+            <Button
+              title="Retry"
+              variant="ghost"
+              size="small"
+              onPress={loadCollections}
+            />
+          </Container>
         </View>
       )}
-      <FlatList
-        data={collections}
-        renderItem={({ item }) => (
-          <CollectionCard
-            id={item._id}
-            name={item.name}
-            description={item.description}
-            propertyCount={item.properties?.length || 0}
-            onPress={(id) => handleCollectionPress(item)}
-          />
-        )}
-        keyExtractor={(item) => item._id}
-        numColumns={2}
-        contentContainerStyle={styles.listContainer}
-        columnWrapperStyle={styles.row}
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefreshing}
-            onRefresh={handleRefresh}
-            colors={[theme.primary]}
-            tintColor={theme.primary}
-          />
-        }
-        showsVerticalScrollIndicator={false}
-      />
+
+      {/* Collections Grid */}
+      <Container flex={1} paddingHorizontal="md">
+        <FlatList
+          data={collections}
+          renderItem={({ item }) => (
+            <Container width="48%" marginBottom="md">
+              <CollectionCard
+                id={item._id}
+                name={item.name}
+                description={item.description}
+                propertyCount={item.properties?.length || 0}
+                onPress={(id) => handleCollectionPress(item)}
+              />
+            </Container>
+          )}
+          keyExtractor={(item) => item._id}
+          numColumns={2}
+          columnWrapperStyle={{ justifyContent: "space-between" }}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={handleRefresh}
+              colors={[theme.colors.primary]}
+              tintColor={theme.colors.primary}
+            />
+          }
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingTop: 16, paddingBottom: 24 }}
+        />
+      </Container>
+
+      {/* Collections Modal */}
       <CollectionsModal
         visible={showCollectionsModal}
         onClose={() => setShowCollectionsModal(false)}
         onCollectionToggle={onCollectionsUpdate}
       />
-    </View>
+    </Container>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  centered: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: spacing.lg,
-    paddingBottom: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: "rgba(0,0,0,0.1)",
-  },
-  headerTitle: {
-    fontSize: fontSize.xl,
-    fontWeight: fontWeight.bold,
-  },
-  headerButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loadingText: {
-    marginTop: spacing.md,
-    fontSize: fontSize.md,
-    textAlign: "center",
-  },
-  errorContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    margin: spacing.md,
-    padding: spacing.md,
-    borderRadius: 8,
-  },
-  errorText: {
-    flex: 1,
-    fontSize: fontSize.sm,
-  },
-  retryText: {
-    fontSize: fontSize.sm,
-    fontWeight: fontWeight.medium,
-  },
-  listContainer: {
-    padding: spacing.md,
-  },
-  row: {
-    justifyContent: "space-between",
-  },
-});

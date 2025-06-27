@@ -40,6 +40,79 @@ export interface ICalendarEvent {
   startDate: Date;
   endDate: Date;
   isBooked: boolean;
+  bookingId?: string;
+  guestName?: string;
+}
+
+export interface ICancellationPolicy {
+  policyType: "flexible" | "moderate" | "strict" | "custom";
+  description: string;
+  refundPercentages: {
+    immediate: number; // 0-100
+    beforeDays: number;
+    percentage: number;
+  }[];
+  nonRefundableFees: string[];
+}
+
+export interface IHouseRules {
+  checkInTime: {
+    from: string; // e.g., "15:00"
+    to: string; // e.g., "22:00"
+  };
+  checkOutTime: string; // e.g., "11:00"
+  quietHours: {
+    from: string;
+    to: string;
+  };
+  smokingAllowed: boolean;
+  petsAllowed: boolean;
+  partiesAllowed: boolean;
+  additionalRules: string[];
+}
+
+export interface ISafetyFeatures {
+  smokeDetector: boolean;
+  carbonMonoxideDetector: boolean;
+  fireExtinguisher: boolean;
+  firstAidKit: boolean;
+  securityCameras: {
+    exterior: boolean;
+    interior: boolean;
+    description?: string;
+  };
+  weaponsOnProperty: boolean;
+  dangerousAnimals: boolean;
+  additionalSafetyInfo: string[];
+}
+
+export interface ICheckInExperience {
+  title: string;
+  description: string;
+  icon?: string;
+  isActive: boolean;
+}
+
+export interface IHost {
+  id: string;
+  rating: number;
+  firstName: string;
+  lastName: string;
+  profileImage?: string;
+  isSuperHost: boolean;
+  hostingSince: Date | string;
+  hostingYears: number;
+  totalProperties: number;
+  activeProperties: number;
+  totalReviews: number;
+  location?: string;
+  phoneNumber?: string; // Contact information from user model
+  properties: {
+    id: string;
+    name: string;
+    isActive: boolean;
+    createdAt: Date | string;
+  }[];
 }
 
 export interface Property {
@@ -61,7 +134,7 @@ export interface Property {
   coordinates: ICoordinates;
   // Property details
   images: string[];
-  price: IPrice;
+  price: number | IPrice; // Support both formats for backward compatibility
   currency: string;
   amenities: string[];
   bedrooms: number;
@@ -74,7 +147,7 @@ export interface Property {
   reviewCount: number;
   reviews?: string[]; // Array of ObjectIds as strings
   // Host information
-  host?: string;
+  host?: IHost | string; // Can be enriched host object or just ID
   hostName?: string;
   hostImage?: string;
   // Status flags
@@ -90,11 +163,17 @@ export interface Property {
   website?: string;
   logo?: string;
   socialLinks?: ISocialLinks;
-
   // Management
   units?: string[]; // Array of ObjectIds as strings
   permissions?: IPermissions;
   calendar?: ICalendarEvent[];
+
+  // Policies and Rules
+  cancellationPolicy?: ICancellationPolicy;
+  houseRules?: IHouseRules;
+  safetyFeatures?: ISafetyFeatures;
+  checkInExperiences?: ICheckInExperience[];
+
   // Timestamps
   createdAt: Date | string;
   updatedAt: Date | string;

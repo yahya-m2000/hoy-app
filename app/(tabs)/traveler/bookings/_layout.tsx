@@ -13,23 +13,33 @@ export default function BookingsLayout() {
       <Stack.Screen
         name="index"
         options={{
-          headerShown: true,
-          headerTitle: "Bookings",
+          headerShown: false,
         }}
-      />{" "}
+      />
       <Stack.Screen
-        name="[id]/index"
+        name="past"
+        options={{
+          headerShown: false, // Remove native header since we use base Header component
+        }}
+      />
+      <Stack.Screen
+        name="confirmation"
         options={{
           headerShown: true,
-          headerTitle: "Booking Details",
-          headerBackTitle: "", // Set empty string to hide back title
+          headerTitle: "Booking Confirmation",
+          headerBackTitle: "",
         }}
-      />{" "}
+      />
       <Stack.Screen
-        name="property/[id]/index"
+        name="[id]"
         options={{
-          headerShown: true,
-          headerTitle: "Property Details",
+          headerShown: false, // Remove native header since we use base Header component
+        }}
+      />
+      <Stack.Screen
+        name="property"
+        options={{
+          headerShown: false,
         }}
       />
     </Stack>

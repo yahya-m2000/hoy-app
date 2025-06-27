@@ -16,7 +16,7 @@ import {
 } from "react-native";
 
 // Context
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Constants
 import { radius, spacing } from "@shared/constants";
@@ -51,8 +51,8 @@ const Card: React.FC<BaseCardProps> = ({
           styles.outlined,
           {
             borderColor: isDark
-              ? theme.colors.grayPalette[700]
-              : theme.colors.grayPalette[200],
+              ? theme.colors.gray[700]
+              : theme.colors.gray[200],
           },
         ];
       case "plain":
@@ -84,8 +84,8 @@ const Card: React.FC<BaseCardProps> = ({
           styles.header,
           {
             borderBottomColor: isDark
-              ? theme.colors.grayPalette[700]
-              : theme.colors.grayPalette[200],
+              ? theme.colors.gray[700]
+              : theme.colors.gray[200],
           },
         ]}
       >
@@ -94,11 +94,7 @@ const Card: React.FC<BaseCardProps> = ({
             <Icon
               name="chevron-forward" // Using a valid icon name since icon prop might be arbitrary string
               size={16}
-              color={
-                isDark
-                  ? theme.colors.grayPalette[400]
-                  : theme.colors.grayPalette[600]
-              }
+              color={isDark ? theme.colors.gray[400] : theme.colors.gray[600]}
               style={styles.headerIcon}
             />
           )}
@@ -112,11 +108,7 @@ const Card: React.FC<BaseCardProps> = ({
           <Icon
             name="chevron-forward"
             size={16}
-            color={
-              isDark
-                ? theme.colors.grayPalette[400]
-                : theme.colors.grayPalette[500]
-            }
+            color={isDark ? theme.colors.gray[400] : theme.colors.gray[500]}
           />
         )}
       </View>
@@ -130,11 +122,7 @@ const Card: React.FC<BaseCardProps> = ({
           <ActivityIndicator color={theme.colors.primary} />
           <Text
             variant="body"
-            color={
-              isDark
-                ? theme.colors.grayPalette[400]
-                : theme.colors.grayPalette[500]
-            }
+            color={isDark ? theme.colors.gray[400] : theme.colors.gray[500]}
             style={styles.loadingText}
           >
             Loading...
@@ -155,7 +143,7 @@ const Card: React.FC<BaseCardProps> = ({
   const combinedStyles = [
     styles.container,
     ...getCardVariantStyle(),
-    { backgroundColor: isDark ? theme.colors.grayPalette[800] : theme.white },
+    { backgroundColor: isDark ? theme.colors.gray[800] : theme.white },
   ];
 
   if (style) {

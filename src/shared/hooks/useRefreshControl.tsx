@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { RefreshControl, RefreshControlProps } from "react-native";
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 /**
  * Hook to create a configured RefreshControl component with loading state

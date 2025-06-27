@@ -7,32 +7,46 @@
 import { fontSize, fontWeight } from "./typography";
 import { spacing } from "./spacing";
 
-// Primary brand colors
+// Primary brand colors - Orange (#F56320)
 export const primary = {
-  50: "#F0F7FF",
-  100: "#E0F0FF",
-  200: "#BAE0FF",
-  300: "#91CAFF",
-  400: "#52A9FF",
-  500: "#2E90FA",
-  600: "#1570EF",
-  700: "#175CD3",
-  800: "#1849A9",
-  900: "#194185",
+  50: "#FFF7ED",
+  100: "#FFEDD5",
+  200: "#FED7AA",
+  300: "#FDBA74",
+  400: "#FB923C",
+  500: "#F56320",
+  600: "#EA580C",
+  700: "#C2410C",
+  800: "#9A3412",
+  900: "#7C2D12",
 };
 
-// Secondary brand colors
+// Secondary brand colors - Blue (#3B82F6) - Complementary to orange
 export const secondary = {
-  50: "#F9F5FF",
-  100: "#F4EBFF",
-  200: "#E9D7FE",
-  300: "#D6BBFB",
-  400: "#B692F6",
-  500: "#9E77ED",
-  600: "#7F56D9",
-  700: "#6941C6",
-  800: "#53389E",
-  900: "#42307D",
+  50: "#EFF6FF",
+  100: "#DBEAFE",
+  200: "#BFDBFE",
+  300: "#93C5FD",
+  400: "#60A5FA",
+  500: "#3B82F6",
+  600: "#2563EB",
+  700: "#1D4ED8",
+  800: "#1E40AF",
+  900: "#1E3A8A",
+};
+
+// Tertiary brand colors - Yellow (#FDE047) - Complementary accent to orange and blue
+export const tertiary = {
+  50: "#FEFCE8",
+  100: "#FEF9C3",
+  200: "#FEF08A",
+  300: "#FDE047",
+  400: "#FACC15",
+  500: "#EAB308",
+  600: "#CA8A04",
+  700: "#A16207",
+  800: "#854D0E",
+  900: "#713F12",
 };
 
 // Grayscale palette
@@ -105,13 +119,13 @@ export const info = {
 // For a wireframe aesthetic, we'll use these colors predominantly
 export const wireframe = {
   background: "#FFFFFF",
-  surface: gray[50],
+  surface: gray[100],
   border: gray[200],
   text: {
-    primary: gray[900],
+    primary: gray[800],
     secondary: gray[600],
-    tertiary: gray[400],
-    disabled: gray[300],
+    tertiary: gray[500],
+    disabled: gray[400],
     inverse: "#FFFFFF",
   },
   divider: gray[200],
@@ -136,30 +150,34 @@ export const darkMode = {
 export const theme = {
   light: {
     ...wireframe,
-    primary: primary[600],
+    primary: primary[500],
     primaryLight: primary[100],
-    secondary: secondary[600],
+    secondary: secondary[500],
     secondaryLight: secondary[100],
+    tertiary: tertiary[500],
+    tertiaryLight: tertiary[100],
     success: success[600],
     error: error[600],
     warning: warning[600],
-    info: info[600], // Include all color palettes for component usage
+    info: info[600],
+    white: "#FFFFFF",
+    black: "#000000",
     text: {
       primary: wireframe.text.primary,
       secondary: wireframe.text.secondary,
       tertiary: wireframe.text.tertiary,
       disabled: wireframe.text.disabled,
       inverse: wireframe.text.inverse,
+      subtitle: wireframe.text.secondary, // Subtitle uses secondary text color
     },
     colors: {
-      // Primary colors as strings for easy access
-      primary: primary[600],
-      secondary: secondary[600],
+      primary: primary[500],
+      secondary: secondary[500],
+      tertiary: tertiary[500],
       success: success[600],
       error: error[600],
       warning: warning[600],
       info: info[600],
-      // Basic colors
       white: "#FFFFFF",
       black: "#000000",
       skeletonBackground: gray[200],
@@ -167,20 +185,16 @@ export const theme = {
       // Color palettes for advanced usage
       gray,
       primaryPalette: primary,
-      grayPalette: gray,
       secondaryPalette: secondary,
+      tertiaryPalette: tertiary,
       successPalette: success,
       errorPalette: error,
       warningPalette: warning,
       infoPalette: info,
     },
-    // Include typography and spacing
     fontSize,
     fontWeight,
     spacing,
-    // Basic colors
-    white: "#FFFFFF",
-    black: "#000000",
   },
   dark: {
     ...darkMode,
@@ -188,46 +202,47 @@ export const theme = {
     primaryLight: primary[900],
     secondary: secondary[400],
     secondaryLight: secondary[900],
+    tertiary: tertiary[400],
+    tertiaryLight: tertiary[900],
     success: success[400],
     error: error[400],
     warning: warning[400],
-    info: info[400], // Include all color palettes for component usage
+    info: info[400],
+    white: "#FFFFFF",
+    black: "#000000",
     text: {
       primary: darkMode.text.primary,
       secondary: darkMode.text.secondary,
       tertiary: darkMode.text.tertiary,
       disabled: darkMode.text.disabled,
       inverse: darkMode.text.inverse,
+      subtitle: darkMode.text.secondary, // Subtitle uses secondary text color
     },
     colors: {
-      // Primary colors as strings for easy access
       primary: primary[400],
       secondary: secondary[400],
+      tertiary: tertiary[400],
       success: success[400],
       error: error[400],
       warning: warning[400],
       info: info[400],
-      // Basic colors
       white: "#FFFFFF",
       black: "#000000",
       skeletonBackground: gray[700],
-      skeletonHighlight: gray[600], // Color palettes for advanced usage
+      skeletonHighlight: gray[600],
+      // Color palettes for advanced usage
       gray,
       primaryPalette: primary,
-      grayPalette: gray,
       secondaryPalette: secondary,
+      tertiaryPalette: tertiary,
       successPalette: success,
       errorPalette: error,
       warningPalette: warning,
       infoPalette: info,
     },
-    // Include typography and spacing
     fontSize,
     fontWeight,
     spacing,
-    // Basic colors
-    white: "#FFFFFF",
-    black: "#000000",
   },
 };
 

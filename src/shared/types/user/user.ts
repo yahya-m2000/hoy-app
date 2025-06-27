@@ -33,4 +33,9 @@ export interface ExtendedUser {
   isSuperHost?: boolean;
   responseRate?: string;
   responseTime?: string;
+  propertyCount?: number;
+  averageRating?: number;
+  reviewCount?: number;
+  totalRatingScore?: number; // Sum of all ratings across all properties
+  totalReviewCount?: number; // Total number of reviews across all properties
 }

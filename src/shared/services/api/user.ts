@@ -110,23 +110,3 @@ export const addPaymentMethod = async (methodData: any) => {
   );
   return response.data.data;
 };
-
-// Wishlist (Saved Properties)
-export const getSavedProperties = async () => {
-  const response = await api.get<{ data: any[] }>("/users/me/saved-properties");
-  return response.data.data;
-};
-
-export const addSavedProperty = async (propertyId: string) => {
-  const response = await api.post<{ data: any }>(
-    `/users/me/saved-properties/${propertyId}`
-  );
-  return response.data.data;
-};
-
-export const removeSavedProperty = async (propertyId: string) => {
-  const response = await api.delete<{ data: any }>(
-    `/users/me/saved-properties/${propertyId}`
-  );
-  return response.data.data;
-};

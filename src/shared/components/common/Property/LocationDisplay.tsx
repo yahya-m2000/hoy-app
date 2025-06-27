@@ -4,9 +4,9 @@
  */
 
 import React from "react";
-import { Text, TextStyle } from "react-native";
-import { useTheme } from "src/shared/context";
-import { fontSize, fontWeight } from "src/shared/constants";
+import { TextStyle } from "react-native";
+import { Text } from "@shared/components/base/Text";
+import { useTheme } from "@shared/hooks/useTheme";
 
 export interface LocationDisplayProps {
   /** New address structure */
@@ -43,7 +43,6 @@ const LocationDisplay: React.FC<LocationDisplayProps> = ({
 }) => {
   const { theme, isDark } = useTheme();
 
-  const textSize = variant === "small" ? fontSize.xs : fontSize.sm;
   const textColor = isDark ? theme.colors.gray[50] : theme.colors.gray[900];
 
   // Format location for display using new address structure
@@ -107,19 +106,12 @@ const LocationDisplay: React.FC<LocationDisplayProps> = ({
   };
 
   const locationText = getLocationDisplay();
-
   return (
     <Text
-      style={[
-        {
-          fontSize: textSize,
-          fontWeight: String(fontWeight.semibold) as any,
-          color: textColor,
-        },
-        style,
-      ]}
-      numberOfLines={numberOfLines}
-      ellipsizeMode={ellipsizeMode}
+      size={variant === "small" ? "xs" : "sm"}
+      weight="semibold"
+      color={textColor}
+      style={style}
     >
       {locationText}
     </Text>

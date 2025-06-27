@@ -6,4 +6,7 @@ export interface IconProps {
   size?: number;
   color?: string;
   style?: ViewStyle;
+  background?: boolean;
+  backgroundColor?: string;
+  backgroundOpacity?: number;
 }

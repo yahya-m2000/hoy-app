@@ -4,10 +4,10 @@
  */
 
 import React from "react";
-import { View, Text, StyleSheet, TextStyle } from "react-native";
+import { TextStyle } from "react-native";
+import { Container, Text, Icon } from "@shared/components/base";
 import { useTheme } from "src/shared/context";
 import { fontSize, fontWeight } from "src/shared/constants";
-import { Icon } from "src/shared/components/base/Icon";
 
 export interface RatingDisplayProps {
   /** Rating value (0-5) */
@@ -43,14 +43,15 @@ const RatingDisplay: React.FC<RatingDisplayProps> = ({
     : theme.colors.gray[600];
 
   return (
-    <View style={styles.container}>
+    <Container flexDirection="row" alignItems="center" style={{ gap: 2 }}>
       <Icon name="star" size={iconSize} color={defaultColor} />
       <Text
         style={[
-          styles.ratingText,
           {
             fontSize: textSize,
             color: defaultColor,
+            fontWeight: fontWeight.medium,
+            marginLeft: 2,
           },
           ratingStyle,
         ]}
@@ -60,10 +61,11 @@ const RatingDisplay: React.FC<RatingDisplayProps> = ({
       {reviewCount !== undefined && reviewCount > 0 && (
         <Text
           style={[
-            styles.reviewCount,
             {
               fontSize: textSize,
               color: secondaryColor,
+              fontWeight: fontWeight.normal,
+              marginLeft: 2,
             },
             reviewCountStyle,
           ]}
@@ -71,24 +73,8 @@ const RatingDisplay: React.FC<RatingDisplayProps> = ({
           ({reviewCount})
         </Text>
       )}
-    </View>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 2,
-  },
-  ratingText: {
-    fontWeight: String(fontWeight.medium) as any,
-    marginLeft: 2,
-  },
-  reviewCount: {
-    fontWeight: String(fontWeight.normal) as any,
-    marginLeft: 2,
-  },
-});
 
 export default RatingDisplay;

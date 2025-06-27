@@ -5,8 +5,10 @@
  */
 
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { useTheme, useUserRole } from "@shared/context";
+import { View, StyleSheet } from "react-native";
+import { Text } from "@shared/components/base/Text";
+import { useTheme } from "@shared/hooks/useTheme";
+import { useUserRole } from "@shared/context";
 import { radius, fontSize, fontWeight, spacing } from "@shared/constants";
 
 export type BookingStatusType =
@@ -56,13 +58,11 @@ const BookingStatus: React.FC<BookingStatusProps> = ({
         };
       default:
         return {
-          textColor: isDark
-            ? theme.colors.grayPalette[400]
-            : theme.colors.grayPalette[600],
+          textColor: isDark ? theme.colors.gray[400] : theme.colors.gray[600],
           backgroundColor: isDark
-            ? theme.colors.grayPalette[800]
-            : theme.colors.grayPalette[100],
-          darkBackgroundColor: theme.colors.grayPalette[800],
+            ? theme.colors.gray[800]
+            : theme.colors.gray[100],
+          darkBackgroundColor: theme.colors.gray[800],
         };
     }
   };

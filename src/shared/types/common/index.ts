@@ -42,3 +42,18 @@ export interface AsyncState<T> {
   loading: boolean;
   error: string | null;
 }
+
+/**
+ * Base interface for section component props
+ */
+export interface BaseSectionProps {
+  style?: any;
+  testID?: string;
+}
+
+/**
+ * Base interface for section components that handle loading states
+ */
+export interface BaseLoadingSectionProps extends BaseSectionProps {
+  loading?: boolean;
+}

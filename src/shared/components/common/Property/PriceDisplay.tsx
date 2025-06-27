@@ -4,8 +4,9 @@
  */
 
 import React from "react";
-import { View, Text, StyleSheet, TextStyle } from "react-native";
-import { useTheme } from "src/shared/context";
+import { View, StyleSheet, TextStyle } from "react-native";
+import { Text } from "@shared/components/base/Text";
+import { useTheme } from "@shared/hooks/useTheme";
 import { fontSize, fontWeight, spacing } from "src/shared/constants";
 
 export interface PriceDisplayProps {
@@ -69,7 +70,7 @@ const PriceDisplay: React.FC<PriceDisplayProps> = ({
           priceStyle,
         ]}
       >
-        {formatPrice(price)} 
+        {formatPrice(price)}
         <Text
           style={[
             styles.perNight,
@@ -108,13 +109,13 @@ const styles = StyleSheet.create({
     alignItems: "baseline",
   },
   price: {
-    fontWeight: String(fontWeight.semibold) as any,
+    fontWeight: fontWeight.semibold,
   },
   perNight: {
-    fontWeight: String(fontWeight.normal) as any,
+    fontWeight: fontWeight.normal,
   },
   totalPrice: {
-    fontWeight: String(fontWeight.normal) as any,
+    fontWeight: fontWeight.normal,
     marginLeft: spacing.xs,
   },
 });

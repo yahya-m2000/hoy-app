@@ -1,0 +1,96 @@
+import React, { memo } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Icon,
+  iconSize,
+  fontSize,
+  fontWeight,
+  spacing,
+  radius,
+} from "src/shared";
+import { useTheme } from "@shared/hooks/useTheme";
+
+interface PropertyHeaderProps {
+  propertyName?: string;
+  propertyType?: string;
+  onPress?: () => void;
+  showDropdownIndicator?: boolean;
+}
+
+const PropertyHeader: React.FC<PropertyHeaderProps> = memo(
+  ({
+    propertyName = "House",
+    propertyType = "house",
+    onPress,
+    showDropdownIndicator = true,
+  }) => {
+    const { theme } = useTheme();
+
+    return (
+      <TouchableOpacity
+        style={styles.container}
+        onPress={onPress}
+        activeOpacity={0.7}
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      >
+        {/* Property Avatar with property type icon */}
+        <View
+          style={[
+            styles.avatarContainer,
+            { backgroundColor: theme.colors?.primary || "#007AFF" },
+          ]}
+        >
+          <Icon name="home" size={iconSize.sm} color="#FFFFFF" />
+        </View>
+        {/* Property Name */}
+        <Text
+          style={[
+            styles.propertyName,
+            { color: theme.text?.primary || "#000" },
+          ]}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >
+          {propertyName}
+        </Text>
+        {/* Dropdown Indicator */}
+        {showDropdownIndicator && (
+          <Icon
+            name="chevron-down"
+            size={iconSize.xs}
+            color={theme.text?.secondary || "#666"}
+            style={styles.dropdownIcon}
+          />
+        )}
+      </TouchableOpacity>
+    );
+  }
+);
+
+PropertyHeader.displayName = "PropertyHeader";
+
+export { PropertyHeader };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: spacing.xs,
+  },
+  avatarContainer: {
+    width: 32,
+    height: 32,
+    borderRadius: radius.circle,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: spacing.sm,
+  },
+  propertyName: {
+    fontSize: fontSize.md,
+    fontWeight: fontWeight.medium,
+    maxWidth: 120, // Limit width to prevent overflow
+  },
+  dropdownIcon: {
+    marginLeft: spacing.xs,
+  },
+});

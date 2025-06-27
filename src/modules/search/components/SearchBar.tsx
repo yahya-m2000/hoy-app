@@ -12,7 +12,7 @@ import {
   ViewStyle,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 import { spacing, fontSize, radius } from "@shared/constants";
 
 interface SearchBarProps {

@@ -1,13 +1,12 @@
 /**
  * PropertyImageContainer - Reusable image container component for property cards
- * Handles image display, fallback icons, and overlay buttons
+ * Handles image display, fallback icons, and overlay buttons with robust error handling
  */
 
-import React from "react";
-import { View, Image, StyleSheet, ViewStyle, ImageStyle } from "react-native";
-import { useTheme } from "src/shared/context";
-import { spacing } from "src/shared/constants";
-import { Icon } from "src/shared/components/base/Icon";
+import React, { useState, useRef, useEffect } from "react";
+import { ImageStyle, Animated, StyleSheet } from "react-native";
+import { useTheme } from "@shared/hooks/useTheme";
+import { Container, Icon } from "@shared/components/base";
 
 export interface PropertyImageContainerProps {
   /** Image source URI or array of URIs (uses first image) */
@@ -39,96 +38,114 @@ const PropertyImageContainer: React.FC<PropertyImageContainerProps> = ({
   variant = "large",
 }) => {
   const { theme } = useTheme();
+  const [imageLoadError, setImageLoadError] = useState(false);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  // Check if property has images
-  const hasImage = () => {
-    return (images && images.length > 0 && images[0]) || imageUrl;
+  // Validate if a URL is legitimate
+  const isValidImageUrl = (url: string | undefined | null): boolean => {
+    if (!url || typeof url !== "string") return false;
+    if (url.trim() === "") return false;
+
+    // Basic URL validation - must start with http/https or be a valid URI
+    const urlPattern = /^(https?:\/\/|data:image\/|file:\/\/|content:\/\/)/i;
+    return urlPattern.test(url.trim());
   };
-
   // Determine the image source
   const getImageSource = () => {
-    if (images && images.length > 0 && images[0]) {
+    if (images && images.length > 0 && isValidImageUrl(images[0])) {
       return { uri: images[0] };
     }
-    if (imageUrl) {
+    if (isValidImageUrl(imageUrl)) {
       return { uri: imageUrl };
     }
     return null;
+  }; // Handle image load error
+  const handleImageError = () => {
+    setImageLoadError(true);
   };
 
-  // Render fallback icon when no image is available
+  // Handle image load start
+  const handleImageLoadStart = () => {
+    setImageLoadError(false);
+  }; // Handle image load success
+  const handleImageLoad = () => {
+    setImageLoadError(false);
+    // Fade in the image
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  // Reset states when image URL changes
+  useEffect(() => {
+    setImageLoadError(false);
+    fadeAnim.setValue(0);
+  }, [imageUrl, images, fadeAnim]); // Render fallback icon when no image is available
   const renderFallbackIcon = () => {
     const iconSize = variant === "small" ? 32 : 48;
 
     return (
-      <View
+      <Container
         style={[
-          styles.fallbackContainer,
+          {
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+            backgroundColor: theme.colors.gray[200],
+          },
           containerStyle,
-          { backgroundColor: theme.colors.gray[100] },
         ]}
       >
-        <View
-          style={[
-            styles.fallbackIconWrapper,
-            { backgroundColor: theme.colors.gray[200] },
-          ]}
-        >
-          <Icon
-            name="home-outline"
-            size={iconSize}
-            color={theme.colors.gray[400]}
-          />
-        </View>
-      </View>
+        <Icon
+          name="home-outline"
+          size={iconSize}
+          color={theme.colors.gray[400]}
+        />
+      </Container>
     );
   };
-
   const imageSource = getImageSource();
 
-  if (!hasImage() || !imageSource) {
-    return (
-      <View style={[styles.container, containerStyle]}>
-        {renderFallbackIcon()}
-        {children}
-      </View>
-    );
-  }
-
+  // Always show fallback icon first for immediate display
   return (
-    <View style={[styles.container, containerStyle]}>
-      <Image
-        source={imageSource}
-        style={[styles.image, imageStyle]}
-        resizeMode={resizeMode}
-      />
+    <Container
+      style={[
+        {
+          position: "relative",
+          width: "100%",
+          overflow: "hidden",
+        },
+        containerStyle,
+      ]}
+    >
+      {/* Always show fallback icon as base layer */}
+      {renderFallbackIcon()}
+      {/* Overlay image when available and not failed */}
+      {imageSource && !imageLoadError && (
+        <Animated.Image
+          source={imageSource}
+          style={[
+            {
+              width: "100%",
+              height: "100%",
+            },
+            imageStyle,
+            StyleSheet.absoluteFill,
+            { opacity: fadeAnim }, // Animated fade in
+          ]}
+          resizeMode={resizeMode}
+          onLoadStart={handleImageLoadStart}
+          onLoad={handleImageLoad}
+          onError={handleImageError}
+        />
+      )}
+
       {children}
-    </View>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    position: "relative",
-    width: "100%",
-    overflow: "hidden",
-  },
-  image: {
-    width: "100%",
-    height: "100%",
-  },
-  fallbackContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    height: "100%",
-  },
-  fallbackIconWrapper: {
-    borderRadius: 50,
-    padding: spacing.lg,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
 
 export default PropertyImageContainer;

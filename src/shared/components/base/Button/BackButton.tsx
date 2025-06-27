@@ -13,7 +13,7 @@ import { TouchableOpacity, StyleSheet } from "react-native";
 import { router } from "expo-router";
 
 // Context
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 import { Icon } from "@shared/components";
 
 // Constants

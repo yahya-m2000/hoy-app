@@ -22,11 +22,13 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.ym2000.mobile_app"
-    },
-    "web": {
+    },    "web": {
       "favicon": "./assets/favicon.png"
-    },    "extra": {
-      "apiUrl": "https://398d-109-147-151-140.ngrok-free.app/api/v1",
+    },
+    "assetBundlePatterns": [
+      "assets/fonts/*"
+    ],
+    "extra": {
       "wsUrl": "wss://adb5-109-147-151-140.ngrok-free.app/ws",
       "mapboxApiKey": "sk.eyJ1IjoieW0yMDAwIiwiYSI6ImNtOXg2ZDMzajB4ZmQyaXM2cWNnamEzOHUifQ.PxAYNN4I-PHTU3MDjxZRYA",      
       "cacheVersion": "1.1.0",

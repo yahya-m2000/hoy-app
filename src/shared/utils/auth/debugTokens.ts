@@ -14,24 +14,21 @@ export const debugTokenStorage = async (): Promise<void> => {
     const isBlacklisted = await AsyncStorage.getItem("tokenBlacklisted");
     const invalidatedAt = await AsyncStorage.getItem("tokenInvalidatedAt");
 
-    console.log("🔐 Access Token:", accessToken ? "✅ Present" : "❌ Missing");
-    console.log(
-      "🔄 Refresh Token:",
-      refreshToken ? "✅ Present" : "❌ Missing"
-    );
-    console.log("👤 User ID:", userId ? "✅ Present" : "❌ Missing");
-    console.log("🚫 Blacklisted:", isBlacklisted || "false");
-    console.log("⏰ Invalidated At:", invalidatedAt || "none");
+    console.log("Access Token:", accessToken ? "Present" : "Missing");
+    console.log("🔄 Refresh Token:", refreshToken ? "Present" : "Missing");
+    console.log(" User ID:", userId ? "Present" : "Missing");
+    console.log("Blacklisted:", isBlacklisted || "false");
+    console.log("Invalidated At:", invalidatedAt || "none");
 
     console.log("🔍 === END DEBUG ===");
   } catch (error) {
-    console.error("❌ Debug token storage error:", error);
+    console.error("Debug token storage error:", error);
   }
 };
 
 export const clearAllTokenDebugData = async (): Promise<void> => {
   try {
-    console.log("🗑️ Clearing all token debug data...");
+    console.log("Clearing all token debug data...");
     await AsyncStorage.multiRemove([
       "accessToken",
       "refreshToken",
@@ -39,8 +36,8 @@ export const clearAllTokenDebugData = async (): Promise<void> => {
       "tokenBlacklisted",
       "tokenInvalidatedAt",
     ]);
-    console.log("✅ All token debug data cleared");
+    console.log("All token debug data cleared");
   } catch (error) {
-    console.error("❌ Error clearing debug data:", error);
+    console.error("Error clearing debug data:", error);
   }
 };

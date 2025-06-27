@@ -10,7 +10,7 @@ import React from "react";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
 
 // Context
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 interface LoadingSpinnerProps {
   size?: "small" | "large";

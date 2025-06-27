@@ -1,9 +1,10 @@
-﻿// Localization and API initialization (must be first)
+// Localization and API initialization (must be first)
 import "@shared/locales/i18n";
 import "@shared/services/api/";
 
 // React imports
 import React from "react";
+import { View } from "react-native";
 
 // Third-party libraries
 import { Stack } from "expo-router";
@@ -14,6 +15,9 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 // App navigation theming
 import { useThemedScreenOptions } from "@shared/navigation";
+
+// App hooks
+import { useFonts } from "@shared/hooks";
 
 // App context providers
 import {
@@ -26,6 +30,7 @@ import {
   NetworkProvider,
   UserRoleProvider,
   useUserRole,
+  CalendarProvider,
 } from "@shared/context";
 
 // App components
@@ -33,7 +38,20 @@ import {
   OfflineNotice,
   RoleChangeLoadingOverlay,
   AuthLoadingOverlay,
+  LogoutHandler,
 } from "@shared/components/common";
+
+// Font loader component
+const FontLoader = ({ children }: { children: React.ReactNode }) => {
+  const { fontsLoaded } = useFonts();
+
+  if (!fontsLoaded) {
+    // Return a minimal loading view while fonts are loading
+    return <View style={{ flex: 1, backgroundColor: "#fff" }} />;
+  }
+
+  return <>{children}</>;
+};
 
 const RoleChangeLoadingOverlayWrapper = () => {
   const { isRoleLoading } = useUserRole();
@@ -98,28 +116,32 @@ const queryClient = new QueryClient({
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <GestureHandlerRootView>
+      <GestureHandlerRootView style={{ flex: 1 }}>
         <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <NetworkProvider>
-              <CurrencyProvider>
-                <ThemeProvider>
-                  <UserRoleProvider>
-                    <DateSelectionProvider>
-                      <ToastProvider>
-                        {" "}
-                        <StatusBar style="auto" />
-                        <OfflineNotice />
-                        <RoleChangeLoadingOverlayWrapper />
-                        <AuthLoadingOverlayWrapper />
-                        <ThemedRootStack />
-                      </ToastProvider>
-                    </DateSelectionProvider>
-                  </UserRoleProvider>
-                </ThemeProvider>
-              </CurrencyProvider>
-            </NetworkProvider>
-          </AuthProvider>
+          <FontLoader>
+            <AuthProvider>
+              <NetworkProvider>
+                <CurrencyProvider>
+                  <ThemeProvider>
+                    <ToastProvider>
+                      <UserRoleProvider>
+                        <DateSelectionProvider>
+                          <CalendarProvider>
+                            <StatusBar style="auto" />
+                            <OfflineNotice />
+                            <LogoutHandler />
+                            <RoleChangeLoadingOverlayWrapper />
+                            <AuthLoadingOverlayWrapper />
+                            <ThemedRootStack />
+                          </CalendarProvider>
+                        </DateSelectionProvider>
+                      </UserRoleProvider>
+                    </ToastProvider>
+                  </ThemeProvider>
+                </CurrencyProvider>
+              </NetworkProvider>
+            </AuthProvider>
+          </FontLoader>
         </QueryClientProvider>
       </GestureHandlerRootView>
     </SafeAreaProvider>

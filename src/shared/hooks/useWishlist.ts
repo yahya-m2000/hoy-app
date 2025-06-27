@@ -1,11 +1,13 @@
 /**
- * Wishlist hook for managing saved properties
+ * Wishlist hook for managing saved properties using collections
  */
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@shared/context";
 import { showAuthPrompt } from "@shared/utils";
-import * as userService from "@shared/services";
-import { wishlistCollectionsService } from "@shared/services";
+import {
+  wishlistCollectionsService,
+  WishlistCollection,
+} from "@shared/services";
 
 export const useWishlist = () => {
   const queryClient = useQueryClient();
@@ -19,29 +21,53 @@ export const useWishlist = () => {
     enabled: isAuthChecked && isAuthenticated, // Only run if user is authenticated
   });
 
-  // Get saved properties - only if authenticated (legacy system)
-  const { data: savedProperties = [], ...savedPropertiesQuery } = useQuery({
-    queryKey: ["savedProperties"],
-    queryFn: userService.getSavedProperties,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    enabled: isAuthChecked && isAuthenticated, // Only run if user is authenticated
-  });
+  // Get or create default collection
+  const getDefaultCollection = async (): Promise<WishlistCollection> => {
+    // If no collections exist, create a default "Favorites" collection
+    if (collections.length === 0) {
+      return await wishlistCollectionsService.createCollection({
+        name: "Favorites",
+        description: "My favorite properties",
+      });
+    }
+    // Return the first collection as default
+    return collections[0];
+  };
 
-  // Add to wishlist mutation
+  // Add to wishlist mutation - uses default collection
   const addToWishlist = useMutation({
-    mutationFn: (propertyId: string) =>
-      userService.addSavedProperty(propertyId),
+    mutationFn: async (propertyId: string) => {
+      const defaultCollection = await getDefaultCollection();
+      return await wishlistCollectionsService.addPropertyToCollection(
+        defaultCollection._id,
+        propertyId
+      );
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["savedProperties"] });
+      queryClient.invalidateQueries({ queryKey: ["wishlistCollections"] });
     },
   });
 
-  // Remove from wishlist mutation
+  // Remove from wishlist mutation - removes from all collections
   const removeFromWishlist = useMutation({
-    mutationFn: (propertyId: string) =>
-      userService.removeSavedProperty(propertyId),
+    mutationFn: async (propertyId: string) => {
+      // Find all collections that contain this property and remove it
+      const collectionsWithProperty = collections.filter((collection) =>
+        collection.properties.includes(propertyId)
+      );
+
+      // Remove from all collections that contain it
+      await Promise.all(
+        collectionsWithProperty.map((collection) =>
+          wishlistCollectionsService.removePropertyFromCollection(
+            collection._id,
+            propertyId
+          )
+        )
+      );
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["savedProperties"] });
+      queryClient.invalidateQueries({ queryKey: ["wishlistCollections"] });
     },
   }); // Toggle wishlist status - prompt for authentication if not logged in
   const toggleWishlist = (propertyId: string) => {
@@ -54,39 +80,33 @@ export const useWishlist = () => {
       return;
     }
 
-    const isWishlisted = savedProperties.some((p: any) => p._id === propertyId);
+    const isWishlisted = isPropertyWishlisted(propertyId);
 
     if (isWishlisted) {
       removeFromWishlist.mutate(propertyId);
     } else {
       addToWishlist.mutate(propertyId);
     }
-  }; // Check if property is wishlisted - check both collections and legacy saved properties
+  };
+
+  // Check if property is wishlisted - only check collections (new system)
   const isPropertyWishlisted = (propertyId: string) => {
     if (!isAuthenticated) return false;
 
-    // Check if property exists in any collection (with null safety)
-    const isInCollections = collections.some(
+    // Check if property exists in any collection
+    return collections.some(
       (collection) =>
         collection?.properties &&
         Array.isArray(collection.properties) &&
         collection.properties.includes(propertyId)
     );
-
-    // Check legacy saved properties as fallback (with null safety)
-    const isInSavedProperties = savedProperties.some(
-      (p: any) => p && p._id === propertyId
-    );
-
-    return isInCollections || isInSavedProperties;
   };
+
   return {
-    savedProperties,
     collections, // Export collections data
-    isLoading: savedPropertiesQuery.isLoading || collectionsQuery.isLoading,
+    isLoading: collectionsQuery.isLoading,
     isCollectionsLoading: collectionsQuery.isLoading,
-    isSavedPropertiesLoading: savedPropertiesQuery.isLoading,
-    error: savedPropertiesQuery.error || collectionsQuery.error,
+    error: collectionsQuery.error,
     addToWishlist,
     removeFromWishlist,
     toggleWishlist,

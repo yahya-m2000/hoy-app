@@ -4,12 +4,13 @@
  */
 
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text } from "@shared/components/base/Text";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 
 // Context
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 import { Icon } from "@shared/components";
 
 // Constants

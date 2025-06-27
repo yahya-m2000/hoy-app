@@ -5,7 +5,7 @@
 
 import React from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { Stack, useLocalSearchParams } from "expo-router";
@@ -77,9 +77,9 @@ const BookingConfirmationScreen = () => {
           styles.container,
           {
             backgroundColor: isDark
-              ? theme.colors.grayPalette[900]
-              : theme.colors.grayPalette[50],
-            paddingTop: insets.top,
+              ? theme.colors.gray[900]
+              : theme.colors.gray[50],
+            paddingTop: insets.top * 2,
           },
         ]}
       >
@@ -97,9 +97,8 @@ const BookingConfirmationScreen = () => {
         styles.container,
         {
           backgroundColor: isDark
-            ? theme.colors.grayPalette[900]
-            : theme.colors.grayPalette[50],
-          paddingTop: insets.top,
+            ? theme.colors.gray[900]
+            : theme.colors.gray[50],
         },
       ]}
     >

@@ -17,7 +17,7 @@ import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Context and hooks
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 import { useTranslation } from "react-i18next";
 import { useCurrency } from "@shared/hooks";
 
@@ -162,11 +162,9 @@ export default function CurrencyModal() {
             selectedCurrency === item.code
               ? isDark
                 ? theme.colors.primaryPalette[200]
-                : theme.colors.primary
+                : theme.colors.primaryPalette[200]
               : "transparent",
-          borderColor: isDark
-            ? theme.colors.grayPalette[700]
-            : theme.colors.grayPalette[300],
+          borderColor: isDark ? theme.colors.gray[700] : theme.colors.gray[300],
         },
       ]}
       onPress={() => handleCurrencyChange(item.code)}
@@ -196,7 +194,7 @@ export default function CurrencyModal() {
                     selectedCurrency === item.code
                       ? theme.colors.primary
                       : isDark
-                      ? theme.colors.grayPalette[400]
+                      ? theme.colors.gray[400]
                       : theme.colors.gray[600],
                 },
               ]}
@@ -208,9 +206,7 @@ export default function CurrencyModal() {
             style={[
               styles.currencyName,
               {
-                color: isDark
-                  ? theme.colors.grayPalette[400]
-                  : theme.colors.gray[600],
+                color: isDark ? theme.colors.gray[400] : theme.colors.gray[600],
               },
             ]}
           >
@@ -255,8 +251,8 @@ export default function CurrencyModal() {
                 styles.loadingText,
                 {
                   color: isDark
-                    ? theme.colors.grayPalette[300]
-                    : theme.colors.grayPalette[700],
+                    ? theme.colors.gray[300]
+                    : theme.colors.gray[700],
                 },
               ]}
             >

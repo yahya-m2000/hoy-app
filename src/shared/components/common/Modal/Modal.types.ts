@@ -3,7 +3,12 @@
  */
 
 import { ReactNode } from "react";
-import { ViewStyle } from "react-native";
+import { ViewStyle, ScrollView } from "react-native";
+
+export interface ModalRef {
+  scrollToEnd: (animated?: boolean) => void;
+  scrollTo: (options: Parameters<ScrollView["scrollTo"]>[0]) => void;
+}
 
 export interface ModalProps {
   visible: boolean;
@@ -12,7 +17,14 @@ export interface ModalProps {
   children: React.ReactNode;
   showCloseButton?: boolean;
   animationType?: "none" | "slide" | "fade";
+  presentationStyle?:
+    | "pageSheet"
+    | "formSheet"
+    | "fullScreen"
+    | "overFullScreen";
   contentStyle?: ViewStyle;
+  enableKeyboardAware?: boolean;
+  enableAutoScroll?: boolean;
   testID?: string;
 }
 

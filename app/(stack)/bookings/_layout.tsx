@@ -1,6 +1,6 @@
 import React from "react";
 import { Stack } from "expo-router";
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 export default function BookingsLayout() {
   const { theme } = useTheme();
@@ -15,6 +15,7 @@ export default function BookingsLayout() {
     >
       <Stack.Screen name="confirmation" options={{ headerShown: false }} />
       <Stack.Screen name="[id]" options={{ headerShown: false }} />
+      <Stack.Screen name="write-review" options={{ headerShown: false }} />
     </Stack>
   );
 }

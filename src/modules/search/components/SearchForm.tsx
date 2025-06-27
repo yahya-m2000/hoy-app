@@ -1,12 +1,12 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { TouchableOpacity } from "react-native";
+import { Container, Text } from "@shared/components/base";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 
 import { useSearchForm } from "@shared/hooks";
-import { useTheme } from "@shared/context";
-import { spacing, fontSize, radius } from "@shared/constants";
+import { useTheme } from "@shared/hooks/useTheme";
 
 interface SearchFormProps {
   onSearch: () => void;
@@ -35,66 +35,65 @@ export const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <Container>
       {/* Location Input - Full Width */}
       <TouchableOpacity
-        style={[
-          styles.searchInput,
-          {
-            backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
-            borderColor: isDark
-              ? theme.colors.gray[700]
-              : theme.colors.gray[300],
-            borderWidth: 1,
-          },
-        ]}
+        style={{
+          paddingHorizontal: 16,
+          paddingVertical: 16,
+          borderRadius: 12,
+          marginBottom: 12,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
+          borderColor: isDark ? theme.colors.gray[700] : theme.colors.gray[300],
+          borderWidth: 1,
+        }}
         onPress={openLocationModal}
         activeOpacity={0.7}
       >
-        <View style={styles.inputContent}>
+        <Container
+          flex={1}
+          style={{ flexDirection: "row", alignItems: "center" }}
+        >
           <Ionicons
             name="location-outline"
             size={24}
             color={
               location
-                ? theme.colors.primary[500]
+                ? theme.colors.primaryPalette[500]
                 : isDark
                 ? theme.colors.gray[400]
                 : theme.colors.gray[500]
             }
           />
-          <View style={styles.inputText}>
+          <Container flex={1} style={{ marginLeft: 12 }}>
             <Text
-              style={[
-                styles.inputLabel,
-                {
-                  color: isDark
-                    ? theme.colors.gray[300]
-                    : theme.colors.gray[600],
-                },
-              ]}
+              size="xs"
+              weight="medium"
+              color={isDark ? theme.colors.gray[300] : theme.colors.gray[600]}
+              style={{ marginBottom: 2 }}
             >
               {t("search.where")}
             </Text>
             <Text
-              style={[
-                styles.inputValue,
-                {
-                  color: location
-                    ? isDark
-                      ? theme.white
-                      : theme.colors.gray[900]
-                    : isDark
-                    ? theme.colors.gray[500]
-                    : theme.colors.gray[400],
-                },
-              ]}
+              size="md"
+              color={
+                location
+                  ? isDark
+                    ? theme.white
+                    : theme.colors.gray[900]
+                  : isDark
+                  ? theme.colors.gray[500]
+                  : theme.colors.gray[400]
+              }
               numberOfLines={1}
             >
               {location || t("search.goingTo")}
             </Text>
-          </View>
-        </View>
+          </Container>
+        </Container>
         <Ionicons
           name="chevron-forward"
           size={20}
@@ -104,63 +103,62 @@ export const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
 
       {/* Dates Input - Full Width */}
       <TouchableOpacity
-        style={[
-          styles.searchInput,
-          {
-            backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
-            borderColor: isDark
-              ? theme.colors.gray[700]
-              : theme.colors.gray[300],
-            borderWidth: 1,
-          },
-        ]}
+        style={{
+          paddingHorizontal: 16,
+          paddingVertical: 16,
+          borderRadius: 12,
+          marginBottom: 12,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
+          borderColor: isDark ? theme.colors.gray[700] : theme.colors.gray[300],
+          borderWidth: 1,
+        }}
         onPress={openDateModal}
         activeOpacity={0.7}
       >
-        <View style={styles.inputContent}>
+        <Container
+          flex={1}
+          style={{ flexDirection: "row", alignItems: "center" }}
+        >
           <Ionicons
             name="calendar-outline"
             size={24}
             color={
               dates
-                ? theme.colors.primary[500]
+                ? theme.colors.primaryPalette[500]
                 : isDark
                 ? theme.colors.gray[400]
                 : theme.colors.gray[500]
             }
           />
-          <View style={styles.inputText}>
+          <Container flex={1} style={{ marginLeft: 12 }}>
             <Text
-              style={[
-                styles.inputLabel,
-                {
-                  color: isDark
-                    ? theme.colors.gray[300]
-                    : theme.colors.gray[600],
-                },
-              ]}
+              size="xs"
+              weight="medium"
+              color={isDark ? theme.colors.gray[300] : theme.colors.gray[600]}
+              style={{ marginBottom: 2 }}
             >
               {t("search.when")}
             </Text>
             <Text
-              style={[
-                styles.inputValue,
-                {
-                  color: dates
-                    ? isDark
-                      ? theme.white
-                      : theme.colors.gray[900]
-                    : isDark
-                    ? theme.colors.gray[500]
-                    : theme.colors.gray[400],
-                },
-              ]}
+              size="md"
+              color={
+                dates
+                  ? isDark
+                    ? theme.white
+                    : theme.colors.gray[900]
+                  : isDark
+                  ? theme.colors.gray[500]
+                  : theme.colors.gray[400]
+              }
               numberOfLines={1}
             >
               {dates || t("search.selectDates")}
             </Text>
-          </View>
-        </View>
+          </Container>
+        </Container>
         <Ionicons
           name="chevron-forward"
           size={20}
@@ -170,51 +168,48 @@ export const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
 
       {/* Travelers Input - Full Width */}
       <TouchableOpacity
-        style={[
-          styles.searchInput,
-          {
-            backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
-            borderColor: isDark
-              ? theme.colors.gray[700]
-              : theme.colors.gray[300],
-            borderWidth: 1,
-          },
-        ]}
+        style={{
+          paddingHorizontal: 16,
+          paddingVertical: 16,
+          borderRadius: 12,
+          marginBottom: 12,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
+          borderColor: isDark ? theme.colors.gray[700] : theme.colors.gray[300],
+          borderWidth: 1,
+        }}
         onPress={openTravelersModal}
         activeOpacity={0.7}
       >
-        <View style={styles.inputContent}>
+        <Container
+          flex={1}
+          style={{ flexDirection: "row", alignItems: "center" }}
+        >
           <Ionicons
             name="people-outline"
             size={24}
             color={isDark ? theme.colors.gray[400] : theme.colors.gray[500]}
           />
-          <View style={styles.inputText}>
+          <Container flex={1} style={{ marginLeft: 12 }}>
             <Text
-              style={[
-                styles.inputLabel,
-                {
-                  color: isDark
-                    ? theme.colors.gray[300]
-                    : theme.colors.gray[600],
-                },
-              ]}
+              size="xs"
+              weight="medium"
+              color={isDark ? theme.colors.gray[300] : theme.colors.gray[600]}
+              style={{ marginBottom: 2 }}
             >
               {t("search.who")}
             </Text>
             <Text
-              style={[
-                styles.inputValue,
-                {
-                  color: isDark ? theme.white : theme.colors.gray[900],
-                },
-              ]}
+              size="md"
+              color={isDark ? theme.white : theme.colors.gray[900]}
               numberOfLines={1}
             >
               {travelers}
             </Text>
-          </View>
-        </View>
+          </Container>
+        </Container>
         <Ionicons
           name="chevron-forward"
           size={20}
@@ -224,63 +219,21 @@ export const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
 
       {/* Search Button */}
       <TouchableOpacity
-        style={[
-          styles.searchButton,
-          {
-            backgroundColor: theme.colors.primaryPalette[500],
-          },
-        ]}
+        style={{
+          paddingVertical: 16,
+          paddingHorizontal: 24,
+          borderRadius: 12,
+          alignItems: "center",
+          marginTop: 12,
+          backgroundColor: theme.colors.primaryPalette[500],
+        }}
         onPress={onSearch}
         activeOpacity={0.8}
       >
-        <Text style={[styles.searchButtonText, { color: theme.colors.white }]}>
+        <Text size="md" weight="semibold" color={theme.colors.white}>
           {t("search.search") || "Search"}
         </Text>
       </TouchableOpacity>
-    </View>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginVertical: spacing.lg,
-  },
-  searchInput: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
-    borderRadius: radius.md,
-    marginBottom: spacing.sm,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  inputContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  inputText: {
-    marginLeft: spacing.sm,
-    flex: 1,
-  },
-  inputLabel: {
-    fontSize: fontSize.xs,
-    fontWeight: "500",
-    marginBottom: 2,
-  },
-  inputValue: {
-    fontSize: fontSize.md,
-    fontWeight: "400",
-  },
-  searchButton: {
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.lg,
-    borderRadius: radius.md,
-    alignItems: "center",
-    marginTop: spacing.sm,
-  },
-  searchButtonText: {
-    fontSize: fontSize.md,
-    fontWeight: "600",
-  },
-});

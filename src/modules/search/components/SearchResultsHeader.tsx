@@ -1,9 +1,9 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { TouchableOpacity } from "react-native";
+import { Container, Text } from "@shared/components/base";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useTheme } from "@shared/context";
-import { spacing, fontSize, radius } from "@shared/constants";
+import { useTheme } from "@shared/hooks/useTheme";
 
 interface SearchResultsHeaderProps {
   title: string;
@@ -16,22 +16,27 @@ export const SearchResultsHeader: React.FC<SearchResultsHeaderProps> = ({
   const router = useRouter();
 
   return (
-    <View
-      style={[
-        styles.header,
-        {
-          backgroundColor: isDark
-            ? theme.colors.gray[900]
-            : theme.colors.gray[50],
-          borderBottomColor: isDark
-            ? theme.colors.gray[800]
-            : theme.colors.gray[200],
-        },
-      ]}
+    <Container
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        paddingHorizontal: 24,
+        paddingVertical: 16,
+        borderBottomWidth: 1,
+        backgroundColor: isDark
+          ? theme.colors.gray[900]
+          : theme.colors.gray[50],
+        borderBottomColor: isDark
+          ? theme.colors.gray[800]
+          : theme.colors.gray[200],
+      }}
     >
       <TouchableOpacity
         onPress={() => router.back()}
-        style={styles.backButton}
+        style={{
+          marginRight: 16,
+          padding: 8,
+        }}
         activeOpacity={0.7}
       >
         <Ionicons
@@ -41,41 +46,16 @@ export const SearchResultsHeader: React.FC<SearchResultsHeaderProps> = ({
         />
       </TouchableOpacity>
 
-      <View style={styles.titleContainer}>
+      <Container flex={1}>
         <Text
-          style={[
-            styles.title,
-            {
-              color: isDark ? theme.colors.gray[100] : theme.colors.gray[900],
-            },
-          ]}
+          size="xl"
+          weight="bold"
+          color={isDark ? theme.colors.gray[100] : theme.colors.gray[900]}
           numberOfLines={1}
-          ellipsizeMode="tail"
         >
           {title}
         </Text>
-      </View>
-    </View>
+      </Container>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
-  },
-  backButton: {
-    marginRight: spacing.md,
-    padding: spacing.xs,
-  },
-  titleContainer: {
-    flex: 1,
-  },
-  title: {
-    fontSize: fontSize.xl,
-    fontWeight: "700",
-  },
-});

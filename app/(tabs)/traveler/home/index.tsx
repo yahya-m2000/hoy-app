@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Home screen for the Hoy application
  * Shows featured and recommended property listings with search functionality
  * Main landing page for travelers to discover accommodations
@@ -6,206 +6,115 @@
 
 // React Native core
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, ScrollView, TouchableOpacity, Image } from "react-native";
 
 // Expo and third-party libraries
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 
 // App context and hooks
-import { useTheme, useAuth } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
+import { useAuth } from "@shared/context";
 import { useCurrentUser } from "@shared/hooks";
 
-// Components
-import { CategoryListingsCarousel } from "@modules/properties";
+// Base components
+import { Container } from "@shared/components/base/Container";
+import { Text } from "@shared/components/base/Text";
+
+// Module components
+import { HorizontalListingsCarousel } from "@modules/properties";
+
 // Utils
-import { userUtils } from "src/shared/utils";
+import { userUtils } from "@shared/utils";
 
 // Constants
-
-import { spacing, fontSize, radius, fontWeight } from "@shared/constants";
+import { spacing, radius } from "@shared/constants";
 
 export default function HomeScreen() {
   const { theme, isDark } = useTheme();
-  const insets = useSafeAreaInsets();
   const { isAuthenticated } = useAuth();
   const { data: user } = useCurrentUser();
   const router = useRouter();
 
   // Handle sign in button press
   const handleSignInPress = () => {
-    router.push("/(overlays)/auth");
+    router.push("/(overlays)/common/auth");
   };
-
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: isDark
-            ? theme.colors.gray[900]
-            : theme.colors.gray[50],
-          paddingTop: insets.top + spacing.xl,
-        },
-      ]}
+    <Container
+      flex={1}
+      backgroundColor={isDark ? theme.colors.gray[900] : theme.colors.gray[50]}
     >
-      <StatusBar style={isDark ? "light" : "dark"} />
-      {/* Header */}
-
       <ScrollView
-        style={styles.scrollView}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.content}
+        contentInsetAdjustmentBehavior="automatic"
       >
-        <View style={styles.header}>
-          <Text
-            style={[
-              styles.greetingText,
-              {
-                color: isDark ? theme.colors.gray[50] : theme.colors.gray[900],
-              },
-            ]}
-          >
-            {userUtils.getGreeting(isAuthenticated, user)}
-          </Text>
+        <StatusBar style={isDark ? "light" : "dark"} />
+
+        {/* Logo Section */}
+        <Container alignItems="center" marginTop="md">
+          <Image
+            source={require("../../../../assets/image.png")}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+        </Container>
+
+        {/* Header Section */}
+        <Container
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+          paddingHorizontal="md"
+          paddingVertical="md"
+          marginBottom="lg"
+        >
+          <Container flexDirection="row" alignItems="center">
+            <Text variant="h6" weight="normal">
+              Hi,&nbsp;
+            </Text>
+            <Text variant="h6" weight="bold" color={theme.text.primary}>
+              {userUtils.getGreeting(isAuthenticated, user)}
+            </Text>
+          </Container>
+
           {!isAuthenticated && (
-            <TouchableOpacity
-              style={[
-                styles.signInButton,
-                {
-                  backgroundColor: theme.colors.primary[600],
-                },
-              ]}
-              onPress={handleSignInPress}
-            >
-              <Text style={styles.signInButtonText}>Sign in</Text>
+            <TouchableOpacity onPress={handleSignInPress}>
+              <Text variant="h6" weight="bold">
+                Sign in
+              </Text>
             </TouchableOpacity>
           )}
-        </View>
-        {/* Category Listings Carousel */}
-        <CategoryListingsCarousel city="New York" />
-        <CategoryListingsCarousel city="Savannah" />
-        <CategoryListingsCarousel city="Brooklyn" />
+        </Container>
+
+        {/* Content Section */}
+        <Container>
+          <HorizontalListingsCarousel city="New York" />
+          <HorizontalListingsCarousel city="Savannah" />
+          <HorizontalListingsCarousel city="Brooklyn" />
+        </Container>
       </ScrollView>
-    </View>
+    </Container>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingBottom: spacing.xl,
+  // Content
+  content: {
+    paddingBottom: spacing.xxl,
   },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
-    marginBottom: spacing.md,
+
+  // Logo
+  logo: {
+    width: 120,
+    height: 30,
   },
-  greetingText: {
-    fontSize: fontSize.lg,
-    fontWeight: fontWeight.semibold,
-  },
+
+  // Sign in button
   signInButton: {
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
     borderRadius: radius.sm,
-  },
-  signInButtonText: {
-    fontSize: fontSize.sm,
-    fontWeight: fontWeight.medium,
-  },
-  title: {
-    fontSize: fontSize.xl,
-    fontWeight: fontWeight.bold,
-    marginBottom: spacing.sm,
-  },
-  searchButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    height: 44,
-    borderRadius: 30,
-    paddingHorizontal: spacing.md,
-    width: "100%",
-    borderWidth: 1,
-    marginBottom: spacing.sm,
-  },
-  searchButtonText: {
-    flex: 1,
-    fontSize: fontSize.md,
-    textAlign: "left",
-  },
-  searchIcon: {
-    marginRight: spacing.xs,
-  },
-  categoriesContainer: {
-    marginVertical: spacing.sm,
-  },
-  categoriesContent: {
-    paddingHorizontal: spacing.lg,
-    gap: spacing.sm,
-  },
-  categoryItem: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-    borderRadius: 20,
-    borderWidth: 1,
-  },
-  categoryText: {
-    fontSize: fontSize.sm,
-    fontWeight: fontWeight.semibold,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  content: {
-    paddingBottom: spacing.xxl,
-  },
-  sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: spacing.lg,
-    marginBottom: spacing.sm,
-  },
-  sectionTitle: {
-    fontSize: fontSize.lg,
-    fontWeight: fontWeight.semibold,
-  },
-  seeAll: {
-    fontSize: fontSize.sm,
-    fontWeight: fontWeight.medium,
-  },
-  propertyCard: {
-    marginBottom: spacing.md,
-  },
-  skeletonContainer: {
-    marginBottom: spacing.md,
-  },
-  skeletonDetails: {
-    marginTop: spacing.sm,
-    gap: spacing.xs,
-  },
-  emptyStateContainer: {
-    padding: spacing.lg,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderStyle: "dashed",
-    marginVertical: spacing.md,
-  },
-  emptyStateText: {
-    fontSize: fontSize.md,
-    textAlign: "center",
   },
 });

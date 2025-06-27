@@ -24,7 +24,7 @@ import { router } from "expo-router";
 import { debounce } from "lodash";
 
 // App context and hooks
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 import { useSearchForm } from "@shared/hooks";
 
 // Components
@@ -137,8 +137,8 @@ export default function SearchLocationModal() {
         {
           backgroundColor: isDark ? "transparent" : "transparent",
           borderBottomColor: isDark
-            ? theme.colors.grayPalette[700]
-            : theme.colors.grayPalette[200],
+            ? theme.colors.gray[700]
+            : theme.colors.gray[200],
         },
       ]}
       onPress={() => handleLocationSelect(item)}
@@ -155,9 +155,7 @@ export default function SearchLocationModal() {
           style={[
             styles.locationCity,
             {
-              color: isDark
-                ? theme.colors.grayPalette[100]
-                : theme.colors.grayPalette[900],
+              color: isDark ? theme.colors.gray[100] : theme.colors.gray[900],
             },
           ]}
         >
@@ -183,8 +181,8 @@ export default function SearchLocationModal() {
           styles.searchContainer,
           {
             backgroundColor: isDark
-              ? theme.colors.grayPalette[700]
-              : theme.colors.grayPalette[200],
+              ? theme.colors.gray[700]
+              : theme.colors.gray[200],
             borderColor: isDark
               ? theme.colors.gray[600]
               : theme.colors.gray[300],
@@ -201,9 +199,7 @@ export default function SearchLocationModal() {
           style={[
             styles.searchInput,
             {
-              color: isDark
-                ? theme.colors.gray[50]
-                : theme.colors.grayPalette[900],
+              color: isDark ? theme.colors.gray[50] : theme.colors.gray[900],
             },
           ]}
           placeholder={t("search.searchDestination")}
@@ -235,13 +231,11 @@ export default function SearchLocationModal() {
             style={[
               styles.sectionTitle,
               {
-                color: isDark
-                  ? theme.colors.gray[300]
-                  : theme.colors.grayPalette[700],
+                color: isDark ? theme.colors.gray[300] : theme.colors.gray[700],
               },
             ]}
           >
-            {t("search.popularDestinations")}{" "}
+            {t("search.popularDestinations")}
           </Text>
         </View>
       )}

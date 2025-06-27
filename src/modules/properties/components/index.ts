@@ -1,28 +1,28 @@
-// Properties Module Components - Organized by category
+/**
+ * Properties Module Components
+ * Shared reusable components
+ */
 
 // Card components
-export * from "./Cards";
+export * from "./cards";
 
 // Carousel components
-export * from "./Carousels";
+export * from "./carousels";
 
-// Detail components
-export * from "./Details";
+// Form components
+export * from "./forms";
 
 // List components
-export * from "./Lists";
+export * from "./lists";
 
 // Media components
-export * from "./Media";
-
-// Modal components
-export * from "./Modals";
+export * from "./media";
 
 // Section components
-export * from "./Sections";
+export * from "./sections";
 
 // State components
-export * from "./States";
+export * from "./states";
 
-// Summary components
-export * from "./Summary";
+// Export PropertyComponents utilities (commented out to avoid conflicts)
+// export * from "./PropertyComponents";

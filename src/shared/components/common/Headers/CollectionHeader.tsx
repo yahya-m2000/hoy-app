@@ -12,10 +12,11 @@
 import React from "react";
 
 // React Native
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { Text } from "@shared/components/base/Text";
 
 // Context
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Constants
 import { fontSize, fontWeight } from "@shared/constants/typography";
@@ -29,12 +30,24 @@ export default function CollectionHeader({
   propertyCount,
 }: CollectionHeaderProps) {
   const { theme } = useTheme();
-
   return (
     <View style={styles.container}>
-      <Text style={[styles.title, { color: theme.text.primary }]}>{title}</Text>
+      <Text
+        size="lg"
+        weight="semibold"
+        align="center"
+        color={theme.text.primary}
+        style={styles.title}
+      >
+        {title}
+      </Text>
       {propertyCount !== undefined && (
-        <Text style={[styles.propertyCount, { color: theme.text.secondary }]}>
+        <Text
+          size="xs"
+          align="center"
+          color={theme.text.secondary}
+          style={styles.propertyCount}
+        >
           {propertyCount} {propertyCount === 1 ? "property" : "properties"}
         </Text>
       )}
@@ -46,15 +59,19 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "center",
+    flex: 1, // Take available space
+    width: "100%", // Use full available width
   },
   title: {
     fontSize: fontSize.lg,
     fontWeight: fontWeight.semibold,
     textAlign: "center",
+    width: "100%", // Use full width
   },
   propertyCount: {
-    fontSize: fontSize.sm,
+    fontSize: fontSize.xs, // Slightly smaller to ensure it fits
     marginTop: spacing.xs / 2,
     textAlign: "center",
+    width: "100%", // Use full width
   },
 });

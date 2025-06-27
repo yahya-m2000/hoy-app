@@ -1,9 +1,7 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { Container, Text } from "@shared/components/base";
 import { Ionicons } from "@expo/vector-icons";
-import { useTheme } from "@shared/context";
-import { spacing, fontSize, radius } from "@shared/constants";
-
+import { useTheme } from "@shared/hooks/useTheme";
 interface SearchSummaryProps {
   location: string;
   guests: number;
@@ -20,129 +18,76 @@ export const SearchSummary: React.FC<SearchSummaryProps> = ({
   const { theme, isDark } = useTheme();
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
-          borderBottomColor: isDark
-            ? theme.colors.gray[700]
-            : theme.colors.gray[200],
-        },
-      ]}
+    <Container
+      backgroundColor={isDark ? theme.colors.gray[800] : theme.white}
+      style={{
+        borderBottomWidth: 1,
+        borderBottomColor: isDark
+          ? theme.colors.gray[700]
+          : theme.colors.gray[200],
+      }}
+      paddingHorizontal="lg"
+      paddingVertical="md"
     >
-      <View style={styles.content}>
-        <View style={styles.locationRow}>
-          <Ionicons
-            name="location-outline"
-            size={16}
-            color={isDark ? theme.colors.gray[400] : theme.colors.gray[500]}
-          />
+      <Container flexDirection="row" alignItems="center" marginBottom="xs">
+        <Ionicons
+          name="location-outline"
+          size={16}
+          color={isDark ? theme.colors.gray[400] : theme.colors.gray[500]}
+        />
+        <Container marginLeft="xs">
           <Text
-            style={[
-              styles.locationText,
-              {
-                color: isDark ? theme.colors.gray[200] : theme.colors.gray[800],
-              },
-            ]}
+            size="md"
+            weight="medium"
+            color={isDark ? theme.colors.gray[200] : theme.colors.gray[800]}
           >
             {location}
           </Text>
-        </View>
+        </Container>
+      </Container>
 
-        <View style={styles.detailsRow}>
-          <View style={styles.detailItem}>
-            <Ionicons
-              name="people-outline"
-              size={14}
-              color={isDark ? theme.colors.gray[400] : theme.colors.gray[500]}
-            />
+      <Container flexDirection="row" alignItems="center" marginBottom="xs">
+        <Container flexDirection="row" alignItems="center" marginRight="md">
+          <Ionicons
+            name="people-outline"
+            size={14}
+            color={isDark ? theme.colors.gray[400] : theme.colors.gray[500]}
+          />
+          <Container marginLeft="xs">
             <Text
-              style={[
-                styles.detailText,
-                {
-                  color: isDark
-                    ? theme.colors.gray[300]
-                    : theme.colors.gray[600],
-                },
-              ]}
+              size="sm"
+              color={isDark ? theme.colors.gray[300] : theme.colors.gray[600]}
             >
               {guests} {guests === 1 ? "guest" : "guests"}
             </Text>
-          </View>
+          </Container>
+        </Container>
 
-          {dates && (
-            <View style={styles.detailItem}>
-              <Ionicons
-                name="calendar-outline"
-                size={14}
-                color={isDark ? theme.colors.gray[400] : theme.colors.gray[500]}
-              />
+        {dates && (
+          <Container flexDirection="row" alignItems="center">
+            <Ionicons
+              name="calendar-outline"
+              size={14}
+              color={isDark ? theme.colors.gray[400] : theme.colors.gray[500]}
+            />
+            <Container marginLeft="xs">
               <Text
-                style={[
-                  styles.detailText,
-                  {
-                    color: isDark
-                      ? theme.colors.gray[300]
-                      : theme.colors.gray[600],
-                  },
-                ]}
+                size="sm"
+                color={isDark ? theme.colors.gray[300] : theme.colors.gray[600]}
               >
                 {dates}
               </Text>
-            </View>
-          )}
-        </View>
+            </Container>
+          </Container>
+        )}
+      </Container>
 
-        <Text
-          style={[
-            styles.resultsText,
-            {
-              color: isDark ? theme.colors.gray[300] : theme.colors.gray[600],
-            },
-          ]}
-        >
-          {resultsCount} {resultsCount === 1 ? "property" : "properties"} found
-        </Text>
-      </View>
-    </View>
+      <Text
+        size="sm"
+        color={isDark ? theme.colors.gray[300] : theme.colors.gray[600]}
+      >
+        {resultsCount} {resultsCount === 1 ? "property" : "properties"} found
+      </Text>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    borderBottomWidth: 1,
-  },
-  content: {
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-  },
-  locationRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: spacing.xs,
-  },
-  locationText: {
-    fontSize: fontSize.md,
-    fontWeight: "600",
-    marginLeft: spacing.xs,
-  },
-  detailsRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: spacing.xs,
-  },
-  detailItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: spacing.md,
-  },
-  detailText: {
-    fontSize: fontSize.xs,
-    marginLeft: spacing.xs,
-  },
-  resultsText: {
-    fontSize: fontSize.xs,
-    fontWeight: "500",
-  },
-});

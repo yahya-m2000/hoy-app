@@ -1,6 +1,12 @@
 import { PROPERTY_ENDPOINTS } from "@shared/constants";
 import api from "../core/client";
-import { PropertyType } from "@shared/types";
+import {
+  PropertyType,
+  ICancellationPolicy,
+  IHouseRules,
+  ISafetyFeatures,
+  ICheckInExperience,
+} from "@shared/types";
 import { isNetworkError, addToRetryQueue } from "@shared/utils/network";
 import { logErrorWithContext } from "@shared/utils/error";
 
@@ -546,9 +552,7 @@ export const fetchPublicHostProfile = async (hostId: string) => {
     );
     return response.data.data;
   } catch (error: any) {
-    logErrorWithContext("fetchPublicHostProfile", error);
-
-    // Return default host profile if fetch fails
+    logErrorWithContext("fetchPublicHostProfile", error); // Return default host profile if fetch fails
     return {
       hostId,
       hostName: "",
@@ -565,5 +569,205 @@ export const fetchPublicHostProfile = async (hostId: string) => {
       joinedDate: new Date(),
       isVerified: false,
     };
+  }
+};
+
+/**
+ * Fetch property policies (cancellation, house rules, safety)
+ */
+export const fetchPropertyPolicies = async (
+  propertyId: string
+): Promise<{
+  cancellationPolicy: ICancellationPolicy;
+  houseRules: IHouseRules;
+  safetyFeatures: ISafetyFeatures;
+} | null> => {
+  try {
+    const response = await api.get<{
+      data: {
+        cancellationPolicy: ICancellationPolicy;
+        houseRules: IHouseRules;
+        safetyFeatures: ISafetyFeatures;
+      };
+    }>(`/properties/${propertyId}/policies`);
+    return response.data.data;
+  } catch (error: any) {
+    logErrorWithContext("fetchPropertyPolicies", error);
+
+    if (isNetworkError(error)) {
+      addToRetryQueue(() => fetchPropertyPolicies(propertyId));
+    }
+
+    return null;
+  }
+};
+
+/**
+ * Fetch property check-in experiences
+ */
+export const fetchPropertyCheckInExperiences = async (
+  propertyId: string
+): Promise<ICheckInExperience[] | null> => {
+  try {
+    console.log(`Fetching check-in experiences for property: ${propertyId}`);
+    const response = await api.get<{
+      data: ICheckInExperience[];
+    }>(`/properties/${propertyId}/check-in-experiences`);
+
+    console.log('Check-in experiences API response:', response.data);
+    return response.data.data;
+  } catch (error: any) {
+    console.error(`Failed to fetch check-in experiences for property: ${propertyId}`, error);
+    logErrorWithContext("fetchPropertyCheckInExperiences", error);
+
+    // Add to retry queue if it's a network error
+    if (isNetworkError(error)) {
+      addToRetryQueue(() => fetchPropertyCheckInExperiences(propertyId));
+    }
+
+    return null;
+  }
+};
+
+/**
+ * Fetch property availability
+ */
+export const fetchPropertyAvailability = async (
+  propertyId: string,
+  startDate?: Date,
+  endDate?: Date,
+  unitId?: string
+): Promise<{
+  isAvailable: boolean;
+  unavailableDates: {
+    startDate: Date;
+    endDate: Date;
+    reason: "booked" | "blocked" | "maintenance";
+    bookingId?: string;
+    guestName?: string;
+  }[];
+  calendar: {
+    date: Date;
+    isAvailable: boolean;
+    price?: number;
+    reason?: string;
+  }[];
+} | null> => {
+  try {
+    const params: any = {};
+    if (startDate) params.startDate = startDate.toISOString();
+    if (endDate) params.endDate = endDate.toISOString();
+    if (unitId) params.unitId = unitId;
+
+    // Create a unique key for this request to track in local cache
+    const cacheKey = `availability_${propertyId}_${params.startDate || ''}_${params.endDate || ''}_${unitId || ''}`;
+    
+    // Check if we have a cached response
+    const cachedResponse = await getCachedData(cacheKey);
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+
+    const response = await api.get<{
+      data: {
+        isAvailable: boolean;
+        unavailableDates: {
+          startDate: Date;
+          endDate: Date;
+          reason: "booked" | "blocked" | "maintenance";
+          bookingId?: string;
+          guestName?: string;
+        }[];
+        calendar: {
+          date: Date;
+          isAvailable: boolean;
+          price?: number;
+          reason?: string;
+        }[];
+      };
+    }>(`/properties/${propertyId}/availability`, { params });
+
+    // Cache the successful response
+    if (response.data?.data) {
+      await setCachedData(cacheKey, response.data.data, 30000); // Cache for 30 seconds
+    }
+
+    return response.data.data;
+  } catch (error: any) {
+    logErrorWithContext("fetchPropertyAvailability", error);
+
+    // If it's a circuit breaker error, return a default response instead of retrying
+    if (error?.message?.includes('CircuitBreakerError')) {
+      return {
+        isAvailable: true, // Assume available to prevent blocking user flow
+        unavailableDates: [],
+        calendar: []
+      };
+    }
+
+    if (isNetworkError(error)) {
+      addToRetryQueue(() =>
+        fetchPropertyAvailability(propertyId, startDate, endDate, unitId)
+      );
+    }
+
+    return null;
+  }
+};
+
+// Simple in-memory cache
+const cache = new Map<string, { data: any, timestamp: number }>();
+
+async function getCachedData(key: string) {
+  const cached = cache.get(key);
+  if (cached && Date.now() - cached.timestamp < 30000) { // 30 seconds cache
+    return cached.data;
+  }
+  return null;
+}
+
+async function setCachedData(key: string, data: any, ttl = 30000) {
+  cache.set(key, { data, timestamp: Date.now() });
+  // Clean up old cache entries
+  setTimeout(() => {
+    if (cache.has(key)) {
+      cache.delete(key);
+    }
+  }, ttl);
+}
+
+/**
+ * Get property reviews and insights
+ */
+export const getPropertyReviews = async (propertyId: string) => {
+  try {
+    const response = await api.get(`/properties/${propertyId}/reviews`);
+    return response.data;
+  } catch (error: any) {
+    logErrorWithContext("getPropertyReviews", error);
+
+    if (isNetworkError(error)) {
+      addToRetryQueue(() => getPropertyReviews(propertyId));
+    }
+
+    throw error;
+  }
+};
+
+/**
+ * Get comprehensive property insights (ratings, reviews, analytics)
+ */
+export const getPropertyInsights = async (propertyId: string) => {
+  try {
+    const response = await api.get(`/properties/${propertyId}/insights`);
+    return response.data;
+  } catch (error: any) {
+    logErrorWithContext("getPropertyInsights", error);
+
+    if (isNetworkError(error)) {
+      addToRetryQueue(() => getPropertyInsights(propertyId));
+    }
+
+    throw error;
   }
 };

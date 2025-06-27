@@ -7,10 +7,13 @@
 import React, { useEffect, useMemo } from "react";
 
 // React Native
-import { View, StyleSheet, Animated, ViewStyle } from "react-native";
+import { Animated, ViewStyle } from "react-native";
+
+// Base components
+import { Container } from "@shared/components/base";
 
 // Context
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Constants
 import { radius } from "@shared/constants";
@@ -44,55 +47,35 @@ const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
     ).start();
   }, [translateX]);
 
-  const skeletonStyle: ViewStyle = {
-    width: width as any,
-    height: height as any,
-    borderRadius: circle
-      ? typeof height === "number"
-        ? height / 2
-        : 25
-      : borderRadius,
-    backgroundColor: theme.colors.skeletonBackground,
-  };
-
-  const combinedStyle = Array.isArray(style)
-    ? [styles.skeleton, skeletonStyle, ...style]
-    : [styles.skeleton, skeletonStyle, style];
-
   return (
-    <View style={combinedStyle}>
+    <Container
+      style={[
+        {
+          backgroundColor: theme.colors.skeletonBackground,
+          borderRadius: borderRadius,
+          overflow: "hidden",
+        },
+        ...(Array.isArray(style) ? style : style ? [style] : []),
+      ]}
+      width={width as number}
+      height={height as number}
+    >
       <Animated.View
         style={[
-          styles.shimmer,
           {
+            position: "absolute",
+            top: 0,
+            left: -(width as number),
+            height: "100%",
+            width: width as number,
             backgroundColor: theme.colors.skeletonHighlight,
             transform: [{ translateX }],
           },
         ]}
       />
-    </View>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  skeleton: {
-    overflow: "hidden",
-  },
-  shimmer: {
-    width: "30%",
-    height: "100%",
-    opacity: 0.3,
-  },
-  listItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-  },
-  listItemContent: {
-    flex: 1,
-    marginLeft: 10,
-  },
-});
 
 export default LoadingSkeleton;
 
@@ -146,9 +129,14 @@ export const ListItemSkeleton: React.FC<{
   height?: number;
 }> = ({ lines = 2, hasImage = true, imageSize = 50, height = 70 }) => {
   return (
-    <View style={styles.listItem}>
+    <Container
+      flexDirection="row"
+      alignItems="center"
+      padding="sm"
+      height={height}
+    >
       {hasImage && <ProfilePictureSkeleton size={imageSize} />}
-      <View style={styles.listItemContent}>
+      <Container flex={1} marginLeft="sm">
         {Array(lines)
           .fill(0)
           .map((_, i) => (
@@ -158,7 +146,7 @@ export const ListItemSkeleton: React.FC<{
               style={{ marginVertical: 5 }}
             />
           ))}
-      </View>
-    </View>
+      </Container>
+    </Container>
   );
 };

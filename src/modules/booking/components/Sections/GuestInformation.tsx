@@ -4,11 +4,12 @@
  */
 
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { Text } from "@shared/components/base/Text";
 
 import { useTranslation } from "react-i18next";
 // Context
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Constants
 import { fontSize, spacing, radius } from "@shared/constants";
@@ -65,7 +66,7 @@ const GuestInformation: React.FC<GuestInformationProps> = ({ guests }) => {
       <Text
         style={[
           styles.title,
-          { color: isDark ? theme.white : theme.colors.grayPalette[900] },
+          { color: isDark ? theme.white : theme.colors.gray[900] },
         ]}
       >
         {t("booking.guests")}
@@ -75,7 +76,7 @@ const GuestInformation: React.FC<GuestInformationProps> = ({ guests }) => {
         <Text
           style={[
             styles.guestInfo,
-            { color: isDark ? theme.white : theme.colors.grayPalette[900] },
+            { color: isDark ? theme.white : theme.colors.gray[900] },
           ]}
         >
           {formatGuestInfo()}

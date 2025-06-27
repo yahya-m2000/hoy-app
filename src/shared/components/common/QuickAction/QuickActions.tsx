@@ -13,7 +13,7 @@ import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 
 // Context
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Constants
 import { radius, spacing } from "@shared/constants";
@@ -43,8 +43,8 @@ const QuickActions: React.FC<QuickActionsProps> = ({
         styles.actionButton,
         {
           backgroundColor: isDark
-            ? theme.colors.grayPalette[800]
-            : theme.colors.grayPalette[100],
+            ? theme.colors.gray[800]
+            : theme.colors.gray[100],
         },
       ]}
       onPress={() => handleActionPress(action.route)}
@@ -60,13 +60,12 @@ const QuickActions: React.FC<QuickActionsProps> = ({
           },
         ]}
       >
-        {" "}
         <Icon
           name={action.icon as any}
           size={22}
           color={action.color || theme.colors.primary}
         />
-      </View>{" "}
+      </View>
       <Text
         variant="caption"
         color={isDark ? theme.colors.white : theme.colors.black}

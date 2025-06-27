@@ -10,8 +10,14 @@ export * as assetUtils from "./asset";
 // Error handling utilities
 export * as errorUtils from "./error";
 
+// Font utilities
+export * as fontUtils from "./fonts";
+
 // Formatting utilities
 export * as formatUtils from "./formatting";
+
+// Host utilities
+export * as hostUtils from "./host";
 
 // Logging utilities
 export * as logUtils from "./log";
@@ -34,3 +40,4 @@ export * from "./auth/debugTokens";
 export * from "./eventEmitter";
 export * from "./locationParser";
 export * from "./mockData";
+export * from "./policyHelpers";

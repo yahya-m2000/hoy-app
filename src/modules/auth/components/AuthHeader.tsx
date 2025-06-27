@@ -4,9 +4,10 @@
  */
 
 import React from "react";
-import { Text, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
+import { Text } from "@shared/components/base/Text";
 import { useTranslation } from "react-i18next";
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 import { fontSize } from "@shared/constants";
 
 interface AuthHeaderProps {

@@ -56,7 +56,7 @@ export const hasValidAuthentication = async (): Promise<boolean> => {
 
     // If no tokens, definitely not authenticated
     if (!accessToken && !refreshToken) {
-      console.log("🚫 No tokens found - not authenticated");
+      console.log("No tokens found - not authenticated");
       console.log(accessToken, refreshToken, userId);
       return false;
     }
@@ -71,18 +71,18 @@ export const hasValidAuthentication = async (): Promise<boolean> => {
     // Only check blacklist flag - remove time-based invalidation that might be too strict
     const isBlacklisted = await AsyncStorage.getItem("tokenBlacklisted");
     if (isBlacklisted === "true") {
-      console.log("🚫 Tokens are blacklisted - not authenticated");
+      console.log("Tokens are blacklisted - not authenticated");
       return false;
     }
 
     // Clear any stale invalidation flags that might be blocking valid tokens
     const tokenInvalidatedAt = await AsyncStorage.getItem("tokenInvalidatedAt");
     if (tokenInvalidatedAt) {
-      console.log("✅ Clearing stale token invalidation flag");
+      console.log("Clearing stale token invalidation flag");
       await AsyncStorage.removeItem("tokenInvalidatedAt");
     }
 
-    console.log("✅ Valid authentication found");
+    console.log("Valid authentication found");
     return true;
   } catch (error) {
     console.error("Error checking valid authentication:", error);
@@ -97,7 +97,7 @@ export const markTokensAsInvalid = async (): Promise<void> => {
   try {
     await AsyncStorage.setItem("tokenInvalidatedAt", Date.now().toString());
     await AsyncStorage.setItem("tokenBlacklisted", "true");
-    console.log("🚫 Tokens marked as invalid");
+    console.log("Tokens marked as invalid");
     notifyAuthStateChange(false);
   } catch (error) {
     console.error("Error marking tokens as invalid:", error);
@@ -111,7 +111,7 @@ export const clearTokenInvalidation = async (): Promise<void> => {
   try {
     await AsyncStorage.removeItem("tokenInvalidatedAt");
     await AsyncStorage.removeItem("tokenBlacklisted");
-    console.log("✅ Auth state cleared");
+    console.log("Auth state cleared");
     notifyAuthStateChange(true);
   } catch (error) {
     console.error("Error clearing token invalidation:", error);

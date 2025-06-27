@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Reservation Modal for the Hoy application
  * Handles the complete property booking flow including date selection,
  * guest count, payment method, and booking confirmation
@@ -20,7 +20,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { format } from "date-fns";
 
 // Context and hooks
-import { useTheme } from "@shared/context/ThemeContext";
+import { useTheme } from "@shared/hooks/useTheme";
 import { useAuth } from "@shared/context/AuthContext";
 import { useToast } from "@shared/context/ToastContext";
 import { useDateSelection } from "@shared/context/DateSelectionContext";
@@ -29,7 +29,11 @@ import { useTranslation } from "react-i18next";
 
 // Components
 import { BottomSheetModal } from "@shared/components";
-import {PaymentMethodSelector, GuestSelector, DateRangePicker} from "@modules/booking";
+import {
+  PaymentMethodSelector,
+  GuestSelector,
+  DateRangePicker,
+} from "@modules/booking";
 
 // Services
 import * as bookingService from "@modules/booking";
@@ -115,9 +119,14 @@ export default function ReservationModal() {
     hasInitialDates ? true : null
   );
   const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
-
   // Initial property price
   const propertyPrice = unit?.price || property?.price || 0;
+
+  // Ensure propertyPrice is a valid number to prevent .toFixed errors
+  const safePropertyPrice =
+    typeof propertyPrice === "number" && !isNaN(propertyPrice)
+      ? propertyPrice
+      : 0;
 
   // Get selected dates either from params or context
   // const selectedDates = React.useMemo(() => {
@@ -212,10 +221,10 @@ export default function ReservationModal() {
         // Set basic price details based on property price
         const nights = calculateNights();
         setPriceDetails({
-          totalPrice: propertyPrice * nights,
-          cleaningFee: Math.round(propertyPrice * 0.1),
-          serviceFee: Math.round(propertyPrice * nights * 0.12),
-          taxes: Math.round(propertyPrice * nights * 0.08),
+          totalPrice: safePropertyPrice * nights,
+          cleaningFee: Math.round(safePropertyPrice * 0.1),
+          serviceFee: Math.round(safePropertyPrice * nights * 0.12),
+          taxes: Math.round(safePropertyPrice * nights * 0.08),
         });
       } else {
         setIsAvailable(false);
@@ -306,7 +315,6 @@ export default function ReservationModal() {
           // Direct launch method - will work on most Android devices
           Linking.openURL(`tel:${cleanUssdCode}`)
             .then(() => {
-              console.log("ZAAD payment initiated via USSD");
               proceedWithBookingCreation("pending");
             })
             .catch((err) => {
@@ -431,7 +439,6 @@ export default function ReservationModal() {
     // const isZaadPayment = selectedPaymentMethod?.type === "zaad";
 
     if (isTestPayment) {
-      console.log("Using test payment method - bypassing payment validation");
     }
 
     // Format booking data according to server validation schema requirements
@@ -449,7 +456,8 @@ export default function ReservationModal() {
         infants: infants || 0,
         pets: pets || 0,
       },
-      totalPrice: priceDetails?.totalPrice || propertyPrice * calculateNights(),
+      totalPrice:
+        priceDetails?.totalPrice || safePropertyPrice * calculateNights(),
       specialRequests,
       contactInfo: {
         name:
@@ -476,10 +484,6 @@ export default function ReservationModal() {
 
     // If using test payment, add additional logging
     if (isTestPayment) {
-      console.log(
-        "Making test booking with data:",
-        JSON.stringify(bookingData)
-      );
     }
 
     // Verify that our data includes all required fields by server validation schema
@@ -490,14 +494,6 @@ export default function ReservationModal() {
     if (!bookingData.guestCount) {
       throw new Error("Guest count is required");
     }
-
-    // Additional logging to help with debugging
-    console.log("Booking data validation passed:", {
-      dates: `${bookingData.checkIn} - ${bookingData.checkOut}`,
-      guestCount: bookingData.guestCount,
-      guests: bookingData.guests,
-      guestsAdults: bookingData.guests?.adults,
-    });
 
     // Try creating the booking, with fallback for tests if it fails
     let result;
@@ -522,7 +518,7 @@ export default function ReservationModal() {
           selectedPaymentMethod?.id === "zaad_payment_method")
       ) {
         // If this is a test booking, generate a mock result
-        console.log("Creating mock booking result for test booking");
+
         result = {
           _id: "mock_" + Math.random().toString(36).substring(2, 15),
           propertyId: property._id,
@@ -629,8 +625,8 @@ export default function ReservationModal() {
                   styles.previewTitle,
                   {
                     color: isDark
-                      ? theme.colors.grayPalette[300]
-                      : theme.colors.grayPalette[700],
+                      ? theme.colors.gray[300]
+                      : theme.colors.gray[700],
                   },
                 ]}
               >
@@ -640,7 +636,7 @@ export default function ReservationModal() {
                 style={[
                   styles.previewDates,
                   {
-                    color: isDark ? theme.white : theme.colors.grayPalette[900],
+                    color: isDark ? theme.white : theme.colors.gray[900],
                   },
                 ]}
               >
@@ -763,8 +759,8 @@ export default function ReservationModal() {
                     ? theme.colors.gray[800]
                     : theme.colors.gray[100],
                   borderColor: isDark
-                    ? theme.colors.grayPalette[700]
-                    : theme.colors.grayPalette[300],
+                    ? theme.colors.gray[700]
+                    : theme.colors.gray[300],
                 },
               ]}
             >
@@ -774,7 +770,7 @@ export default function ReservationModal() {
                     styles.datesSummaryLabel,
                     {
                       color: isDark
-                        ? theme.colors.grayPalette[300]
+                        ? theme.colors.gray[300]
                         : theme.colors.gray[600],
                     },
                   ]}
@@ -785,9 +781,7 @@ export default function ReservationModal() {
                   style={[
                     styles.datesSummaryValue,
                     {
-                      color: isDark
-                        ? theme.white
-                        : theme.colors.grayPalette[900],
+                      color: isDark ? theme.white : theme.colors.gray[900],
                     },
                   ]}
                 >
@@ -799,8 +793,8 @@ export default function ReservationModal() {
                   styles.datesDivider,
                   {
                     backgroundColor: isDark
-                      ? theme.colors.grayPalette[700]
-                      : theme.colors.grayPalette[300],
+                      ? theme.colors.gray[700]
+                      : theme.colors.gray[300],
                   },
                 ]}
               />
@@ -810,7 +804,7 @@ export default function ReservationModal() {
                     styles.datesSummaryLabel,
                     {
                       color: isDark
-                        ? theme.colors.grayPalette[300]
+                        ? theme.colors.gray[300]
                         : theme.colors.gray[600],
                     },
                   ]}
@@ -821,9 +815,7 @@ export default function ReservationModal() {
                   style={[
                     styles.datesSummaryValue,
                     {
-                      color: isDark
-                        ? theme.white
-                        : theme.colors.grayPalette[900],
+                      color: isDark ? theme.white : theme.colors.gray[900],
                     },
                   ]}
                 >
@@ -850,7 +842,7 @@ export default function ReservationModal() {
             <Text
               style={[
                 styles.sectionTitle,
-                { color: isDark ? theme.white : theme.colors.grayPalette[900] },
+                { color: isDark ? theme.white : theme.colors.gray[900] },
               ]}
             >
               Guest Information
@@ -969,7 +961,6 @@ export default function ReservationModal() {
               </Text>
             </TouchableOpacity>
             <View style={styles.buttonContainer}>
-              {" "}
               <TouchableOpacity
                 style={styles.backButton}
                 onPress={() => setStep(2)}
@@ -977,12 +968,12 @@ export default function ReservationModal() {
                 <Ionicons
                   name="arrow-back"
                   size={20}
-                  color={theme.colors.grayPalette[700]}
+                  color={theme.colors.gray[700]}
                 />
                 <Text
                   style={[
                     styles.backButtonText,
-                    { color: theme.colors.grayPalette[700] },
+                    { color: theme.colors.gray[700] },
                   ]}
                 >
                   {t("common.back")}
@@ -1030,13 +1021,11 @@ export default function ReservationModal() {
                   style={[
                     styles.propertyTitle,
                     {
-                      color: isDark
-                        ? theme.white
-                        : theme.colors.grayPalette[900],
+                      color: isDark ? theme.white : theme.colors.gray[900],
                     },
                   ]}
                 >
-                  {property?.name}
+                  {property?.name || "Property name not available"}
                 </Text>
                 <Text
                   style={[
@@ -1057,8 +1046,8 @@ export default function ReservationModal() {
                   styles.divider,
                   {
                     backgroundColor: isDark
-                      ? theme.colors.grayPalette[700]
-                      : theme.colors.grayPalette[300],
+                      ? theme.colors.gray[700]
+                      : theme.colors.gray[300],
                   },
                 ]}
               />
@@ -1080,9 +1069,7 @@ export default function ReservationModal() {
                   style={[
                     styles.infoValue,
                     {
-                      color: isDark
-                        ? theme.white
-                        : theme.colors.grayPalette[900],
+                      color: isDark ? theme.white : theme.colors.gray[900],
                     },
                   ]}
                 >
@@ -1107,9 +1094,7 @@ export default function ReservationModal() {
                   style={[
                     styles.infoValue,
                     {
-                      color: isDark
-                        ? theme.white
-                        : theme.colors.grayPalette[900],
+                      color: isDark ? theme.white : theme.colors.gray[900],
                     },
                   ]}
                 >
@@ -1134,9 +1119,7 @@ export default function ReservationModal() {
                   style={[
                     styles.infoValue,
                     {
-                      color: isDark
-                        ? theme.white
-                        : theme.colors.grayPalette[900],
+                      color: isDark ? theme.white : theme.colors.gray[900],
                     },
                   ]}
                 >
@@ -1151,8 +1134,8 @@ export default function ReservationModal() {
                   styles.divider,
                   {
                     backgroundColor: isDark
-                      ? theme.colors.grayPalette[700]
-                      : theme.colors.grayPalette[300],
+                      ? theme.colors.gray[700]
+                      : theme.colors.gray[300],
                   },
                 ]}
               />
@@ -1183,20 +1166,19 @@ export default function ReservationModal() {
                   ]}
                 >
                   {getSymbol(currency)}
-                  {formatCurrency(propertyPrice)} x {calculateNights()} nights
+                  {formatCurrency(safePropertyPrice)} x {calculateNights()}
+                  nights
                 </Text>
                 <Text
                   style={[
                     styles.infoValue,
                     {
-                      color: isDark
-                        ? theme.white
-                        : theme.colors.grayPalette[900],
+                      color: isDark ? theme.white : theme.colors.gray[900],
                     },
                   ]}
                 >
                   {getSymbol(currency)}
-                  {formatCurrency(propertyPrice * calculateNights())}
+                  {formatCurrency(safePropertyPrice * calculateNights())}
                 </Text>
               </View>
 
@@ -1218,9 +1200,7 @@ export default function ReservationModal() {
                     style={[
                       styles.infoValue,
                       {
-                        color: isDark
-                          ? theme.white
-                          : theme.colors.grayPalette[900],
+                        color: isDark ? theme.white : theme.colors.gray[900],
                       },
                     ]}
                   >
@@ -1248,9 +1228,7 @@ export default function ReservationModal() {
                     style={[
                       styles.infoValue,
                       {
-                        color: isDark
-                          ? theme.white
-                          : theme.colors.grayPalette[900],
+                        color: isDark ? theme.white : theme.colors.gray[900],
                       },
                     ]}
                   >
@@ -1278,9 +1256,7 @@ export default function ReservationModal() {
                     style={[
                       styles.infoValue,
                       {
-                        color: isDark
-                          ? theme.white
-                          : theme.colors.grayPalette[900],
+                        color: isDark ? theme.white : theme.colors.gray[900],
                       },
                     ]}
                   >
@@ -1295,8 +1271,8 @@ export default function ReservationModal() {
                   styles.divider,
                   {
                     backgroundColor: isDark
-                      ? theme.colors.grayPalette[700]
-                      : theme.colors.grayPalette[300],
+                      ? theme.colors.gray[700]
+                      : theme.colors.gray[300],
                   },
                 ]}
               />
@@ -1306,9 +1282,7 @@ export default function ReservationModal() {
                   style={[
                     styles.totalLabel,
                     {
-                      color: isDark
-                        ? theme.white
-                        : theme.colors.grayPalette[900],
+                      color: isDark ? theme.white : theme.colors.gray[900],
                     },
                   ]}
                 >
@@ -1318,16 +1292,14 @@ export default function ReservationModal() {
                   style={[
                     styles.totalValue,
                     {
-                      color: isDark
-                        ? theme.white
-                        : theme.colors.grayPalette[900],
+                      color: isDark ? theme.white : theme.colors.gray[900],
                     },
                   ]}
                 >
                   {getSymbol(currency)}
                   {formatCurrency(
                     priceDetails?.totalPrice ||
-                      propertyPrice * calculateNights()
+                      safePropertyPrice * calculateNights()
                   )}
                 </Text>
               </View>
@@ -1337,8 +1309,8 @@ export default function ReservationModal() {
                   styles.divider,
                   {
                     backgroundColor: isDark
-                      ? theme.colors.grayPalette[700]
-                      : theme.colors.grayPalette[300],
+                      ? theme.colors.gray[700]
+                      : theme.colors.gray[300],
                   },
                 ]}
               />
@@ -1365,8 +1337,8 @@ export default function ReservationModal() {
                       ? theme.colors.gray[800]
                       : theme.colors.gray[100],
                     borderColor: isDark
-                      ? theme.colors.grayPalette[700]
-                      : theme.colors.grayPalette[300],
+                      ? theme.colors.gray[700]
+                      : theme.colors.gray[300],
                   },
                 ]}
               >
@@ -1378,9 +1350,7 @@ export default function ReservationModal() {
                   }
                   size={24}
                   color={
-                    isDark
-                      ? theme.colors.grayPalette[300]
-                      : theme.colors.grayPalette[700]
+                    isDark ? theme.colors.gray[300] : theme.colors.gray[700]
                   }
                 />
 
@@ -1389,9 +1359,7 @@ export default function ReservationModal() {
                     style={[
                       styles.paymentMethodTitle,
                       {
-                        color: isDark
-                          ? theme.white
-                          : theme.colors.grayPalette[900],
+                        color: isDark ? theme.white : theme.colors.gray[900],
                       },
                     ]}
                   >
@@ -1418,7 +1386,6 @@ export default function ReservationModal() {
             </View>
 
             <View style={styles.buttonContainer}>
-              {" "}
               <TouchableOpacity
                 style={styles.backButton}
                 onPress={() => setStep(3)}
@@ -1426,12 +1393,12 @@ export default function ReservationModal() {
                 <Ionicons
                   name="arrow-back"
                   size={20}
-                  color={theme.colors.grayPalette[700]}
+                  color={theme.colors.gray[700]}
                 />
                 <Text
                   style={[
                     styles.backButtonText,
-                    { color: theme.colors.grayPalette[700] },
+                    { color: theme.colors.gray[700] },
                   ]}
                 >
                   {t("common.back")}
@@ -1449,7 +1416,6 @@ export default function ReservationModal() {
                   <ActivityIndicator size="small" color={theme.white} />
                 ) : (
                   <>
-                    {" "}
                     <Text style={styles.reserveButtonText}>
                       {t("reservation.confirmAndPay")}
                     </Text>

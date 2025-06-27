@@ -1,170 +1,238 @@
 /**
- * Modal component for the Hoy application
- * Used for dialogs, settings panels, and other overlay content
+ * Enhanced Modal Component
+ * Full-screen modal with keyboard awareness, auto-scroll, and modern styling
+ * Perfect for forms, collections, and content that requires keyboard interaction
  */
 
-// React
-import React from "react";
-
-// React Native
+import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import {
   View,
-  StyleSheet,
-  Modal as RNModal,
-  Pressable,
   TouchableOpacity,
+  Modal,
+  StyleSheet,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-// Context
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
+import { Text } from "@shared/components/base";
+import { spacing } from "@shared/constants";
+import { ModalProps, ModalRef } from "./Modal.types";
 
-// Constants
-import { radius, spacing } from "@shared/constants";
+const ModalComponent = forwardRef<ModalRef, ModalProps>(
+  (
+    {
+      visible,
+      onClose,
+      title,
+      children,
+      showCloseButton = true,
+      animationType = "slide",
+      presentationStyle = "pageSheet",
+      contentStyle,
+      enableKeyboardAware = true,
+      enableAutoScroll = true,
+      testID,
+    },
+    ref
+  ) => {
+    const { theme, isDark } = useTheme();
+    const scrollViewRef = useRef<ScrollView>(null);
 
-// Base components
-import { Text } from "../../base/Text";
-import { Icon } from "../../base/Icon";
+    // Expose scroll methods through ref
+    useImperativeHandle(ref, () => ({
+      scrollToEnd: (animated = true) => {
+        setTimeout(() => {
+          scrollViewRef.current?.scrollToEnd({ animated });
+        }, 100);
+      },
+      scrollTo: (options) => {
+        scrollViewRef.current?.scrollTo(options);
+      },
+    }));
 
-// Types
-import { ModalProps } from "./Modal.types";
+    const renderHeader = () => {
+      if (!title && !showCloseButton) return null;
 
-const Modal: React.FC<ModalProps> = ({
-  visible,
-  onClose,
-  title,
-  children,
-  showCloseButton = true,
-  animationType = "fade",
-  contentStyle,
-  testID,
-}) => {
-  const { theme, isDark } = useTheme();
-
-  const renderHeader = () => {
-    if (!title && !showCloseButton) return null;
-
-    return (
-      <View
-        style={[
-          styles.header,
-          {
-            borderBottomColor: isDark
-              ? theme.colors.grayPalette[700]
-              : theme.colors.grayPalette[200],
-          },
-        ]}
-      >
-        {title && (
-          <Text
-            variant="h3"
-            weight="semibold"
-            color={
-              isDark
-                ? theme.colors.grayPalette[50]
-                : theme.colors.grayPalette[900]
-            }
-            numberOfLines={1}
-            style={styles.title}
-          >
-            {title}
-          </Text>
-        )}{" "}
-        {showCloseButton && (
-          <TouchableOpacity
-            onPress={onClose}
-            style={styles.closeButton}
-            accessibilityLabel="Close modal"
-            accessibilityRole="button"
-          >
-            <Icon
-              name="close"
-              size={20}
-              color={
-                isDark
-                  ? theme.colors.grayPalette[400]
-                  : theme.colors.grayPalette[600]
-              }
-            />
-          </TouchableOpacity>
-        )}
-      </View>
-    );
-  };
-
-  return (
-    <RNModal
-      visible={visible}
-      transparent={true}
-      animationType={animationType}
-      onRequestClose={onClose}
-      statusBarTranslucent={true}
-      testID={testID}
-    >
-      <View style={styles.overlay}>
-        <Pressable style={styles.backdrop} onPress={onClose} />{" "}
+      return (
         <View
           style={[
-            styles.contentContainer,
+            styles.header,
             {
-              backgroundColor: isDark
-                ? theme.colors.grayPalette[800]
-                : theme.colors.grayPalette[50],
-              shadowColor: isDark
-                ? theme.colors.grayPalette[900]
-                : theme.colors.grayPalette[900],
+              borderBottomColor: isDark
+                ? theme.colors.gray[700]
+                : theme.colors.gray[200],
+              backgroundColor: isDark ? theme.colors.gray[900] : "white",
+            },
+          ]}
+        >
+          {showCloseButton && (
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={onClose}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              accessibilityLabel="Close modal"
+              accessibilityRole="button"
+            >
+              <Ionicons
+                name="close"
+                size={24}
+                color={isDark ? theme.colors.gray[50] : theme.colors.gray[900]}
+              />
+            </TouchableOpacity>
+          )}
+
+          {title && (
+            <Text
+              variant="h3"
+              weight="semibold"
+              style={[
+                styles.title,
+                {
+                  color: isDark
+                    ? theme.colors.gray[50]
+                    : theme.colors.gray[900],
+                },
+              ]}
+            >
+              {title}
+            </Text>
+          )}
+
+          {showCloseButton && <View style={styles.placeholder} />}
+        </View>
+      );
+    };
+
+    const renderContent = () => {
+      if (enableAutoScroll) {
+        return (
+          <ScrollView
+            ref={scrollViewRef}
+            style={[
+              styles.scrollContent,
+              {
+                backgroundColor: isDark ? theme.colors.gray[900] : "white",
+              },
+              contentStyle,
+            ]}
+            contentContainerStyle={styles.scrollContentContainer}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="interactive"
+          >
+            {children}
+          </ScrollView>
+        );
+      }
+
+      return (
+        <View
+          style={[
+            styles.content,
+            {
+              backgroundColor: isDark ? theme.colors.gray[900] : "white",
             },
             contentStyle,
           ]}
         >
-          {renderHeader()}
-          <View style={styles.content}>{children}</View>
+          {children}
         </View>
+      );
+    };
+
+    const modalContent = (
+      <View
+        style={[
+          styles.modalContainer,
+          {
+            backgroundColor: isDark ? theme.colors.gray[900] : "white",
+          },
+        ]}
+      >
+        {renderHeader()}
+        {renderContent()}
       </View>
-    </RNModal>
-  );
-};
+    );
+
+    return (
+      <Modal
+        visible={visible}
+        animationType={animationType}
+        presentationStyle={presentationStyle}
+        onRequestClose={onClose}
+        testID={testID}
+      >
+        {enableKeyboardAware ? (
+          <KeyboardAvoidingView
+            style={styles.keyboardAvoidingView}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+          >
+            {modalContent}
+          </KeyboardAvoidingView>
+        ) : (
+          modalContent
+        )}
+      </Modal>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
-  overlay: {
+  keyboardAvoidingView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
-  backdrop: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  contentContainer: {
-    width: "90%",
-    maxWidth: 400,
-    borderRadius: radius.lg,
-    overflow: "hidden",
-    elevation: 5,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "transparent",
+    // Ensure z-index is below the toast's z-index (9999)
+    zIndex: 9000,
   },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+    paddingVertical: spacing.lg,
     borderBottomWidth: 1,
+    backgroundColor: "white",
+  },
+  closeButton: {
+    width: 32,
+    height: 32,
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     flex: 1,
+    textAlign: "center",
+    marginHorizontal: spacing.md,
   },
-  closeButton: {
-    padding: spacing.xs,
+  placeholder: {
+    width: 32,
+    height: 32,
+  },
+  scrollContent: {
+    flex: 1,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
+    backgroundColor: "white",
+  },
+  scrollContentContainer: {
+    flexGrow: 1,
+    paddingBottom: spacing.xl * 2,
   },
   content: {
-    padding: spacing.lg,
+    flex: 1,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
+    backgroundColor: "white",
   },
 });
 
-export default Modal;
+ModalComponent.displayName = "Modal";
+
+export default ModalComponent;

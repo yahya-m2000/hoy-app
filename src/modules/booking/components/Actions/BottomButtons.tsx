@@ -4,8 +4,9 @@
  */
 
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { useTheme } from "@shared/context/ThemeContext";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text } from "@shared/components/base/Text";
+import { useTheme } from "@shared/hooks/useTheme";
 import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
 import { useUserRole } from "@shared/context/UserRoleContext";
@@ -20,8 +21,7 @@ interface BottomButtonsProps {
 const BottomButtons: React.FC<BottomButtonsProps> = ({ bookingId }) => {
   const { theme } = useTheme();
   const { t } = useTranslation();
-  const { isHost } = useUserRole();
-  // Navigate to booking details
+  const { isHost } = useUserRole(); // Navigate to booking details
   const handleViewBooking = () => {
     if (!bookingId) return;
     router.push(`/(tabs)/traveler/bookings/${bookingId}`);

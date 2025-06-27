@@ -10,6 +10,7 @@ import React, {
   useState,
   ReactNode,
 } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   hasValidAuthentication,
   setAuthStateChangeCallback,
@@ -42,6 +43,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
   const [isAuthChecked, setIsAuthChecked] = useState(false);
+  const queryClient = useQueryClient();
   const checkAuthenticationState = async () => {
     try {
       const authenticated = await hasValidAuthentication();
@@ -51,13 +53,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Only log once during initial check
       if (!isAuthChecked) {
         if (!authenticated) {
-          console.log("🚫 User not authenticated");
+          console.log("User not authenticated");
         } else {
-          console.log("✅ User authenticated");
+          console.log("User authenticated");
         }
       }
     } catch (error) {
-      console.error("❌ Error checking authentication:", error);
+      console.error("Error checking authentication:", error);
       setIsUserAuthenticated(false);
       setIsAuthChecked(true);
     }
@@ -65,22 +67,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const markAsUnauthenticated = () => {
     setIsUserAuthenticated(false);
     setIsAuthChecked(true);
-    console.log("🚫 Marked as unauthenticated");
+    console.log("Marked as unauthenticated");
   };
   const markAsAuthenticated = () => {
     setIsUserAuthenticated(true);
     setIsAuthChecked(true);
-    console.log("✅ Marked as authenticated");
+    console.log("Marked as authenticated");
   };
 
   const login = async (email: string, password: string): Promise<void> => {
     try {
-      console.log("🔐 Starting login process...");
+      console.log("Starting login process...");
 
       // Call the auth service to perform login
       const loginResponse = await authService.login({ email, password });
 
-      console.log("🔐 Login API call successful, storing tokens...");
+      console.log("Login API call successful, storing tokens...");
 
       // Store tokens in AsyncStorage
       await saveTokenToStorage(loginResponse.accessToken);
@@ -99,33 +101,49 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         loginResponse.user.id || loginResponse.user._id,
         loginResponse.user.email
       );
-      console.log("✅ Tokens stored successfully");
+      console.log("Tokens stored successfully");
 
       // Debug: Check what's actually stored
       await debugTokenStorage();
 
       // Update auth state
       markAsAuthenticated();
-      console.log("✅ Login completed successfully");
+      console.log("Login completed successfully");
     } catch (error) {
-      console.error("❌ Login failed:", error);
+      console.error("Login failed:", error);
       throw error;
     }
   };
-
   const logout = async (): Promise<void> => {
     try {
       console.log("🔓 Starting logout process...");
+
+      // Call server logout endpoint first
+      try {
+        await authService.logout();
+        console.log("✅ Server logout successful");
+      } catch (error) {
+        console.warn(
+          "⚠️ Server logout failed, continuing with local logout:",
+          error
+        );
+        // Continue with local logout even if server call fails
+      }
 
       // Clear tokens from storage
       await clearTokensFromStorage();
 
       // Mark tokens as invalid
       await markTokensAsInvalid();
+
       // Clear user identity
       await clearUserIdentity();
 
       console.log("✅ Tokens cleared successfully");
+
+      // Clear all React Query cache to remove user-specific data
+      queryClient.clear();
+      console.log("✅ React Query cache cleared");
 
       // Update auth state
       markAsUnauthenticated();
@@ -133,7 +151,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.log("✅ Logout completed successfully");
     } catch (error) {
       console.error("❌ Logout failed:", error);
-      // Still mark as unauthenticated even if clearing fails
+      // Still mark as unauthenticated and clear cache even if clearing fails
+      queryClient.clear();
       markAsUnauthenticated();
     }
   }; // Check authentication once on mount

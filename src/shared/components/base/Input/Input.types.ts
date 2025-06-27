@@ -26,8 +26,8 @@ export interface BaseInputProps {
   multiline?: boolean;
   numberOfLines?: number;
   secureTextEntry?: boolean;
-  keyboardType?: any;
-  autoCapitalize?: any;
+  keyboardType?: RNTextInputProps["keyboardType"];
+  autoCapitalize?: RNTextInputProps["autoCapitalize"];
   autoCorrect?: boolean;
 }
 

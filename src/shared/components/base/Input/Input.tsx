@@ -1,27 +1,25 @@
 /**
  * Base Input component for the Hoy application
- * Supports icons, error states, and field validation
+ * Uses React Native Elements Input with custom styling
  */
 
 // React
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 
 // React Native
-import {
-  View,
-  TextInput as RNTextInput,
-  StyleSheet,
-  Pressable,
-} from "react-native";
+import { Animated } from "react-native";
+
+// React Native Elements
+import { Input as RNEInput } from "@rneui/themed";
 
 // Context
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Constants
 import { spacing, radius, fontSize, fontWeight } from "@shared/constants";
 
 // Base components
-import { Text } from "../Text";
+import { Container } from "../Container";
 
 // Types
 import type { BaseInputProps } from "./Input.types";
@@ -51,103 +49,119 @@ export const Input: React.FC<BaseInputProps> = ({
 }) => {
   const { theme } = useTheme();
   const [isFocused, setIsFocused] = useState(false);
+  const labelAnimation = useRef(new Animated.Value(value ? 1 : 0)).current;
 
-  const styles = StyleSheet.create({
-    container: {
-      marginBottom: error ? spacing.xs : spacing.md,
+  // Animate label position and size
+  const animateLabel = useCallback(
+    (toTop: boolean) => {
+      Animated.timing(labelAnimation, {
+        toValue: toTop ? 1 : 0,
+        duration: 200,
+        useNativeDriver: false,
+      }).start();
     },
-    label: {
-      fontSize: fontSize.sm,
-      fontWeight: fontWeight.medium,
-      color: theme.text.secondary,
-      marginBottom: spacing.xs,
+    [labelAnimation]
+  );
+
+  // Handle focus
+  const handleFocus = useCallback(() => {
+    setIsFocused(true);
+    animateLabel(true);
+  }, [animateLabel]);
+
+  // Handle blur
+  const handleBlur = useCallback(() => {
+    setIsFocused(false);
+    if (!value) {
+      animateLabel(false);
+    }
+  }, [value, animateLabel]);
+
+  // Handle text change
+  const handleTextChange = useCallback(
+    (text: string) => {
+      if (onChangeText) {
+        onChangeText(text);
+      }
+      if (text && !isFocused) {
+        animateLabel(true);
+      } else if (!text && !isFocused) {
+        animateLabel(false);
+      }
     },
-    inputContainer: {
-      flexDirection: "row",
-      alignItems: multiline ? "flex-start" : "center",
-      backgroundColor: theme.surface,
-      borderRadius: radius.md,
-      borderWidth: 1,
-      borderColor: error
-        ? theme.error
-        : isFocused
-        ? theme.primary
-        : theme.border,
-      paddingHorizontal: spacing.md,
-      paddingVertical: multiline ? spacing.md : spacing.sm,
-      minHeight: multiline ? 80 : 50,
-    },
-    input: {
-      flex: 1,
-      fontSize: fontSize.md,
-      color: theme.text.primary,
-      paddingVertical: 0,
-      textAlignVertical: multiline ? "top" : "center",
-    },
-    iconContainer: {
-      marginHorizontal: spacing.xs,
-    },
-    leftIcon: {
-      marginRight: spacing.xs,
-      marginLeft: 0,
-    },
-    rightIcon: {
-      marginLeft: spacing.xs,
-      marginRight: 0,
-    },
-    error: {
-      fontSize: fontSize.sm,
-      color: theme.error,
-      marginTop: spacing.xs,
-      marginLeft: spacing.xs,
-    },
-    disabled: {
-      opacity: 0.6,
-    },
-  });
+    [onChangeText, isFocused, animateLabel]
+  );
 
   return (
-    <View style={[styles.container, style]}>
-      {label && (
-        <Text style={[styles.label, labelStyle]}>
-          {label}
-          {required && <Text style={{ color: theme.error }}> *</Text>}
-        </Text>
-      )}
-      <View style={[styles.inputContainer, disabled && styles.disabled]}>
-        {leftIcon && (
-          <View style={[styles.iconContainer, styles.leftIcon]}>
-            {leftIcon}
-          </View>
-        )}
-        <RNTextInput
-          style={[styles.input, inputStyle]}
-          value={value}
-          onChangeText={onChangeText}
-          placeholder={placeholder}
-          placeholderTextColor={theme.secondary}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          editable={!disabled}
-          multiline={multiline}
-          numberOfLines={numberOfLines}
-          secureTextEntry={secureTextEntry}
-          keyboardType={keyboardType}
-          autoCapitalize={autoCapitalize}
-          autoCorrect={autoCorrect}
-          {...props}
-        />
-        {rightIcon && (
-          <Pressable
-            style={[styles.iconContainer, styles.rightIcon]}
-            onPress={onRightIconPress}
-            disabled={!onRightIconPress}
-          >
-            {rightIcon}
-          </Pressable>
-        )}
-      </View>
-      {error && <Text style={[styles.error, errorStyle]}>{error}</Text>}
-    </View>
+    <Container style={style} marginBottom={error ? "xs" : "md"}>
+      <RNEInput
+        value={value}
+        onChangeText={handleTextChange}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        placeholder={placeholder}
+        label={label && `${label}${required ? " *" : ""}`}
+        errorMessage={error}
+        disabled={disabled}
+        multiline={multiline}
+        numberOfLines={numberOfLines}
+        secureTextEntry={secureTextEntry}
+        keyboardType={keyboardType}
+        autoCapitalize={autoCapitalize}
+        autoCorrect={autoCorrect}
+        // Custom styling
+        containerStyle={{
+          paddingHorizontal: 0,
+          marginBottom: 0,
+        }}
+        inputContainerStyle={{
+          backgroundColor: theme.background,
+          borderColor: theme.text?.primary || theme.primary,
+          borderWidth: 1,
+          borderRadius: radius.md,
+          paddingHorizontal: spacing.md,
+          minHeight: multiline ? 100 : 59, // Increased minimum height for better pressability
+          borderBottomWidth: 1, // Override RNE default
+        }}
+        inputStyle={{
+          fontSize: fontSize.md, // Changed to body/md size as requested
+          color: theme.text?.primary || theme.primary,
+          fontWeight: fontWeight.medium,
+          paddingVertical: spacing.sm,
+          paddingLeft: leftIcon ? spacing.sm : 0, // Better spacing for placeholder alignment
+          ...inputStyle,
+        }}
+        labelStyle={{
+          fontSize: fontSize.sm,
+          color: theme.text?.secondary || theme.secondary,
+          fontWeight: fontWeight.medium,
+          marginBottom: spacing.xs,
+          ...labelStyle,
+        }}
+        errorStyle={{
+          fontSize: fontSize.xs,
+          color: theme.error,
+          marginTop: spacing.xs,
+          marginLeft: spacing.xs,
+          ...errorStyle,
+        }}
+        placeholderTextColor={theme.text?.secondary || theme.secondary}
+        renderErrorMessage={!!error}
+        // Custom icon rendering
+        leftIconContainerStyle={{
+          marginRight: spacing.xs,
+        }}
+        rightIconContainerStyle={{
+          marginLeft: spacing.xs,
+        }}
+        {...(leftIcon && {
+          leftIcon: leftIcon as any,
+        })}
+        {...(rightIcon && {
+          rightIcon: rightIcon as any,
+        })}
+        {...props}
+      />
+    </Container>
   );
 };

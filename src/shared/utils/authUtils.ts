@@ -91,30 +91,53 @@ export const withAuth = (
 
 /**
  * Perform complete logout process
- * @param logoutFn - Logout function from auth service to avoid circular import
  */
-export const performLogout = async (
-  logoutFn?: () => Promise<void>
-): Promise<void> => {
+export const performLogout = async (): Promise<void> => {
   try {
-    // Call server logout endpoint if provided
-    if (logoutFn) {
-      await logoutFn();
+    console.log("🔓 Starting complete logout process...");
+
+    // First, try to call server logout endpoint
+    try {
+      const { logout: serverLogout } = await import(
+        "@shared/services/api/auth"
+      );
+      await serverLogout();
+      console.log("✅ Server logout successful");
+    } catch (error) {
+      console.warn(
+        "⚠️ Server logout failed, continuing with local logout:",
+        error
+      );
+      // Continue with local logout even if server call fails
     }
-  } catch (error) {
-    console.warn("Server logout failed:", error);
-    // Continue with local logout even if server call fails
-  }
-  try {
+
     // Clear all local auth data
     await clearTokensFromStorage();
+    console.log("✅ Local tokens cleared");
 
     // Emit logout event to update app state
     eventEmitter.emit(AppEvents.AUTH_LOGOUT);
+    console.log("✅ Logout event emitted");
+
+    // Small delay to ensure event handlers complete
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    // Emit logout complete event
+    eventEmitter.emit(AppEvents.AUTH_LOGOUT_COMPLETE);
+    console.log("✅ Logout complete event emitted");
 
     console.log("✅ Logout completed successfully");
   } catch (error) {
     console.error("❌ Error during logout:", error);
+
+    // Even if there's an error, emit the logout event to ensure app state updates
+    try {
+      eventEmitter.emit(AppEvents.AUTH_LOGOUT);
+      eventEmitter.emit(AppEvents.AUTH_LOGOUT_COMPLETE);
+    } catch (eventError) {
+      console.error("❌ Error emitting logout events:", eventError);
+    }
+
     throw error;
   }
 };

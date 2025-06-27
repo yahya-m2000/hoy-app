@@ -8,7 +8,10 @@
  * @param decimalPlaces Number of decimal places to show (default: 2)
  * @returns Formatted number string
  */
-export const formatCurrency = (amount: number, decimalPlaces = 2): string => {
+export const formatCurrency = (amount: number | null | undefined, decimalPlaces = 2): string => {
+  if (amount === null || amount === undefined || isNaN(amount)) {
+    return "0.00";
+  }
   return amount.toFixed(decimalPlaces).replace(/\d(?=(\d{3})+\.)/g, "$&,");
 };
 

@@ -1,291 +1,201 @@
-﻿/**
- * Search Results screen for the Hoy application
- * Displays properties matching search criteria
+/**
+ * Search Results Screen
+ * Displays properties based on search criteria with filtering and sorting options
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { StyleSheet, View } from "react-native";
-import { useTheme } from "@shared/context";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useTranslation } from "react-i18next";
-import { StatusBar } from "expo-status-bar";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import type { PropertyType } from "@shared/types";
-import { useProperties } from "@shared/hooks";
-import { searchProperties } from "@shared/services/api/properties";
-import { formatCoordinateParams } from "@shared/utils/validation";
-
+import React, { useEffect, useMemo } from "react";
 import {
-  SearchSummary,
-  FiltersBar,
-  PropertyList,
-  LoadingState,
-  SearchEmptyState,
-  type FilterOption,
-  type SortOrder,
-} from "@modules/search/components";
+  View,
+  StyleSheet,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  RefreshControl,
+} from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
+import { Ionicons } from "@expo/vector-icons";
 
-import { parseLocation } from "@shared/utils";
-import { spacing } from "@shared/constants";
+// Context and hooks
+import { useToast } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
+import { useProperties, type SearchParams } from "@shared/hooks";
+
+// Components
+import {
+  LoadingSpinner,
+  EmptyState,
+  PropertyImageContainer,
+} from "@shared/components";
+
+// Types
+import type { PropertyType } from "@shared/types/property";
+
+// Constants
+import { fontSize, fontWeight, spacing, wireframe } from "@shared/constants";
 
 export default function SearchResultsScreen() {
-  const insets = useSafeAreaInsets();
   const { theme, isDark } = useTheme();
   const { t } = useTranslation();
   const router = useRouter();
+  const { showToast } = useToast();
   const params = useLocalSearchParams();
 
-  // Extract search parameters
-  const location = typeof params.location === "string" ? params.location : "";
-  const startDate =
-    typeof params.startDate === "string" ? params.startDate : "";
-  const endDate = typeof params.endDate === "string" ? params.endDate : "";
-  const adults =
-    typeof params.adults === "string" ? parseInt(params.adults, 10) : 2;
-  const children =
-    typeof params.children === "string" ? parseInt(params.children, 10) : 0;
-  const rooms =
-    typeof params.rooms === "string" ? parseInt(params.rooms, 10) : 1;
+  // Parse search parameters from URL
+  const searchParams: SearchParams = useMemo(() => {
+    const searchQuery: SearchParams = {};
 
-  // Extract coordinates if available
-  const latitude =
-    typeof params.latitude === "string"
-      ? parseFloat(params.latitude)
-      : undefined;
-  const longitude =
-    typeof params.longitude === "string"
-      ? parseFloat(params.longitude)
-      : undefined;
+    if (params.location && typeof params.location === "string") {
+      searchQuery.location = params.location;
+    }
 
-  // Check if we have valid coordinates
-  const hasCoordinates = !isNaN(Number(latitude)) && !isNaN(Number(longitude));
+    if (params.startDate && typeof params.startDate === "string") {
+      searchQuery.startDate = params.startDate;
+    }
 
-  // Log coordinate information for debugging
+    if (params.endDate && typeof params.endDate === "string") {
+      searchQuery.endDate = params.endDate;
+    }
+
+    if (params.adults && typeof params.adults === "string") {
+      const adults = parseInt(params.adults, 10);
+      if (!isNaN(adults)) {
+        searchQuery.guests =
+          adults +
+          (params.children ? parseInt(params.children as string, 10) || 0 : 0);
+      }
+    }
+
+    if (params.rooms && typeof params.rooms === "string") {
+      const rooms = parseInt(params.rooms, 10);
+      if (!isNaN(rooms)) {
+        searchQuery.rooms = rooms;
+      }
+    }
+
+    // Include coordinates if available
+    if (params.latitude && params.longitude) {
+      const lat = parseFloat(params.latitude as string);
+      const lng = parseFloat(params.longitude as string);
+      if (!isNaN(lat) && !isNaN(lng)) {
+        searchQuery.coordinates = {
+          latitude: lat,
+          longitude: lng,
+          radius: 50, // 50km radius
+        };
+      }
+    }
+
+    return searchQuery;
+  }, [params]);
+
+  // Use the properties hook for searching
+  const { properties, loading, error, fetchProperties } =
+    useProperties(searchParams);
+
+  // Show error toast if search fails
   useEffect(() => {
-    console.log(
-      `Search location: ${location}, has coordinates: ${hasCoordinates}`
-    );
-    if (hasCoordinates) {
-      console.log(`Coordinates: ${latitude}, ${longitude}`);
-    }
-  }, [location, hasCoordinates, latitude, longitude]); // Parse location string into city, state, and country components
-  const { city, state, country } = useMemo(() => {
-    if (!location) return { city: "", state: "", country: "" };
-
-    const parsed = parseLocation(location);
-    console.log(`Parsed location "${location}":`, {
-      city: parsed.city,
-      state: parsed.state,
-      country: parsed.country,
-    });
-
-    return parsed;
-  }, [location]);
-
-  const propertyType =
-    typeof params.propertyType === "string" ? params.propertyType : "";
-  // State variables
-  const [activeFilter, setActiveFilter] = useState<FilterOption>("all");
-  const [sortOrder] = useState<SortOrder>("desc");
-  const [showMap, setShowMap] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
-  const [manualResults, setManualResults] = useState<PropertyType[]>([]);
-  const [isDirectLoaded, setIsDirectLoaded] = useState(false); // Use custom hook to fetch properties - only pass parsed components, not the full location
-  const { properties, loading, error, fetchProperties } = useProperties({
-    city,
-    state,
-    country,
-    startDate,
-    endDate,
-    guests: adults + children,
-    rooms,
-    propertyType,
-  });
-  // Use manual results if loaded directly, otherwise use hook results
-  const currentProperties = isDirectLoaded ? manualResults : properties;
-
-  // Filter properties based on active filter
-  const filteredProperties = useMemo(() => {
-    if (activeFilter === "all") return currentProperties;
-
-    return currentProperties.filter((property) => {
-      switch (activeFilter) {
-        case "rating":
-          return (property.rating || 0) >= 4.5;
-        case "price":
-          const priceAmount =
-            typeof property.price === "object"
-              ? property.price.amount
-              : property.price || 0;
-          return priceAmount <= 200; // Filter for affordable properties
-        case "newest":
-          return true; // Could filter by creation date if available
-        default:
-          return true;
-      }
-    });
-  }, [currentProperties, activeFilter]);
-  // Sort properties
-  const filteredAndSortedProperties = useMemo(() => {
-    const sorted = [...filteredProperties];
-    sorted.sort((a, b) => {
-      switch (sortOrder) {
-        case "asc":
-          const priceA =
-            typeof a.price === "object" ? a.price.amount : a.price || 0;
-          const priceB =
-            typeof b.price === "object" ? b.price.amount : b.price || 0;
-          return priceA - priceB;
-        case "desc":
-          const priceA2 =
-            typeof a.price === "object" ? a.price.amount : a.price || 0;
-          const priceB2 =
-            typeof b.price === "object" ? b.price.amount : b.price || 0;
-          return priceB2 - priceA2;
-        default:
-          return 0;
-      }
-    });
-    return sorted;
-  }, [filteredProperties, sortOrder]);
-
-  // Load properties when search changes
-  useEffect(() => {
-    if (!isDirectLoaded && location) {
-      fetchProperties();
-    }
-  }, [
-    fetchProperties,
-    location,
-    startDate,
-    endDate,
-    adults,
-    children,
-    rooms,
-    propertyType,
-    isDirectLoaded,
-  ]);
-
-  // Direct search function for manual searches
-  const performDirectSearch = useCallback(async () => {
-    if (!location) return;
-
-    try {
-      setRefreshing(true);
-      console.log("Performing direct search with params:", {
-        location,
-        city,
-        state,
-        country,
-        startDate,
-        endDate,
-        guests: adults + children,
-        rooms,
-        propertyType,
-        latitude: hasCoordinates ? latitude : undefined,
-        longitude: hasCoordinates ? longitude : undefined,
+    if (error) {
+      showToast({
+        message: error,
+        type: "error",
+        duration: 4000,
       });
-
-      let searchParams: any = {
-        city,
-        state,
-        country,
-        startDate,
-        endDate,
-        guests: adults + children,
-        rooms,
-        propertyType,
-      };
-
-      // Add coordinates if available and valid
-      if (hasCoordinates) {
-        const formattedCoords = formatCoordinateParams(latitude!, longitude!);
-        searchParams = { ...searchParams, ...formattedCoords };
-      }
-
-      const results = await searchProperties(searchParams);
-      console.log(`Direct search returned ${results?.length || 0} properties`);
-
-      setManualResults(results || []);
-      setIsDirectLoaded(true);
-    } catch (error) {
-      console.error("Direct search error:", error);
-      setManualResults([]);
-    } finally {
-      setRefreshing(false);
     }
-  }, [
-    location,
-    city,
-    state,
-    country,
-    startDate,
-    endDate,
-    adults,
-    children,
-    rooms,
-    propertyType,
-    hasCoordinates,
-    latitude,
-    longitude,
-  ]);
-  // Handle property press
-  const handlePropertyPress = useCallback(
-    (property: PropertyType) => {
-      router.push({
-        pathname: "/(tabs)/traveler/search/[id]" as any,
-        params: {
-          propertyId: property._id,
-          title: property.name || property.title,
-          pricePerNight:
-            (typeof property.price === "object"
-              ? property.price.amount
-              : property.price
-            )?.toString() || "0",
-          averageRating: property.rating?.toString() || "0",
-          totalReviews: property.reviewCount?.toString() || "0",
-          // Pass search parameters for context
-          searchLocation: location,
-          searchStartDate: startDate,
-          searchEndDate: endDate,
-          searchAdults: adults.toString(),
-          searchChildren: children.toString(),
-          returnTo: "/(tabs)/traveler/search",
-          searchRooms: rooms.toString(),
-        },
-      });
-    },
-    [router, location, startDate, endDate, adults, children, rooms]
-  );
-
-  // Apply filter
-  const applyFilter = useCallback((filter: FilterOption) => {
-    setActiveFilter(filter);
-  }, []);
-
-  // Toggle map view
-  const toggleMapView = useCallback(() => {
-    setShowMap(!showMap);
-  }, [showMap]);
+  }, [error, showToast]); // Handle property press
+  const handlePropertyPress = (property: PropertyType) => {
+    console.log("Navigating to property:", property._id);
+    router.push({
+      pathname: "/(tabs)/traveler/search/property/[id]",
+      params: {
+        property: JSON.stringify(property),
+        returnTo: "/(tabs)/traveler/search/results",
+      },
+    });
+  };
 
   // Handle refresh
-  const onRefresh = useCallback(() => {
-    if (isDirectLoaded) {
-      performDirectSearch();
-    } else {
-      fetchProperties();
-    }
-  }, [isDirectLoaded, performDirectSearch, fetchProperties]);
-  // Perform direct search on mount if we have valid search parameters
-  useEffect(() => {
-    if (location && !isDirectLoaded) {
-      performDirectSearch();
-    }
-  }, [location, isDirectLoaded, performDirectSearch]);
+  const handleRefresh = () => {
+    fetchProperties();
+  };
 
-  // Determine what to show
-  const showLoading = loading || refreshing;
-  const showEmpty = !showLoading && filteredAndSortedProperties.length === 0;
+  // Render search summary
+  const renderSearchSummary = () => {
+    const locationText = (params.location as string) || t("search.anyLocation");
+    const datesText = (params.displayDates as string) || t("search.anyDates");
+    const guestsText =
+      (params.displayTravelers as string) || t("search.anyGuests");
+
+    return (
+      <View
+        style={[
+          styles.searchSummary,
+          {
+            backgroundColor: isDark
+              ? theme.colors.gray[800]
+              : wireframe.surface,
+          },
+        ]}
+      >
+        <View style={styles.searchInfo}>
+          <Text
+            style={[styles.searchLocation, { color: theme.colors.gray[900] }]}
+            numberOfLines={1}
+          >
+            {locationText}
+          </Text>
+          <Text
+            style={[styles.searchDetails, { color: theme.colors.gray[600] }]}
+          >
+            {datesText} • {guestsText}
+          </Text>
+        </View>
+
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => router.back()}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <Ionicons
+            name="create-outline"
+            size={20}
+            color={theme.colors.gray[600]}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  // Render results count
+  const renderResultsCount = () => {
+    if (loading) return null;
+
+    return (
+      <View style={styles.resultsCount}>
+        <Text style={[styles.countText, { color: theme.colors.gray[600] }]}>
+          {properties.length === 0
+            ? t("search.noResults")
+            : t("search.resultsFound", { count: properties.length })}
+        </Text>
+      </View>
+    );
+  };
+  // Render empty state
+  const renderEmptyState = () => (
+    <EmptyState
+      icon="search-outline"
+      title={t("search.noPropertiesFound")}
+      message={t("search.tryAdjustingFilters")}
+      action={{
+        label: t("search.newSearch"),
+        onPress: () => router.back(),
+      }}
+    />
+  );
+
+  if (loading && properties.length === 0) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <View
@@ -294,60 +204,253 @@ export default function SearchResultsScreen() {
         {
           backgroundColor: isDark
             ? theme.colors.gray[900]
-            : theme.colors.gray[50],
-          paddingTop: insets.top,
+            : wireframe.background,
         },
       ]}
     >
-      <StatusBar style={isDark ? "light" : "dark"} />
-
-      <SearchSummary
-        resultsCount={filteredAndSortedProperties.length}
-        location={location}
-        guests={adults + children}
-        dates={
-          startDate && endDate
-            ? `${new Date(startDate).toLocaleDateString()} - ${new Date(
-                endDate
-              ).toLocaleDateString()}`
-            : undefined
+      <FlatList
+        data={properties}
+        keyExtractor={(item) => item._id}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={[
+              styles.propertyCard,
+              {
+                backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
+              },
+            ]}
+            onPress={() => handlePropertyPress(item)}
+            activeOpacity={0.7}
+          >
+            <PropertyCard property={item} />
+          </TouchableOpacity>
+        )}
+        ListHeaderComponent={
+          <View>
+            {renderSearchSummary()}
+            {renderResultsCount()}
+          </View>
+        }
+        ListEmptyComponent={!loading ? renderEmptyState : null}
+        contentContainerStyle={
+          properties.length === 0 ? styles.emptyContainer : styles.listContent
+        }
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={loading}
+            onRefresh={handleRefresh}
+            tintColor={theme.colors.primary}
+            colors={[theme.colors.primary]}
+          />
         }
       />
-      <FiltersBar
-        activeFilter={activeFilter}
-        sortOrder={sortOrder}
-        showMap={showMap}
-        onFilterChange={applyFilter}
-        onToggleMap={toggleMapView}
-      />
-      {showLoading && (
-        <LoadingState
-          message={t("search.finding") || "Finding perfect properties..."}
-        />
-      )}
-      {showEmpty && (
-        <SearchEmptyState
-          isError={!!error}
-          errorMessage={error || undefined}
-          onRetry={error ? onRefresh : undefined}
-        />
-      )}
-      {!showLoading && !showEmpty && (
-        <PropertyList
-          properties={filteredAndSortedProperties}
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-          onPropertyPress={handlePropertyPress}
-        />
-      )}
     </View>
   );
 }
 
+// Simplified PropertyCard component for search results
+const PropertyCard: React.FC<{ property: PropertyType }> = ({ property }) => {
+  const { theme } = useTheme();
+
+  const price =
+    typeof property.price === "object" ? property.price.amount : property.price;
+  const currency =
+    typeof property.price === "object" ? property.price.currency : "USD";
+
+  return (
+    <View style={styles.card}>
+      <View style={styles.cardContainer}>
+        {/* Property Image */}
+        <View style={styles.imageContainer}>
+          <PropertyImageContainer
+            images={property.images}
+            containerStyle={styles.imageWrapper}
+            imageStyle={styles.propertyImage}
+            variant="small"
+          />
+        </View>
+
+        {/* Property Content */}
+        <View style={styles.cardContent}>
+          <Text
+            style={[styles.propertyName, { color: theme.colors.gray[900] }]}
+            numberOfLines={2}
+          >
+            {property.name || property.title}
+          </Text>
+
+          <Text
+            style={[styles.propertyType, { color: theme.colors.gray[600] }]}
+            numberOfLines={1}
+          >
+            {property.type || "Property"}
+          </Text>
+
+          <View style={styles.propertyFooter}>
+            <View style={styles.rating}>
+              {property.rating && property.rating > 0 && (
+                <>
+                  <Ionicons
+                    name="star"
+                    size={14}
+                    color={theme.colors.primary}
+                  />
+                  <Text
+                    style={[
+                      styles.ratingText,
+                      { color: theme.colors.gray[700] },
+                    ]}
+                  >
+                    {property.rating.toFixed(1)}
+                  </Text>
+                  {property.reviewCount && property.reviewCount > 0 && (
+                    <Text
+                      style={[
+                        styles.reviewCount,
+                        { color: theme.colors.gray[500] },
+                      ]}
+                    >
+                      ({property.reviewCount})
+                    </Text>
+                  )}
+                </>
+              )}
+            </View>
+
+            <View style={styles.priceContainer}>
+              <Text style={[styles.price, { color: theme.colors.gray[900] }]}>
+                {currency === "USD" ? "$" : currency}
+                {Math.round(price)}
+              </Text>
+              <Text
+                style={[styles.priceUnit, { color: theme.colors.gray[600] }]}
+              >
+                /night
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: spacing.xl,
-    // paddingHorizontal: spacing.lg,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  listContent: {
+    paddingBottom: spacing.xl,
+    marginTop: spacing.md,
+  },
+  searchSummary: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+    marginHorizontal: spacing.md,
+    marginTop: spacing.sm,
+    borderRadius: 12,
+    marginBottom: spacing.sm,
+  },
+  searchInfo: {
+    flex: 1,
+  },
+  searchLocation: {
+    fontSize: fontSize.md,
+    fontWeight: fontWeight.semibold,
+    marginBottom: 2,
+  },
+  searchDetails: {
+    fontSize: fontSize.sm,
+  },
+  editButton: {
+    padding: spacing.xs,
+  },
+  resultsCount: {
+    paddingHorizontal: spacing.md,
+    paddingBottom: spacing.sm,
+  },
+  countText: {
+    fontSize: fontSize.sm,
+  },
+  propertyCard: {
+    marginHorizontal: spacing.md,
+    marginBottom: spacing.sm,
+    borderRadius: 12,
+    overflow: "hidden",
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  card: {
+    padding: spacing.md,
+  },
+  cardContainer: {
+    flexDirection: "row",
+    gap: spacing.md,
+  },
+  imageContainer: {
+    width: 80,
+    height: 80,
+  },
+  imageWrapper: {
+    borderRadius: 8,
+    overflow: "hidden",
+  },
+  propertyImage: {
+    borderRadius: 8,
+  },
+  cardContent: {
+    flex: 1,
+    gap: spacing.xs,
+    justifyContent: "space-between",
+  },
+  propertyName: {
+    fontSize: fontSize.md,
+    fontWeight: fontWeight.semibold,
+    lineHeight: fontSize.md * 1.2,
+  },
+  propertyType: {
+    fontSize: fontSize.sm,
+    textTransform: "capitalize",
+  },
+  propertyFooter: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: spacing.xs,
+  },
+  rating: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  ratingText: {
+    fontSize: fontSize.sm,
+    fontWeight: fontWeight.medium,
+  },
+  reviewCount: {
+    fontSize: fontSize.xs,
+    marginLeft: 2,
+  },
+  priceContainer: {
+    flexDirection: "row",
+    alignItems: "baseline",
+  },
+  price: {
+    fontSize: fontSize.md,
+    fontWeight: fontWeight.semibold,
+  },
+  priceUnit: {
+    fontSize: fontSize.sm,
+    marginLeft: 2,
   },
 });

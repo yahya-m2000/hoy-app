@@ -9,7 +9,7 @@ import { Platform, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { Icon } from "@shared/components/base";
 import { useNavigation } from "@react-navigation/native";
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 import { fontSize, spacing } from "@shared/constants";
 
 /**
@@ -26,46 +26,70 @@ const CustomBackButton = ({
   // Use passed props or fall back to context
   const darkMode = isDark !== undefined ? isDark : themeContext.isDark;
   const themeData = theme || themeContext.theme;
+  // Safe color extraction with fallbacks
+  const getBackButtonColor = () => {
+    try {
+      if (darkMode) {
+        return themeData?.colors?.gray?.[50] || "#ffffff";
+      } else {
+        return themeData?.colors?.gray?.[900] || "#000000";
+      }
+    } catch (error) {
+      console.warn("Error getting back button color:", error);
+      return darkMode ? "#ffffff" : "#000000";
+    }
+  };
 
   // More robust check for whether we should show the back button
   // Based on React Navigation best practices
-  const state = navigation.getState();
+  let shouldShowBackButton = false;
 
-  // Don't render if no navigation state
-  if (!state) {
+  try {
+    const state = navigation.getState();
+
+    // Don't render if no navigation state
+    if (!state) {
+      return null;
+    }
+
+    // Only show back button if:
+    // 1. We have navigation state
+    // 2. The current route index is greater than 0 (not the first screen in the stack)
+    // 3. There are multiple routes in the stack
+    shouldShowBackButton =
+      typeof state.index === "number" &&
+      state.index > 0 &&
+      Array.isArray(state.routes) &&
+      state.routes.length > 1;
+  } catch (error) {
+    console.warn("Error checking navigation state:", error);
     return null;
   }
-
-  // Only show back button if:
-  // 1. We have navigation state
-  // 2. The current route index is greater than 0 (not the first screen in the stack)
-  // 3. There are multiple routes in the stack
-  const shouldShowBackButton =
-    state.index > 0 && state.routes && state.routes.length > 1;
 
   if (!shouldShowBackButton) {
     return null;
   }
 
+  const handleBackPress = () => {
+    try {
+      if (router.canGoBack()) {
+        router.back();
+      }
+    } catch (error) {
+      console.warn("Error navigating back:", error);
+    }
+  };
+
   return (
     <TouchableOpacity
-      onPress={() => router.back()}
+      onPress={handleBackPress}
       style={{
-        padding: spacing.xs,
-        borderRadius: spacing.xs,
+        padding: spacing?.xs || 8,
+        borderRadius: spacing?.xs || 4,
       }}
       activeOpacity={0.7}
     >
-      {" "}
-      <Icon
-        name="arrow-back"
-        size={22}
-        color={
-          darkMode
-            ? themeData.colors.grayPalette[50]
-            : themeData.colors.grayPalette[900]
-        }
-      />
+      <Icon name="arrow-back" size={22} color={getBackButtonColor()} />
     </TouchableOpacity>
   );
 };
@@ -117,17 +141,48 @@ export const useNavigationTheme = (): NavigationThemeConfig => {
   const { theme, isDark } = useTheme();
   const navigation = useNavigation();
 
-  const titleColor = isDark ? theme.white : theme.black;
-  const borderColor = isDark
-    ? theme.colors.grayPalette[700]
-    : theme.colors.grayPalette[300];
+  // Safe color extraction with fallbacks
+  const getTitleColor = () => {
+    try {
+      return theme?.text?.primary || (isDark ? "#ffffff" : "#000000");
+    } catch (error) {
+      console.warn("Error getting title color:", error);
+      return isDark ? "#ffffff" : "#000000";
+    }
+  };
+  const getBorderColor = () => {
+    try {
+      return isDark
+        ? theme?.colors?.gray?.[700] || "#374151"
+        : theme?.colors?.gray?.[300] || "#d1d5db";
+    } catch (error) {
+      console.warn("Error getting border color:", error);
+      return isDark ? "#374151" : "#d1d5db";
+    }
+  };
+
+  const titleColor = getTitleColor();
+  const borderColor = getBorderColor();
 
   // Conditionally include headerLeft only when appropriate
   const shouldShowBackButton = React.useMemo(() => {
-    const state = navigation.getState();
-    return state && state.index > 0 && state.routes && state.routes.length > 1;
+    try {
+      const state = navigation?.getState();
+      return (
+        state &&
+        typeof state.index === "number" &&
+        state.index > 0 &&
+        Array.isArray(state.routes) &&
+        state.routes.length > 1
+      );
+    } catch (error) {
+      console.warn(
+        "Error checking navigation state in useNavigationTheme:",
+        error
+      );
+      return false;
+    }
   }, [navigation]);
-
   return {
     headerStyle: {
       backgroundColor: "transparent",
@@ -136,7 +191,7 @@ export const useNavigationTheme = (): NavigationThemeConfig => {
       height: Platform.OS === "ios" ? 100 : 80,
     },
     headerTitleStyle: {
-      fontSize: fontSize.md,
+      fontSize: fontSize?.md || 16,
       fontWeight: "500",
       color: titleColor,
     },
@@ -148,15 +203,14 @@ export const useNavigationTheme = (): NavigationThemeConfig => {
     headerBackButtonDisplayMode: "minimal",
     headerShadowVisible: true,
     headerLeftContainerStyle: {
-      paddingLeft: spacing.md,
+      paddingLeft: spacing?.md || 16,
     },
     headerRightContainerStyle: {
-      paddingRight: spacing.md,
+      paddingRight: spacing?.md || 16,
     },
     headerTitleContainerStyle: {
-      paddingHorizontal: spacing.sm,
-    },
-    // Only include headerLeft when we should show back button
+      paddingHorizontal: spacing?.sm || 12,
+    }, // Only include headerLeft when we should show back button
     ...(shouldShowBackButton && {
       headerLeft: () => <CustomBackButton />,
     }),
@@ -218,11 +272,35 @@ export const mergeWithThemedOptions = (
   theme: any,
   includeBackButton: boolean = false
 ) => {
-  const titleColor = isDark ? theme.white : theme.black;
+  // Safe color extraction with fallbacks
+  const getTitleColor = () => {
+    try {
+      return theme?.text?.primary || (isDark ? "#ffffff" : "#000000");
+    } catch (error) {
+      console.warn(
+        "Error getting title color in mergeWithThemedOptions:",
+        error
+      );
+      return isDark ? "#ffffff" : "#000000";
+    }
+  };
+  const getBorderColor = () => {
+    try {
+      return isDark
+        ? theme?.colors?.gray?.[700] || "#374151"
+        : theme?.colors?.gray?.[300] || "#d1d5db";
+    } catch (error) {
+      console.warn(
+        "Error getting border color in mergeWithThemedOptions:",
+        error
+      );
+      return isDark ? "#374151" : "#d1d5db";
+    }
+  };
 
-  const borderColor = isDark
-    ? theme.colors.grayPalette[700]
-    : theme.colors.grayPalette[300];
+  const titleColor = getTitleColor();
+  const borderColor = getBorderColor();
+
   const themedOptions = {
     headerStyle: {
       backgroundColor: "transparent",
@@ -231,7 +309,7 @@ export const mergeWithThemedOptions = (
       height: Platform.OS === "ios" ? 100 : 80,
     },
     headerTitleStyle: {
-      fontSize: fontSize.lg,
+      fontSize: fontSize?.lg || 18,
       fontWeight: "600" as const,
       color: titleColor,
     },
@@ -242,13 +320,13 @@ export const mergeWithThemedOptions = (
     headerBlurEffect: "regular",
     headerShadowVisible: true,
     headerLeftContainerStyle: {
-      paddingLeft: spacing.md,
+      paddingLeft: spacing?.md || 16,
     },
     headerRightContainerStyle: {
-      paddingRight: spacing.md,
+      paddingRight: spacing?.md || 16,
     },
     headerTitleContainerStyle: {
-      paddingHorizontal: spacing.sm,
+      paddingHorizontal: spacing?.sm || 12,
     },
     // Only include headerLeft if explicitly requested
     ...(includeBackButton && {

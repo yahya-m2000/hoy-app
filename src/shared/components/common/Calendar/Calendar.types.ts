@@ -11,6 +11,7 @@ export interface CalendarProps {
   minDate?: Date;
   maxDate?: Date;
   enableRangeSelection?: boolean;
+  propertyId?: string;
 }
 
 export interface CalendarDateProps {
@@ -20,6 +21,7 @@ export interface CalendarDateProps {
   isInRange: boolean;
   isInBookingRange: boolean;
   isToday: boolean;
+  isCurrentMonth: boolean;
   onPress: (date: Date) => void;
   cellWidth: number;
 }

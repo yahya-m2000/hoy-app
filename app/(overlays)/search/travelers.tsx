@@ -4,12 +4,13 @@
  */
 
 import React, { useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text } from "@shared/components/base/Text";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 
 // Context and hooks
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 import { useTranslation } from "react-i18next";
 import { useSearchForm } from "@shared/hooks";
 // Components
@@ -95,9 +96,7 @@ export default function SearchTravelersModal() {
         style={[
           styles.counterLabel,
           {
-            color: isDark
-              ? theme.colors.grayPalette[100]
-              : theme.colors.grayPalette[900],
+            color: isDark ? theme.colors.gray[100] : theme.colors.gray[900],
           },
         ]}
       >
@@ -110,8 +109,8 @@ export default function SearchTravelersModal() {
             styles.counterButton,
             {
               backgroundColor: isDark
-                ? theme.colors.grayPalette[700]
-                : theme.colors.grayPalette[200],
+                ? theme.colors.gray[700]
+                : theme.colors.gray[200],
               opacity: value <= minValue ? 0.5 : 1,
             },
           ]}
@@ -121,9 +120,7 @@ export default function SearchTravelersModal() {
           <Ionicons
             name="remove"
             size={20}
-            color={
-              isDark ? theme.colors.gray[300] : theme.colors.grayPalette[700]
-            }
+            color={isDark ? theme.colors.gray[300] : theme.colors.gray[700]}
           />
         </TouchableOpacity>
 
@@ -131,9 +128,7 @@ export default function SearchTravelersModal() {
           style={[
             styles.counterValue,
             {
-              color: isDark
-                ? theme.colors.grayPalette[100]
-                : theme.colors.grayPalette[900],
+              color: isDark ? theme.colors.gray[100] : theme.colors.gray[900],
             },
           ]}
         >
@@ -145,8 +140,8 @@ export default function SearchTravelersModal() {
             styles.counterButton,
             {
               backgroundColor: isDark
-                ? theme.colors.grayPalette[700]
-                : theme.colors.grayPalette[200],
+                ? theme.colors.gray[700]
+                : theme.colors.gray[200],
               opacity: value >= maxValue ? 0.5 : 1,
             },
           ]}
@@ -156,9 +151,7 @@ export default function SearchTravelersModal() {
           <Ionicons
             name="add"
             size={20}
-            color={
-              isDark ? theme.colors.gray[300] : theme.colors.grayPalette[700]
-            }
+            color={isDark ? theme.colors.gray[300] : theme.colors.gray[700]}
           />
         </TouchableOpacity>
       </View>
@@ -205,9 +198,9 @@ export default function SearchTravelersModal() {
             {
               backgroundColor: isDark
                 ? theme.colors.gray[800]
-                : theme.colors.grayPalette[100],
+                : theme.colors.gray[100],
               borderColor: isDark
-                ? theme.colors.grayPalette[700]
+                ? theme.colors.gray[700]
                 : theme.colors.gray[300],
             },
           ]}
@@ -216,9 +209,7 @@ export default function SearchTravelersModal() {
             style={[
               styles.summaryText,
               {
-                color: isDark
-                  ? theme.colors.grayPalette[100]
-                  : theme.colors.grayPalette[900],
+                color: isDark ? theme.colors.gray[100] : theme.colors.gray[900],
               },
             ]}
           >

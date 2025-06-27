@@ -4,12 +4,13 @@
  */
 
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text } from "@shared/components/base/Text";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
 // Context
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Constants
 import { fontSize, spacing, radius } from "@shared/constants";
@@ -32,7 +33,7 @@ const ErrorState: React.FC = () => {
       <Text
         style={[
           styles.title,
-          { color: isDark ? theme.white : theme.colors.grayPalette[900] },
+          { color: isDark ? theme.white : theme.colors.gray[900] },
         ]}
       >
         {t("booking.bookingNotFound")}

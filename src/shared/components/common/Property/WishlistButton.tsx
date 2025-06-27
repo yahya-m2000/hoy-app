@@ -5,11 +5,13 @@
 
 import React from "react";
 import { TouchableOpacity, StyleSheet, ViewStyle } from "react-native";
-import { useTheme, useAuth } from "src/shared/context";
-import { useWishlist } from "src/shared/hooks";
-import { spacing } from "src/shared/constants";
+import { LinearGradient } from "expo-linear-gradient";
+import { useAuth } from "src/shared/context";
+import { useWishlist, useTheme } from "src/shared/hooks";
+import { iconSize, spacing } from "src/shared/constants";
 import { Icon } from "src/shared/components/base/Icon";
 import { showAuthPrompt } from "src/shared/utils";
+import { Container } from "../..";
 
 export interface WishlistButtonProps {
   /** Property ID for wishlist operations */
@@ -31,13 +33,11 @@ const WishlistButton: React.FC<WishlistButtonProps> = ({
   onShowCollections,
   onCollectionToggle,
 }) => {
-  const { theme, isDark } = useTheme();
+  const { theme } = useTheme();
   const { isPropertyWishlisted, isToggling } = useWishlist();
   const { isAuthenticated } = useAuth();
 
   const isWishlisted = isPropertyWishlisted(propertyId);
-  const iconSize = variant === "small" ? 14 : 18;
-  const buttonSize = variant === "small" ? 24 : 32;
 
   // Handle wishlist toggle - show collections modal
   const handleWishlistPress = (e: any) => {
@@ -55,36 +55,20 @@ const WishlistButton: React.FC<WishlistButtonProps> = ({
     // Show collections modal for authenticated users
     onShowCollections?.();
   };
-
   return (
     <TouchableOpacity
-      style={[
-        styles.button,
-        {
-          width: buttonSize,
-          height: buttonSize,
-          borderRadius: buttonSize / 2,
-          backgroundColor: isDark
-            ? "rgba(0, 0, 0, 0.6)"
-            : "rgba(255, 255, 255, 0.9)",
-        },
-        style,
-      ]}
+      style={[styles.button]}
       onPress={handleWishlistPress}
       disabled={isToggling}
       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
     >
-      <Icon
-        name={isWishlisted ? "heart" : "heart-outline"}
-        size={iconSize}
-        color={
-          isWishlisted
-            ? "#ff385c"
-            : isDark
-            ? theme.colors.gray[50]
-            : theme.colors.gray[900]
-        }
-      />
+      <Container alignItems="center" justifyContent="center">
+        <Icon
+          name={isWishlisted ? "heart" : "heart-outline"}
+          size={iconSize.sm}
+          color={theme.colors.white}
+        />
+      </Container>
     </TouchableOpacity>
   );
 };
@@ -94,8 +78,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: spacing.sm,
     right: spacing.sm,
-    alignItems: "center",
-    justifyContent: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -104,6 +86,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 3,
+  },
+  gradientBackground: {
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 

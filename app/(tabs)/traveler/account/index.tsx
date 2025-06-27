@@ -12,13 +12,10 @@ import { format } from "date-fns";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Context
-import { useTheme, useAuth } from "@shared/context";
+import { useAuth, useToast } from "@shared/context";
 
 // Hooks
-import { useCurrentUser } from "@shared/hooks";
-
-// Utils
-import { performLogout } from "@shared/utils";
+import { useTheme, useCurrentUser } from "@shared/hooks";
 
 // Components
 import { LoadingSkeleton } from "@shared/components";
@@ -35,7 +32,12 @@ import { spacing } from "@shared/constants";
 
 export default function AccountScreen() {
   const { theme, isDark } = useTheme();
-  const { isAuthenticated } = useAuth();
+  const {
+    isAuthenticated,
+    logout: authLogout,
+    checkAuthenticationState,
+  } = useAuth();
+  const { showToast } = useToast();
   const {
     data: currentUser,
     isLoading: userLoading,
@@ -82,11 +84,11 @@ export default function AccountScreen() {
       console.log(`User data loaded: ${currentUser.email} (${currentUser.id})`);
     }
   }, [currentUser]);
-
   // Format joined date if available
   const joinedDate = currentUser?.joinedDate
     ? format(new Date(currentUser.joinedDate), "MMMM yyyy")
     : "";
+
   // Handle edit profile navigation
   const handleEditProfile = () => {
     router.navigate("/(overlays)/account/personal-info");
@@ -96,6 +98,50 @@ export default function AccountScreen() {
   const handleRefresh = () => {
     refetch();
     setLastRefresh(Date.now());
+  }; // Handle logout with proper navigation
+  const handleLogout = async () => {
+    try {
+      console.log("🔓 Starting logout process from account screen...");
+
+      // Use AuthContext logout method to ensure state is properly updated
+      await authLogout();
+
+      // Force a re-check of authentication state
+      await checkAuthenticationState();
+
+      // Clear any cached user data
+      refetch();
+
+      // Show success toast
+      showToast({
+        type: "success",
+        message: "Signed out successfully",
+      });
+
+      // Small delay to ensure state propagates
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Navigate to home screen after logout
+      console.log("🔄 Navigating to home screen after logout...");
+      router.replace("/(tabs)/traveler/home");
+
+      console.log("✅ Logout and navigation completed successfully");
+    } catch (error) {
+      console.error("❌ Error during logout:", error);
+
+      // Force authentication state to false even if logout fails
+      await checkAuthenticationState();
+      refetch();
+
+      // Show error toast
+      showToast({
+        type: "error",
+        message: "Sign out failed. Please try again.",
+      });
+
+      // Even if logout fails, try to navigate away
+      router.replace("/(tabs)/traveler/home");
+    }
   };
 
   const isLoading = userLoading;
@@ -112,7 +158,7 @@ export default function AccountScreen() {
           },
         ]}
       >
-        <StatusBar style={isDark ? "light" : "dark"} />{" "}
+        <StatusBar style={isDark ? "light" : "dark"} />
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <LoadingSkeleton />
         </ScrollView>
@@ -128,11 +174,10 @@ export default function AccountScreen() {
           backgroundColor: isDark
             ? theme.colors.gray[900]
             : theme.colors.gray[50],
-          paddingTop: insets.top,
         },
       ]}
     >
-      <StatusBar style={isDark ? "light" : "dark"} />{" "}
+      <StatusBar style={isDark ? "light" : "dark"} />
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -147,13 +192,13 @@ export default function AccountScreen() {
           />
         ) : (
           <SignInSection />
-        )}{" "}
+        )}
         {/* Preferences Section */}
         <PreferencesSection isAuthenticated={isAuthenticated} />
         {/* Account Section */}
         <AccountSection
           isAuthenticated={isAuthenticated}
-          onLogout={performLogout}
+          onLogout={handleLogout}
         />
         {/* Support Section */}
         <SupportSection
@@ -169,7 +214,6 @@ export default function AccountScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: spacing.md,
   },
   scrollContent: {
     padding: spacing.md,

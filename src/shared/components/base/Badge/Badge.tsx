@@ -7,10 +7,11 @@
 import React from "react";
 
 // React Native imports
-import { View, Text, StyleSheet, ViewStyle, TextStyle } from "react-native";
+import { View, StyleSheet, ViewStyle, TextStyle } from "react-native";
+import { Text } from "@shared/components/base/Text";
 
 // Internal imports
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Constants
 import { radius, fontSize, fontWeight, spacing } from "@shared/constants";
@@ -60,7 +61,7 @@ const Badge: React.FC<BadgeProps> = ({
       case "info":
         return theme.colors.info;
       case "gray":
-        return isDark ? theme.colors.grayPalette[700] : theme.colors.gray[300];
+        return isDark ? theme.colors.gray[700] : theme.colors.gray[300];
       default:
         return theme.colors.primary;
     }
@@ -147,7 +148,7 @@ const Badge: React.FC<BadgeProps> = ({
           style={[
             styles.text,
             {
-              color: theme.colors.grayPalette[50],
+              color: theme.colors.gray[50],
               fontSize: badgeFontSize,
             },
             textStyle,
@@ -166,7 +167,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    fontWeight: String(fontWeight.semibold) as any,
+    fontWeight: fontWeight.semibold,
     textAlign: "center",
   },
 });

@@ -6,7 +6,8 @@
 
 // React Native core
 import React, { useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text } from "@shared/components/base/Text";
 
 // Expo and third-party libraries
 import { Ionicons } from "@expo/vector-icons";
@@ -15,7 +16,7 @@ import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // App context and hooks
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Components
 import { BottomSheetModal } from "@shared/components";
@@ -85,11 +86,11 @@ export default function LanguageModal() {
                     selectedLanguage === language.code
                       ? isDark
                         ? theme.colors.primaryPalette[200]
-                        : theme.colors.primary
+                        : theme.colors.primaryPalette[50]
                       : "transparent",
                   borderColor: isDark
-                    ? theme.colors.grayPalette[700]
-                    : theme.colors.grayPalette[300],
+                    ? theme.colors.gray[700]
+                    : theme.colors.gray[300],
                 },
               ]}
               onPress={() => handleLanguageChange(language.code)}

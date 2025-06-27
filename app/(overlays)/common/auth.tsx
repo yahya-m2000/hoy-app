@@ -170,6 +170,7 @@ export default function AuthModal() {
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
+          scrollEnabled={false}
         >
           <View style={styles.formContainer}>
             {/* Error Message */}

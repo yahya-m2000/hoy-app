@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Date Selection Context for the Hoy application
  * Provides global state management for selected dates across the app
  */

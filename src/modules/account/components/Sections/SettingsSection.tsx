@@ -4,9 +4,11 @@
  */
 
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { Text } from "@shared/components/base/Text";
 import { Ionicons } from "@expo/vector-icons";
-import { useTheme, useUserRole } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
+import { useUserRole } from "@shared/context";
 import { radius, fontSize, fontWeight, spacing } from "@shared/constants";
 
 export interface SettingsItem {

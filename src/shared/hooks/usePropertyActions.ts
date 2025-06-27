@@ -22,17 +22,17 @@ export const usePropertyActions = (property: PropertyType | null) => {
     const context = getCurrentTabContext();
     switch (context) {
       case "home":
-        return "(tabs)/traveler/home/[id]";
+        return "(tabs)/traveler/home/property/[id]";
       case "search":
-        return "(tabs)/traveler/search/[id]";
+        return "(tabs)/traveler/search/property/[id]";
       case "wishlist":
         return "(tabs)/traveler/wishlist/property/[id]";
       case "bookings":
         return "(tabs)/traveler/bookings/property/[id]";
       case "properties":
-        return "(tabs)/traveler/properties/[id]";
+        return "(tabs)/traveler/properties/property/[id]";
       default:
-        return "(tabs)/traveler/properties/[id]";
+        return "(tabs)/traveler/properties/property/[id]";
     }
   };
 
@@ -58,7 +58,7 @@ export const usePropertyActions = (property: PropertyType | null) => {
     if (!dates?.startDate || !dates?.endDate) {
       // No dates selected - open availability calendar modal (Check Availability flow)
       router.push({
-        pathname: "/(overlays)/traveler/availability-calendar",
+        pathname: "/modules/properties/details/modals/availability-calendar",
         params: {
           propertyId: property._id,
           property: JSON.stringify(property),

@@ -17,7 +17,7 @@ import { format } from "date-fns";
 import * as Calendar from "expo-calendar";
 
 // Shared Context and Hooks
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Shared Constants
 import { fontSize, spacing } from "@shared/constants";
@@ -141,7 +141,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({ booking }) => {
         <Text
           style={[
             styles.actionText,
-            { color: isDark ? theme.white : theme.colors.grayPalette[900] },
+            { color: isDark ? theme.white : theme.colors.gray[900] },
           ]}
         >
           {t("booking.shareBooking")}
@@ -156,7 +156,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({ booking }) => {
         <Text
           style={[
             styles.actionText,
-            { color: isDark ? theme.white : theme.colors.grayPalette[900] },
+            { color: isDark ? theme.white : theme.colors.gray[900] },
           ]}
         >
           {t("booking.addToCalendar")}
@@ -171,7 +171,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({ booking }) => {
         <Text
           style={[
             styles.actionText,
-            { color: isDark ? theme.white : theme.colors.grayPalette[900] },
+            { color: isDark ? theme.white : theme.colors.gray[900] },
           ]}
         >
           {t("booking.directions")}

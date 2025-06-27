@@ -27,7 +27,7 @@ import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 
 // Context
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Constants
 import { fontSize, spacing, radius } from "@shared/constants";

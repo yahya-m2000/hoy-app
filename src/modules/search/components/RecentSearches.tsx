@@ -1,16 +1,9 @@
 import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  StyleSheet,
-  Alert,
-} from "react-native";
+import { TouchableOpacity, FlatList, Alert } from "react-native";
+import { Container, Text, Icon } from "@shared/components/base";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import { useTheme } from "@shared/context";
-import { spacing, fontSize, radius } from "@shared/constants";
+import { useTheme } from "@shared/hooks/useTheme";
 
 import { RecentSearch } from "./RecentSearchManager";
 
@@ -88,61 +81,59 @@ export const RecentSearches: React.FC<RecentSearchesProps> = ({
 
   const renderRecentSearchItem = ({ item }: { item: RecentSearch }) => (
     <TouchableOpacity
-      style={[
-        styles.recentSearchItem,
-        {
-          backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
-          borderColor: isDark ? theme.colors.gray[700] : theme.colors.gray[200],
-        },
-      ]}
+      style={{
+        backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
+        borderColor: isDark ? theme.colors.gray[700] : theme.colors.gray[200],
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        borderRadius: 8,
+        marginBottom: 8,
+        borderWidth: 1,
+      }}
       onPress={() => onSearchSelect(item)}
       activeOpacity={0.7}
     >
-      <View style={styles.searchContent}>
-        <View style={styles.searchIcon}>
+      <Container flexDirection="row" alignItems="center" flex={1}>
+        <Container marginRight="sm">
           <Ionicons
             name="time-outline"
             size={20}
             color={isDark ? theme.colors.gray[400] : theme.colors.gray[500]}
           />
-        </View>
-        <View style={styles.searchDetails}>
+        </Container>
+        <Container flex={1}>
           <Text
-            style={[
-              styles.searchLocation,
-              {
-                color: isDark ? theme.white : theme.colors.gray[900],
-              },
-            ]}
+            color={isDark ? theme.white : theme.colors.gray[900]}
+            size="md"
+            weight="normal"
             numberOfLines={1}
           >
             {item.location}
           </Text>
-          <Text
-            style={[
-              styles.searchInfo,
-              {
-                color: isDark ? theme.colors.gray[400] : theme.colors.gray[600],
-              },
-            ]}
-            numberOfLines={1}
-          >
-            {item.displayDates} • {item.displayTravelers}
-          </Text>
-          <Text
-            style={[
-              styles.searchTime,
-              {
-                color: isDark ? theme.colors.gray[500] : theme.colors.gray[500],
-              },
-            ]}
-          >
-            {formatTimeAgo(item.timestamp)}
-          </Text>
-        </View>
-      </View>
+          <Container marginTop="xs">
+            <Text
+              color={isDark ? theme.colors.gray[400] : theme.colors.gray[600]}
+              size="sm"
+              numberOfLines={1}
+            >
+              {item.displayDates} • {item.displayTravelers}
+            </Text>
+          </Container>
+          <Container marginTop="xs">
+            <Text
+              color={isDark ? theme.colors.gray[500] : theme.colors.gray[500]}
+              size="xs"
+            >
+              {formatTimeAgo(item.timestamp)}
+            </Text>
+          </Container>
+        </Container>
+      </Container>
       <TouchableOpacity
-        style={styles.removeButton}
+        style={{ padding: 8, marginLeft: 12 }}
         onPress={() => handleRemoveSearch(item.id, item.location)}
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       >
@@ -160,24 +151,29 @@ export const RecentSearches: React.FC<RecentSearchesProps> = ({
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <Container marginBottom="lg">
+      <Container
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+        marginVertical="md"
+      >
         <Text
-          style={[
-            styles.title,
-            {
-              color: isDark ? theme.colors.gray[50] : theme.colors.gray[900],
-            },
-          ]}
+          color={isDark ? theme.colors.gray[50] : theme.colors.gray[900]}
+          variant="h6"
         >
           {t("search.recentSearches") || "Recent Searches"}
         </Text>
         <TouchableOpacity onPress={handleClearAll}>
-          <Text style={[styles.clearAll, { color: theme.colors.primary[500] }]}>
+          <Text
+            color={theme.colors.primaryPalette[500]}
+            size="sm"
+            weight="semibold"
+          >
             {t("search.clear") || "Clear All"}
           </Text>
         </TouchableOpacity>
-      </View>
+      </Container>
       <FlatList
         data={searches}
         renderItem={renderRecentSearchItem}
@@ -185,63 +181,6 @@ export const RecentSearches: React.FC<RecentSearchesProps> = ({
         showsVerticalScrollIndicator={false}
         scrollEnabled={false}
       />
-    </View>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginBottom: spacing.lg,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: spacing.md,
-  },
-  title: {
-    fontSize: fontSize.md,
-    fontWeight: "600",
-  },
-  clearAll: {
-    fontSize: fontSize.sm,
-    fontWeight: "600",
-  },
-  recentSearchItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.md,
-    marginBottom: spacing.xs,
-    borderWidth: 1,
-  },
-  searchContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  searchIcon: {
-    marginRight: spacing.sm,
-  },
-  searchDetails: {
-    flex: 1,
-  },
-  searchLocation: {
-    fontSize: fontSize.md,
-    fontWeight: "400",
-    marginBottom: 2,
-  },
-  searchInfo: {
-    fontSize: fontSize.sm,
-    marginBottom: 2,
-  },
-  searchTime: {
-    fontSize: fontSize.xs,
-  },
-  removeButton: {
-    padding: spacing.xs,
-    marginLeft: spacing.sm,
-  },
-});

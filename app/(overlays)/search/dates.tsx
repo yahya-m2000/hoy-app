@@ -1,10 +1,11 @@
-﻿/**
+/**
  * Search Date Modal for selecting check-in and check-out dates
  */
 
 // React imports
 import React, { useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text } from "@shared/components/base/Text";
 
 // Third-party libraries
 import { Ionicons } from "@expo/vector-icons";
@@ -107,7 +108,6 @@ export default function SearchDateModal() {
       onSave={handleApply}
     >
       <View style={styles.container}>
-        {" "}
         {/* Date selection info */}
         <View style={styles.dateInfoContainer}>
           <View
@@ -115,7 +115,7 @@ export default function SearchDateModal() {
               styles.dateBox,
               {
                 borderColor: isDark
-                  ? theme.colors.grayPalette[700]
+                  ? theme.colors.gray[700]
                   : theme.colors.gray[300],
                 borderWidth: 1,
               },
@@ -139,7 +139,7 @@ export default function SearchDateModal() {
                 {
                   color: isDark
                     ? theme.colors.gray[50]
-                    : theme.colors.grayPalette[900],
+                    : theme.colors.gray[900],
                 },
               ]}
             >
@@ -152,13 +152,13 @@ export default function SearchDateModal() {
               size={20}
               color={isDark ? theme.colors.gray[500] : theme.colors.gray[400]}
             />
-          </View>{" "}
+          </View>
           <View
             style={[
               styles.dateBox,
               {
                 borderColor: isDark
-                  ? theme.colors.grayPalette[700]
+                  ? theme.colors.gray[700]
                   : theme.colors.gray[300],
                 borderWidth: 1,
               },
@@ -182,7 +182,7 @@ export default function SearchDateModal() {
                 {
                   color: isDark
                     ? theme.colors.gray[50]
-                    : theme.colors.grayPalette[900],
+                    : theme.colors.gray[900],
                 },
               ]}
             >
@@ -202,7 +202,7 @@ export default function SearchDateModal() {
           >
             {nights} {nights === 1 ? "night" : "nights"}
           </Text>
-        </View>{" "}
+        </View>
         {/* Calendar */}
         <Calendar
           enableRangeSelection={true}
@@ -231,7 +231,7 @@ export default function SearchDateModal() {
                   styles.quickSelectButton,
                   {
                     backgroundColor: isDark
-                      ? theme.colors.grayPalette[700]
+                      ? theme.colors.gray[700]
                       : theme.colors.gray[200],
                   },
                 ]}
@@ -248,7 +248,7 @@ export default function SearchDateModal() {
                     {
                       color: isDark
                         ? theme.colors.white
-                        : theme.colors.grayPalette[900],
+                        : theme.colors.gray[900],
                     },
                   ]}
                 >

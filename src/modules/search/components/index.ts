@@ -6,8 +6,8 @@
 // Components
 export { SearchEmptyState } from "./SearchEmptyState";
 export { FiltersBar, type FilterOption, type SortOrder } from "./FiltersBar";
-export { LoadingState } from "../../properties/components/States";
-export { PropertyList } from "../../properties/components/Lists";
+export { LoadingState } from "@modules/properties/components/states/LoadingState"
+export { PropertyList } from "@modules/properties/components/lists/PropertyList";
 export { RecentSearches } from "./RecentSearches";
 export { default as SearchBar } from "./SearchBar";
 export { SearchForm } from "./SearchForm";

@@ -11,7 +11,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, router } from "expo-router";
 
 // Context and hooks
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 import { useTranslation } from "react-i18next";
 
 // Constants
@@ -90,8 +90,8 @@ export default function PropertyTypeModal() {
         styles.container,
         {
           backgroundColor: isDark
-            ? theme.colors.grayPalette[900]
-            : theme.colors.grayPalette[50],
+            ? theme.colors.gray[900]
+            : theme.colors.gray[50],
         },
       ]}
     >
@@ -105,11 +105,7 @@ export default function PropertyTypeModal() {
           <Ionicons
             name="close"
             size={24}
-            color={
-              isDark
-                ? theme.colors.grayPalette[400]
-                : theme.colors.grayPalette[600]
-            }
+            color={isDark ? theme.colors.gray[400] : theme.colors.gray[600]}
           />
         </TouchableOpacity>
 
@@ -117,9 +113,7 @@ export default function PropertyTypeModal() {
           style={[
             styles.title,
             {
-              color: isDark
-                ? theme.colors.grayPalette[50]
-                : theme.colors.grayPalette[900],
+              color: isDark ? theme.colors.gray[50] : theme.colors.gray[900],
             },
           ]}
         >
@@ -136,10 +130,10 @@ export default function PropertyTypeModal() {
               {
                 backgroundColor: isDark
                   ? theme.colors.gray[800]
-                  : theme.colors.grayPalette[50],
+                  : theme.colors.gray[50],
                 borderColor:
                   selectedType === type.id
-                    ? theme.colors.primary[500]
+                    ? theme.colors.primaryPalette[500]
                     : isDark
                     ? theme.colors.gray[700]
                     : theme.colors.gray[300],
@@ -155,7 +149,7 @@ export default function PropertyTypeModal() {
                 {
                   backgroundColor:
                     selectedType === type.id
-                      ? theme.colors.primary[100]
+                      ? theme.colors.primaryPalette[100]
                       : isDark
                       ? theme.colors.gray[700]
                       : theme.colors.gray[200],
@@ -167,10 +161,10 @@ export default function PropertyTypeModal() {
                 size={28}
                 color={
                   selectedType === type.id
-                    ? theme.colors.primary[500]
+                    ? theme.colors.primaryPalette[500]
                     : isDark
                     ? theme.colors.gray[300]
-                    : theme.colors.grayPalette[600]
+                    : theme.colors.gray[600]
                 }
               />
             </View>
@@ -181,8 +175,8 @@ export default function PropertyTypeModal() {
                   styles.typeTitle,
                   {
                     color: isDark
-                      ? theme.colors.grayPalette[50]
-                      : theme.colors.grayPalette[900],
+                      ? theme.colors.gray[50]
+                      : theme.colors.gray[900],
                   },
                 ]}
               >
@@ -193,8 +187,8 @@ export default function PropertyTypeModal() {
                   styles.typeDescription,
                   {
                     color: isDark
-                      ? theme.colors.grayPalette[400]
-                      : theme.colors.grayPalette[600],
+                      ? theme.colors.gray[400]
+                      : theme.colors.gray[600],
                   },
                 ]}
                 numberOfLines={2}
@@ -208,7 +202,7 @@ export default function PropertyTypeModal() {
                 <Ionicons
                   name="checkmark-circle"
                   size={24}
-                  color={theme.colors.primary[500]}
+                  color={theme.colors.primaryPalette[500]}
                 />
               </View>
             )}
@@ -230,7 +224,7 @@ export default function PropertyTypeModal() {
         <TouchableOpacity
           style={[
             styles.applyButton,
-            { backgroundColor: theme.colors.primary[500] },
+            { backgroundColor: theme.colors.primaryPalette[500] },
           ]}
           onPress={handleApply}
         >

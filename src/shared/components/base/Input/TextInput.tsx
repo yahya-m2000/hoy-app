@@ -11,12 +11,12 @@ import {
   View,
   TextInput as RNTextInput,
   StyleSheet,
-  Text,
   Pressable,
 } from "react-native";
+import { Text } from "@shared/components/base/Text";
 
 // Context
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Constants
 import { radius, fontSize, fontWeight, spacing } from "@shared/constants";
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: fontSize.sm,
-    fontWeight: String(fontWeight.medium) as any,
+    fontWeight: fontWeight.medium,
   },
   inputContainer: {
     flexDirection: "row",

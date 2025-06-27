@@ -10,12 +10,11 @@ export default function WishlistLayout() {
       <Stack.Screen
         name="index"
         options={{
-          headerShown: true,
-          headerTitle: "Wishlist",
+          headerShown: false,
         }}
       />
       <Stack.Screen
-        name="[id]/index"
+        name="[id]"
         options={({ route }) => {
           const params = route.params as
             | { name?: string; propertyCount?: string }
@@ -37,12 +36,11 @@ export default function WishlistLayout() {
             headerTitleAlign: "center",
           };
         }}
-      />{" "}
+      />
       <Stack.Screen
-        name="property/[id]/index"
+        name="property"
         options={{
-          headerShown: true,
-          headerTitle: "Property Details",
+          headerShown: false,
         }}
       />
     </Stack>

@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 import { resetAllAppData } from "@shared/utils/network";
 import { router } from "expo-router";
 import { spacing, radius, fontSize } from "@shared/constants";
@@ -61,8 +61,8 @@ export default function FixAccountDataScreen() {
         styles.container,
         {
           backgroundColor: isDark
-            ? theme.colors.grayPalette[900]
-            : theme.colors.grayPalette[50],
+            ? theme.colors.gray[900]
+            : theme.colors.gray[50],
         },
       ]}
     >
@@ -77,7 +77,7 @@ export default function FixAccountDataScreen() {
         <Text
           style={[
             styles.title,
-            { color: isDark ? theme.white : theme.colors.grayPalette[900] },
+            { color: isDark ? theme.white : theme.colors.gray[900] },
           ]}
         >
           Data Issue Detected

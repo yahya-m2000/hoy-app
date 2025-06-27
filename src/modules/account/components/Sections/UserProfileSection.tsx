@@ -4,10 +4,12 @@
  */
 
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { Text } from "@shared/components/base/Text";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
-import { useTheme, useUserRole } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
+import { useUserRole } from "@shared/context";
 import { radius, fontSize, fontWeight, spacing } from "@shared/constants";
 
 // Components
@@ -66,10 +68,9 @@ export default function UserProfileSection({
 
   return (
     <View style={styles.profileSection}>
-      {" "}
       <Avatar
         source={currentUser?.profilePicture}
-        size={80}
+        size="xlarge"
         name={`${currentUser?.firstName || ""} ${
           currentUser?.lastName || ""
         }`.trim()}
@@ -137,8 +138,7 @@ const styles = StyleSheet.create({
   profileSection: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.lg,
+    paddingBottom: spacing.lg,
   },
   profileInfo: {
     flex: 1,

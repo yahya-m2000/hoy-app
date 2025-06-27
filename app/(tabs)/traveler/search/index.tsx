@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Search screen for the Hoy application
  * Clean, modular search interface with recent searches functionality
  * Allows travelers to search for accommodations by location, dates, and guest count
@@ -6,8 +6,10 @@
 
 // React Native core
 import React, { useState, useEffect } from "react";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { View, Text, StyleSheet, FlatList, ScrollView } from "react-native";
+import { FlatList } from "react-native";
+
+// Base components
+import { Container, Header } from "@shared/components/base";
 
 // Expo and third-party libraries
 import { StatusBar } from "expo-status-bar";
@@ -15,7 +17,8 @@ import { useTranslation } from "react-i18next";
 import { useRouter } from "expo-router";
 
 // App context and hooks
-import { useTheme, useToast } from "@shared/context";
+import { useToast } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 import { useSearchForm } from "@shared/hooks";
 
 // Search components
@@ -25,11 +28,7 @@ import {
   type RecentSearch,
 } from "@modules/search/components/RecentSearchManager";
 
-// Constants
-import { fontSize, fontWeight, spacing } from "@shared/constants";
-
 export default function SearchScreen() {
-  const insets = useSafeAreaInsets();
   const { theme, isDark } = useTheme();
   const { t } = useTranslation();
   const router = useRouter();
@@ -170,61 +169,53 @@ export default function SearchScreen() {
 
       {/* Recent Searches Section */}
       {recentSearches.length > 0 && (
-        <View style={styles.section}>
+        <Container>
           <RecentSearches
             searches={recentSearches}
             onSearchSelect={handleRecentSearchSelect}
             onRemoveSearch={removeRecentSearch}
             onClearAll={clearAllRecentSearches}
           />
-        </View>
+        </Container>
       )}
     </>
   );
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: isDark
-            ? theme.colors.gray[900]
-            : theme.colors.gray[50],
-          paddingTop: insets.top,
-        },
-      ]}
+    <Container
+      flex={1}
+      backgroundColor={isDark ? theme.colors.gray[900] : theme.colors.gray[50]}
     >
       <StatusBar style={isDark ? "light" : "dark"} />
 
-      {/* Using FlatList to avoid VirtualizedList nesting issues */}
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-        data={[{ key: "content" }]}
-        keyExtractor={(item) => item.key}
-        renderItem={() => null}
-        ListHeaderComponent={renderHeader}
+      {/* Header */}
+      <Header
+        title={t("search.title") || "Search"}
+        variant="solid"
+        right={{
+          text: t("search.filters") || "Filters",
+          onPress: () => {
+            // TODO: Open filters modal
+            console.log("Open filters");
+          },
+        }}
+        backgroundColor={
+          isDark ? theme.colors.gray[900] : theme.colors.gray[50]
+        }
       />
-    </View>
+
+      {/* Content with padding */}
+      <Container paddingHorizontal="md" flex={1}>
+        {/* Using FlatList to avoid VirtualizedList nesting issues */}
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 96 }}
+          data={[{ key: "content" }]}
+          keyExtractor={(item) => item.key}
+          renderItem={() => null}
+          ListHeaderComponent={renderHeader}
+        />
+      </Container>
+    </Container>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: spacing.xl,
-    paddingHorizontal: spacing.md,
-  },
-
-  title: {
-    fontSize: fontSize.xl,
-    fontWeight: fontWeight.bold,
-    marginBottom: spacing.sm,
-  },
-  scrollContent: {
-    paddingBottom: spacing.xxl * 2,
-  },
-  section: {
-    marginTop: spacing.xl,
-  },
-});

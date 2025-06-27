@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 import { fontSize, spacing, radius } from "@shared/constants";
 // Components
 import AuthInput from "./AuthInput";

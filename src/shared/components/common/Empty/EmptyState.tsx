@@ -10,7 +10,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 
 // Context
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Constants
 import { spacing } from "@shared/constants";
@@ -34,15 +34,15 @@ const EmptyState: React.FC<EmptyStateProps> = ({
   const { theme, isDark } = useTheme();
 
   return (
-    <Container padding={minimized ? "small" : "large"} style={styles.container}>
+    <Container padding={minimized ? "sm" : "lg"} style={styles.container}>
       <View
         style={[
           styles.iconContainer,
           minimized && styles.minimizedIconContainer,
           {
             backgroundColor: isDark
-              ? theme.colors.grayPalette[800]
-              : theme.colors.grayPalette[100],
+              ? theme.colors.gray[800]
+              : theme.colors.gray[100],
           },
         ]}
       >
@@ -53,19 +53,17 @@ const EmptyState: React.FC<EmptyStateProps> = ({
         />
       </View>
       <Text
-        variant={minimized ? "h4" : "h3"}
+        variant={minimized ? "h6" : "h6"}
         weight="semibold"
         style={[styles.title, minimized && styles.minimizedTitle]}
-        color={isDark ? theme.colors.white : theme.colors.grayPalette[900]}
+        color={isDark ? theme.colors.white : theme.colors.gray[900]}
       >
         {title}
-      </Text>{" "}
+      </Text>
       <Text
-        variant={minimized ? "body" : "h3"}
+        variant={minimized ? "body" : "h6"}
         style={[styles.message, minimized && styles.minimizedMessage]}
-        color={
-          isDark ? theme.colors.grayPalette[400] : theme.colors.grayPalette[600]
-        }
+        color={isDark ? theme.colors.gray[400] : theme.colors.gray[600]}
       >
         {message}
       </Text>

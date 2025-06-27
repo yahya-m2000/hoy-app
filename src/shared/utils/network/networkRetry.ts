@@ -1,4 +1,4 @@
-import NetInfo from '@react-native-community/netinfo';
+import NetInfo from "./netInfoCompat";
 
 // Track failed network requests for retry
 let networkFailedQueue: (() => void)[] = [];
@@ -8,16 +8,18 @@ let networkFailedQueue: (() => void)[] = [];
  */
 export const processNetworkQueue = () => {
   if (networkFailedQueue.length > 0) {
-    console.log(`Retrying ${networkFailedQueue.length} requests after network reconnection`);
-    
+    console.log(
+      `Retrying ${networkFailedQueue.length} requests after network reconnection`
+    );
+
     const queueToProcess = [...networkFailedQueue];
     networkFailedQueue = [];
-    
-    queueToProcess.forEach(request => {
+
+    queueToProcess.forEach((request) => {
       try {
         request();
       } catch (error) {
-        console.error('Error retrying request:', error);
+        console.error("Error retrying request:", error);
       }
     });
   }
@@ -28,7 +30,7 @@ export const processNetworkQueue = () => {
  */
 export const setupNetworkMonitoring = () => {
   // Set up network state listener
-  NetInfo.addEventListener(state => {
+  NetInfo.addEventListener((state) => {
     if (state.isConnected && state.isInternetReachable !== false) {
       // Network is back - process any queued requests
       processNetworkQueue();
@@ -48,9 +50,9 @@ export const addToRetryQueue = (retryFunction: () => void) => {
  */
 export const isNetworkError = (error: any): boolean => {
   return (
-    error?.message?.includes('Network Error') ||
-    error?.code === 'ECONNABORTED' ||
-    error?.code === 'ERR_NETWORK' ||
+    error?.message?.includes("Network Error") ||
+    error?.code === "ECONNABORTED" ||
+    error?.code === "ERR_NETWORK" ||
     !error?.response
   );
 };

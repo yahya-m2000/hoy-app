@@ -6,15 +6,19 @@
 
 // React and React Native
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text } from "@shared/components/base/Text";
 
 // External Libraries
 import { format } from "date-fns";
-import { router } from "expo-router";
-import { useTranslation } from "react-i18next";
+import { useRouter } from "expo-router";
 
 // Shared Context and Hooks
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
+
+// Shared Components
+import { PropertyImageContainer } from "@shared/components/common/Property";
+import { BookingStatusBadge } from "@shared/components/common/Status";
 
 // Shared Constants
 import { radius, fontSize, spacing } from "@shared/constants";
@@ -29,64 +33,10 @@ interface BookingCardProps {
 
 const BookingCard: React.FC<BookingCardProps> = ({ booking, isUpcoming }) => {
   const { theme, isDark } = useTheme();
-  const { t } = useTranslation();
-
-  // Format date to display
+  const router = useRouter(); // Format date to display
   const formatBookingDate = (dateString: string) => {
     const date = new Date(dateString);
     return format(date, "MMM d, yyyy");
-  };
-
-  // Get status colors and background
-  const getStatusColors = (status: PopulatedBooking["bookingStatus"]) => {
-    switch (status) {
-      case "confirmed":
-        return {
-          textColor: "#059669", // green-600
-          backgroundColor: "#dcfce7", // green-100
-          darkBackgroundColor: "#064e3b", // green-900
-        };
-      case "pending":
-        return {
-          textColor: "#d97706", // amber-600
-          backgroundColor: "#fef3c7", // amber-100
-          darkBackgroundColor: "#92400e", // amber-800
-        };
-      case "completed":
-        return {
-          textColor: "#2563eb", // blue-600
-          backgroundColor: "#dbeafe", // blue-100
-          darkBackgroundColor: "#1e3a8a", // blue-900
-        };
-      case "cancelled":
-        return {
-          textColor: "#dc2626", // red-600
-          backgroundColor: "#fee2e2", // red-100
-          darkBackgroundColor: "#7f1d1d", // red-900
-        };
-      default:
-        return {
-          textColor: theme.colors.gray[600],
-          backgroundColor: theme.colors.gray[100],
-          darkBackgroundColor: theme.colors.gray[800],
-        };
-    }
-  };
-
-  // Get status text
-  const getStatusText = (status: PopulatedBooking["bookingStatus"]) => {
-    switch (status) {
-      case "confirmed":
-        return t("booking.confirmed") || "Confirmed";
-      case "pending":
-        return t("booking.pending") || "Pending";
-      case "completed":
-        return t("booking.completed") || "Completed";
-      case "cancelled":
-        return t("booking.cancelled") || "Cancelled";
-      default:
-        return status;
-    }
   };
 
   // Navigate to booking details
@@ -106,21 +56,8 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isUpcoming }) => {
   const checkIn = formatBookingDate(booking.checkIn);
   const checkOut = formatBookingDate(booking.checkOut);
   const nights = calculateNights();
-  const statusColors = getStatusColors(booking.bookingStatus);
 
-  // Helper function to get the first available image
-  const getPropertyImage = () => {
-    if (!property) return null;
-
-    // Use the images array from Property type
-    const images = property.images || [];
-
-    if (images.length > 0) {
-      return images[0];
-    }
-
-    return null;
-  };
+  // Get property data
 
   // Helper function to get property title using Property type structure
   const getPropertyTitle = () => {
@@ -149,9 +86,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isUpcoming }) => {
       return "Location not specified";
     }
   };
-
   const locationDisplay = getLocationDisplay();
-  const propertyImage = property?.images?.[0];
   const propertyTitle = getPropertyTitle();
 
   // Format price
@@ -171,68 +106,43 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isUpcoming }) => {
       accessibilityRole="button"
       accessibilityLabel={`Booking for ${propertyTitle} in ${locationDisplay}`}
     >
-      {/* Image Container with Status Badge */}{" "}
+      {/* Image Container with Status Badge */}
       <View style={styles.imageContainer}>
-        {propertyImage ? (
-          <Image
-            source={{ uri: propertyImage }}
-            style={styles.image}
-            resizeMode="cover"
-          />
-        ) : (
-          <View style={[styles.image, styles.placeholderImage]}>
-            <Text style={styles.placeholderText}>No Image</Text>
-          </View>
-        )}
+        <PropertyImageContainer
+          images={property?.images}
+          containerStyle={styles.image}
+          variant="small"
+        />
 
         {/* Status Badge */}
-        <View
-          style={[
-            styles.statusBadge,
-            {
-              backgroundColor: isDark
-                ? statusColors.darkBackgroundColor
-                : statusColors.backgroundColor,
-            },
-          ]}
-        >
-          <Text style={[styles.statusText, { color: statusColors.textColor }]}>
-            {getStatusText(booking.bookingStatus)}
-          </Text>
-        </View>
+        <BookingStatusBadge
+          status={booking.bookingStatus}
+          type="booking"
+          size="small"
+        />
       </View>
       {/* Property Details */}
       <View style={styles.detailsContainer}>
         {/* Location and Status Row */}
         <View style={styles.locationRow}>
           <Text
-            style={[
-              styles.location,
-              {
-                color: isDark ? theme.colors.gray[50] : theme.colors.gray[900],
-              },
-            ]}
-            numberOfLines={1}
-            ellipsizeMode="tail"
+            size="sm"
+            weight="semibold"
+            color={isDark ? theme.colors.gray[50] : theme.colors.gray[900]}
+            style={[styles.location]}
           >
             {locationDisplay}
           </Text>
         </View>
-
         {/* Property Title */}
         <Text
-          style={[
-            styles.title,
-            {
-              color: isDark ? theme.colors.gray[300] : theme.colors.gray[600],
-            },
-          ]}
-          numberOfLines={1}
-          ellipsizeMode="tail"
+          size="sm"
+          weight="normal"
+          color={isDark ? theme.colors.gray[300] : theme.colors.gray[600]}
+          style={[styles.title]}
         >
           {propertyTitle}
         </Text>
-
         {/* Dates */}
         <Text
           style={[
@@ -244,7 +154,6 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isUpcoming }) => {
         >
           {checkIn} - {checkOut}
         </Text>
-
         {/* Price Row */}
         <View style={styles.priceRow}>
           <Text
@@ -255,7 +164,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isUpcoming }) => {
               },
             ]}
           >
-            {formatPrice(booking.totalPrice)}{" "}
+            {formatPrice(booking.totalPrice)}
             <Text
               style={[
                 styles.perNight,
@@ -336,11 +245,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 3,
-  },
-  statusText: {
-    fontSize: fontSize.xs,
-    fontWeight: "600",
-    textTransform: "uppercase",
   },
 
   // ===== CONTENT SECTION =====

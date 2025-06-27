@@ -75,12 +75,25 @@ const transformPropertyData = (apiProperty: any): PropertyType => {
     beds: apiProperty.units?.[0]?.beds || 1,
     bathrooms: apiProperty.units?.[0]?.bathrooms || 1,
     maxGuests: apiProperty.maxGuests || apiProperty.units?.[0]?.maxGuests || 2,
-    host: apiProperty.hostId || apiProperty.host || "",
-    hostId: apiProperty.hostId || apiProperty.host || "",
-    hostName: "", // Not provided in API response
-    hostImage: "", // Not provided in API response
+    host:
+      typeof apiProperty.host === "object"
+        ? apiProperty.host
+        : apiProperty.hostId || apiProperty.host || "",
+    hostId:
+      typeof apiProperty.host === "object"
+        ? apiProperty.host.id
+        : apiProperty.hostId || apiProperty.host || "",
+    hostName:
+      typeof apiProperty.host === "object"
+        ? `${apiProperty.host.firstName || ""} ${
+            apiProperty.host.lastName || ""
+          }`.trim()
+        : "", // Extract from enriched host object
+    hostImage:
+      typeof apiProperty.host === "object" ? apiProperty.host.profileImage : "", // Extract from enriched host object
     createdAt: apiProperty.createdAt || new Date().toISOString(),
     updatedAt: apiProperty.updatedAt || new Date().toISOString(),
+    checkInExperiences: apiProperty.checkInExperiences || [],
   };
 };
 
@@ -193,10 +206,6 @@ export function useProperties(params: SearchParams = {}): PropertiesHookReturn {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Add these to track request frequency
-  const requestCountRef = useRef(0);
-  const lastRequestTimeRef = useRef(Date.now());
-  const MIN_REQUEST_INTERVAL = 2000; // 2 seconds between requests
   const isMountedRef = useRef(false);
 
   // Create a memoized search query object

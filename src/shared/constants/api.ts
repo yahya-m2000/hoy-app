@@ -3,77 +3,188 @@
  * Consolidated from api.ts and apiEndpoints.ts
  */
 
-import { API_CONFIG, API_ENDPOINTS } from "../config";
-
-// API Base Configuration
+// API Base Configuration - get from expo config first, then environment
 export const API_BASE_URL =
-  "https://fb4c-109-147-151-140.ngrok-free.app/api/v1";
+  "https://4567-109-146-197-179.ngrok-free.app/api/v1";
+// process.env.EXPO_PUBLIC_API_BASE_URL;
 
 // Authentication endpoints
 export const AUTH_ENDPOINTS = {
-  LOGIN: API_ENDPOINTS.AUTH_LOGIN,
-  REGISTER: API_ENDPOINTS.AUTH_REGISTER,
-  REFRESH_TOKEN: API_ENDPOINTS.AUTH_REFRESH_TOKEN,
-  FORGOT_PASSWORD: API_ENDPOINTS.AUTH_FORGOT_PASSWORD,
-  RESET_PASSWORD: API_ENDPOINTS.AUTH_RESET_PASSWORD,
+  LOGIN: process.env.EXPO_PUBLIC_AUTH_LOGIN || "/auth/login",
+  REGISTER: process.env.EXPO_PUBLIC_AUTH_REGISTER || "/auth/register",
+  REFRESH_TOKEN:
+    process.env.EXPO_PUBLIC_AUTH_REFRESH_TOKEN || "/auth/refresh-token",
+  FORGOT_PASSWORD:
+    process.env.EXPO_PUBLIC_AUTH_FORGOT_PASSWORD || "/auth/forgot-password",
+  RESET_PASSWORD:
+    process.env.EXPO_PUBLIC_AUTH_RESET_PASSWORD || "/auth/reset-password",
 };
 
 // Property-related endpoints
 export const PROPERTY_ENDPOINTS = {
-  SEARCH: API_ENDPOINTS.PROPERTY_SEARCH,
-  FEATURED: API_ENDPOINTS.PROPERTY_FEATURED,
-  NEARBY: API_ENDPOINTS.PROPERTY_NEARBY,
-  DETAILS: (id: string) => `${API_ENDPOINTS.PROPERTY_DETAILS}/${id}`,
+  SEARCH: process.env.EXPO_PUBLIC_PROPERTY_SEARCH || "/properties",
+  FEATURED: process.env.EXPO_PUBLIC_PROPERTY_FEATURED || "/properties/featured",
+  NEARBY: process.env.EXPO_PUBLIC_PROPERTY_NEARBY || "/properties/nearby",
+  DETAILS: (id: string) =>
+    `${process.env.EXPO_PUBLIC_PROPERTY_DETAILS || "/properties"}/${id}`,
   CALENDAR: (id: string) =>
-    `${API_ENDPOINTS.PROPERTY_DETAILS}/${id}${API_ENDPOINTS.PROPERTY_CALENDAR}`,
+    `${process.env.EXPO_PUBLIC_PROPERTY_DETAILS || "/properties"}/${id}${
+      process.env.EXPO_PUBLIC_PROPERTY_CALENDAR || "/calendar"
+    }`,
   UNITS: (id: string) =>
-    `${API_ENDPOINTS.PROPERTY_DETAILS}/${id}${API_ENDPOINTS.PROPERTY_UNITS}`,
+    `${process.env.EXPO_PUBLIC_PROPERTY_DETAILS || "/properties"}/${id}${
+      process.env.EXPO_PUBLIC_PROPERTY_UNITS || "/units"
+    }`,
   UNIT_DETAILS: (propertyId: string, unitId: string) =>
-    `${API_ENDPOINTS.PROPERTY_DETAILS}/${propertyId}${API_ENDPOINTS.PROPERTY_UNITS}/${unitId}`,
+    `${
+      process.env.EXPO_PUBLIC_PROPERTY_DETAILS || "/properties"
+    }/${propertyId}${
+      process.env.EXPO_PUBLIC_PROPERTY_UNITS || "/units"
+    }/${unitId}`,
   REVIEWS: (id: string) =>
-    `${API_ENDPOINTS.PROPERTY_DETAILS}/${id}${API_ENDPOINTS.PROPERTY_REVIEWS}`,
+    `${process.env.EXPO_PUBLIC_PROPERTY_DETAILS || "/properties"}/${id}${
+      process.env.EXPO_PUBLIC_PROPERTY_REVIEWS || "/reviews"
+    }`,
   AVAILABILITY: (id: string) =>
-    `${API_ENDPOINTS.PROPERTY_DETAILS}/${id}${API_ENDPOINTS.PROPERTY_AVAILABILITY}`,
+    `${process.env.EXPO_PUBLIC_PROPERTY_DETAILS || "/properties"}/${id}${
+      process.env.EXPO_PUBLIC_PROPERTY_AVAILABILITY || "/availability"
+    }`,
 };
 
 // Search-related endpoints
 export const SEARCH_ENDPOINTS = {
-  GENERAL: API_ENDPOINTS.SEARCH_GENERAL,
-  SUGGESTIONS: API_ENDPOINTS.SEARCH_SUGGESTIONS,
-  NEARBY: API_ENDPOINTS.SEARCH_NEARBY,
-  TRENDING: API_ENDPOINTS.SEARCH_TRENDING,
+  GENERAL: process.env.EXPO_PUBLIC_SEARCH_GENERAL || "/search",
+  SUGGESTIONS:
+    process.env.EXPO_PUBLIC_SEARCH_SUGGESTIONS || "/search/suggestions",
+  NEARBY: process.env.EXPO_PUBLIC_SEARCH_NEARBY || "/search/nearby",
+  TRENDING: process.env.EXPO_PUBLIC_SEARCH_TRENDING || "/search/trending",
 };
 
 // User/traveler endpoints
 export const USER_ENDPOINTS = {
-  PROFILE: API_ENDPOINTS.USER_PROFILE,
-  UPDATE_PROFILE: API_ENDPOINTS.USER_UPDATE_PROFILE,
-  BOOKINGS: API_ENDPOINTS.USER_BOOKINGS,
-  BOOKING: (id: string) => `${API_ENDPOINTS.USER_BOOKINGS}/${id}`,
-  FAVORITES: API_ENDPOINTS.USER_FAVORITES,
-  MESSAGES: API_ENDPOINTS.USER_MESSAGES,
-  MESSAGES_CONVERSATION: (id: string) => `${API_ENDPOINTS.USER_MESSAGES}/${id}`,
+  PROFILE: process.env.EXPO_PUBLIC_USER_PROFILE || "/user/profile",
+  UPDATE_PROFILE:
+    process.env.EXPO_PUBLIC_USER_UPDATE_PROFILE || "/user/profile",
+  BOOKINGS: process.env.EXPO_PUBLIC_USER_BOOKINGS || "/user/bookings",
+  BOOKING: (id: string) =>
+    `${process.env.EXPO_PUBLIC_USER_BOOKINGS || "/user/bookings"}/${id}`,
+  FAVORITES: process.env.EXPO_PUBLIC_USER_FAVORITES || "/user/favorites",
+  MESSAGES: process.env.EXPO_PUBLIC_USER_MESSAGES || "/user/messages",
+  MESSAGES_CONVERSATION: (id: string) =>
+    `${process.env.EXPO_PUBLIC_USER_MESSAGES || "/user/messages"}/${id}`,
 };
 
 // Host endpoints
 export const HOST_ENDPOINTS = {
-  DASHBOARD: API_ENDPOINTS.HOST_DASHBOARD,
-  PROPERTIES: API_ENDPOINTS.HOST_PROPERTIES,
-  PROPERTY: (id: string) => `${API_ENDPOINTS.HOST_PROPERTIES}/${id}`,
-  EARNINGS: API_ENDPOINTS.HOST_EARNINGS,
-  RESERVATIONS: API_ENDPOINTS.HOST_RESERVATIONS,
-  RESERVATION: (id: string) => `${API_ENDPOINTS.HOST_RESERVATIONS}/${id}`,
-  MESSAGES: API_ENDPOINTS.HOST_MESSAGES,
-  MESSAGES_CONVERSATION: (id: string) => `${API_ENDPOINTS.HOST_MESSAGES}/${id}`,
-  SETTINGS: API_ENDPOINTS.HOST_SETTINGS,
+  DASHBOARD: process.env.EXPO_PUBLIC_HOST_DASHBOARD || "/host/dashboard",
+  PROPERTIES: process.env.EXPO_PUBLIC_HOST_PROPERTIES || "/host/properties",
+  PROPERTY: (id: string) =>
+    `${process.env.EXPO_PUBLIC_HOST_PROPERTIES || "/host/properties"}/${id}`,
+  EARNINGS: process.env.EXPO_PUBLIC_HOST_EARNINGS || "/host/earnings",
+  RESERVATIONS:
+    process.env.EXPO_PUBLIC_HOST_RESERVATIONS || "/host/reservations",
+  RESERVATION: (id: string) =>
+    `${
+      process.env.EXPO_PUBLIC_HOST_RESERVATIONS || "/host/reservations"
+    }/${id}`,
+  MESSAGES: process.env.EXPO_PUBLIC_HOST_MESSAGES || "/host/messages",
+  MESSAGES_CONVERSATION: (id: string) =>
+    `${process.env.EXPO_PUBLIC_HOST_MESSAGES || "/host/messages"}/${id}`,
+  SETTINGS: process.env.EXPO_PUBLIC_HOST_SETTINGS || "/host/settings",
 };
 
 // Booking endpoints
 export const BOOKING_ENDPOINTS = {
-  CREATE: API_ENDPOINTS.BOOKING_CREATE,
-  USER_BOOKINGS: API_ENDPOINTS.BOOKING_USER_BOOKINGS,
-  DETAILS: (id: string) => `${API_ENDPOINTS.BOOKING_CREATE}/${id}`,
-  CANCEL: (id: string) => `${API_ENDPOINTS.BOOKING_CREATE}/${id}/cancel`,
+  CREATE: process.env.EXPO_PUBLIC_BOOKING_CREATE || "/bookings",
+  USER_BOOKINGS:
+    process.env.EXPO_PUBLIC_BOOKING_USER_BOOKINGS || "/user/bookings",
+  DETAILS: (id: string) =>
+    `${process.env.EXPO_PUBLIC_BOOKING_CREATE || "/bookings"}/${id}`,
+  CANCEL: (id: string) =>
+    `${process.env.EXPO_PUBLIC_BOOKING_CREATE || "/bookings"}/${id}/cancel`,
+  CHECK_IN: (id: string) =>
+    `${process.env.EXPO_PUBLIC_BOOKING_CREATE || "/bookings"}/${id}/check-in`,
+  CHECK_OUT: (id: string) =>
+    `${process.env.EXPO_PUBLIC_BOOKING_CREATE || "/bookings"}/${id}/check-out`,
+};
+
+// Review endpoints
+export const REVIEW_ENDPOINTS = {
+  CREATE: (propertyId: string) => `/reviews/property/${propertyId}`,
+  PROPERTY_REVIEWS: (propertyId: string) => `/reviews/property/${propertyId}`,
+  PROPERTY_STATS: (propertyId: string) =>
+    `/reviews/property/${propertyId}/stats`,
+  ELIGIBILITY: (bookingId: string) => `/reviews/eligibility/${bookingId}`,
+  RESPOND: (reviewId: string) => `/reviews/${reviewId}/respond`,
+  REPORT: (reviewId: string) => `/reviews/${reviewId}/report`,
+};
+
+// Public endpoints that don't require authentication
+export const PUBLIC_ENDPOINTS = [
+  "/auth/login",
+  "/auth/register",
+  "/auth/refresh-token",
+  "/auth/forgot-password",
+  "/auth/reset-password",
+  "/properties",
+  "/search",
+  "/reviews/property",
+  "/public",
+  "/health",
+  "/status",
+] as const;
+
+// Protected endpoints that always require authentication
+export const PROTECTED_ENDPOINTS = [
+  "/user",
+  "/host",
+  "/bookings",
+  "/messages",
+  "/favorites",
+  "/profile",
+] as const;
+
+// Helper function to check if an endpoint is protected
+export const isProtectedEndpoint = (url: string): boolean => {
+  if (!url) return false;
+
+  return PROTECTED_ENDPOINTS.some((endpoint) => url.includes(endpoint));
+};
+
+// Helper function to check if an endpoint is public
+export const isPublicEndpoint = (url: string, method?: string): boolean => {
+  if (!url) return false;
+
+  // First check if it's a protected endpoint (takes precedence)
+  if (isProtectedEndpoint(url)) {
+    return false;
+  }
+
+  return PUBLIC_ENDPOINTS.some((endpoint) => {
+    if (!url.includes(endpoint)) return false;
+
+    // Properties endpoint is public for GET requests only (but not host properties)
+    if (endpoint === "/properties") {
+      return (
+        (!method || method.toUpperCase() === "GET") &&
+        !url.includes("/host/") &&
+        !url.includes("/bookings")
+      );
+    }
+
+    // Status endpoint is public only for general status, not host status
+    if (endpoint === "/status") {
+      return !url.includes("/host/");
+    }
+
+    // Reviews property endpoint is public for GET requests only
+    // (POST requests for creating reviews require authentication)
+    if (endpoint === "/reviews/property") {
+      return !method || method.toUpperCase() === "GET";
+    }
+
+    return true;
+  });
 };
 
 // Legacy consolidated export for backwards compatibility
@@ -84,4 +195,5 @@ export const ENDPOINTS = {
   PROPERTIES: PROPERTY_ENDPOINTS,
   SEARCH: SEARCH_ENDPOINTS,
   BOOKING: BOOKING_ENDPOINTS,
+  REVIEW: REVIEW_ENDPOINTS,
 };

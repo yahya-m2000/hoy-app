@@ -17,7 +17,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
 // Context and hooks
-import { useTheme, useToast } from "@shared/context";
+import { useToast } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 import { useTranslation } from "react-i18next";
 
 // Components
@@ -100,9 +101,7 @@ export default function ChangePasswordModal() {
           style={[
             styles.inputLabel,
             {
-              color: isDark
-                ? theme.colors.grayPalette[300]
-                : theme.colors.grayPalette[700],
+              color: isDark ? theme.colors.gray[300] : theme.colors.gray[700],
             },
           ]}
         >
@@ -113,12 +112,10 @@ export default function ChangePasswordModal() {
             style={[
               styles.passwordInput,
               {
-                backgroundColor: isDark
-                  ? theme.colors.grayPalette[800]
-                  : theme.white,
+                backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
                 borderColor: isDark
-                  ? theme.colors.grayPalette[700]
-                  : theme.colors.grayPalette[300],
+                  ? theme.colors.gray[700]
+                  : theme.colors.gray[300],
                 color: isDark ? theme.white : theme.colors.gray[900],
               },
             ]}
@@ -198,9 +195,7 @@ export default function ChangePasswordModal() {
             style={[
               styles.description,
               {
-                color: isDark
-                  ? theme.colors.grayPalette[300]
-                  : theme.colors.grayPalette[700],
+                color: isDark ? theme.colors.gray[300] : theme.colors.gray[700],
               },
             ]}
           >
@@ -241,7 +236,7 @@ export default function ChangePasswordModal() {
               styles.requirementsContainer,
               {
                 backgroundColor: isDark
-                  ? theme.colors.grayPalette[700]
+                  ? theme.colors.gray[700]
                   : theme.colors.gray[100],
                 borderColor: isDark
                   ? theme.colors.gray[600]
@@ -255,7 +250,7 @@ export default function ChangePasswordModal() {
                 {
                   color: isDark
                     ? theme.colors.gray[200]
-                    : theme.colors.grayPalette[800],
+                    : theme.colors.gray[800],
                 },
               ]}
             >
@@ -283,8 +278,8 @@ export default function ChangePasswordModal() {
                   styles.requirementText,
                   {
                     color: isDark
-                      ? theme.colors.grayPalette[300]
-                      : theme.colors.grayPalette[700],
+                      ? theme.colors.gray[300]
+                      : theme.colors.gray[700],
                   },
                 ]}
               >
@@ -313,8 +308,8 @@ export default function ChangePasswordModal() {
                   styles.requirementText,
                   {
                     color: isDark
-                      ? theme.colors.grayPalette[300]
-                      : theme.colors.grayPalette[700],
+                      ? theme.colors.gray[300]
+                      : theme.colors.gray[700],
                   },
                 ]}
               >
@@ -343,8 +338,8 @@ export default function ChangePasswordModal() {
                   styles.requirementText,
                   {
                     color: isDark
-                      ? theme.colors.grayPalette[300]
-                      : theme.colors.grayPalette[700],
+                      ? theme.colors.gray[300]
+                      : theme.colors.gray[700],
                   },
                 ]}
               >

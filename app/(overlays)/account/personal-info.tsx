@@ -14,7 +14,8 @@ import {
   ActivityIndicator,
   Platform,
 } from "react-native";
-import { useTheme, useToast } from "@shared/context";
+import { useToast } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
@@ -110,8 +111,8 @@ export default function PersonalInfoScreen() {
           styles.container,
           {
             backgroundColor: isDark
-              ? theme.colors.grayPalette[900]
-              : theme.colors.grayPalette[50],
+              ? theme.colors.gray[900]
+              : theme.colors.gray[50],
           },
         ]}
       >
@@ -124,9 +125,7 @@ export default function PersonalInfoScreen() {
             style={[
               styles.loadingText,
               {
-                color: isDark
-                  ? theme.colors.grayPalette[300]
-                  : theme.colors.grayPalette[700],
+                color: isDark ? theme.colors.gray[300] : theme.colors.gray[700],
               },
             ]}
           >
@@ -149,9 +148,7 @@ export default function PersonalInfoScreen() {
           style={[
             styles.inputLabel,
             {
-              color: isDark
-                ? theme.colors.grayPalette[300]
-                : theme.colors.grayPalette[700],
+              color: isDark ? theme.colors.gray[300] : theme.colors.gray[700],
             },
           ]}
         >
@@ -163,13 +160,13 @@ export default function PersonalInfoScreen() {
             {
               backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
               borderColor: isDark
-                ? theme.colors.grayPalette[700]
-                : theme.colors.grayPalette[300],
-              color: isDark ? theme.white : theme.colors.grayPalette[900],
+                ? theme.colors.gray[700]
+                : theme.colors.gray[300],
+              color: isDark ? theme.white : theme.colors.gray[900],
             },
             !editable && {
               backgroundColor: isDark
-                ? theme.colors.grayPalette[700]
+                ? theme.colors.gray[700]
                 : theme.colors.gray[100],
             },
           ]}
@@ -188,7 +185,6 @@ export default function PersonalInfoScreen() {
           backgroundColor: isDark
             ? theme.colors.gray[900]
             : theme.colors.gray[50],
-          paddingTop: insets.top,
         },
       ]}
     >
@@ -199,8 +195,8 @@ export default function PersonalInfoScreen() {
       >
         <View style={styles.profileSection}>
           <Avatar
-            size="xl"
-            source={user?.avatarUrl || null}
+            size="small"
+            source={user?.avatarUrl || undefined}
             name={`${user?.firstName || ""} ${user?.lastName || ""}`}
             showBorder
           />
@@ -220,8 +216,8 @@ export default function PersonalInfoScreen() {
                   styles.changePhotoText,
                   {
                     color: isDark
-                      ? theme.colors.grayPalette[300]
-                      : theme.colors.grayPalette[700],
+                      ? theme.colors.gray[300]
+                      : theme.colors.gray[700],
                   },
                 ]}
               >
@@ -268,9 +264,7 @@ export default function PersonalInfoScreen() {
             style={[
               styles.sectionTitle,
               {
-                color: isDark
-                  ? theme.colors.grayPalette[300]
-                  : theme.colors.grayPalette[700],
+                color: isDark ? theme.colors.gray[300] : theme.colors.gray[700],
               },
             ]}
           >
@@ -338,8 +332,8 @@ export default function PersonalInfoScreen() {
                 styles.cancelButtonText,
                 {
                   color: isDark
-                    ? theme.colors.grayPalette[300]
-                    : theme.colors.grayPalette[700],
+                    ? theme.colors.gray[300]
+                    : theme.colors.gray[700],
                 },
               ]}
             >

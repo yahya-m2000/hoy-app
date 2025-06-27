@@ -4,9 +4,9 @@
  */
 
 import React from "react";
-import { Text, TextStyle } from "react-native";
+import { TextStyle } from "react-native";
+import { Text } from "@shared/components/base/Text";
 import { useTheme } from "src/shared/context";
-import { fontSize, fontWeight } from "src/shared/constants";
 
 export interface PropertyLocationDisplayProps {
   /** Modern address structure */
@@ -45,7 +45,6 @@ const PropertyLocationDisplay: React.FC<PropertyLocationDisplayProps> = ({
 }) => {
   const { theme, isDark } = useTheme();
 
-  const textSize = variant === "small" ? fontSize.xs : fontSize.sm;
   const defaultColor = isDark ? theme.colors.gray[50] : theme.colors.gray[900];
 
   // Format location for display using new address structure
@@ -112,16 +111,10 @@ const PropertyLocationDisplay: React.FC<PropertyLocationDisplayProps> = ({
 
   return (
     <Text
-      style={[
-        {
-          fontSize: textSize,
-          fontWeight: String(fontWeight.semibold) as any,
-          color: defaultColor,
-        },
-        style,
-      ]}
-      numberOfLines={numberOfLines}
-      ellipsizeMode={ellipsizeMode}
+      size={variant === "small" ? "xs" : "sm"}
+      weight="semibold"
+      color={defaultColor}
+      style={style}
     >
       {locationText}
     </Text>

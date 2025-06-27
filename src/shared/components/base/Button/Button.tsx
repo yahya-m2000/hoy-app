@@ -9,22 +9,22 @@ import React from "react";
 // React Native imports
 import {
   TouchableOpacity,
-  Text,
   ActivityIndicator,
   StyleSheet,
   ViewStyle,
   TextStyle,
   View,
 } from "react-native";
-
-// Internal imports
-import { useTheme } from "@shared/context";
+import { Text } from "@shared/components/base/Text";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Constants
-import { radius, fontSize, fontWeight, spacing } from "@shared/constants";
+import { radius, fontSize, spacing } from "@shared/constants";
+import { primary, secondary, gray } from "@shared/constants/colors";
 
 type ButtonVariant = "primary" | "secondary" | "outline" | "ghost";
 type ButtonSize = "small" | "medium" | "large";
+type ButtonRadius = "xs" | "sm" | "md" | "lg" | "xl" | "circle" | number;
 
 interface ButtonProps {
   title: string;
@@ -38,6 +38,7 @@ interface ButtonProps {
   style?: ViewStyle;
   textStyle?: TextStyle;
   accessibilityLabel?: string;
+  radius?: ButtonRadius;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -52,43 +53,63 @@ export const Button: React.FC<ButtonProps> = ({
   style,
   textStyle,
   accessibilityLabel,
+  radius: buttonRadius = "circle",
 }) => {
-  const { theme, isDark } = useTheme();
+  // Determine border radius based on radius prop
+  const getBorderRadius = () => {
+    if (typeof buttonRadius === "number") {
+      return buttonRadius;
+    }
+
+    switch (buttonRadius) {
+      case "xs":
+        return radius.xs;
+      case "sm":
+        return radius.sm;
+      case "md":
+        return radius.md;
+      case "lg":
+        return radius.lg;
+      case "xl":
+        return radius.xl;
+      case "circle":
+        return radius.circle;
+      default:
+        return radius.md;
+    }
+  };
+
+  const { theme } = useTheme();
 
   // Determine button background color based on variant and state
   const getBackgroundColor = () => {
-    if (disabled)
-      return isDark
-        ? theme.colors.grayPalette[700]
-        : theme.colors.grayPalette[300];
+    if (disabled) return gray[100];
 
     switch (variant) {
       case "primary":
-        return theme.primary[500];
+        return theme.text.primary; // #F56320 - Primary brand color
       case "secondary":
-        return theme.secondary[500];
+        return secondary[500];
       case "outline":
         return "transparent";
       case "ghost":
         return "transparent";
       default:
-        return theme.primary[500];
+        return primary[500];
     }
   };
 
   // Determine button border color based on variant and state
   const getBorderColor = () => {
-    if (disabled) return "transparent";
+    if (disabled) return gray[300];
 
     switch (variant) {
       case "outline":
-        return isDark
-          ? theme.colors.grayPalette[300]
-          : theme.colors.grayPalette[700];
+        return primary[500];
       case "primary":
-        return theme.primary[500];
+        return primary[500];
       case "secondary":
-        return theme.secondary[500];
+        return secondary[500];
       default:
         return "transparent";
     }
@@ -96,20 +117,19 @@ export const Button: React.FC<ButtonProps> = ({
 
   // Determine text color based on variant and state
   const getTextColor = () => {
-    if (disabled)
-      return isDark
-        ? theme.colors.grayPalette[500]
-        : theme.colors.grayPalette[500];
+    if (disabled) return gray[400];
 
     switch (variant) {
       case "primary":
+        return "#FFFFFF"; // White text on primary background
       case "secondary":
-        return theme.white;
+        return "#FFFFFF";
       case "outline":
+        return theme.text.primary; // Use theme text color instead of primary color
       case "ghost":
-        return isDark ? theme.colors.grayPalette[300] : theme.colors.gray[800];
+        return gray[700];
       default:
-        return theme.white;
+        return "#FFFFFF";
     }
   };
 
@@ -119,9 +139,9 @@ export const Button: React.FC<ButtonProps> = ({
       case "small":
         return { paddingVertical: spacing.xs, paddingHorizontal: spacing.md };
       case "large":
-        return { paddingVertical: spacing.md, paddingHorizontal: spacing.xl };
+        return { paddingVertical: spacing.lg, paddingHorizontal: spacing.xl };
       default:
-        return { paddingVertical: spacing.sm, paddingHorizontal: spacing.lg };
+        return { paddingVertical: spacing.sm, paddingHorizontal: spacing.lg }; // Default matches PropertyTab
     }
   };
 
@@ -147,6 +167,7 @@ export const Button: React.FC<ButtonProps> = ({
           backgroundColor: getBackgroundColor(),
           borderColor: getBorderColor(),
           borderWidth: variant === "outline" ? 1 : 0,
+          borderRadius: getBorderRadius(),
           ...getPadding(),
         },
         style,
@@ -172,10 +193,10 @@ export const Button: React.FC<ButtonProps> = ({
                 {
                   color: getTextColor(),
                   fontSize: getFontSize(),
-                  fontWeight: String(fontWeight.normal) as any,
                 },
                 textStyle,
               ]}
+              weight="semibold"
             >
               {title}
             </Text>
@@ -191,7 +212,6 @@ export const Button: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: radius.md,
     alignItems: "center",
     justifyContent: "center",
   },

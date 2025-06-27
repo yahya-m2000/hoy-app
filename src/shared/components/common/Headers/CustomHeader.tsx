@@ -18,7 +18,7 @@ import { View, StyleSheet, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
 // Context
-import { useTheme } from "@shared/context/ThemeContext";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Constants
 import { spacing } from "@shared/constants/spacing";
@@ -44,13 +44,11 @@ export default function CustomHeader({
 
   const headerBackgroundColor =
     backgroundColor ||
-    (isDark ? theme.colors.grayPalette[900] : theme.colors.grayPalette[50]);
+    (isDark ? theme.colors.gray[900] : theme.colors.gray[50]);
 
   const titleColor = textColor || (isDark ? theme.white : theme.black);
 
-  const borderColor = isDark
-    ? theme.colors.grayPalette[700]
-    : theme.colors.grayPalette[300];
+  const borderColor = isDark ? theme.colors.gray[700] : theme.colors.gray[300];
 
   return (
     <>
@@ -70,7 +68,7 @@ export default function CustomHeader({
           {showBackButton && (
             <BackButton onPress={onBackPress} color={titleColor} />
           )}
-        </View>{" "}
+        </View>
         {/* Center - Title */}
         <View style={styles.centerContainer}>
           <Text

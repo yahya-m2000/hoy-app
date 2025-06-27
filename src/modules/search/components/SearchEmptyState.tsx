@@ -1,9 +1,9 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { TouchableOpacity } from "react-native";
+import { Container, Text } from "@shared/components/base";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import { useTheme } from "@shared/context";
-import { spacing, fontSize, radius } from "@shared/constants";
+import { useTheme } from "@shared/hooks/useTheme";
 
 interface SearchEmptyStateProps {
   isError?: boolean;
@@ -37,92 +37,49 @@ export const SearchEmptyState: React.FC<SearchEmptyStateProps> = ({
     : t("search.tryDifferentFilters") || "Try adjusting your search criteria";
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: isDark
-            ? theme.colors.gray[900]
-            : theme.colors.gray[50],
-        },
-      ]}
+    <Container
+      justifyContent="center"
+      alignItems="center"
+      paddingVertical="xxl"
+      paddingHorizontal="lg"
+      backgroundColor={isDark ? theme.colors.gray[900] : theme.colors.gray[50]}
     >
-      <Ionicons
-        name={iconName}
-        size={48}
-        color={iconColor}
-        style={styles.icon}
-      />
-      <Text
-        style={[
-          styles.primaryText,
-          {
-            color: isDark ? theme.colors.gray[200] : theme.colors.gray[800],
-          },
-        ]}
-      >
-        {primaryText}
-      </Text>
-      <Text
-        style={[
-          styles.secondaryText,
-          {
-            color: isDark ? theme.colors.gray[400] : theme.colors.gray[600],
-          },
-        ]}
-      >
-        {secondaryText}
-      </Text>
+      <Container marginBottom="md">
+        <Ionicons name={iconName} size={48} color={iconColor} />
+      </Container>
+      <Container alignItems="center" marginBottom="xs">
+        <Text
+          size="lg"
+          weight="semibold"
+          color={isDark ? theme.colors.gray[200] : theme.colors.gray[800]}
+        >
+          {primaryText}
+        </Text>
+      </Container>
+      <Container alignItems="center" marginBottom="lg">
+        <Text
+          size="md"
+          color={isDark ? theme.colors.gray[400] : theme.colors.gray[600]}
+        >
+          {secondaryText}
+        </Text>
+      </Container>
 
       {isError && onRetry && (
         <TouchableOpacity
-          style={[
-            styles.retryButton,
-            {
-              backgroundColor: theme.colors.primary,
-            },
-          ]}
+          style={{
+            backgroundColor: theme.colors.primary,
+            paddingVertical: 12,
+            paddingHorizontal: 16,
+            borderRadius: 8,
+          }}
           onPress={onRetry}
         >
-          <Text style={styles.retryButtonText}>
+          <Text size="md" weight="medium" color="white">
             {t("search.retry") || "Try Again"}
           </Text>
         </TouchableOpacity>
       )}
-    </View>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: spacing.xxl * 2,
-    paddingHorizontal: spacing.lg,
-  },
-  icon: {
-    marginBottom: spacing.md,
-  },
-  primaryText: {
-    fontSize: fontSize.lg,
-    fontWeight: "600",
-    marginBottom: spacing.xs,
-    textAlign: "center",
-  },
-  secondaryText: {
-    fontSize: fontSize.md,
-    textAlign: "center",
-    marginBottom: spacing.lg,
-  },
-  retryButton: {
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
-    borderRadius: radius.md,
-  },
-  retryButtonText: {
-    color: "#FFFFFF",
-    fontSize: fontSize.md,
-    fontWeight: "600",
-  },
-});

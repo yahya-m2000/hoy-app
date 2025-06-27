@@ -21,13 +21,13 @@ export const getGreeting = (
   if (isAuthenticated && user) {
     const firstName = user.firstName;
     if (firstName) {
-      return `Hi, ${firstName}`;
+      return `${firstName}`;
     }
     // Fallback to email username if no first name
     const emailUsername = user.email?.split("@")[0];
     if (emailUsername) {
-      return `Hi, ${emailUsername}`;
+      return `${emailUsername}`;
     }
   }
-  return "Hi traveller";
+  return "traveller";
 };

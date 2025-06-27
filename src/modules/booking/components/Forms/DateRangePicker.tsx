@@ -1,26 +1,18 @@
-﻿/**
+/**
  * Date Range Picker component for the Hoy application
  * Allows users to select check-in and check-out dates
  */
 
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
+import { TouchableOpacity, ActivityIndicator } from "react-native";
 
 // import { useTranslation } from "react-i18next";
 import { Calendar } from "@shared/components";
+import { Container, Text } from "@shared/components/base";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import * as bookingService from "@shared/services/bookingService";
 import { useTheme, useDateSelection } from "@shared/context";
-
-// Constants
-import { fontSize, spacing, radius, fontWeight } from "@shared/constants";
 
 interface DateRangePickerProps {
   initialStartDate?: Date | null;
@@ -139,49 +131,55 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   };
 
   return (
-    <View style={styles.container}>
-      {" "}
+    <Container flex={1} backgroundColor={theme.background}>
       {loading ? (
-        <View style={styles.loadingContainer}>
+        <Container
+          alignItems="center"
+          justifyContent="center"
+          paddingVertical="xl"
+        >
           <ActivityIndicator size="large" color={theme.colors.primary} />
-          <Text
-            style={[
-              styles.loadingText,
-              {
-                color: isDark ? theme.colors.gray[300] : theme.colors.gray[600],
-              },
-            ]}
-          >
-            Loading availability...
-          </Text>
-        </View>
+          <Container marginTop="md">
+            <Text
+              color={isDark ? theme.colors.gray[300] : theme.colors.gray[600]}
+            >
+              Loading availability...
+            </Text>
+          </Container>
+        </Container>
       ) : (
         <>
-          <View style={styles.dateSelectionHeader}>
-            <View style={styles.dateInfo}>
+          <Container
+            flexDirection="row"
+            alignItems="center"
+            justifyContent="space-between"
+            paddingHorizontal="md"
+            paddingVertical="lg"
+            marginBottom="md"
+            backgroundColor={
+              isDark ? theme.colors.gray[800] : theme.colors.gray[50]
+            }
+            borderRadius="md"
+          >
+            <Container flex={1} alignItems="center">
               <Text
-                style={[
-                  styles.dateLabel,
-                  {
-                    color: isDark
-                      ? theme.colors.gray[300]
-                      : theme.colors.gray[600],
-                  },
-                ]}
+                color={isDark ? theme.colors.gray[300] : theme.colors.gray[600]}
+                size="sm"
               >
                 Check In
               </Text>
-              <Text
-                style={[
-                  styles.dateValue,
-                  { color: isDark ? theme.white : theme.colors.gray[900] },
-                ]}
-              >
-                {selectedStartDate
-                  ? format(selectedStartDate, "MMM dd, yyyy")
-                  : "Select date"}
-              </Text>
-            </View>
+              <Container marginTop="xs">
+                <Text
+                  color={isDark ? theme.white : theme.colors.gray[900]}
+                  size="md"
+                  weight="medium"
+                >
+                  {selectedStartDate
+                    ? format(selectedStartDate, "MMM dd, yyyy")
+                    : "Select date"}
+                </Text>
+              </Container>
+            </Container>
 
             <Ionicons
               name="arrow-forward"
@@ -189,34 +187,29 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
               color={isDark ? theme.colors.gray[400] : theme.colors.gray[600]}
             />
 
-            <View style={styles.dateInfo}>
+            <Container flex={1} alignItems="center">
               <Text
-                style={[
-                  styles.dateLabel,
-                  {
-                    color: isDark
-                      ? theme.colors.gray[300]
-                      : theme.colors.gray[600],
-                  },
-                ]}
+                color={isDark ? theme.colors.gray[300] : theme.colors.gray[600]}
+                size="sm"
               >
                 Check Out
               </Text>
-              <Text
-                style={[
-                  styles.dateValue,
-                  { color: isDark ? theme.white : theme.colors.gray[900] },
-                ]}
-              >
-                {selectedEndDate
-                  ? format(selectedEndDate, "MMM dd, yyyy")
-                  : "Select date"}
-              </Text>
-            </View>
+              <Container marginTop="xs">
+                <Text
+                  color={isDark ? theme.white : theme.colors.gray[900]}
+                  size="md"
+                  weight="medium"
+                >
+                  {selectedEndDate
+                    ? format(selectedEndDate, "MMM dd, yyyy")
+                    : "Select date"}
+                </Text>
+              </Container>
+            </Container>
 
             {(selectedStartDate || selectedEndDate) && (
               <TouchableOpacity
-                style={styles.resetButton}
+                style={{ padding: 8, marginLeft: 8 }}
                 onPress={resetSelection}
               >
                 <Ionicons
@@ -226,7 +219,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
                 />
               </TouchableOpacity>
             )}
-          </View>{" "}
+          </Container>
           <Calendar
             enableRangeSelection={true}
             initialStartDate={selectedStartDate || undefined}
@@ -248,45 +241,8 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
           />
         </>
       )}
-    </View>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginVertical: spacing.md,
-  },
-  loadingContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    padding: spacing.xl,
-  },
-  loadingText: {
-    marginTop: spacing.md,
-    fontSize: fontSize.md,
-  },
-  dateSelectionHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: spacing.lg,
-    paddingHorizontal: spacing.sm,
-  },
-  dateInfo: {
-    flex: 1,
-  },
-  dateLabel: {
-    fontSize: fontSize.sm,
-    marginBottom: 4,
-  },
-  dateValue: {
-    fontSize: fontSize.md,
-    fontWeight: "600",
-  },
-  resetButton: {
-    marginLeft: spacing.md,
-    padding: spacing.xs,
-  },
-});
 
 export default DateRangePicker;

@@ -18,7 +18,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useCurrentUser } from "@shared/hooks";
 // Context
-import { useTheme, useAuth } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
+import { useAuth } from "@shared/context";
 
 // Constants
 import { fontSize, spacing, radius } from "@shared/constants";
@@ -83,13 +84,6 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
         throw new Error("User not authenticated");
       }
 
-      // Debug: Log user object to see what phone field is available
-      console.log("User object in PaymentMethodSelector:", {
-        phoneNumber: user.phoneNumber,
-        phone: (user as any).phone,
-        fullUser: JSON.stringify(user, null, 2),
-      });
-
       // Check if user has a phone number for ZAAD
       // Try multiple field names for compatibility
       const phoneNumber =
@@ -100,10 +94,7 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
         ((user as any).data && (user as any).data.phoneNumber) ||
         ((user as any)._source && (user as any)._source.phoneNumber);
 
-      console.log("Extracted phone number:", phoneNumber);
-
       if (!phoneNumber || phoneNumber.trim() === "") {
-        console.log("No phone number found for user");
         setPaymentMethods([]);
         setError(null); // We'll handle this case in the UI
         return;

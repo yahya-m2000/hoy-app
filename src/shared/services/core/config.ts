@@ -4,7 +4,6 @@
  */
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Constants from "expo-constants";
 import {
   logRequest,
   logResponse,
@@ -15,7 +14,6 @@ import { API_BASE_URL } from "../../constants/api";
 // Get API base URL from environment or use default - ensure proper URL formatting
 const AXIOS_API_BASE_URL = formatApiUrl(
   API_BASE_URL ||
-    Constants.expoConfig?.extra?.apiUrl ||
     process.env.EXPO_PUBLIC_API_URL ||
     "http://localhost:3000/api/v1"
 );
@@ -41,7 +39,7 @@ const axiosInstance = axios.create({
 let authToken: string | null = null;
 
 // Pre-load the token
-AsyncStorage.getItem("authToken")
+AsyncStorage.getItem("accessToken")
   .then((token) => {
     if (token) authToken = token;
   })
@@ -108,6 +106,16 @@ axiosInstance.interceptors.request.use((config) => {
     throw new Error(`Invalid URL format: ${config.url}`);
   }
 });
+
+// Function to update the cached auth token
+export const updateAuthToken = async () => {
+  try {
+    const token = await AsyncStorage.getItem("accessToken");
+    authToken = token;
+  } catch (err) {
+    console.error("Error updating auth token:", err);
+  }
+};
 
 // Export the instance
 export default axiosInstance;

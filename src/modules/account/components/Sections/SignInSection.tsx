@@ -4,12 +4,14 @@
  */
 
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { Text } from "@shared/components/base/Text";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 
-import { useTheme, useUserRole } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
+import { useUserRole } from "@shared/context";
 import { radius, fontSize, fontWeight, spacing } from "@shared/constants";
 
 export default function SignInSection() {
@@ -36,15 +38,15 @@ export default function SignInSection() {
               styles.iconContainer,
               {
                 backgroundColor: isDark
-                  ? theme.colors.primary[900]
-                  : theme.colors.primary[100],
+                  ? theme.colors.primaryPalette[900]
+                  : theme.colors.primaryPalette[100],
               },
             ]}
           >
             <Ionicons
               name="person-outline"
               size={32}
-              color={theme.colors.primary[500]}
+              color={theme.colors.primaryPalette[500]}
             />
           </View>
           <View style={styles.headerText}>
@@ -92,22 +94,22 @@ export default function SignInSection() {
               : theme.colors.gray[200],
           },
         ]}
-        onPress={() => router.push("/(overlays)/auth")}
+        onPress={() => router.push("/(overlays)/auth/login")}
       >
         <View
           style={[
             styles.buttonIconContainer,
             {
               backgroundColor: isDark
-                ? theme.colors.primary[900]
-                : theme.colors.primary[100],
+                ? theme.colors.primaryPalette[900]
+                : theme.colors.primaryPalette[100],
             },
           ]}
         >
           <Ionicons
             name="log-in-outline"
             size={20}
-            color={theme.colors.primary[500]}
+            color={theme.colors.primaryPalette[500]}
           />
         </View>
         <View style={styles.buttonContent}>
@@ -179,9 +181,7 @@ export default function SignInSection() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginVertical: spacing.lg,
-  },
+  container: {},
   header: {
     borderRadius: radius.lg,
     borderWidth: 1,

@@ -15,7 +15,8 @@ import { Tabs, Redirect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 // App context
-import { useTheme, useUserRole } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
+import { useUserRole } from "@shared/context";
 
 const TravelerLayout = () => {
   const { t } = useTranslation();
@@ -67,9 +68,7 @@ const TravelerLayout = () => {
     <Animated.View style={{ opacity: tabIconOpacity }}>
       <Ionicons name={name} size={size} color={color} />
     </Animated.View>
-  );
-
-  // Helper function to check if we're on a property details screen
+  ); // Helper function to check if we're on a property details screen or search results
   const isOnPropertyDetailsScreen = (navigationState: any) => {
     try {
       if (!navigationState) return false;
@@ -90,11 +89,38 @@ const TravelerLayout = () => {
       const currentScreenRoute = tabState.routes[currentScreenIndex];
       const routeName = currentScreenRoute?.name || "";
 
+      // Check for search results page
+      if (routeName === "results" || routeName.includes("results")) {
+        return true;
+      }
+
       // Pattern matching for property details screens
       const isPropertyDetails =
         routeName === "[id]" || // Direct [id] routes (home/[id], search/[id], etc.)
         routeName.includes("property") || // wishlist/property, bookings/property
         (currentScreenRoute?.params && "id" in currentScreenRoute.params); // Any screen with id param
+
+      // Special handling for nested routes like wishlist/property/[id]
+      if (currentScreenRoute?.state) {
+        const nestedState = currentScreenRoute.state;
+        const nestedRoute = nestedState.routes?.[nestedState.index];
+        if (
+          nestedRoute?.name === "property/[id]" ||
+          nestedRoute?.name?.includes("property") ||
+          nestedRoute?.name === "results" ||
+          nestedRoute?.name?.includes("results")
+        ) {
+          return true;
+        }
+      }
+
+      // Additional check for wishlist property routes specifically
+      if (
+        currentTabRoute.name === "wishlist" &&
+        currentScreenRoute?.name === "property/[id]"
+      ) {
+        return true;
+      }
 
       return isPropertyDetails;
     } catch {
@@ -114,13 +140,13 @@ const TravelerLayout = () => {
       initialRouteName="home"
       screenOptions={{
         animation: "fade",
-        tabBarActiveTintColor: theme.colors.primary,
+        tabBarActiveTintColor: theme.colors.primaryPalette[500],
         tabBarInactiveTintColor: isDark
           ? theme.colors.gray[400]
           : theme.colors.gray[500],
         tabBarStyle: [
           {
-            backgroundColor: isDark ? theme.colors.gray[900] : theme.white,
+            backgroundColor: theme.background,
             borderTopColor: isDark
               ? theme.colors.gray[800]
               : theme.colors.gray[200],
@@ -158,7 +184,7 @@ const TravelerLayout = () => {
           href: null, // This completely hides the tab from the tab bar
           headerShown: false,
         }}
-      />{" "}
+      />
       <Tabs.Screen
         name="home"
         options={{

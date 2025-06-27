@@ -500,6 +500,15 @@ export const getHostPayouts = async (status?: string) => {
 };
 
 /**
+ * Get host average rating
+ */
+export const getHostRating = async (hostId?: string) => {
+  const endpoint = hostId ? `/host/${hostId}/rating` : "/host/rating";
+  const response = await api.get(endpoint);
+  return response.data;
+};
+
+/**
  * Update payout method
  */
 export const updatePayoutMethod = async (payoutData: any) => {
@@ -515,6 +524,38 @@ export const getTaxDocuments = async (year?: number) => {
   const response = await api.get("/host/tax-documents", { params });
   return response.data;
 };
+
+/**
+ * Get comprehensive host reviews and ratings data including properties with reviews
+ * @param hostId Optional host ID, if not provided will get data for current authenticated host
+ * @returns Host reviews data including properties list, reviews, ratings, and analytics
+ */
+export const getHostReviewsAndRatings = async (hostId?: string) => {
+  const endpoint = hostId ? `/host/${hostId}/reviews` : "/host/reviews";
+  console.log(
+    `📊 [getHostReviewsAndRatings] Fetching host reviews and ratings from endpoint: ${endpoint}`
+  );
+
+  try {
+    const response = await api.get(endpoint);
+    console.log(
+      `✅ [getHostReviewsAndRatings] Successfully fetched host reviews and ratings data:`,
+      response.data
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      `❌ [getHostReviewsAndRatings] Error fetching host reviews and ratings:`,
+      error
+    );
+    throw error;
+  }
+};
+
+/**
+ * @deprecated Use getHostReviewsAndRatings instead for better naming clarity
+ */
+export const getHostReviews = getHostReviewsAndRatings;
 
 // Legacy function names for backward compatibility
 export const fetchHostDashboard = getHostDashboard;

@@ -4,10 +4,11 @@
  */
 
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { Text } from "@shared/components/base/Text";
 import { useTranslation } from "react-i18next";
 // Context
-import { useTheme } from "@shared/context";
+import { useTheme } from "@shared/hooks/useTheme";
 
 // Constants
 import { fontSize, spacing, radius } from "@shared/constants";
@@ -40,29 +41,23 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ priceDetails }) => {
         },
       ]}
     >
-      {" "}
       <Text
         style={[
           styles.title,
-          { color: isDark ? theme.white : theme.colors.grayPalette[900] },
+          { color: isDark ? theme.white : theme.colors.gray[900] },
         ]}
       >
         {t("booking.paymentDetails")}
-      </Text>{" "}
+      </Text>
       <View style={styles.contentContainer}>
         <View style={styles.priceRow}>
-          <Text
-            style={[
-              styles.priceLabel,
-              { color: theme.colors.grayPalette[600] },
-            ]}
-          >
+          <Text style={[styles.priceLabel, { color: theme.colors.gray[600] }]}>
             {t("booking.basePrice")}
           </Text>
           <Text
             style={[
               styles.priceValue,
-              { color: isDark ? theme.white : theme.colors.grayPalette[900] },
+              { color: isDark ? theme.white : theme.colors.gray[900] },
             ]}
           >
             ${priceDetails.basePrice || 0}
@@ -70,18 +65,13 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ priceDetails }) => {
         </View>
 
         <View style={styles.priceRow}>
-          <Text
-            style={[
-              styles.priceLabel,
-              { color: theme.colors.grayPalette[600] },
-            ]}
-          >
+          <Text style={[styles.priceLabel, { color: theme.colors.gray[600] }]}>
             {t("booking.cleaningFee")}
           </Text>
           <Text
             style={[
               styles.priceValue,
-              { color: isDark ? theme.white : theme.colors.grayPalette[900] },
+              { color: isDark ? theme.white : theme.colors.gray[900] },
             ]}
           >
             ${priceDetails.cleaningFee}
@@ -89,18 +79,13 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ priceDetails }) => {
         </View>
 
         <View style={styles.priceRow}>
-          <Text
-            style={[
-              styles.priceLabel,
-              { color: theme.colors.grayPalette[600] },
-            ]}
-          >
+          <Text style={[styles.priceLabel, { color: theme.colors.gray[600] }]}>
             {t("booking.serviceFee")}
           </Text>
           <Text
             style={[
               styles.priceValue,
-              { color: isDark ? theme.white : theme.colors.grayPalette[900] },
+              { color: isDark ? theme.white : theme.colors.gray[900] },
             ]}
           >
             ${priceDetails.serviceFee}
@@ -108,18 +93,13 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ priceDetails }) => {
         </View>
 
         <View style={styles.priceRow}>
-          <Text
-            style={[
-              styles.priceLabel,
-              { color: theme.colors.grayPalette[600] },
-            ]}
-          >
+          <Text style={[styles.priceLabel, { color: theme.colors.gray[600] }]}>
             {t("booking.taxes")}
           </Text>
           <Text
             style={[
               styles.priceValue,
-              { color: isDark ? theme.white : theme.colors.grayPalette[900] },
+              { color: isDark ? theme.white : theme.colors.gray[900] },
             ]}
           >
             ${priceDetails.taxes}
@@ -130,7 +110,7 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ priceDetails }) => {
           <Text
             style={[
               styles.totalLabel,
-              { color: isDark ? theme.white : theme.colors.grayPalette[900] },
+              { color: isDark ? theme.white : theme.colors.gray[900] },
             ]}
           >
             {t("booking.total")}
@@ -138,7 +118,7 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ priceDetails }) => {
           <Text
             style={[
               styles.totalValue,
-              { color: isDark ? theme.white : theme.colors.grayPalette[900] },
+              { color: isDark ? theme.white : theme.colors.gray[900] },
             ]}
           >
             $
