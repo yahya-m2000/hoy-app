@@ -2,8 +2,8 @@ import React from "react";
 import { Stack, router } from "expo-router";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useTheme } from "@shared/hooks/useTheme";
-import { spacing, fontSize } from "@shared/constants";
+import { useTheme } from "@core/hooks";
+import { spacing, fontSize } from "@core/design";
 
 export default function PropertiesLayout() {
   const { theme, isDark } = useTheme();

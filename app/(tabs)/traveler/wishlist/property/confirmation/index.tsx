@@ -1,3 +1,3 @@
-import ReservationConfirmationScreen from "@modules/properties/features/reservation/screens/ReservationConfirmationScreen";
+import ReservationConfirmationScreen from "src/features/properties/screens/ReservationConfirmationScreen";
 
 export default ReservationConfirmationScreen;

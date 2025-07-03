@@ -1,6 +1,8 @@
+import "../src/core/utils/dev/metro-error-suppress";
+
 // Localization and API initialization (must be first)
-import "@shared/locales/i18n";
-import "@shared/services/api/";
+import "@core/locales/i18n";
+import "@core/api/services";
 
 // React imports
 import React from "react";
@@ -11,56 +13,63 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import {
+  SafeAreaProvider,
+  initialWindowMetrics,
+} from "react-native-safe-area-context";
+import * as SplashScreen from "expo-splash-screen";
 
 // App navigation theming
-import { useThemedScreenOptions } from "@shared/navigation";
+import { useThemedScreenOptions } from "@core/navigation";
 
 // App hooks
-import { useFonts } from "@shared/hooks";
+import { useFonts } from "@core/hooks";
 
 // App context providers
-import {
-  ThemeProvider,
-  ToastProvider,
-  AuthProvider,
-  useAuth,
-  CurrencyProvider,
-  DateSelectionProvider,
-  NetworkProvider,
-  UserRoleProvider,
-  useUserRole,
-  CalendarProvider,
-} from "@shared/context";
+import { ThemeProvider } from "@core/context/ThemeContext";
+import { AuthProvider, useAuth } from "@core/context/AuthContext";
+import { ToastProvider } from "@core/context/ToastContext";
+import { NetworkProvider } from "@core/context/NetworkContext";
+import { UserRoleProvider } from "@core/context/UserRoleContext";
+import { DateSelectionProvider } from "@features/calendar/context/DateSelectionContext";
 
-// App components
-import {
-  OfflineNotice,
-  RoleChangeLoadingOverlay,
-  AuthLoadingOverlay,
-  LogoutHandler,
-} from "@shared/components/common";
+// Error boundary system
+import { AppErrorBoundary } from "@core/error/GlobalErrorBoundary";
+import { CalendarProvider } from "src/features/calendar/context/CalendarContext";
+
+// Call preventAutoHideAsync as soon as possible to keep the splash screen visible until we decide to hide it manually.
+SplashScreen.preventAutoHideAsync().catch(() => {
+  /* Re-thrown errors can crash the app in dev – safely ignore. */
+});
 
 // Font loader component
 const FontLoader = ({ children }: { children: React.ReactNode }) => {
   const { fontsLoaded } = useFonts();
 
+  // When fonts are ready, hide the splash screen.
+  React.useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync().catch(() => {
+        /* ignore – the splash screen might already be hidden */
+      });
+    }
+  }, [fontsLoaded]);
+
   if (!fontsLoaded) {
-    // Return a minimal loading view while fonts are loading
+    // Maintain a white background to avoid any black flicker.
     return <View style={{ flex: 1, backgroundColor: "#fff" }} />;
   }
 
   return <>{children}</>;
 };
 
-const RoleChangeLoadingOverlayWrapper = () => {
-  const { isRoleLoading } = useUserRole();
-  return <RoleChangeLoadingOverlay visible={isRoleLoading} />;
-};
-
+// Simplified loading components - remove complex overlays for now
 const AuthLoadingOverlayWrapper = () => {
   const { isAuthChecked } = useAuth();
-  return <AuthLoadingOverlay visible={!isAuthChecked} />;
+  if (!isAuthChecked) {
+    return <View style={{ flex: 1, backgroundColor: "#fff" }} />;
+  }
+  return null;
 };
 
 // Themed Stack component for root navigation
@@ -70,23 +79,9 @@ const ThemedRootStack = () => {
   return (
     <Stack screenOptions={themedOptions}>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="(stack)"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="(overlays)"
-        options={{
-          headerShown: false,
-          presentation: "modal",
-          contentStyle: { backgroundColor: "transparent" },
-          headerStyle: {
-            backgroundColor: "transparent",
-          },
-        }}
-      />
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
+      <Stack.Screen name="(debug)" options={{ headerShown: false }} />
     </Stack>
   );
 };
@@ -115,35 +110,32 @@ const queryClient = new QueryClient({
 // Root layout component
 export default function RootLayout() {
   return (
-    <SafeAreaProvider>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <QueryClientProvider client={queryClient}>
-          <FontLoader>
-            <AuthProvider>
-              <NetworkProvider>
-                <CurrencyProvider>
+    <AppErrorBoundary>
+      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+        <GestureHandlerRootView style={{ flex: 1, backgroundColor: "#fff" }}>
+          <QueryClientProvider client={queryClient}>
+            <FontLoader>
+              <AuthProvider>
+                <NetworkProvider>
                   <ThemeProvider>
-                    <ToastProvider>
-                      <UserRoleProvider>
-                        <DateSelectionProvider>
-                          <CalendarProvider>
+                    <CalendarProvider>
+                      <DateSelectionProvider>
+                        <UserRoleProvider>
+                          <ToastProvider>
                             <StatusBar style="auto" />
-                            <OfflineNotice />
-                            <LogoutHandler />
-                            <RoleChangeLoadingOverlayWrapper />
                             <AuthLoadingOverlayWrapper />
                             <ThemedRootStack />
-                          </CalendarProvider>
-                        </DateSelectionProvider>
-                      </UserRoleProvider>
-                    </ToastProvider>
+                          </ToastProvider>
+                        </UserRoleProvider>
+                      </DateSelectionProvider>
+                    </CalendarProvider>
                   </ThemeProvider>
-                </CurrencyProvider>
-              </NetworkProvider>
-            </AuthProvider>
-          </FontLoader>
-        </QueryClientProvider>
-      </GestureHandlerRootView>
-    </SafeAreaProvider>
+                </NetworkProvider>
+              </AuthProvider>
+            </FontLoader>
+          </QueryClientProvider>
+        </GestureHandlerRootView>
+      </SafeAreaProvider>
+    </AppErrorBoundary>
   );
 }

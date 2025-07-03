@@ -4,29 +4,35 @@
  * Allows travelers to search for accommodations by location, dates, and guest count
  */
 
-// React Native core
 import React, { useState, useEffect } from "react";
 import { FlatList } from "react-native";
-
-// Base components
-import { Container, Header } from "@shared/components/base";
-
-// Expo and third-party libraries
 import { StatusBar } from "expo-status-bar";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "expo-router";
 
+// Base components
+import {
+  Container,
+  Screen,
+  Icon,
+  ListScreen,
+  Header,
+} from "@shared/components";
+
 // App context and hooks
-import { useToast } from "@shared/context";
-import { useTheme } from "@shared/hooks/useTheme";
-import { useSearchForm } from "@shared/hooks";
+import { useToast } from "@core/context";
+import { useTheme } from "@core/hooks";
+import { useSearchForm } from "@features/search/hooks";
+
+// Constants
+import { spacing, iconSize } from "@core/design";
 
 // Search components
-import { SearchForm, RecentSearches } from "src/modules/search/components";
+import { SearchForm, RecentSearches } from "src/features/search/components";
 import {
   RecentSearchManager,
   type RecentSearch,
-} from "@modules/search/components/RecentSearchManager";
+} from "src/features/search/components/RecentSearchManager";
 
 export default function SearchScreen() {
   const { theme, isDark } = useTheme();
@@ -96,8 +102,13 @@ export default function SearchScreen() {
     const location = searchState?.location || "";
 
     if (!location) {
-      // Open location modal if no location selected
-      router.push("/(overlays)/search/location");
+      // Show a toast to prompt user to select location instead of navigating
+      showToast({
+        message:
+          t("search.selectLocationFirst") || "Please select a location first",
+        type: "warning",
+        duration: 3000,
+      });
       return;
     }
 
@@ -161,6 +172,21 @@ export default function SearchScreen() {
     });
   };
 
+  // Handle filters press
+  const handleFiltersPress = () => {
+    // Navigate to filters screen
+    router.push({
+      pathname: "/(overlays)/search/filters",
+      params: {
+        location: searchState?.location || "",
+        checkIn: searchState?.startDate || "",
+        checkOut: searchState?.endDate || "",
+        guests: searchState?.displayTravelers || "",
+        returnTo: "/search",
+      },
+    });
+  };
+
   // Create the content for the FlatList's ListHeaderComponent
   const renderHeader = () => (
     <>
@@ -182,34 +208,26 @@ export default function SearchScreen() {
   );
 
   return (
-    <Container
-      flex={1}
-      backgroundColor={isDark ? theme.colors.gray[900] : theme.colors.gray[50]}
-    >
-      <StatusBar style={isDark ? "light" : "dark"} />
-
-      {/* Header */}
+    <Container flex={1} backgroundColor={theme.background}>
       <Header
         title={t("search.title") || "Search"}
-        variant="solid"
         right={{
-          text: t("search.filters") || "Filters",
-          onPress: () => {
-            // TODO: Open filters modal
-            console.log("Open filters");
-          },
+          children: (
+            <Icon
+              name="options-outline"
+              size={iconSize.sm}
+              color={theme.text.primary}
+            />
+          ),
+          onPress: handleFiltersPress,
         }}
-        backgroundColor={
-          isDark ? theme.colors.gray[900] : theme.colors.gray[50]
-        }
       />
-
-      {/* Content with padding */}
-      <Container paddingHorizontal="md" flex={1}>
+      <StatusBar style={isDark ? "light" : "dark"} />
+      <Container padding="md">
         {/* Using FlatList to avoid VirtualizedList nesting issues */}
         <FlatList
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 96 }}
+          contentContainerStyle={{ paddingBottom: spacing.xxxl }}
           data={[{ key: "content" }]}
           keyExtractor={(item) => item.key}
           renderItem={() => null}

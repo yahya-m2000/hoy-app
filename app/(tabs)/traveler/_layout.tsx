@@ -15,13 +15,13 @@ import { Tabs, Redirect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 // App context
-import { useTheme } from "@shared/hooks/useTheme";
-import { useUserRole } from "@shared/context";
+import { useTheme } from "@core/hooks";
+import { useUserRole } from "@core/context";
 
 const TravelerLayout = () => {
   const { t } = useTranslation();
   const { theme, isDark } = useTheme();
-  const { isHost, isRoleLoading } = useUserRole();
+  const { userRole, isRoleLoading } = useUserRole();
   const insets = useSafeAreaInsets();
 
   // Animated values for tab bar slide animation and icon opacity
@@ -127,7 +127,7 @@ const TravelerLayout = () => {
       return false;
     }
   }; // Use declarative Redirect instead of imperative navigation
-  if (!isRoleLoading && isHost) {
+  if (!isRoleLoading && userRole === "host") {
     return <Redirect href="/(tabs)/host/today" />;
   }
 
@@ -241,10 +241,10 @@ const TravelerLayout = () => {
         }}
       />
       <Tabs.Screen
-        name="account"
+        name="profile"
         options={{
-          title: t("navigation.account"),
-          tabBarLabel: t("navigation.account"),
+          title: t("navigation.profile"),
+          tabBarLabel: t("navigation.profile"),
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <AnimatedTabIcon name="person-outline" size={size} color={color} />

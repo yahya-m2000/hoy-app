@@ -13,11 +13,11 @@ import { TouchableOpacity, StyleSheet } from "react-native";
 import { router } from "expo-router";
 
 // Context
-import { useTheme } from "@shared/hooks/useTheme";
+import { useTheme } from "src/core/hooks/useTheme";
 import { Icon } from "@shared/components";
 
 // Constants
-import { spacing, fontSize } from "@shared/constants";
+import { spacing, fontSize } from "@core/design";
 
 interface BackButtonProps {
   onPress?: () => void;

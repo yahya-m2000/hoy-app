@@ -9,19 +9,26 @@ import { StatusBar } from "expo-status-bar";
 import { useTranslation } from "react-i18next";
 
 // Context
-import { useTheme } from "@shared/hooks/useTheme";
-import { useAuth } from "@shared/context";
+import { useTheme } from "@core/hooks";
+import { useAuth } from "@core/context";
 
 // Hooks
-import { useUserBookings } from "@shared/hooks";
+import { useUserBookings } from "@features/booking/hooks";
 import { useRouter } from "expo-router";
 
 // Base Components
-import { Container, Text, Button, Header } from "@shared/components/base";
-import { EmptyState, LoadingSpinner } from "@shared/components/common";
+import {
+  Container,
+  Text,
+  Button,
+  Header,
+  EmptyState,
+  LoadingSpinner,
+} from "@shared/components";
 
 // Module Components
-import { BookingsSection, type PopulatedBooking } from "@modules/booking";
+import { BookingsSection } from "@features/booking/components";
+import { PopulatedBooking } from "@core/types/booking.types";
 
 const BookingsScreen = () => {
   const router = useRouter();
@@ -60,23 +67,28 @@ const BookingsScreen = () => {
         _id: booking._id,
         propertyId: booking.propertyId,
         unitId: booking.unitId,
-        userId: booking.userId,
+        guestId: booking.guestId,
         checkIn: booking.checkIn,
         checkOut: booking.checkOut,
         guestCount: booking.guestCount,
         guests: booking.guests || { adults: 1 },
-        totalPrice: booking.totalPrice,
+        totalAmount: booking.totalAmount,
         specialRequests: booking.specialRequests,
-        bookingStatus: booking.bookingStatus,
+        status: booking.status,
         paymentStatus: booking.paymentStatus,
         paymentId: booking.paymentId,
         contactInfo: booking.contactInfo,
         createdAt: booking.createdAt,
         updatedAt: booking.updatedAt,
         reviewId: booking.reviewId,
+        hostId: booking.hostId,
+        currency: booking.currency || "USD",
+        paymentMethod: booking.paymentMethod || "",
+        pricing: booking.pricing || { totalPrice: booking.totalAmount },
         // Populated properties
         property: property,
-        user: booking.user,
+        guest: booking.guest,
+        host: booking.host,
       };
     });
   }, [data, isLoading, error]);
@@ -89,18 +101,18 @@ const BookingsScreen = () => {
   // Separate bookings into upcoming and past
   const upcomingBookings = allBookings.filter(
     (booking) =>
-      (booking.bookingStatus === "confirmed" ||
-        booking.bookingStatus === "pending" ||
-        booking.bookingStatus === "in-progress") &&
+      (booking.status === "confirmed" ||
+        booking.status === "pending" ||
+        booking.status === "in_progress") &&
       new Date(booking.checkIn) >= new Date()
   );
 
   const pastBookings = allBookings.filter(
     (booking) =>
-      booking.bookingStatus === "completed" ||
-      booking.bookingStatus === "cancelled" ||
+      booking.status === "completed" ||
+      booking.status === "cancelled" ||
       (new Date(booking.checkOut) < new Date() &&
-        booking.bookingStatus !== "in-progress")
+        booking.status !== "in_progress")
   );
 
   // Show loading state

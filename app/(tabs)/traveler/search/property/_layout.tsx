@@ -14,13 +14,13 @@ export default function SearchPropertyLayout() {
         }}
       />
       <Stack.Screen
-        name="reviews/[id]"
+        name="reviews"
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name="confirmation/[id]"
+        name="confirmation"
         options={{
           headerShown: false,
         }}

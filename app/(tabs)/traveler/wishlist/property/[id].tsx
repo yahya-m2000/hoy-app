@@ -1,3 +1,3 @@
-import { PropertyDetailsScreen } from "@modules/properties/features/details/screens";
+import { PropertyDetailsScreen } from "src/features/properties/screens";
 
 export default PropertyDetailsScreen;

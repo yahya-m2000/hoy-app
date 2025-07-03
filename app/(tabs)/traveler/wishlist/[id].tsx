@@ -7,27 +7,30 @@ import React, { useState, useEffect, useCallback } from "react";
 import { ScrollView, RefreshControl } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 
-// Context
-import { useTheme } from "@shared/hooks/useTheme";
-import { useCurrentUser } from "@shared/hooks/";
+// Core
+import { useTheme } from "@core/hooks";
 
-// Base Components
-import { Container, Text } from "@shared/components/base";
-import { EmptyState, LoadingSpinner } from "@shared/components/common";
-
-// Module Components
-import { CollectionsModal } from "@modules/properties/modals";
-import { PropertyCard } from "@modules/properties/components/cards/property-card";
-
-// Services
+// Features
+import { useCurrentUser } from "@features/user/hooks";
+import { CollectionsModal } from "@features/properties/modals";
+import { PropertyCard } from "src/features/properties/components/cards/PropertyCard";
 import {
-  wishlistCollectionsService,
-  WishlistCollection,
-  fetchPropertyById,
-} from "@shared/services";
+  WishlistService,
+  type WishlistCollection,
+} from "@core/api/services/wishlist";
+import { PropertyDetailsService } from "@core/api/services/property";
+
+// Shared
+import {
+  Container,
+  Text,
+  EmptyState,
+  LoadingSpinner,
+  Header,
+} from "@shared/components";
 
 // Types
-import type { PropertyType } from "@shared/types/";
+import type { PropertyType } from "@core/types";
 
 export default function CollectionDetail() {
   const { theme, isDark } = useTheme();
@@ -51,8 +54,7 @@ export default function CollectionDetail() {
       setError(null);
 
       // Get collection details
-      const collectionsResponse =
-        await wishlistCollectionsService.getCollections();
+      const collectionsResponse = await WishlistService.getCollections();
       const foundCollection = collectionsResponse.find(
         (col: WishlistCollection) => col._id === id
       );
@@ -66,7 +68,7 @@ export default function CollectionDetail() {
       const propertyPromises = foundCollection.properties.map(
         async (propertyId: string) => {
           try {
-            return await fetchPropertyById(propertyId);
+            return await PropertyDetailsService.getPropertyById(propertyId);
           } catch (error) {
             console.error(`Failed to load property ${propertyId}:`, error);
             return null;
@@ -132,6 +134,9 @@ export default function CollectionDetail() {
         justifyContent="center"
         alignItems="center"
       >
+        <Header
+          left={{ icon: "chevron-back-outline", onPress: () => router.back() }}
+        />
         <LoadingSpinner size="large" />
         <Container marginTop="md">
           <Text
@@ -155,6 +160,9 @@ export default function CollectionDetail() {
         justifyContent="center"
         alignItems="center"
       >
+        <Header
+          left={{ icon: "chevron-back-outline", onPress: () => router.back() }}
+        />
         <EmptyState
           icon="alert-circle-outline"
           title="Error"
@@ -172,6 +180,9 @@ export default function CollectionDetail() {
   if (properties.length === 0) {
     return (
       <Container flex={1} backgroundColor="background">
+        <Header
+          left={{ icon: "chevron-back-outline", onPress: () => router.back() }}
+        />
         <Container flex={1} justifyContent="center" alignItems="center">
           <EmptyState
             icon="heart-outline"
@@ -193,7 +204,10 @@ export default function CollectionDetail() {
   }
 
   return (
-    <Container flex={1} backgroundColor={isDark ? "gray900" : "gray50"}>
+    <Container flex={1} backgroundColor="background">
+      <Header
+        left={{ icon: "chevron-back-outline", onPress: () => router.back() }}
+      />
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={{ padding: 16 }}
@@ -213,19 +227,19 @@ export default function CollectionDetail() {
               return null;
             }
             return (
-              <Container key={i} marginBottom="md">
-                <PropertyCard
-                  {...property}
-                  _id={property.id || property._id}
-                  name={property.name || property.title}
-                  price={
-                    typeof property.price === "object"
-                      ? property.price.amount
-                      : property.price
-                  }
-                  onPress={() => handlePropertyPress(property)}
-                />
-              </Container>
+              <PropertyCard
+                key={i}
+                {...property}
+                _id={property.id || property._id}
+                name={property.name || property.title}
+                price={
+                  typeof property.price === "object"
+                    ? property.price.amount
+                    : property.price
+                }
+                onPress={() => handlePropertyPress(property)}
+                variant="fullWidth"
+              />
             );
           })}
       </ScrollView>

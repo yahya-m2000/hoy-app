@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import { IconProps } from "./Icon.types";
-import { fontSize } from "src/shared/constants";
+import { fontSize } from "@core/design";
 
 /**
  * Icon component with optional circular background

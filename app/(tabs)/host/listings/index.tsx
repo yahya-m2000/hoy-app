@@ -5,15 +5,27 @@ import {
   StyleSheet,
   Alert,
   RefreshControl,
+  TouchableOpacity,
 } from "react-native";
+
+// Navigation
 import { router } from "expo-router";
-import { useProperties } from "./hooks/useProperties";
-import { Property } from "./utils/types";
-import PropertyListItem from "./components/PropertyListItem";
-import EmptyState from "./components/EmptyState";
-import LoadingState from "./components/LoadingState";
+
+// Features
+import { useProperties } from "@features/host/hooks/useProperties";
+import { Property } from "@core/types/listings.types";
+import PropertyListItem from "@features/host/components/listings/PropertyListItem";
+import EmptyState from "@features/host/components/listings/EmptyState";
+import LoadingState from "@features/host/components/listings/LoadingState";
+import { Ionicons } from "node_modules/@expo/vector-icons/build/Icons";
+import { useTheme } from "@core/hooks";
+
+// Shared Components
+import { Container, Header } from "@shared/components";
+import { spacing } from "src/core/design";
 
 export default function ListingsPage() {
+  const { theme, isDark } = useTheme();
   const { properties, loading, error, refreshing, refresh, deleteProperty } =
     useProperties();
   const [deletingPropertyId, setDeletingPropertyId] = useState<string | null>(
@@ -35,6 +47,19 @@ export default function ListingsPage() {
       },
     });
   };
+
+  const HeaderAddButton = () => (
+    <TouchableOpacity
+      onPress={() => router.push("/(tabs)/host/listings/add-property")}
+      style={{ padding: 8 }}
+    >
+      <Ionicons
+        name="add"
+        size={24}
+        color={isDark ? theme.white : theme.colors.gray[900]}
+      />
+    </TouchableOpacity>
+  );
 
   const handleDeleteProperty = (property: Property) => {
     Alert.alert(
@@ -84,7 +109,12 @@ export default function ListingsPage() {
   }
 
   return (
-    <View style={styles.container}>
+    <Container flex={1} backgroundColor="background">
+      <Header
+        title="My Properties"
+        rightIcon="add"
+        onRightPress={handleAddProperty}
+      />
       <FlatList
         data={properties}
         renderItem={renderProperty}
@@ -92,6 +122,7 @@ export default function ListingsPage() {
         contentContainerStyle={[
           styles.listContainer,
           properties.length === 0 && styles.emptyContainer,
+          { paddingBottom: 100 },
         ]}
         showsVerticalScrollIndicator={false}
         refreshControl={
@@ -110,7 +141,7 @@ export default function ListingsPage() {
           />
         )}
       />
-    </View>
+    </Container>
   );
 }
 

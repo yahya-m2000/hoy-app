@@ -8,13 +8,13 @@ import React from "react";
 
 // React Native imports
 import { View, StyleSheet, ViewStyle, TextStyle } from "react-native";
-import { Text } from "@shared/components/base/Text";
+import { Text } from "../Text";
 
 // Internal imports
-import { useTheme } from "@shared/hooks/useTheme";
+import { useTheme } from "src/core/hooks/useTheme";
 
 // Constants
-import { radius, fontSize, fontWeight, spacing } from "@shared/constants";
+import { radius, fontSize, fontWeight, spacing } from "@core/design";
 
 type BadgeVariant =
   | "primary"

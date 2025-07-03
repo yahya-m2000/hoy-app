@@ -29,23 +29,8 @@
       "assets/fonts/*"
     ],
     "extra": {
-      "wsUrl": "wss://adb5-109-147-151-140.ngrok-free.app/ws",
-      "mapboxApiKey": "sk.eyJ1IjoieW0yMDAwIiwiYSI6ImNtOXg2ZDMzajB4ZmQyaXM2cWNnamEzOHUifQ.PxAYNN4I-PHTU3MDjxZRYA",      
-      "cacheVersion": "1.1.0",
-      "cacheTTL": 5000,
-      "sessionTTL": 43200000,
-      "enableDataIntegrityChecks": true,
-      "disableSearchResultsCache": true,
-      "forceFetchOnSearchResults": true,
-      "bypassSearchLoadingDelay": true,
-      "chatPollingInterval": 30000,
-      "chatUnreadCountPollingInterval": 60000,
-      "disableChatPolling": false,
-      "disableWebSocket": false,
-      "useChatMockData": false,
+      "environment": "development",
       "minApiCallInterval": 10000,
-      "enableTypingIndicators": true,
-      "enableReadReceipts": true,
       "offlineCacheMaxAge": 86400000
     },
     "plugins": [

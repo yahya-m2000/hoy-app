@@ -1,9 +1,6 @@
 import { Stack } from "expo-router";
-import { useThemedScreenOptions } from "@shared/navigation";
-import { useTranslation } from "react-i18next";
 
 export default function SearchLayout() {
-  const { t } = useTranslation();
   return (
     <Stack>
       <Stack.Screen
@@ -21,8 +18,7 @@ export default function SearchLayout() {
       <Stack.Screen
         name="results/index"
         options={{
-          title: t("search.results"),
-          headerShown: true,
+          headerShown: false,
         }}
       />
     </Stack>

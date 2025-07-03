@@ -1,1 +1,0 @@
-export { PropertyReviewsScreen } from "./PropertyReviewsScreen";

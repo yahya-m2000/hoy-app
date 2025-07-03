@@ -1,6 +1,6 @@
 /**
  * Base Input component for the Hoy application
- * Uses React Native Elements Input with custom styling
+ * Uses React Native Paper TextInput with custom styling
  */
 
 // React
@@ -9,17 +9,20 @@ import React, { useState, useRef, useCallback } from "react";
 // React Native
 import { Animated } from "react-native";
 
-// React Native Elements
-import { Input as RNEInput } from "@rneui/themed";
+// React Native Paper
+import {
+  TextInput as RNEInput,
+  useTheme as usePaperTheme,
+} from "react-native-paper";
 
 // Context
-import { useTheme } from "@shared/hooks/useTheme";
+import { useTheme } from "src/core/hooks/useTheme";
 
 // Constants
-import { spacing, radius, fontSize, fontWeight } from "@shared/constants";
+import { spacing, radius, fontSize, fontWeight } from "@core/design";
 
 // Base components
-import { Container } from "../Container";
+import { Container } from "../../layout";
 
 // Types
 import type { BaseInputProps } from "./Input.types";
@@ -48,8 +51,26 @@ export const Input: React.FC<BaseInputProps> = ({
   ...props
 }) => {
   const { theme } = useTheme();
+  const paperTheme = usePaperTheme();
   const [isFocused, setIsFocused] = useState(false);
   const labelAnimation = useRef(new Animated.Value(value ? 1 : 0)).current;
+
+  // Create custom theme for this input
+  const customTheme = {
+    ...paperTheme,
+    colors: {
+      ...paperTheme.colors,
+      primary: theme.primary,
+      onSurface: theme.text?.primary || theme.primary,
+      onSurfaceVariant: theme.text?.secondary || theme.secondary,
+      error: theme.error,
+      outline: error
+        ? theme.error
+        : isFocused
+        ? theme.primary
+        : theme.text?.secondary || theme.secondary,
+    },
+  };
 
   // Animate label position and size
   const animateLabel = useCallback(
@@ -93,15 +114,16 @@ export const Input: React.FC<BaseInputProps> = ({
   );
 
   return (
-    <Container style={style} marginBottom={error ? "xs" : "md"}>
+    <Container style={style} marginBottom={error ? "xs" : "xs"}>
       <RNEInput
+        theme={customTheme}
         value={value}
         onChangeText={handleTextChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
         placeholder={placeholder}
         label={label && `${label}${required ? " *" : ""}`}
-        errorMessage={error}
+        error={!!error}
         disabled={disabled}
         multiline={multiline}
         numberOfLines={numberOfLines}
@@ -109,59 +131,50 @@ export const Input: React.FC<BaseInputProps> = ({
         keyboardType={keyboardType}
         autoCapitalize={autoCapitalize}
         autoCorrect={autoCorrect}
+        mode="outlined"
         // Custom styling
-        containerStyle={{
-          paddingHorizontal: 0,
-          marginBottom: 0,
-        }}
-        inputContainerStyle={{
+        style={{
           backgroundColor: theme.background,
-          borderColor: theme.text?.primary || theme.primary,
-          borderWidth: 1,
-          borderRadius: radius.md,
-          paddingHorizontal: spacing.md,
-          minHeight: multiline ? 100 : 59, // Increased minimum height for better pressability
-          borderBottomWidth: 1, // Override RNE default
-        }}
-        inputStyle={{
-          fontSize: fontSize.md, // Changed to body/md size as requested
+          fontSize: fontSize.md,
           color: theme.text?.primary || theme.primary,
-          fontWeight: fontWeight.medium,
-          paddingVertical: spacing.sm,
-          paddingLeft: leftIcon ? spacing.sm : 0, // Better spacing for placeholder alignment
-          ...inputStyle,
+          fontWeight: fontWeight.light,
         }}
-        labelStyle={{
-          fontSize: fontSize.sm,
-          color: theme.text?.secondary || theme.secondary,
-          fontWeight: fontWeight.medium,
-          marginBottom: spacing.xs,
-          ...labelStyle,
-        }}
-        errorStyle={{
-          fontSize: fontSize.xs,
-          color: theme.error,
-          marginTop: spacing.xs,
-          marginLeft: spacing.xs,
-          ...errorStyle,
+        outlineStyle={{
+          borderRadius: radius.md,
+          borderColor: error
+            ? theme.error
+            : isFocused
+            ? theme.primary
+            : theme.text?.secondary || theme.secondary,
         }}
         placeholderTextColor={theme.text?.secondary || theme.secondary}
-        renderErrorMessage={!!error}
         // Custom icon rendering
-        leftIconContainerStyle={{
-          marginRight: spacing.xs,
-        }}
-        rightIconContainerStyle={{
-          marginLeft: spacing.xs,
-        }}
-        {...(leftIcon && {
-          leftIcon: leftIcon as any,
-        })}
-        {...(rightIcon && {
-          rightIcon: rightIcon as any,
-        })}
+        left={
+          leftIcon ? <RNEInput.Icon icon={leftIcon as string} /> : undefined
+        }
+        right={
+          rightIcon ? (
+            <RNEInput.Icon
+              icon={rightIcon as string}
+              onPress={onRightIconPress}
+            />
+          ) : undefined
+        }
         {...props}
       />
+      {error && (
+        <Container
+          marginTop="xs"
+          marginLeft="xs"
+          style={{
+            fontSize: fontSize.xs,
+            color: theme.error,
+            ...errorStyle,
+          }}
+        >
+          {error}
+        </Container>
+      )}
     </Container>
   );
 };

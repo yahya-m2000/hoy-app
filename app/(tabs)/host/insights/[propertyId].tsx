@@ -10,11 +10,11 @@ import {
   Image,
   ActivityIndicator,
 } from "react-native";
-import { useTheme } from "@shared/hooks/useTheme";
-import { spacing } from "@shared/constants";
+import { useTheme } from "@core/hooks/useTheme";
+import { spacing } from "@core/design";
 import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
-import { getPropertyReviews } from "@shared/services/api/properties";
+import { getPropertyReviews } from "@core/api";
 
 interface PropertyReview {
   _id: string;

@@ -8,18 +8,24 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { useTheme } from "@shared/hooks/useTheme";
-import { Screen, Text, Button } from "@shared/components/base";
-import { spacing } from "@shared/constants";
-import { useHostSetup } from "@modules/host";
+import { useTheme } from "@core/hooks";
+import { Screen, Text, Button } from "@shared/components";
+import { SetupModal } from "@features/host/modals";
+import { spacing } from "@core/design";
+import { useHostSetup } from "@features/host/hooks";
 import {
   ReservationsSection,
   EarningsModal,
   InsightsModal,
   MetricGrid,
-} from "./components";
-import type { MetricItem } from "./components/MetricGrid";
-import { useDashboardData, useCurrentHostInsights } from "./hooks";
+} from "@features/host/components/today";
+import type { MetricItem } from "@features/host/components/today/MetricGrid";
+import { useDashboardData } from "src/features/host/hooks/useDashboardData";
+import { useCurrentHostInsights } from "src/features/host/hooks/useHostInsights";
+// import {
+//   useDashboardData,
+//   useCurrentHostInsights,
+// } from "@features/host/components/today/hooks";
 
 // Import the Reservation type from the hook
 interface Reservation {
@@ -51,6 +57,7 @@ export default function HostTodayScreen() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showEarningsModal, setShowEarningsModal] = useState(false);
   const [showInsightsModal, setShowInsightsModal] = useState(false);
+  const [showHostSetup, setShowHostSetup] = useState(false);
 
   // Debug logging
   console.log("📊 Dashboard State:", {
@@ -136,7 +143,7 @@ export default function HostTodayScreen() {
           <View style={styles.setupActions}>
             <Button
               title={t("host.setup.getStarted")}
-              onPress={() => router.push("/(overlays)/host-setup")}
+              onPress={() => setShowHostSetup(true)}
               style={styles.setupButton}
             />
           </View>
@@ -191,6 +198,14 @@ export default function HostTodayScreen() {
       <InsightsModal
         visible={showInsightsModal}
         onClose={() => setShowInsightsModal(false)}
+      />
+      <SetupModal
+        visible={showHostSetup}
+        onClose={() => setShowHostSetup(false)}
+        onSetupComplete={() => {
+          setShowHostSetup(false);
+          refreshData(); // Refresh data after setup completion
+        }}
       />
     </Screen>
   );

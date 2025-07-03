@@ -8,21 +8,27 @@ import { FlatList, RefreshControl, View } from "react-native";
 import { useRouter } from "expo-router";
 
 // Context
-import { useTheme } from "@shared/hooks/useTheme";
-import { useAuth } from "@shared/context";
+import { useTheme } from "@core/hooks";
+import { useAuth } from "@core/context";
 
 // Base Components
-import { Container, Text, Header, Button } from "@shared/components/base";
-import { EmptyState, LoadingSpinner } from "@shared/components/common";
+import {
+  Container,
+  Text,
+  Header,
+  Button,
+  EmptyState,
+  LoadingSpinner,
+} from "@shared/components";
 
 // Module Components
-import { CollectionsModal, CollectionCard } from "@modules/properties";
+import { CollectionsModal, CollectionCard } from "src/features/properties";
 
 // Services
 import {
   wishlistCollectionsService,
   WishlistCollection,
-} from "@shared/services/";
+} from "@core/api/services/wishlist";
 
 export default function WishlistIndex() {
   const { theme } = useTheme();

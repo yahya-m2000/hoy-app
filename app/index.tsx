@@ -7,12 +7,16 @@
 import { Redirect } from "expo-router";
 
 // App context
-import { useUserRole } from "@shared/context";
+import { useUserRole } from "@core/context";
 
 export default function Index() {
-  const { isHost } = useUserRole();
+  const { userRole } = useUserRole();
   // Redirect to the appropriate experience based on user role
   return (
-    <Redirect href={isHost ? "/(tabs)/host/today" : "/(tabs)/traveler/home"} />
+    <Redirect
+      href={
+        userRole === "host" ? "/(tabs)/host/today" : "/(tabs)/traveler/home"
+      }
+    />
   );
 }

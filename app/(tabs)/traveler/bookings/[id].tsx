@@ -4,13 +4,21 @@
  */
 
 import React from "react";
-import { TouchableOpacity, Alert, Linking, ScrollView } from "react-native";
+import {
+  TouchableOpacity,
+  Alert,
+  Linking,
+  ScrollView,
+  Platform,
+} from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import * as LinkingExpo from "expo-linking";
+import { useTranslation } from "react-i18next";
 
 // Context and hooks
-import { useToast } from "@shared/context";
-import { useTheme } from "@shared/hooks/useTheme";
-import { useBookingDetails } from "@shared/hooks";
+import { useToast } from "@core/context";
+import { useTheme } from "@core/hooks";
+import { useBookingDetails } from "@features/booking/hooks";
 
 // Components
 import {
@@ -20,24 +28,26 @@ import {
   Text,
   Button,
   Section,
-  PropertyImageContainer,
   Header,
   Icon,
+  BookingStatusBadge,
 } from "@shared/components";
-import { BookingStatusBadge } from "@shared/components/common/Status";
+
+import { PropertyImageContainer } from "src/features/properties/components/details";
 
 // Utils
 import {
   formatDate,
   formatCurrency,
-} from "@shared/utils/formatting/formatters";
-import { iconSize } from "src/shared";
+} from "@core/utils/data/formatting/data-formatters";
+import { iconSize } from "@core/design";
 
 export default function BookingDetailsScreen() {
   const { theme } = useTheme();
   const router = useRouter();
   const { showToast } = useToast();
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { t } = useTranslation();
 
   // Fetch booking details
   const {
@@ -50,64 +60,75 @@ export default function BookingDetailsScreen() {
   // Handle calendar actions
   const handleAddToCalendar = () => {
     if (!booking) return;
-
-    const property = booking.propertyId as any; // Type cast since backend returns populated property
+    const property = booking.propertyId as any;
     const checkInDate = new Date(booking.checkIn);
     const checkOutDate = new Date(booking.checkOut);
-
-    const title = `Stay at ${property?.name || "Property"}`;
-    const details = `Check-in: ${formatDate(
-      checkInDate,
-      "long"
-    )}\nCheck-out: ${formatDate(checkOutDate, "long")}\nGuests: ${
-      booking.guests.adults + (booking.guests.children || 0)
-    }`;
-
-    // Create calendar URL (works on most platforms)
-    const startDate =
-      checkInDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
-    const endDate =
-      checkOutDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
-
-    const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
-      title
-    )}&dates=${startDate}/${endDate}&details=${encodeURIComponent(details)}`;
-
-    Linking.openURL(calendarUrl).catch(() => {
-      showToast({
-        message: "Unable to open calendar app",
-        type: "error",
-      });
+    const title = t("bookings.calendarTitle", {
+      property: property?.name || t("bookings.property"),
     });
+    const details = t("bookings.calendarDetails", {
+      checkIn: formatDate(checkInDate, "long"),
+      checkOut: formatDate(checkOutDate, "long"),
+      guests: booking.guests.adults + (booking.guests.children || 0),
+    });
+    if (Platform.OS === "ios") {
+      // Use Apple Calendar
+      const startDate =
+        checkInDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+      const endDate =
+        checkOutDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+      const appleCalUrl = `calshow:${checkInDate.getTime() / 1000}`;
+      LinkingExpo.openURL(appleCalUrl).catch(() => {
+        showToast({ message: t("bookings.calendarError"), type: "error" });
+      });
+    } else {
+      // Use Google Calendar
+      const startDate =
+        checkInDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+      const endDate =
+        checkOutDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+      const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
+        title
+      )}&dates=${startDate}/${endDate}&details=${encodeURIComponent(details)}`;
+      LinkingExpo.openURL(calendarUrl).catch(() => {
+        showToast({ message: t("bookings.calendarError"), type: "error" });
+      });
+    }
   };
 
   // Handle directions
   const handleGetDirections = () => {
-    const property = booking?.propertyId as any; // Type cast since backend returns populated property
+    const property = booking?.propertyId as any;
     if (!property?.coordinates) {
-      showToast({
-        message: "Location not available",
-        type: "error",
-      });
+      showToast({ message: t("bookings.locationError"), type: "error" });
       return;
     }
-
     const { latitude, longitude } = property.coordinates;
-    const url = `https://maps.google.com/maps?daddr=${latitude},${longitude}`;
-
-    Linking.openURL(url).catch(() => {
-      showToast({
-        message: "Unable to open maps app",
-        type: "error",
-      });
+    let url = "";
+    if (Platform.OS === "ios") {
+      // Apple Maps
+      url = `http://maps.apple.com/?daddr=${latitude},${longitude}`;
+    } else {
+      // Google Maps
+      url = `https://maps.google.com/maps?daddr=${latitude},${longitude}`;
+    }
+    LinkingExpo.openURL(url).catch(() => {
+      showToast({ message: t("bookings.mapsError"), type: "error" });
     });
   };
 
   // Handle contact host
   const handleContactHost = () => {
-    showToast({
-      message: "Contact host feature coming soon",
-      type: "info",
+    const property = booking?.propertyId as any;
+    const phone = property?.host?.phoneNumber || booking.contactInfo?.phone;
+    if (!phone) {
+      showToast({ message: t("bookings.whatsappError"), type: "error" });
+      return;
+    }
+    // WhatsApp deep link
+    const url = `https://wa.me/${phone}`;
+    LinkingExpo.openURL(url).catch(() => {
+      showToast({ message: t("bookings.whatsappError"), type: "error" });
     });
   };
 
@@ -161,10 +182,7 @@ export default function BookingDetailsScreen() {
   // Check if booking can be cancelled
   const canCancelBooking = () => {
     if (!booking) return false;
-    return (
-      booking.bookingStatus === "confirmed" ||
-      booking.bookingStatus === "pending"
-    );
+    return booking.status === "confirmed" || booking.status === "pending";
   };
 
   if (isLoading) {
@@ -191,7 +209,7 @@ export default function BookingDetailsScreen() {
   return (
     <Container flex={1} backgroundColor={theme.background}>
       <Header
-        title="Booking Details"
+        title={t("bookings.detailsTitle")}
         leftIcon="arrow-back"
         onLeftPress={() => router.back()}
       />
@@ -273,7 +291,7 @@ export default function BookingDetailsScreen() {
 
         {/* Booking Status */}
         <Container marginBottom="lg">
-          <Section title="Booking Status">
+          <Section title={t("bookings.statusTitle")}>
             <Container flexDirection="row" style={{ gap: 16 }}>
               <Container flex={1}>
                 <Container marginBottom="xs">
@@ -282,7 +300,7 @@ export default function BookingDetailsScreen() {
                   </Text>
                 </Container>
                 <BookingStatusBadge
-                  status={booking.bookingStatus}
+                  status={booking.status}
                   type="booking"
                   size="medium"
                 />
@@ -294,7 +312,22 @@ export default function BookingDetailsScreen() {
                   </Text>
                 </Container>
                 <BookingStatusBadge
-                  status={booking.paymentStatus || "pending"}
+                  status={
+                    [
+                      "pending",
+                      "confirmed",
+                      "cancelled",
+                      "completed",
+                      "in_progress",
+                      "refunded",
+                      "disputed",
+                      "paid",
+                      "partial",
+                      "failed",
+                    ].includes(booking.paymentStatus)
+                      ? booking.paymentStatus
+                      : "pending"
+                  }
                   type="payment"
                   size="medium"
                 />
@@ -305,7 +338,7 @@ export default function BookingDetailsScreen() {
 
         {/* Dates & Guests */}
         <Container marginBottom="lg">
-          <Section title="Trip Details">
+          <Section title={t("bookings.tripDetailsTitle")}>
             <Container style={{ gap: 16 }}>
               <Container flexDirection="row" alignItems="flex-start">
                 <Container width={32} alignItems="center" marginTop="sm">
@@ -404,7 +437,7 @@ export default function BookingDetailsScreen() {
         {/* Contact Information */}
         {booking.contactInfo && (
           <Container marginBottom="lg">
-            <Section title="Contact Information">
+            <Section title={t("bookings.contactInfoTitle")}>
               <Container style={{ gap: 16 }}>
                 <Container flexDirection="row" alignItems="flex-start">
                   <Container width={32} alignItems="center" marginTop="sm">
@@ -416,7 +449,7 @@ export default function BookingDetailsScreen() {
                   </Container>
                   <Container flex={1} marginLeft="md">
                     <Text variant="body" weight="medium">
-                      Name
+                      {t("bookings.contactName")}
                     </Text>
                     <Container marginTop="xs">
                       <Text variant="caption" color={theme.colors.gray[600]}>
@@ -436,7 +469,7 @@ export default function BookingDetailsScreen() {
                   </Container>
                   <Container flex={1} marginLeft="md">
                     <Text variant="body" weight="medium">
-                      Email
+                      {t("bookings.contactEmail")}
                     </Text>
                     <Container marginTop="xs">
                       <Text variant="caption" color={theme.colors.gray[600]}>
@@ -457,7 +490,7 @@ export default function BookingDetailsScreen() {
                     </Container>
                     <Container flex={1} marginLeft="md">
                       <Text variant="body" weight="medium">
-                        Phone
+                        {t("bookings.contactPhone")}
                       </Text>
                       <Container marginTop="xs">
                         <Text variant="caption" color={theme.colors.gray[600]}>
@@ -474,7 +507,7 @@ export default function BookingDetailsScreen() {
 
         {/* Price Breakdown */}
         <Container marginBottom="lg">
-          <Section title="Price Details">
+          <Section title={t("bookings.priceDetailsTitle")}>
             <Container style={{ gap: 8 }}>
               <Container
                 flexDirection="row"
@@ -482,11 +515,18 @@ export default function BookingDetailsScreen() {
                 alignItems="center"
               >
                 <Text variant="body">
-                  ${Math.round(booking.totalPrice / daysCount)} x {daysCount}{" "}
-                  night{daysCount !== 1 ? "s" : ""}
+                  $
+                  {Math.round(
+                    ((booking.pricing?.totalPrice ?? booking.totalAmount) ||
+                      0) / daysCount
+                  )}{" "}
+                  x {daysCount} night{daysCount !== 1 ? "s" : ""}
                 </Text>
                 <Text variant="body">
-                  ${formatCurrency(booking.totalPrice)}
+                  $
+                  {formatCurrency(
+                    booking.pricing?.totalPrice ?? booking.totalAmount
+                  )}
                 </Text>
               </Container>
               <Container
@@ -499,10 +539,13 @@ export default function BookingDetailsScreen() {
                 marginTop="xs"
               >
                 <Text variant="body" weight="semibold">
-                  Total
+                  {t("bookings.total")}
                 </Text>
                 <Text variant="body" weight="semibold">
-                  ${formatCurrency(booking.totalPrice)}
+                  $
+                  {formatCurrency(
+                    booking.pricing?.totalPrice ?? booking.totalAmount
+                  )}
                 </Text>
               </Container>
             </Container>
@@ -512,7 +555,7 @@ export default function BookingDetailsScreen() {
         {/* Special Requests */}
         {booking.specialRequests && (
           <Container marginBottom="lg">
-            <Section title="Special Requests">
+            <Section title={t("bookings.specialRequestsTitle")}>
               <Text variant="body" color={theme.colors.gray[700]}>
                 {booking.specialRequests}
               </Text>
@@ -554,11 +597,11 @@ export default function BookingDetailsScreen() {
               )}
               <Button
                 variant="primary"
-                title="Contact Host"
+                title={t("bookings.contactHost")}
                 onPress={handleContactHost}
                 icon={
                   <Icon
-                    name="chatbubble-outline"
+                    name="logo-whatsapp"
                     size={iconSize.sm}
                     color={theme.colors.white}
                   />
@@ -592,14 +635,15 @@ export default function BookingDetailsScreen() {
               color={theme.colors.gray[500]}
               style={{ textAlign: "center" }}
             >
-              Booking ID: {booking._id}
+              {t("bookings.bookingId")}: {booking._id}
             </Text>
             <Text
               variant="caption"
               color={theme.colors.gray[400]}
               style={{ textAlign: "center", marginTop: 4 }}
             >
-              Booked on {formatDate(booking.createdAt, "medium")}
+              {t("bookings.bookedOn")}:{" "}
+              {formatDate(booking.createdAt, "medium")}
             </Text>
           </Section>
         </Container>

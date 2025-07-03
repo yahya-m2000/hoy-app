@@ -5,7 +5,7 @@
 
 import React, { ReactNode } from "react";
 import { View } from "react-native";
-import { Text } from "@shared/components/base/Text";
+import { Text } from "../base/Text";
 
 interface State {
   hasError: boolean;

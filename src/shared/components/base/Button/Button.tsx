@@ -15,12 +15,12 @@ import {
   TextStyle,
   View,
 } from "react-native";
-import { Text } from "@shared/components/base/Text";
-import { useTheme } from "@shared/hooks/useTheme";
+import { Text } from "../Text";
+import { useTheme } from "src/core/hooks/useTheme";
 
 // Constants
-import { radius, fontSize, spacing } from "@shared/constants";
-import { primary, secondary, gray } from "@shared/constants/colors";
+import { radius, fontSize, spacing } from "@core/design";
+import { primary, secondary, gray } from "@core/design/colors";
 
 type ButtonVariant = "primary" | "secondary" | "outline" | "ghost";
 type ButtonSize = "small" | "medium" | "large";

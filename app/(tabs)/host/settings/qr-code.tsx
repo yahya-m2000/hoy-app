@@ -1,14 +1,18 @@
 import React from "react";
-import { Screen } from "@shared/components/base";
-import { useCurrentUser } from "@shared/hooks/useUser";
-import { HostQRCodeScreen } from "./components/HostQRCodeScreen";
 
-export default function QRCodeScreen() {
+// Features
+import { useCurrentUser } from "@features/user/hooks";
+import { QRCodeScreen } from "src/features/account/screens/QRCodeScreen";
+
+// Shared
+import { Screen } from "@shared/components";
+
+export default function QRCodeModalScreen() {
   const { data: user } = useCurrentUser();
 
   return (
     <Screen>
-      <HostQRCodeScreen user={user || null} />
+      <QRCodeScreen user={user || null} />
     </Screen>
   );
 }

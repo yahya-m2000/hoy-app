@@ -8,7 +8,7 @@ import React from "react";
 import { Stack } from "expo-router";
 
 // Context
-import { useUserRole } from "@shared/context/UserRoleContext";
+import { useUserRole } from "@core/context/UserRoleContext";
 
 // Main tabs layout serves as a router between host and traveler experiences
 export default function TabsLayout() {

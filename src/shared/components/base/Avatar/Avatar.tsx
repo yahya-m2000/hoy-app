@@ -1,8 +1,8 @@
 import React from "react";
 import { Image } from "react-native";
-import { Container } from "../Container";
+import { Container } from "../../layout";
 import { Text } from "../Text";
-import { useTheme } from "@shared/hooks/useTheme";
+import { useTheme } from "@core/hooks/useTheme";
 
 export interface AvatarProps {
   size?: "small" | "medium" | "large" | "xlarge";

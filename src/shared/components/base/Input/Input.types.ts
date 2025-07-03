@@ -29,6 +29,7 @@ export interface BaseInputProps {
   keyboardType?: RNTextInputProps["keyboardType"];
   autoCapitalize?: RNTextInputProps["autoCapitalize"];
   autoCorrect?: boolean;
+  maxLength?: number;
 }
 
 export interface TextInputProps extends RNTextInputProps {

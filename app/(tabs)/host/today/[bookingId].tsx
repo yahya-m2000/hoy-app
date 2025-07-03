@@ -1,3 +1,3 @@
-import BookingDetailsScreen from "@shared/screens/BookingDetailsScreen";
+import BookingDetailsScreen from "src/features/booking/screens/BookingDetailsScreen";
 
 export default BookingDetailsScreen;

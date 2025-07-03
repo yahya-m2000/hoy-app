@@ -1,0 +1,1 @@
+export { default as errorReportingService } from './error-reporting.service';

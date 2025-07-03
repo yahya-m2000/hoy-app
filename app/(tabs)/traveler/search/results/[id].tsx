@@ -3,6 +3,6 @@
  * Displays full property information when accessed from search results
  */
 
-import { PropertyDetailsScreen } from "@modules/properties";
+import PropertyDetailsScreen from "@features/properties/screens/PropertyDetailsScreen";
 
 export default PropertyDetailsScreen;

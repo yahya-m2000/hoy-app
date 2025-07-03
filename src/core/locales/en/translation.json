@@ -1,0 +1,280 @@
+{
+  "common": {
+    "test": "test",
+    "loading": "Loading...",
+    "error": "Error",
+    "save": "Save",
+    "cancel": "Cancel",
+    "required": "Required",
+    "optional": "Optional",
+    "search": "Search",
+    "and": "and",
+    "next": "Next",
+    "back": "Back",
+    "saveAndExit": "Save & Exit",
+    "publish": "Publish",
+    "saveDraft": "Save Draft",
+    "characters": "characters",
+    "min": "Min",
+    "max": "Max"
+  },
+  "auth": {
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+    "createAccount": "Create Account",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "legalName": "Legal Name",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "firstNameHelper": "Enter your legal first name as it appears on your ID",
+    "lastNameHelper": "Enter your legal last name as it appears on your ID",
+    "contactDetails": "Contact Details",
+    "email": "Email Address",
+    "phoneNumber": "Phone Number",
+    "emailHelper": "We'll use this email to send you booking confirmations",
+    "phoneHelper": "For booking confirmations and host communication",
+    "address": "Address",
+    "country": "Country",
+    "city": "City",
+    "countryHelper": "Select your country of residence",
+    "cityHelper": "Select your city",
+    "profilePicture": "Profile Picture",
+    "profilePictureHelper": "Optional: Add a photo to help hosts recognize you",
+    "password": "Password",
+    "passwordHelper": "Must be at least 8 characters with letters and numbers",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordHelper": "Re-enter your password to confirm",
+    "legal": "Legal",
+    "termsAndConditions": "Terms and Conditions",
+    "privacyPolicy": "Privacy Policy",
+    "termsAgreement": "By creating an account, you agree to our:",
+    "validation": {
+      "emailInvalid": "Please enter a valid email address",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "passwordsDoNotMatch": "Passwords do not match",
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "phoneRequired": "Phone number is required",
+      "phoneInvalid": "Please enter a valid phone number",
+      "countryRequired": "Please select your country",
+      "cityRequired": "Please select your city"
+    },
+    "avatar": {
+      "selectPhoto": "Select Photo",
+      "takePhoto": "Take Photo",
+      "removePhoto": "Remove Photo",
+      "cameraPermissionDenied": "Camera permission denied",
+      "photoLibraryPermissionDenied": "Photo library permission denied"
+    }
+  },
+  "booking": {
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "bookingConfirmed": "Booking Confirmed",
+    "confirmationMessage": "Your booking has been confirmed",
+    "addToCalendar": "Add to Calendar",
+    "directions": "Get Directions",
+    "shareBooking": "Share Booking",
+    "cancelBooking": "Cancel Booking",
+    "viewBookingDetails": "View Booking Details",
+    "bookingNotFound": "Booking Not Found",
+    "bookingNotFoundMessage": "We couldn't find this booking",
+    "zaadPaymentPending": "Zaad Payment Pending",
+    "zaadPaymentPendingMessage": "Complete your payment to confirm booking",
+    "payNowWithZaad": "Pay Now with Zaad",
+    "guests": "Guests",
+    "adults": "adults",
+    "childrenShort": "children",
+    "infantsShort": "infants",
+    "petsShort": "pets",
+    "paymentDetails": "Payment Details",
+    "basePrice": "Base Price",
+    "cleaningFee": "Cleaning Fee",
+    "serviceFee": "Service Fee",
+    "taxes": "Taxes",
+    "total": "Total",
+    "signInRequired": "Sign In Required",
+    "signInToViewBookings": "Sign in to view your bookings",
+    "signIn": "Sign In",
+    "calendarPermissionDenied": "Calendar permission denied",
+    "noCalendarFound": "No calendar found",
+    "addedToCalendar": "Added to calendar",
+    "calendarError": "Calendar error",
+    "whatsappContact": "WhatsApp Contact"
+  },
+  "property": {
+    "add": {
+      "title": "List Your Property",
+      "progressSaved": "Your progress has been saved",
+      "savingProgress": "Saving progress...",
+      "errorSaving": "Error saving progress",
+      "exitConfirmTitle": "Save & Exit?",
+      "exitConfirmMessage": "Your progress will be saved and you can continue later",
+      "step1": {
+        "title": "Tell Us About Your Place",
+        "intro": {
+          "title": "Let's get started",
+          "description": "We'll guide you through listing your property in just a few simple steps. You can save and exit at any time.",
+          "benefits": [
+            "Reach millions of travelers worldwide",
+            "Set your own prices and house rules",
+            "Get paid quickly and securely"
+          ]
+        },
+        "propertyType": {
+          "title": "What type of property is this?",
+          "description": "Choose the option that best describes your place"
+        },
+        "guestAccess": {
+          "title": "What will guests have access to?",
+          "description": "Let guests know what spaces they can use"
+        },
+        "location": {
+          "title": "Where's your property located?",
+          "description": "Guests will only see your exact address after booking",
+          "searchPlaceholder": "Search for your address",
+          "confirmTitle": "Is this the right location?",
+          "confirmDescription": "Make sure the pin is in the right spot. You can adjust it if needed.",
+          "street": "Street Address",
+          "city": "City",
+          "state": "State/Province",
+          "postalCode": "Postal Code",
+          "country": "Country"
+        },
+        "details": {
+          "title": "Share some basics about your place",
+          "description": "You can always change these later",
+          "guests": "Guests",
+          "bedrooms": "Bedrooms",
+          "beds": "Beds",
+          "bathrooms": "Bathrooms"
+        }
+      },
+      "step2": {
+        "title": "Make Your Place Stand Out",
+        "amenities": {
+          "title": "What amenities do you offer?",
+          "description": "Select all that apply",
+          "popular": "Popular amenities",
+          "kitchen": "Kitchen & Dining",
+          "entertainment": "Entertainment",
+          "comfort": "Comfort",
+          "safety": "Safety & Security"
+        },
+        "photos": {
+          "title": "Add photos of your property",
+          "description": "Upload at least 5 photos. The first one will be your cover photo.",
+          "tips": [
+            "Use natural lighting when possible",
+            "Show off your best features",
+            "Include different areas of your space",
+            "Keep photos current and accurate"
+          ],
+          "upload": "Upload Photos",
+          "dragDrop": "Drag and drop photos here",
+          "coverPhoto": "Cover Photo",
+          "minRequired": "Minimum 5 photos required"
+        },
+        "title": {
+          "title": "Give your property a title",
+          "description": "Catch guests' attention with a catchy title",
+          "placeholder": "e.g., Cozy Downtown Apartment",
+          "charLimit": "32 characters maximum"
+        },
+        "tags": {
+          "title": "Choose tags that describe your place",
+          "description": "Help guests find your property",
+          "selected": "Selected tags"
+        },
+        "description": {
+          "title": "Describe your property",
+          "description": "Tell guests what makes your place special",
+          "placeholder": "Write about your space, neighborhood, and what guests can expect...",
+          "wordLimit": "500 words maximum",
+          "tips": [
+            "Highlight unique features",
+            "Mention nearby attractions",
+            "Describe the neighborhood vibe",
+            "Set clear expectations"
+          ]
+        }
+      },
+      "step3": {
+        "title": "Finish Up and Publish",
+        "pricing": {
+          "title": "Set your pricing",
+          "weekdayPrice": "Weekday Price",
+          "weekendPrice": "Weekend Price",
+          "currency": "Currency",
+          "perNight": "per night",
+          "competitiveTip": "Price competitively to attract more bookings"
+        },
+        "discounts": {
+          "title": "Offer discounts to attract guests",
+          "description": "Optional: Increase bookings with strategic discounts",
+          "newListing": "New listing promotion (20% off first 3 bookings)",
+          "lastMinute": "Last-minute discount (for bookings within 24 hours)",
+          "weekly": "Weekly discount",
+          "monthly": "Monthly discount",
+          "percentage": "Discount percentage"
+        },
+        "policies": {
+          "title": "Review your policies",
+          "description": "These are your default policies. You can customize them for this property.",
+          "cancellation": "Cancellation Policy",
+          "houseRules": "House Rules",
+          "safetyInfo": "Safety Information",
+          "modify": "Modify for this property"
+        },
+        "hostInfo": {
+          "title": "Tell us about yourself",
+          "hostType": "Are you listing as an individual or business?",
+          "individual": "Individual",
+          "business": "Business",
+          "safetyQuestions": {
+            "title": "Safety disclosures",
+            "weapons": "Are there any weapons on the property?",
+            "cameras": "Are there security cameras on the property?",
+            "cameraDetails": "Please describe camera locations"
+          }
+        }
+      },
+      "review": {
+        "title": "Review & Publish",
+        "description": "Take a final look before publishing your listing",
+        "editSection": "Edit",
+        "allSet": "Everything looks good!",
+        "publishNow": "Publish Now",
+        "saveDraft": "Save as Draft"
+      },
+      "success": {
+        "title": "Congratulations!",
+        "published": "Your property has been published",
+        "draft": "Your property has been saved as a draft",
+        "nextSteps": "What's next?",
+        "viewListing": "View Listing",
+        "addAnother": "Add Another Property",
+        "goToDashboard": "Go to Dashboard"
+      },
+      "errors": {
+        "requiredField": "This field is required",
+        "minPhotos": "Please upload at least 5 photos",
+        "titleTooLong": "Title must be 32 characters or less",
+        "descriptionTooLong": "Description must be 500 words or less",
+        "invalidPrice": "Please enter a valid price",
+        "locationRequired": "Please select a location",
+        "submitError": "Error submitting property. Please try again."
+      }
+    }
+  },
+  "navigation": {
+    "profile": "Profile",
+    "wishlist": "Wishlist",
+    "bookings": "Bookings",
+    "messages": "Messages",
+    "settings": "Settings",
+    "search": "Search",
+    "home": "Home"
+  }
+}

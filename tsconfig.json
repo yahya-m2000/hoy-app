@@ -7,28 +7,75 @@
     "paths": {
       "*": ["*"],
       "@/*": ["*"],
-      // New structure - shared components and utilities
+      
+      // ========================================
+      // NEW STRUCTURE - Production paths
+      // ========================================
+      
+      // Core application layer
+      "@core/*": ["src/core/*"],
+      "@core/api": ["src/core/api"],
+      "@core/auth": ["src/core/auth"],
+      "@core/storage": ["src/core/storage"],
+      "@core/navigation": ["src/core/navigation"],
+      "@core/localization": ["src/core/localization"],
+      "@core/notifications": ["src/core/notifications"],
+      "@core/analytics": ["src/core/analytics"],
+      "@core/contexts": ["src/core/contexts"],
+"@core/design": ["src/core/design"],  
+"@core/external": ["src/core/external"],
+"@core/utils": ["src/core/utils"],
+      
+      // Feature modules (domain-driven)
+      "@features/*": ["src/features/*"],
+      "@features/auth": ["src/features/auth"],
+      "@features/booking": ["src/features/booking"],
+      "@features/property": ["src/features/property"],
+      "@features/search": ["src/features/search"],
+      "@features/chat": ["src/features/chat"],
+      "@features/review": ["src/features/review"],
+      "@features/user": ["src/features/user"],
+      "@features/host": ["src/features/host"],
+      "@features/host/calendar": ["src/features/host/calendar"],
+      "@features/host/insights": ["src/features/host/insights"],
+      "@features/host/today": ["src/features/host/components/today"],
+      
+      // Shared resources (new structure)
       "@shared/*": ["src/shared/*"],
       "@shared/components": ["src/shared/components"],
-      "@shared/components/ui": ["src/shared/components/ui"],
-      "@shared/components/layout": ["src/shared/components/layout"],
+      "@shared/components/base": ["src/shared/components/ui"],
       "@shared/components/feedback": ["src/shared/components/feedback"],
+      "@shared/components/layout": ["src/shared/components/layout"],
+      "@shared/components/navigation": ["src/shared/components/navigation"],
+      "@shared/components/form": ["src/shared/components/form"],
+      "@shared/components/animation": ["src/shared/components/animation"],
       "@shared/hooks": ["src/shared/hooks"],
-      "@shared/utils": ["src/shared/utils"],
+      "@shared/utils": ["src/core/utils"],
       "@shared/constants": ["src/shared/constants"],
+      "@shared/contexts": ["src/shared/contexts"],
       "@shared/types": ["src/shared/types"],
+      "@shared/assets": ["src/shared/assets"],
+      
+      // Test utilities
+      "@test/*": ["src/test/*"],
+      
+      // ========================================
+      // LEGACY STRUCTURE - Keep for compatibility
+      // ========================================
+      
+      // Legacy shared components and utilities (current structure)
+      "@shared/components/ui": ["src/shared/components/ui"],
       "@shared/context": ["src/shared/context"],
       "@shared/services": ["src/shared/services"],
       
-      // Module-based organization (new structure)
-      "@modules/*": ["src/modules/*"],
-      "@modules/auth": ["src/modules/auth"],
-      "@modules/properties": ["src/modules/properties"],
-      "@modules/booking": ["src/modules/booking"],
-      "@modules/messaging": ["src/modules/messaging"],
-      "@modules/search": ["src/modules/search"],
-      "@modules/account": ["src/modules/account"],
-      
+      // Legacy module-based organization (current structure)
+      "@modules/*": ["src/features/*"],
+      "@modules/auth": ["src/features/auth"],
+      "@modules/properties": ["src/features/properties"],
+      "@modules/booking": ["src/features/traveler/booking"],
+      "@modules/messaging": ["src/features/messaging"],
+      "@modules/search": ["src/features/search"],
+      "@modules/account": ["src/features/account"],
       
       // Legacy aliases (for migration period - updated to actual paths)
       "@common/*": ["../common/*"],

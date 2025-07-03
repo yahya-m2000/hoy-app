@@ -10,8 +10,8 @@ import React from "react";
 import { Text as RNText } from "react-native";
 
 // Context
-import { useTheme } from "@shared/hooks/useTheme";
-import { text, getFontFamily } from "@shared/constants/typography";
+import { useTheme } from "src/core/hooks/useTheme";
+import { text, getFontFamily } from "@core/design/typography";
 
 // Types
 import { BaseTextProps } from "./Text.types";

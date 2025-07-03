@@ -1,18 +1,3 @@
-import React from "react";
-import { StyleSheet } from "react-native";
-import { Screen } from "@shared/components/base";
-import { HostSettingsContent } from "./components";
+import AccountScreen from "src/features/account/screens/AccountScreen";
 
-export default function HostSettingsScreen() {
-  return (
-    <Screen style={styles.container}>
-      <HostSettingsContent />
-    </Screen>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+export default AccountScreen;

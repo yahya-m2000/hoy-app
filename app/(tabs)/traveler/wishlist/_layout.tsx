@@ -1,12 +1,12 @@
 import { Stack } from "expo-router";
-import { useThemedScreenOptions } from "@shared/navigation";
+import { useThemedScreenOptions } from "@core/navigation";
 import { CollectionHeader } from "@shared/components";
 
 export default function WishlistLayout() {
   const themedOptions = useThemedScreenOptions();
 
   return (
-    <Stack screenOptions={themedOptions}>
+    <Stack>
       <Stack.Screen
         name="index"
         options={{
@@ -15,26 +15,8 @@ export default function WishlistLayout() {
       />
       <Stack.Screen
         name="[id]"
-        options={({ route }) => {
-          const params = route.params as
-            | { name?: string; propertyCount?: string }
-            | undefined;
-          const propertyCount = params?.propertyCount
-            ? parseInt(params.propertyCount, 10)
-            : undefined;
-          const collectionName = params?.name
-            ? decodeURIComponent(params.name)
-            : "Collection";
-          return {
-            headerShown: true,
-            headerTitle: () => (
-              <CollectionHeader
-                title={collectionName}
-                propertyCount={propertyCount}
-              />
-            ),
-            headerTitleAlign: "center",
-          };
+        options={{
+          headerShown: false,
         }}
       />
       <Stack.Screen

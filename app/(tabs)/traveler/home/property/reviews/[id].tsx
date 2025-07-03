@@ -5,7 +5,7 @@
 
 import React from "react";
 import { useLocalSearchParams } from "expo-router";
-import { PropertyReviewsScreen } from "@shared/screens/PropertyReviewsScreen";
+import { PropertyReviewsScreen } from "src/features/properties/screens/PropertyReviewsScreen";
 
 export default function HomeReviewsPage() {
   const { id } = useLocalSearchParams<{ id: string }>();

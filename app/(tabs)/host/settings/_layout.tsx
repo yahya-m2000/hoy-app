@@ -1,6 +1,6 @@
 import React from "react";
 import { Stack } from "expo-router";
-import { useThemedScreenOptions } from "@shared/navigation";
+import { useThemedScreenOptions } from "@core/navigation";
 
 export default function SettingsLayout() {
   const themedOptions = useThemedScreenOptions();

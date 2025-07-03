@@ -7,25 +7,29 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 
+// Navigation
 import { useNavigation } from "@react-navigation/native";
 import { useRouter } from "expo-router";
-import { YearGrid } from "./components/YearGrid";
-import { MonthView } from "./components/MonthView";
-import { EditOverlay } from "./components/EditOverlay";
-import { PropertyHeader } from "./components/PropertyHeader";
-import PropertySelectorModal from "./components/PropertySelectorModal";
-import { BookingData } from "./utils/dateUtils";
-import { PropertyProvider, useProperty, Property } from "./hooks/useProperty";
+
+// Core
+import { fontSize, fontWeight, iconSize, radius, spacing } from "@core/design";
+import { useTheme } from "@core/hooks";
+import { CalendarBookingData } from "@core/types";
+
+// Features
+import { YearGrid } from "@features/calendar/components/YearGrid";
+import { MonthView } from "@features/calendar/components/MonthView";
+import { EditOverlay } from "@features/calendar/components/EditOverlay";
+import { PropertyHeader } from "@features/calendar/components/PropertyHeader";
+import PropertySelectorModal from "@features/calendar/components/PropertySelectorModal";
 import {
-  fontSize,
-  fontWeight,
-  Icon,
-  iconSize,
-  radius,
-  spacing,
-  Text,
-} from "src/shared";
-import { useTheme } from "@shared/hooks/useTheme";
+  PropertyProvider,
+  useProperty,
+  Property,
+} from "@features/calendar/hooks/useProperty";
+
+// Shared
+import { Icon, Text } from "@shared/components";
 
 type ViewMode = "year" | "month";
 
@@ -129,7 +133,7 @@ function CalendarScreenInner() {
     }, TRANSITION_DURATION); // Match exit animation duration
   }, []);
   const handleBookingPress = useCallback(
-    (booking: BookingData) => {
+    (booking: CalendarBookingData) => {
       // Navigate to booking details screen with booking ID
       router.push(`/(tabs)/host/calendar/${booking.id}`);
     },

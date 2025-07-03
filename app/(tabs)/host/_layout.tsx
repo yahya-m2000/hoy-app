@@ -15,8 +15,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 // App context
-import { useTheme } from "@shared/hooks/useTheme";
-import { useUserRole } from "@shared/context";
+import { useTheme } from "@core/hooks";
+import { useUserRole } from "@core/context";
 
 // Global state for edit modal communication
 let globalAnimateTabBarFn: ((hide: boolean) => void) | null = null;
@@ -33,7 +33,7 @@ export const setEditModalVisible = (visible: boolean) => {
 
 const HostLayout = () => {
   const { theme, isDark } = useTheme();
-  const { isHost, isRoleLoading } = useUserRole();
+  const { userRole, isRoleLoading } = useUserRole();
   const insets = useSafeAreaInsets();
 
   // Animated values for tab bar slide animation and icon opacity
@@ -126,7 +126,7 @@ const HostLayout = () => {
   );
 
   // Use declarative Redirect instead of imperative navigation
-  if (!isRoleLoading && !isHost) {
+  if (!isRoleLoading && userRole !== "host") {
     return <Redirect href="/(tabs)/traveler" />;
   }
 

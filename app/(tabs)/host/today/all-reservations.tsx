@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
-import { useTheme } from "@shared/hooks/useTheme";
-import { spacing } from "@shared/constants";
-import { useDashboardData } from "./hooks/useDashboardData";
-import { FilterType } from "./components/FilterTabs";
-import ReservationList from "./components/ReservationList";
-import ReservationFilterSection from "./components/ReservationFilterSection";
-import { Reservation } from "./components/ReservationCard";
+import { useTheme } from "@core/hooks";
+import { spacing } from "@core/design";
+import { useDashboardData } from "@features/host/hooks/useDashboardData";
+import { FilterType } from "@features/host/components/today/FilterTabs";
+import ReservationList from "@features/host/components/today/ReservationList";
+import ReservationFilterSection from "@features/host/components/today/ReservationFilterSection";
+import { Reservation } from "@features/host/components/today/ReservationCard";
 
 export default function AllReservationsPage() {
   const { theme } = useTheme();
