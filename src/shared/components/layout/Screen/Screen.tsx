@@ -63,11 +63,7 @@ const Screen: React.FC<ScreenProps> = ({
     large: spacing.lg,
   }[padding];
 
-  const screenBackgroundColor =
-    backgroundColor ||
-    (isDark
-      ? theme.colors.gray?.[900] || "#1a1a1a"
-      : theme.colors.gray?.[50] || "#ffffff");
+  const screenBackgroundColor = backgroundColor || theme.background;
 
   // Render header based on variant
   const renderHeader = () => {

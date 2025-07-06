@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 import { iconSize, fontSize, fontWeight, spacing, radius } from "@core/design";
 import { useTheme } from "@core/hooks";
 import { Property } from "../hooks/useProperty";
@@ -21,6 +22,7 @@ interface PropertySelectorModalProps {
 
 const PropertySelectorModal: React.FC<PropertySelectorModalProps> = memo(
   ({ isVisible, onClose, properties, selectedProperty, onPropertySelect }) => {
+    const { t } = useTranslation();
     const { theme } = useTheme();
 
     const handlePropertySelect = (property: Property) => {
@@ -32,7 +34,7 @@ const PropertySelectorModal: React.FC<PropertySelectorModalProps> = memo(
 
     return (
       <BottomSheetModal
-        title="Select Property"
+        title={t("calendar.selectProperty")}
         onClose={onClose}
         showSaveButton={false}
         testID="property-selector-modal"
@@ -124,7 +126,9 @@ const PropertySelectorModal: React.FC<PropertySelectorModalProps> = memo(
                             },
                           ]}
                         >
-                          <Text style={styles.activeText}>Active</Text>
+                          <Text style={styles.activeText}>
+                            {t("property.status.active")}
+                          </Text>
                         </View>
                       )}
                     </View>

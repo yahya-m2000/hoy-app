@@ -5,8 +5,9 @@
  */
 
 // React Native core
-import React, { useRef, useState } from "react";
-import { Platform, Animated, Easing } from "react-native";
+import React from "react";
+import { Platform, Animated } from "react-native";
+import { useTranslation } from "react-i18next";
 
 // Expo and third-party libraries
 import { Tabs, Redirect } from "expo-router";
@@ -17,6 +18,10 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 // App context
 import { useTheme } from "@core/hooks";
 import { useUserRole } from "@core/context";
+import {
+  useTabBarVisibility,
+  isOnAddPropertyScreen,
+} from "@core/navigation/useTabBarVisibility";
 
 // Global state for edit modal communication
 let globalAnimateTabBarFn: ((hide: boolean) => void) | null = null;
@@ -32,45 +37,12 @@ export const setEditModalVisible = (visible: boolean) => {
 };
 
 const HostLayout = () => {
+  const { t } = useTranslation();
   const { theme, isDark } = useTheme();
   const { userRole, isRoleLoading } = useUserRole();
   const insets = useSafeAreaInsets();
-
-  // Animated values for tab bar slide animation and icon opacity
-  const tabBarTranslateY = useRef(new Animated.Value(0)).current;
-  const tabIconOpacity = useRef(new Animated.Value(1)).current;
-  const [shouldHideTabBar, setShouldHideTabBar] = useState(false);
-
-  // Adjusted tab bar height including bottom inset for safe area
-  const tabBarHeight = Platform.OS === "ios" ? 50 + insets.bottom : 60;
-  // Function to animate tab bar with smooth easing
-  const animateTabBar = (hide: boolean) => {
-    console.log(
-      `Host layout animateTabBar called with: ${hide}, current shouldHideTabBar: ${shouldHideTabBar}`
-    );
-    if (hide === shouldHideTabBar) return; // Don't animate if already in the desired state
-
-    setShouldHideTabBar(hide);
-    console.log(`Starting tab bar animation: ${hide ? "hiding" : "showing"}`);
-
-    // Animate both tab bar position and icon opacity
-    Animated.parallel([
-      Animated.timing(tabBarTranslateY, {
-        toValue: hide ? tabBarHeight + 20 : 0, // Add extra 20px to fully hide
-        duration: 400, // 0.4 seconds for smooth animation
-        easing: Easing.bezier(0.25, 0.1, 0.25, 1), // Ease in-out cubic bezier
-        useNativeDriver: true,
-      }),
-      Animated.timing(tabIconOpacity, {
-        toValue: hide ? 0 : 1, // Fade out icons when hiding
-        duration: hide ? 200 : 400, // Faster fade out, slower fade in
-        easing: Easing.bezier(0.25, 0.1, 0.25, 1),
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      console.log(`Tab bar animation completed: ${hide ? "hidden" : "shown"}`);
-    });
-  };
+  const { tabBarTranslateY, tabIconOpacity, animateTabBar, tabBarHeight } =
+    useTabBarVisibility();
 
   // Set global function reference
   globalAnimateTabBarFn = animateTabBar;
@@ -110,6 +82,58 @@ const HostLayout = () => {
     }
   };
 
+  // Check if we're on a property details screen
+  const isOnPropertyDetailsScreen = (navigationState: any) => {
+    try {
+      if (!navigationState) return false;
+
+      const currentTabRoute = navigationState.routes[navigationState.index];
+      if (!currentTabRoute?.state) return false;
+
+      const tabState = currentTabRoute.state;
+      const currentScreenIndex = tabState.index;
+
+      if (
+        currentScreenIndex === undefined ||
+        !tabState.routes[currentScreenIndex]
+      ) {
+        return false;
+      }
+
+      const currentScreenRoute = tabState.routes[currentScreenIndex];
+      const routeName = currentScreenRoute?.name || "";
+
+      // Check for property details screen in listings tab
+      if (
+        currentTabRoute.name === "listings" &&
+        routeName === "details/index"
+      ) {
+        return true;
+      }
+
+      // Check for booking details screen in today tab
+      if (currentTabRoute.name === "today" && routeName === "[bookingId]") {
+        return true;
+      }
+
+      // Check for nested property details routes
+      if (currentScreenRoute?.state) {
+        const nestedState = currentScreenRoute.state;
+        const nestedRoute = nestedState.routes?.[nestedState.index];
+        if (
+          nestedRoute?.name === "details/index" ||
+          nestedRoute?.name?.includes("property")
+        ) {
+          return true;
+        }
+      }
+
+      return false;
+    } catch {
+      return false;
+    }
+  };
+
   // Animated Icon Wrapper Component
   const AnimatedTabIcon = ({
     name,
@@ -130,111 +154,133 @@ const HostLayout = () => {
     return <Redirect href="/(tabs)/traveler" />;
   }
 
-  // Show nothing while loading to avoid flicker
-  if (isRoleLoading) {
-    return null;
-  }
-
   // Export the animateTabBar function to global scope for use by edit modal
   (global as any).hostTabBarAnimate = animateTabBar;
 
   return (
-    <BottomSheetModalProvider>
-      <Tabs
-        screenOptions={{
-          animation: "fade",
-          tabBarActiveTintColor: theme.colors.primary,
-          tabBarInactiveTintColor: isDark
-            ? theme.colors.gray[400]
-            : theme.colors.gray[500],
-          tabBarStyle: [
-            {
+    <>
+      <BottomSheetModalProvider>
+        <Tabs
+          screenOptions={{
+            animation: "fade",
+            tabBarActiveTintColor: theme.colors.primary,
+            tabBarInactiveTintColor: isDark
+              ? theme.colors.gray[400]
+              : theme.colors.gray[500],
+            tabBarStyle: [
+              {
+                backgroundColor: isDark ? theme.colors.gray[900] : theme.white,
+                borderTopColor: isDark
+                  ? theme.colors.gray[800]
+                  : theme.colors.gray[200],
+                height: tabBarHeight,
+                paddingBottom: insets.bottom,
+                position: "absolute",
+              },
+              {
+                transform: [{ translateY: tabBarTranslateY }],
+              },
+            ],
+            tabBarShowLabel: true,
+            tabBarLabelStyle: {
+              fontSize: 12,
+              fontWeight: "500",
+            },
+            headerStyle: {
               backgroundColor: isDark ? theme.colors.gray[900] : theme.white,
-              borderTopColor: isDark
-                ? theme.colors.gray[800]
-                : theme.colors.gray[200],
-              height: tabBarHeight,
-              paddingBottom: insets.bottom,
-              position: "absolute",
             },
-            {
-              transform: [{ translateY: tabBarTranslateY }],
-            },
-          ],
-          tabBarShowLabel: true,
-          tabBarLabelStyle: {
-            fontSize: 12,
-            fontWeight: "500",
-          },
-          headerStyle: {
-            backgroundColor: isDark ? theme.colors.gray[900] : theme.white,
-          },
-          headerTintColor: isDark ? theme.white : theme.colors.gray[900],
-          headerShadowVisible: false,
-          headerShown: false,
-        }}
-        screenListeners={{
-          state: (e) => {
-            // Check if we should hide the tab bar based on current navigation state
-            const shouldHide = isOnEditModalScreen(e.data.state);
-            animateTabBar(shouldHide);
-          },
-        }}
-      >
-        <Tabs.Screen
-          name="index"
-          options={{
-            href: null, // This completely hides the tab from the tab bar
+            headerTintColor: isDark ? theme.white : theme.colors.gray[900],
+            headerShadowVisible: false,
             headerShown: false,
           }}
-        />
-        <Tabs.Screen
-          name="today"
-          options={{
-            title: "Today",
-            tabBarIcon: ({ color, size }) => (
-              <AnimatedTabIcon name="today-outline" size={size} color={color} />
-            ),
+          screenListeners={{
+            state: (e) => {
+              // Check if we should hide the tab bar based on current navigation state
+              const shouldHide =
+                isOnEditModalScreen(e.data.state) ||
+                isOnAddPropertyScreen(e.data.state) ||
+                isOnPropertyDetailsScreen(e.data.state);
+              animateTabBar(shouldHide);
+            },
           }}
-        />
-        <Tabs.Screen
-          name="calendar"
-          options={{
-            title: "Calendar",
-            headerShown: false,
-            tabBarIcon: ({ color, size }) => (
-              <AnimatedTabIcon
-                name="calendar-outline"
-                size={size}
-                color={color}
-              />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="listings"
-          options={{
-            title: "Listings",
-            tabBarIcon: ({ color, size }) => (
-              <AnimatedTabIcon name="home-outline" size={size} color={color} />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="settings"
-          options={{
-            title: "Settings",
-            tabBarIcon: ({ color, size }) => (
-              <AnimatedTabIcon
-                name="settings-outline"
-                size={size}
-                color={color}
-              />
-            ),
-          }}
-        />
-      </Tabs>
-    </BottomSheetModalProvider>
+        >
+          <Tabs.Screen
+            name="index"
+            options={{
+              href: null, // This completely hides the tab from the tab bar
+              headerShown: false,
+            }}
+          />
+          {/* <Tabs.Screen
+            name="insights"
+            options={{
+              href: null, // This completely hides the tab from the tab bar
+              headerShown: false,
+            }}
+          /> */}
+          <Tabs.Screen
+            name="insights/[propertyId]"
+            options={{
+              href: null, // This completely hides the tab from the tab bar
+              headerShown: false,
+            }}
+          />
+          <Tabs.Screen
+            name="today"
+            options={{
+              title: t("host.dashboard.title"),
+              tabBarIcon: ({ color, size }) => (
+                <AnimatedTabIcon
+                  name="today-outline"
+                  size={size}
+                  color={color}
+                />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="calendar"
+            options={{
+              title: t("calendar.title"),
+              headerShown: false,
+              tabBarIcon: ({ color, size }) => (
+                <AnimatedTabIcon
+                  name="calendar-outline"
+                  size={size}
+                  color={color}
+                />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="listings"
+            options={{
+              title: t("navigation.listings"),
+              tabBarIcon: ({ color, size }) => (
+                <AnimatedTabIcon
+                  name="home-outline"
+                  size={size}
+                  color={color}
+                />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="profile"
+            options={{
+              title: t("navigation.profile"),
+              tabBarIcon: ({ color, size }) => (
+                <AnimatedTabIcon
+                  name="person-outline"
+                  size={size}
+                  color={color}
+                />
+              ),
+            }}
+          />
+        </Tabs>
+      </BottomSheetModalProvider>
+    </>
   );
 };
 

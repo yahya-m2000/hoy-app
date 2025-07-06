@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,18 +9,16 @@ import {
   ScrollView,
 } from "react-native";
 import { useTheme } from "@core/hooks";
+import { useCurrency } from "@core/context";
+import { useCurrencyConversion } from "@core/hooks";
 import { spacing } from "@core/design";
 import { Ionicons } from "@expo/vector-icons";
+import type { EarningsData } from "@features/host/types/dashboard.types";
 
 interface EarningsModalProps {
   visible: boolean;
   onClose: () => void;
-  earningsData?: {
-    thisMonth?: number;
-    lastMonth?: number;
-    thisYear?: number;
-    chartData?: { month: string; amount: number }[];
-  };
+  earningsData?: EarningsData;
 }
 
 const EarningsModal: React.FC<EarningsModalProps> = ({
@@ -29,18 +27,70 @@ const EarningsModal: React.FC<EarningsModalProps> = ({
   earningsData,
 }) => {
   const { theme } = useTheme();
+  const { currency, supportedCurrencies } = useCurrency();
+  const { convertAmount } = useCurrencyConversion();
+
+  // State for converted amounts
+  const [convertedAmounts, setConvertedAmounts] = useState({
+    thisMonth: 0,
+    lastMonth: 0,
+    thisYear: 0,
+    chartData: [] as { month: string; earnings: number }[],
+  });
+
+  // Get currency symbol
+  const getCurrencySymbol = () => {
+    const currencyInfo = supportedCurrencies.find(
+      (curr) => curr.code === currency
+    );
+    return currencyInfo?.symbol || currency;
+  };
+
+  // Convert amounts when currency or data changes
+  useEffect(() => {
+    const convertAllAmounts = async () => {
+      if (earningsData) {
+        const thisMonth = await convertAmount(
+          earningsData.thisMonth || 0,
+          "USD"
+        );
+        const lastMonth = await convertAmount(
+          earningsData.lastMonth || 0,
+          "USD"
+        );
+        const thisYear = await convertAmount(earningsData.thisYear || 0, "USD");
+
+        // Convert chart data
+        const convertedChartData = await Promise.all(
+          (earningsData.chartData || []).map(async (item) => ({
+            month: item.month,
+            earnings: await convertAmount(item.earnings, "USD"),
+          }))
+        );
+
+        setConvertedAmounts({
+          thisMonth,
+          lastMonth,
+          thisYear,
+          chartData: convertedChartData,
+        });
+      }
+    };
+
+    convertAllAmounts();
+  }, [earningsData, currency, convertAmount]);
 
   // Mock chart data if not provided
   const chartData = earningsData?.chartData || [
-    { month: "Jan", amount: 2400 },
-    { month: "Feb", amount: 1800 },
-    { month: "Mar", amount: 3200 },
-    { month: "Apr", amount: 2800 },
-    { month: "May", amount: 3800 },
-    { month: "Jun", amount: 4200 },
+    { month: "Jan", earnings: 2400 },
+    { month: "Feb", earnings: 1800 },
+    { month: "Mar", earnings: 3200 },
+    { month: "Apr", earnings: 2800 },
+    { month: "May", earnings: 3800 },
+    { month: "Jun", earnings: 4200 },
   ];
 
-  const maxAmount = Math.max(...chartData.map((d) => d.amount));
+  const maxAmount = Math.max(...chartData.map((d) => d.earnings));
 
   return (
     <Modal
@@ -78,7 +128,8 @@ const EarningsModal: React.FC<EarningsModalProps> = ({
               <Text
                 style={[styles.summaryValue, { color: theme.text.primary }]}
               >
-                ${earningsData?.thisMonth?.toLocaleString() || "0"}
+                {getCurrencySymbol()}
+                {convertedAmounts.thisMonth.toLocaleString()}
               </Text>
             </View>
 
@@ -96,7 +147,8 @@ const EarningsModal: React.FC<EarningsModalProps> = ({
               <Text
                 style={[styles.summaryValue, { color: theme.text.primary }]}
               >
-                ${earningsData?.lastMonth?.toLocaleString() || "0"}
+                {getCurrencySymbol()}
+                {convertedAmounts.lastMonth.toLocaleString()}
               </Text>
             </View>
           </View>
@@ -113,13 +165,13 @@ const EarningsModal: React.FC<EarningsModalProps> = ({
             </Text>
 
             <View style={styles.chart}>
-              {chartData.map((data, index) => (
+              {convertedAmounts.chartData.map((data, index) => (
                 <View key={index} style={styles.chartBar}>
                   <View
                     style={[
                       styles.bar,
                       {
-                        height: (data.amount / maxAmount) * 120,
+                        height: (data.earnings / maxAmount) * 120,
                         backgroundColor: theme.colors.primary,
                       },
                     ]}
@@ -132,7 +184,8 @@ const EarningsModal: React.FC<EarningsModalProps> = ({
                   <Text
                     style={[styles.barValue, { color: theme.text.primary }]}
                   >
-                    ${(data.amount / 1000).toFixed(1)}k
+                    {getCurrencySymbol()}
+                    {(data.earnings / 1000).toFixed(1)}k
                   </Text>
                 </View>
               ))}
@@ -150,7 +203,8 @@ const EarningsModal: React.FC<EarningsModalProps> = ({
               Year to date
             </Text>
             <Text style={[styles.detailsValue, { color: theme.text.primary }]}>
-              ${earningsData?.thisYear?.toLocaleString() || "0"}
+              {getCurrencySymbol()}
+              {convertedAmounts.thisYear.toLocaleString()}
             </Text>
             <Text
               style={[styles.detailsSubtext, { color: theme.text.secondary }]}
@@ -248,12 +302,11 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     borderRadius: 12,
     borderWidth: 1,
-    alignItems: "center",
     marginBottom: spacing.xl,
   },
   detailsTitle: {
-    fontSize: 16,
-    fontWeight: "500",
+    fontSize: 18,
+    fontWeight: "600",
     marginBottom: spacing.sm,
   },
   detailsValue: {

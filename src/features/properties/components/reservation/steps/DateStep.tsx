@@ -7,7 +7,7 @@ import { ActivityIndicator } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import { Text, Container, Icon, Calendar } from "@shared/components";
 import { useTheme } from "@core/hooks/useTheme";
-import { useCalendar } from "@features/calendar/context/CalendarContext";
+import { useCalendar } from "@features/calendar/hooks/useCalendar";
 import { PropertyDetailsService } from "@core/api/services";
 
 interface DateStepProps {
@@ -76,10 +76,10 @@ export const DateStep: React.FC<DateStepProps> = ({
     if (calendarContext && startDate && endDate) {
       // Update context with current selection
       if (
-        startDate !== calendarContext.selectedDates.start ||
-        endDate !== calendarContext.selectedDates.end
+        startDate !== calendarContext.selectedDates[0] ||
+        endDate !== calendarContext.selectedDates[1]
       ) {
-        calendarContext.selectDates(startDate, endDate);
+        calendarContext.setSelectedDates([startDate, endDate]);
       }
 
       // Check availability for the selected dates

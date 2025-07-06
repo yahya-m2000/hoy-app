@@ -1,5 +1,15 @@
+/**
+ * Calendar Scroll Handlers
+ * 
+ * Utilities for handling scroll behavior in calendar components
+ * 
+ * @module @features/calendar/utils/scrollHandlers
+ * @author Hoy Development Team
+ * @version 1.0.0
+ */
+
 import { NativeSyntheticEvent, NativeScrollEvent } from "react-native";
-import type { MonthViewData } from "./monthDataUtils";
+import type { MonthViewData } from "./calendarUtils";
 
 export interface ScrollHandlerParams {
   lastScrollY: React.MutableRefObject<number>;
@@ -78,5 +88,39 @@ export const createScrollEndHandler = (params: ScrollEndHandlerParams) => {
         onCurrentMonthChange(newHeaderMonth);
       }
     }
+  };
+};
+
+/**
+ * Simple scroll handler for basic scroll tracking
+ */
+export const createSimpleScrollHandler = (
+  onScroll?: (offsetY: number) => void
+) => {
+  return (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    onScroll?.(offsetY);
+  };
+};
+
+/**
+ * Debounced scroll handler for performance optimization
+ */
+export const createDebouncedScrollHandler = (
+  onScroll: (offsetY: number) => void,
+  delay: number = 16 // ~60fps
+) => {
+  let timeoutId: NodeJS.Timeout | null = null;
+  
+  return (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    
+    timeoutId = setTimeout(() => {
+      onScroll(offsetY);
+    }, delay);
   };
 };

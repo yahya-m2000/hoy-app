@@ -130,7 +130,7 @@ const Container: React.FC<ContainerProps> = ({
       card: "#F9FAFB",
       primary: "#F56320",
       secondary: "#3B82F6",
-      tertiary: "#6B7280",
+      tertiary: theme.colors.primary,
       success: "#16A34A",
       error: "#DC2626",
       warning: "#D97706",

@@ -179,7 +179,10 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <Container
-      style={[isAbsolutePositioned && styles.absoluteHeader, style]}
+      style={[
+        ...(isAbsolutePositioned ? [styles.absoluteHeader] : []),
+        ...(style ? [style] : []),
+      ]}
       {...props}
     >
       <Animated.View

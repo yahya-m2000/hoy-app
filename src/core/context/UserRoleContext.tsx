@@ -24,6 +24,7 @@ interface UserRoleContextType {
   userRole: UserRoleType;
   setUserRole: (role: UserRoleType) => Promise<void>;
   isRoleLoading: boolean;
+  pendingRole: UserRoleType | null;
 }
 
 const UserRoleContext = createContext<UserRoleContextType | undefined>(
@@ -35,6 +36,7 @@ const UserRoleProviderInternal = ({ children }: { children: ReactNode }) => {
   const queryClient = useQueryClient();
   const [userRole, setUserRoleState] = useState<UserRoleType>("traveler");
   const [isRoleLoading, setIsRoleLoading] = useState<boolean>(false);
+  const [pendingRole, setPendingRole] = useState<UserRoleType | null>(null);
 
   // Initialize user role from storage
   useEffect(() => {
@@ -66,6 +68,9 @@ const UserRoleProviderInternal = ({ children }: { children: ReactNode }) => {
 
   const setUserRole = useCallback(
     async (role: UserRoleType) => {
+      // Record start time to guarantee minimum visible duration
+      const startTime = Date.now();
+      setPendingRole(role);
       setIsRoleLoading(true);
 
       try {
@@ -87,7 +92,15 @@ const UserRoleProviderInternal = ({ children }: { children: ReactNode }) => {
       } catch (error) {
         logger.error("Failed to set user role:", error);
       } finally {
-        setIsRoleLoading(false);
+        // Ensure overlay is visible for at least 2 seconds
+        const elapsed = Date.now() - startTime;
+        const MIN_DURATION = 2000; // 2 seconds
+        const remaining = MIN_DURATION - elapsed;
+        if (remaining > 0) {
+          setTimeout(() => setIsRoleLoading(false), remaining);
+        } else {
+          setIsRoleLoading(false);
+        }
       }
     },
     [queryClient, checkAuthenticationState]
@@ -99,6 +112,7 @@ const UserRoleProviderInternal = ({ children }: { children: ReactNode }) => {
         userRole,
         setUserRole,
         isRoleLoading,
+        pendingRole,
       }}
     >
       {children}

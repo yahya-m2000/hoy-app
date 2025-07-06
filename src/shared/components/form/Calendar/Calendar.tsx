@@ -4,7 +4,7 @@ import { Container } from "../../layout";
 import { Icon } from "../../base/Icon";
 import { Text } from "../../base/Text";
 import { CalendarProps } from "./Calendar.types";
-import { useCalendar } from "@features/calendar/context/CalendarContext";
+import { useCalendar } from "@features/calendar/hooks/useCalendar";
 import { useTheme } from "@core/hooks/useTheme";
 import { useToast } from "@core/context/ToastContext";
 import { iconSize, spacing, radius } from "@core/design";
@@ -28,10 +28,12 @@ const Calendar: React.FC<CalendarProps> = ({
     bookedDates,
     blockDates,
     currentPropertyId,
-    selectDates,
+    setSelectedDates,
     setPropertyId,
-    clearSelection,
   } = useCalendar();
+
+  // Create clearSelection function
+  const clearSelection = () => setSelectedDates([]);
   const { theme, isDark } = useTheme();
   const { showToast } = useToast();
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -120,9 +122,13 @@ const Calendar: React.FC<CalendarProps> = ({
   // Initialize selected dates from props
   useEffect(() => {
     if (initialStartDate || initialEndDate) {
-      selectDates(initialStartDate || new Date(), initialEndDate);
+      const dates = [initialStartDate || new Date()];
+      if (initialEndDate) {
+        dates.push(initialEndDate);
+      }
+      setSelectedDates(dates);
     }
-  }, [initialStartDate, initialEndDate, selectDates]);
+  }, [initialStartDate, initialEndDate, setSelectedDates]);
 
   // Generate calendar days for the current month (Monday start)
   const generateCalendarDays = () => {
@@ -200,11 +206,12 @@ const Calendar: React.FC<CalendarProps> = ({
     }
 
     if (enableRangeSelection) {
-      const { start, end } = selectedDates;
+      const start = selectedDates[0];
+      const end = selectedDates[1];
 
       if (!start || (start && end)) {
         // Start new selection
-        selectDates(date, undefined);
+        setSelectedDates([date]);
         // Trigger callback for start date
         if (onDateSelect) {
           onDateSelect(date, undefined);
@@ -244,14 +251,14 @@ const Calendar: React.FC<CalendarProps> = ({
             return;
           }
 
-          selectDates(start, date);
+          setSelectedDates([start, date]);
           // Trigger callback when range is complete
           if (onDateSelect) {
             onDateSelect(start, date);
           }
         } else {
           // If selected date is before start, make it the new start
-          selectDates(date, undefined);
+          setSelectedDates([date]);
           // Trigger callback for new start date
           if (onDateSelect) {
             onDateSelect(date, undefined);
@@ -259,7 +266,7 @@ const Calendar: React.FC<CalendarProps> = ({
         }
       }
     } else {
-      selectDates(date, undefined);
+      setSelectedDates([date]);
       // Trigger callback for single selection
       if (onDateSelect) {
         onDateSelect(date, undefined);
@@ -301,7 +308,8 @@ const Calendar: React.FC<CalendarProps> = ({
   };
 
   const isDateSelected = (date: Date): boolean => {
-    const { start, end } = selectedDates;
+    const start = selectedDates[0];
+    const end = selectedDates[1];
     if (!start) return false;
 
     if (!enableRangeSelection) {
@@ -316,7 +324,8 @@ const Calendar: React.FC<CalendarProps> = ({
   };
 
   const isDateInRange = (date: Date): boolean => {
-    const { start, end } = selectedDates;
+    const start = selectedDates[0];
+    const end = selectedDates[1];
     if (!enableRangeSelection || !start || !end) {
       return false;
     }

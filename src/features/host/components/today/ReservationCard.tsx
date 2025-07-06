@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useTheme } from "@core/hooks";
+import { useCurrency } from "@core/context";
+import { useCurrencyConversion } from "@core/hooks";
 import { spacing } from "@core/design";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -29,6 +31,13 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
   onPress,
 }) => {
   const { theme } = useTheme();
+  const { currency, supportedCurrencies } = useCurrency();
+  const { convertAmount } = useCurrencyConversion();
+
+  // State for converted amount
+  const [convertedTotalAmount, setConvertedTotalAmount] = useState<
+    number | null
+  >(null);
 
   const formatDate = (dateString: string) => {
     try {
@@ -44,6 +53,24 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
       return "Invalid date";
     }
   };
+
+  // Get currency symbol
+  const getCurrencySymbol = () => {
+    const currencyInfo = supportedCurrencies.find(
+      (curr) => curr.code === currency
+    );
+    return currencyInfo?.symbol || currency;
+  };
+
+  // Convert amount when currency or reservation changes
+  useEffect(() => {
+    const convertTotalAmount = async () => {
+      const converted = await convertAmount(reservation.totalAmount, "USD");
+      setConvertedTotalAmount(converted);
+    };
+
+    convertTotalAmount();
+  }, [reservation.totalAmount, currency, convertAmount]);
 
   return (
     <TouchableOpacity
@@ -90,7 +117,7 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
           </Text>
           {!isCurrentlyHosting && (
             <Text style={[styles.amount, { color: theme.text.primary }]}>
-              ${reservation.totalAmount}
+              {getCurrencySymbol()} {convertedTotalAmount}
             </Text>
           )}
         </View>

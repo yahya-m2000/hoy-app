@@ -1,5 +1,6 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useTranslation } from "react-i18next";
 import {
   MonthData,
   formatMonthName,
@@ -8,9 +9,10 @@ import {
 import {
   getMonthlyEarnings,
   getBookingsForPropertyMonth,
-} from "../utils/mockData";
+} from "../utils/realBookingData";
 import { useTheme } from "@core/hooks";
 import { fontSize, fontWeight, radius, spacing } from "@core/design";
+import { CalendarBookingData } from "@core/types";
 
 interface MonthThumbnailProps {
   monthData: MonthData;
@@ -23,35 +25,117 @@ const MonthThumbnailComponent: React.FC<MonthThumbnailProps> = ({
   onPress,
   propertyId,
 }) => {
+  const { t } = useTranslation();
   const { theme } = useTheme();
+  const [earnings, setEarnings] = useState<number>(0);
+  const [bookings, setBookings] = useState<CalendarBookingData[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const isLoadingRef = useRef<boolean>(false);
 
-  // Memoize expensive calculations (must be before early returns)
-  const monthlyData = useMemo(() => {
-    if (!monthData?.month) return { earnings: 0, bookings: [], cells: null };
-
-    return {
-      earnings: getMonthlyEarnings(monthData.month, propertyId),
-      bookings: getBookingsForPropertyMonth(monthData.month, propertyId),
-      cells: generateCalendarCells(monthData.month).cells,
+  // Helper function to translate month name
+  const getTranslatedMonthName = useMemo(() => {
+    return (date: Date, short: boolean = false) => {
+      const monthKey = formatMonthName(date, short);
+      const parts = monthKey.split(" ");
+      if (parts.length >= 2) {
+        const translationKey = parts[0];
+        return `${t(translationKey)} `;
+      }
+      return monthKey;
     };
-  }, [monthData?.month, propertyId]);
+  }, [t]);
 
-  const { earnings, bookings, cells } = monthlyData;
+  // Generate calendar cells synchronously
+  const cells = useMemo(() => {
+    if (!monthData?.month) return null;
+    return generateCalendarCells(monthData.month).cells;
+  }, [monthData?.month]);
+
+  // Fetch booking data asynchronously
+  useEffect(() => {
+    const fetchMonthlyData = async () => {
+      // Don't fetch if no month data or no property ID
+      if (!monthData?.month || !propertyId) {
+        console.log("📋 MonthThumbnail: Skipping fetch", {
+          hasMonthData: !!monthData?.month,
+          propertyId,
+          monthName: monthData?.month
+            ? getTranslatedMonthName(monthData.month)
+            : t("calendar.loading.noMonth"),
+        });
+        setEarnings(0);
+        setBookings([]);
+        setIsLoading(false);
+        isLoadingRef.current = false;
+        return;
+      }
+
+      // Prevent duplicate requests
+      if (isLoadingRef.current) {
+        console.log("⏳ MonthThumbnail: Already loading, skipping...", {
+          month: getTranslatedMonthName(monthData.month),
+          propertyId,
+        });
+        return;
+      }
+
+      isLoadingRef.current = true;
+      setIsLoading(true);
+
+      console.log("🔄 MonthThumbnail: Starting fetch", {
+        month: getTranslatedMonthName(monthData.month),
+        propertyId,
+        date: monthData.month.toISOString(),
+      });
+
+      try {
+        const [monthEarnings, monthBookings] = await Promise.all([
+          getMonthlyEarnings(monthData.month, propertyId),
+          getBookingsForPropertyMonth(monthData.month, propertyId),
+        ]);
+
+        console.log("✅ MonthThumbnail: Fetched data", {
+          month: getTranslatedMonthName(monthData.month),
+          earnings: monthEarnings,
+          bookingsCount: monthBookings.length,
+          bookings: monthBookings,
+        });
+
+        setEarnings(monthEarnings);
+        setBookings(monthBookings);
+      } catch (error) {
+        console.error("❌ MonthThumbnail: Error fetching monthly data:", {
+          month: getTranslatedMonthName(monthData.month),
+          propertyId,
+          error,
+        });
+        setEarnings(0);
+        setBookings([]);
+      } finally {
+        setIsLoading(false);
+        isLoadingRef.current = false;
+      }
+    };
+
+    fetchMonthlyData();
+  }, [monthData?.month, propertyId, getTranslatedMonthName]);
 
   // Memoized booking lookup function with precomputed map
   const { getBookingState } = useMemo(() => {
     // Create a map for O(1) booking lookups instead of O(n) array search
     const bookingMap = new Map<string, (typeof bookings)[0]>();
 
-    bookings.forEach((booking) => {
-      const start = new Date(booking.startDate);
-      const end = new Date(booking.endDate);
+    if (bookings && bookings.length > 0) {
+      bookings.forEach((booking) => {
+        const start = new Date(booking.startDate);
+        const end = new Date(booking.endDate);
 
-      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-        const dateKey = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
-        bookingMap.set(dateKey, booking);
-      }
-    });
+        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+          const dateKey = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+          bookingMap.set(dateKey, booking);
+        }
+      });
+    }
 
     const lookupFunction = (date: Date) => {
       const dateKey = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
@@ -75,7 +159,7 @@ const MonthThumbnailComponent: React.FC<MonthThumbnailProps> = ({
 
   // Memoize the expensive dot matrix rendering (before early return)
   const dotMatrix = useMemo(() => {
-    if (!cells) return null;
+    if (!cells || isLoading) return null;
 
     // Helper function to get booking pills for each row
     const getBookingPillsForRow = (rowCells: any[], rowIndex: number) => {
@@ -289,7 +373,7 @@ const MonthThumbnailComponent: React.FC<MonthThumbnailProps> = ({
   }, [cells, getBookingState, theme, monthData?.month]);
 
   // Safety checks after hooks
-  if (!monthData || !monthData.month) {
+  if (!monthData || !monthData.month || isLoading) {
     return null;
   }
   const handlePress = () => {
@@ -306,7 +390,7 @@ const MonthThumbnailComponent: React.FC<MonthThumbnailProps> = ({
     >
       <View style={styles.header}>
         <Text style={[styles.monthName, { color: theme.text.primary }]}>
-          {formatMonthName(monthData.month, true)}
+          {getTranslatedMonthName(monthData.month, true)}
         </Text>
         <Text style={[styles.earnings, { color: theme.colors.gray[400] }]}>
           ${earnings.toLocaleString()}
@@ -425,7 +509,8 @@ export const MonthThumbnail = React.memo(
     return (
       prevProps.monthData?.month?.getTime() ===
         nextProps.monthData?.month?.getTime() &&
-      prevProps.onPress === nextProps.onPress
+      prevProps.onPress === nextProps.onPress &&
+      prevProps.propertyId === nextProps.propertyId
     );
   }
 );

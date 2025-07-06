@@ -52,6 +52,7 @@ const Toast: React.FC<ToastProps> = ({
 }) => {
   // We must always call hooks unconditionally
   const themeResult = useTheme();
+  // Fallback values to avoid runtime crashes when ThemeProvider is unavailable
   const { theme, isDark } = themeResult || {
     theme: {
       colors: {
@@ -60,9 +61,8 @@ const Toast: React.FC<ToastProps> = ({
         warning: "#f59e0b",
         primary: "#3b82f6",
         gray: { 400: "#9ca3af" },
-        text: { primary: "#000000", secondary: "#6b7280" },
       },
-      text: { primary: "#000000", secondary: "#6b7280" },
+      text: { primary: "#000000", secondary: "#3b82f6" },
       background: "#ffffff",
     },
     isDark: false,

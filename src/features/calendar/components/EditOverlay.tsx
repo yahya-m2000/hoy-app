@@ -1,14 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
 import { useTheme } from "@core/hooks";
 import { setEditModalVisible } from "../../../../app/(tabs)/host/_layout";
-import {
-  fontSize,
-  fontWeight,
-  radius,
-  spacing,
-  iconSize,
-} from "@core/design";
+import { fontSize, fontWeight, radius, spacing, iconSize } from "@core/design";
 import {
   AnimatedContainer,
   AnimatedPressableContainer,
@@ -26,6 +21,7 @@ export const EditOverlay: React.FC<EditOverlayProps> = ({
   onClose,
   selectedDaysCount = 3,
 }) => {
+  const { t } = useTranslation();
   const { theme } = useTheme();
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -81,7 +77,7 @@ export const EditOverlay: React.FC<EditOverlayProps> = ({
           ]}
         >
           <Text style={styles.selectedDaysText}>
-            {selectedDaysCount} days selected
+            {t("calendar.daysSelected", { count: selectedDaysCount })}
           </Text>
         </AnimatedPressableContainer>
       </View>
@@ -97,7 +93,8 @@ export const EditOverlay: React.FC<EditOverlayProps> = ({
             animationDuration={300}
             isExiting={!isVisible}
           >
-            &nbsp; <Text style={styles.gridItemText}>Item 1</Text>
+            &nbsp;{" "}
+            <Text style={styles.gridItemText}>{t("calendar.editItem1")}</Text>
           </AnimatedContainer>
           &nbsp;
           <AnimatedPressableContainer
@@ -107,7 +104,7 @@ export const EditOverlay: React.FC<EditOverlayProps> = ({
             animationDuration={300}
             isExiting={!isVisible}
           >
-            <Text style={styles.gridItemText}>Item 2</Text>
+            <Text style={styles.gridItemText}>{t("calendar.editItem2")}</Text>
           </AnimatedPressableContainer>
         </View>
 
@@ -121,7 +118,7 @@ export const EditOverlay: React.FC<EditOverlayProps> = ({
             animationDuration={300}
             isExiting={!isVisible}
           >
-            <Text style={styles.gridItemText}>Item 3</Text>
+            <Text style={styles.gridItemText}>{t("calendar.editItem3")}</Text>
           </AnimatedPressableContainer>
           &nbsp;
         </View>

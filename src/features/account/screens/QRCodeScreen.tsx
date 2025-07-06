@@ -7,6 +7,8 @@ import { Container, Text, Header } from "@shared/components";
 import { useTheme } from "@core/hooks";
 import { getUserDisplayName } from "@core/utils/user";
 import type { QRCodeScreenProps } from "@core/types";
+import { useTranslation } from "react-i18next";
+import { LinearGradient } from "expo-linear-gradient";
 
 /**
  * Instagram-style QR Code Screen
@@ -15,7 +17,7 @@ import type { QRCodeScreenProps } from "@core/types";
  */
 const QRCodeScreen: React.FC<QRCodeScreenProps> = ({ user }) => {
   const { theme, isDark } = useTheme();
-
+  const { t } = useTranslation();
   const displayName = getUserDisplayName(user);
   const userId = user?._id || user?.id || "placeholder-user-id";
 
@@ -45,15 +47,27 @@ const QRCodeScreen: React.FC<QRCodeScreenProps> = ({ user }) => {
     }
   };
 
+  // Gradient colors
+  const qrGradientColors = ["#F56320", "#3B82F6"];
+  const backgroundGradientColors = [
+    theme.colors.primary,
+    theme.colors.secondary,
+  ] as const;
+
   return (
-    <Container flex={1} backgroundColor={isDark ? "gray900" : "white"}>
+    <LinearGradient
+      colors={backgroundGradientColors as any}
+      style={{ flex: 1 }}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+    >
       {/* Header */}
       <Header
-        title="My QR Code"
         leftIcon="close"
         onLeftPress={handleClose}
         rightIcon="share-outline"
         onRightPress={handleShare}
+        variant="transparent"
       />
 
       {/* Content */}
@@ -62,63 +76,67 @@ const QRCodeScreen: React.FC<QRCodeScreenProps> = ({ user }) => {
         alignItems="center"
         justifyContent="center"
         paddingHorizontal="xl"
+        backgroundColor="transparent"
       >
         {/* User Name */}
         <Container marginBottom="xl">
-          <Text size="2xl" weight="bold">
-            {displayName}
+          <Text variant="h6" weight="bold" color="inverse">
+            {displayName.toUpperCase()}
           </Text>
         </Container>
 
         {/* QR Code Container */}
         <Container
+          marginBottom="xl"
+          backgroundColor="background"
           padding="xl"
           borderRadius="xl"
-          borderWidth={1}
-          backgroundColor={isDark ? "gray800" : "white"}
-          borderColor={isDark ? "gray700" : "gray200"}
-          marginBottom="xl"
           elevation={2}
           shadowColor="black"
           shadowOffset={{ width: 0, height: 2 }}
-          shadowOpacity={0.1}
-          shadowRadius={4}
+          shadowOpacity={0.2}
+          shadowRadius={6}
         >
           <QRCode
             value={qrContent}
             size={220}
-            color={isDark ? theme.colors.gray[100] : theme.colors.gray[900]}
-            backgroundColor={
-              isDark ? theme.colors.gray[800] : theme.colors.white
-            }
-            logo={require("../../../../assets/icon.png")} // App logo in center
-            logoSize={40}
+            logo={require("../../../../assets/icon.png")}
+            logoSize={50}
             logoBackgroundColor="transparent"
             logoMargin={4}
             logoBorderRadius={8}
+            backgroundColor="transparent"
+            enableLinearGradient
+            gradientDirection={["0", "100", "1", "100"]}
+            linearGradient={[theme.colors.primary, theme.colors.secondary]}
           />
         </Container>
 
         {/* App Branding */}
         <Container alignItems="center" marginTop="md">
           <Container marginBottom="xs">
-            <Text size="xl" weight="bold" color="primary">
-              HOY
+            <Text size="xl" weight="bold" color="inverse">
+              {t("common.appName")}
             </Text>
           </Container>
-          <Text size="md" color={isDark ? "gray400" : "gray600"}>
-            Scan to view my profile
+          <Text size="md" color="inverse">
+            {t("qrCode.scanToViewProfile")}
           </Text>
         </Container>
       </Container>
 
       {/* Bottom Instructions */}
-      <Container paddingHorizontal="xl" paddingBottom="xl" alignItems="center">
-        <Text size="sm" color={isDark ? "gray400" : "gray600"}>
-          Point your camera at this QR code to visit my profile
+      <Container
+        paddingHorizontal="xl"
+        paddingBottom="xl"
+        alignItems="center"
+        backgroundColor="transparent"
+      >
+        <Text size="sm" color="inverse">
+          {t("qrCode.pointCameraToProfile")}
         </Text>
       </Container>
-    </Container>
+    </LinearGradient>
   );
 };
 

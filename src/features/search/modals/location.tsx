@@ -15,6 +15,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 // @ts-ignore
 import { debounce } from "lodash";
+import { COUNTRIES } from "@core/utils/data/countries";
 
 // App context and hooks
 import { useTheme } from "@core/hooks/useTheme";
@@ -35,16 +36,69 @@ interface LocationResult {
   coordinates?: { longitude: number; latitude: number };
 }
 
-// Placeholder services (TODO: implement actual search services)
+// Location search utilities powered by the static COUNTRIES dataset
 const searchLocations = async (query: string): Promise<LocationResult[]> => {
-  return [];
+  const lower = query.trim().toLowerCase();
+  if (!lower) return [];
+
+  const results: LocationResult[] = [];
+
+  // 1. City matches
+  COUNTRIES.forEach((c) => {
+    c.cities.forEach((city) => {
+      if (city.toLowerCase().includes(lower)) {
+        results.push({
+          city,
+          country: c.name,
+          fullName: `${city}, ${c.name}`,
+        });
+      }
+    });
+  });
+
+  // 2. State matches
+  COUNTRIES.forEach((c) => {
+    c.states.forEach((state) => {
+      if (state.toLowerCase().includes(lower)) {
+        results.push({
+          city: state, // reuse city field for display
+          country: c.name,
+          fullName: `${state}, ${c.name}`,
+        });
+      }
+    });
+  });
+
+  // 3. Country matches
+  COUNTRIES.forEach((c) => {
+    if (c.name.toLowerCase().includes(lower)) {
+      results.push({
+        city: c.name, // show the country name in primary text
+        country: "", // secondary text empty for countries
+        fullName: c.name,
+      });
+    }
+  });
+
+  // Remove duplicates (by fullName)
+  const unique = Array.from(
+    new Map(results.map((r) => [r.fullName, r])).values()
+  );
+
+  // Limit for UX
+  return unique.slice(0, 20);
 };
 
+// Basic popular destinations list (static)
 const getPopularDestinations = (): LocationResult[] => {
   return [
-    { city: "Mogadishu", country: "Somalia" },
-    { city: "Hargeisa", country: "Somalia" },
-    { city: "Bosaso", country: "Somalia" },
+    { city: "Paris", country: "France", fullName: "Paris, France" },
+    {
+      city: "New York",
+      country: "United States",
+      fullName: "New York, United States",
+    },
+    { city: "Tokyo", country: "Japan", fullName: "Tokyo, Japan" },
   ];
 };
 

@@ -166,32 +166,24 @@ export class AuthService {
 
       const response = await api.post<{ data: any }>("/auth/register", payload);
 
-      // Backend currently returns only the created user without tokens
+      // Backend registration endpoint only returns the created user, not tokens
       const createdUser = response.data.data;
 
-      // Attempt automatic login to retrieve tokens so the app can proceed seamlessly
-      let loginTokens: LoginResponse | null = null;
-      try {
-        loginTokens = await this.login({
-          email: userData.email,
-          password: userData.password,
-        });
-      } catch (loginError) {
-        logger.warn("Auto-login after registration failed", loginError);
-      }
-
+      logger.log("Registration successful for:", userData.email);
+      
+      // Return registration response with user data only
+      // Tokens will be obtained by performing login after registration
       const registrationResponse: RegistrationResponse = {
-        user: loginTokens?.user ?? createdUser,
+        user: createdUser,
         tokens: {
-          access: loginTokens?.accessToken ?? "",
-          refresh: loginTokens?.refreshToken ?? "",
-          expiresIn: loginTokens?.expiresIn ?? 0,
+          access: "", // Will be obtained via login
+          refresh: "", // Will be obtained via login
+          expiresIn: 0,
         },
         message: "Registration successful",
         requiresVerification: false,
       };
 
-      logger.log("Registration successful for:", userData.email);
       return registrationResponse;
 
     } catch (error: any) {

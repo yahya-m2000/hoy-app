@@ -16,7 +16,7 @@
  * @version 1.0.0
  */
 
-import { Alert} from "react-native";
+import { Alert } from "react-native";
 import { router } from "expo-router";
 import type { AccountAction, ActionServiceDependencies } from "@core/types/account.types";
 import { logger } from "@core/utils/sys/log";
@@ -184,6 +184,8 @@ export class AccountActionService {
                 type: "success",
                 message: t("common.switchedToTraveler"),
               });
+
+              // Navigation handled centrally after role change
             } catch (error) {
               logger.error("Error switching to traveler mode:", error);
               showToast({
@@ -289,6 +291,8 @@ export class AccountActionService {
                 type: "success",
                 message: t("common.switchedToHost"),
               });
+
+              // Navigation handled centrally after role change
             } catch (error) {
               logger.error("Error switching to host mode:", error);
               showToast({

@@ -29,3 +29,4 @@ export * from './overlay';
 export * from './debug';
 
 export { default as AvatarPicker } from "./form/AvatarPicker";
+export { default as AutocompleteInput } from "./AutocompleteInput";

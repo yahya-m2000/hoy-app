@@ -7,5 +7,5 @@
 import { Redirect } from "expo-router";
 
 export default function TravelerIndex() {
-  return <Redirect href="home" />;
+  return <Redirect href="/(tabs)/traveler/home" />;
 }

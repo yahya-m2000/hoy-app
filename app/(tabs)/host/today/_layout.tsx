@@ -6,24 +6,16 @@ export default function TodayLayout() {
       <Stack.Screen
         name="index"
         options={{
-          title: "Today",
-          headerShown: true,
+          headerShown: false,
         }}
       />
+
       <Stack.Screen
-        name="[bookingId]"
+        name="reservations"
         options={{
-          title: "Booking Details",
-          headerShown: true,
-          headerBackVisible: true,
-        }}
-      />
-      <Stack.Screen
-        name="all-reservations"
-        options={{
-          title: "All Reservations",
-          headerShown: true,
-          headerBackVisible: true,
+          headerShown: false,
+          presentation: "fullScreenModal",
+          animation: "slide_from_right",
         }}
       />
     </Stack>

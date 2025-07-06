@@ -18,6 +18,7 @@ import {
   initialWindowMetrics,
 } from "react-native-safe-area-context";
 import * as SplashScreen from "expo-splash-screen";
+import { router } from "expo-router";
 
 // App navigation theming
 import { useThemedScreenOptions } from "@core/navigation";
@@ -25,17 +26,13 @@ import { useThemedScreenOptions } from "@core/navigation";
 // App hooks
 import { useFonts } from "@core/hooks";
 
-// App context providers
-import { ThemeProvider } from "@core/context/ThemeContext";
-import { AuthProvider, useAuth } from "@core/context/AuthContext";
-import { ToastProvider } from "@core/context/ToastContext";
-import { NetworkProvider } from "@core/context/NetworkContext";
-import { UserRoleProvider } from "@core/context/UserRoleContext";
-import { DateSelectionProvider } from "@features/calendar/context/DateSelectionContext";
+// App context providers - Use the fixed ContextProviders wrapper
+import { ContextProviders } from "@core/context/ContextProviders";
+import { RoleChangeLoadingOverlay } from "@shared/components";
 
 // Error boundary system
 import { AppErrorBoundary } from "@core/error/GlobalErrorBoundary";
-import { CalendarProvider } from "src/features/calendar/context/CalendarContext";
+import { logger } from "@core/utils/sys/log/logger";
 
 // Call preventAutoHideAsync as soon as possible to keep the splash screen visible until we decide to hide it manually.
 SplashScreen.preventAutoHideAsync().catch(() => {
@@ -65,6 +62,8 @@ const FontLoader = ({ children }: { children: React.ReactNode }) => {
 
 // Simplified loading components - remove complex overlays for now
 const AuthLoadingOverlayWrapper = () => {
+  // Import useAuth here to avoid circular dependency
+  const { useAuth } = require("@core/context/AuthContext");
   const { isAuthChecked } = useAuth();
   if (!isAuthChecked) {
     return <View style={{ flex: 1, backgroundColor: "#fff" }} />;
@@ -107,33 +106,100 @@ const queryClient = new QueryClient({
   },
 });
 
+// Wrapper component to use hook within Provider context
+const RoleChangeLoader = () => {
+  // Import useUserRole here to avoid circular dependency
+  const { useUserRole } = require("@core/context/UserRoleContext");
+  const { isRoleLoading, userRole } = useUserRole();
+  const prevLoading = React.useRef<boolean>(isRoleLoading);
+
+  React.useEffect(() => {
+    if (prevLoading.current && !isRoleLoading) {
+      // role change just finished
+      const target = userRole === "host" ? "/(tabs)/host" : "/(tabs)/traveler";
+      router.replace(target);
+    }
+    prevLoading.current = isRoleLoading;
+  }, [isRoleLoading, userRole]);
+
+  return <RoleChangeLoadingOverlay visible={isRoleLoading} />;
+};
+
+// Test component to verify API interceptors
+const ApiInterceptorTest = () => {
+  React.useEffect(() => {
+    const testInterceptors = async () => {
+      try {
+        logger.info(
+          "[ApiInterceptorTest] 🔍 Testing API interceptors on app startup...",
+          undefined,
+          {
+            module: "ApiInterceptorTest",
+          }
+        );
+
+        // Test if interceptors are set up
+        const {
+          testAuthTokenInterceptor,
+        } = require("@core/api/auth-token-interceptor");
+        const interceptorWorking = await testAuthTokenInterceptor();
+
+        logger.info(
+          `[ApiInterceptorTest] Interceptor test result: ${
+            interceptorWorking ? "✅ WORKING" : "❌ FAILED"
+          }`,
+          undefined,
+          {
+            module: "ApiInterceptorTest",
+          }
+        );
+
+        if (interceptorWorking) {
+          logger.info(
+            "[ApiInterceptorTest] ✅ API interceptors are properly initialized",
+            undefined,
+            {
+              module: "ApiInterceptorTest",
+            }
+          );
+        } else {
+          logger.error(
+            "[ApiInterceptorTest] ❌ API interceptors are not working",
+            undefined,
+            {
+              module: "ApiInterceptorTest",
+            }
+          );
+        }
+      } catch (error) {
+        logger.error("[ApiInterceptorTest] Test failed", error, {
+          module: "ApiInterceptorTest",
+        });
+      }
+    };
+
+    // Run test after a short delay to ensure everything is initialized
+    setTimeout(testInterceptors, 1000);
+  }, []);
+
+  return null; // This component doesn't render anything
+};
+
 // Root layout component
 export default function RootLayout() {
   return (
     <AppErrorBoundary>
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
         <GestureHandlerRootView style={{ flex: 1, backgroundColor: "#fff" }}>
-          <QueryClientProvider client={queryClient}>
+          <ContextProviders features={{ calendar: true }}>
             <FontLoader>
-              <AuthProvider>
-                <NetworkProvider>
-                  <ThemeProvider>
-                    <CalendarProvider>
-                      <DateSelectionProvider>
-                        <UserRoleProvider>
-                          <ToastProvider>
-                            <StatusBar style="auto" />
-                            <AuthLoadingOverlayWrapper />
-                            <ThemedRootStack />
-                          </ToastProvider>
-                        </UserRoleProvider>
-                      </DateSelectionProvider>
-                    </CalendarProvider>
-                  </ThemeProvider>
-                </NetworkProvider>
-              </AuthProvider>
+              <StatusBar style="auto" />
+              <ApiInterceptorTest />
+              <AuthLoadingOverlayWrapper />
+              <RoleChangeLoader />
+              <ThemedRootStack />
             </FontLoader>
-          </QueryClientProvider>
+          </ContextProviders>
         </GestureHandlerRootView>
       </SafeAreaProvider>
     </AppErrorBoundary>

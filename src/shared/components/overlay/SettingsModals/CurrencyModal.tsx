@@ -163,7 +163,7 @@ export default function CurrencyModal({
     <Modal
       visible={visible}
       animationType="slide"
-      presentationStyle="pageSheet"
+      presentationStyle="formSheet"
       onRequestClose={onClose}
     >
       <Container flex={1} backgroundColor="background">

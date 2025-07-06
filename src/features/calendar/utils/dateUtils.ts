@@ -12,6 +12,7 @@ import {
   isToday,
   isSameDay,
 } from "date-fns";
+import { useTranslation } from "react-i18next";
 import {
   getMonthlyEarnings,
   getMonthBookingDensity,
@@ -463,7 +464,7 @@ export function calculateBookingPillLayout(
 }
 
 /**
- * Format month name for display
+ * Format month name for display using translation keys
  */
 export function formatMonthName(date: Date, short: boolean = false): string {
   if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
@@ -472,7 +473,27 @@ export function formatMonthName(date: Date, short: boolean = false): string {
   }
 
   try {
-    return format(date, short ? "MMM" : "MMMM yyyy");
+    // Get month index (0-11)
+    const monthIndex = date.getMonth();
+    const year = date.getFullYear();
+    
+    // Month names array for translation keys
+    const monthKeys = [
+      "january", "february", "march", "april", "may", "june",
+      "july", "august", "september", "october", "november", "december"
+    ];
+    
+    const monthShortKeys = [
+      "jan", "feb", "mar", "apr", "may", "jun",
+      "jul", "aug", "sep", "oct", "nov", "dec"
+    ];
+    
+    // Return the translation key that can be used with t() function
+    const monthKey = short ? monthShortKeys[monthIndex] : monthKeys[monthIndex];
+    const translationKey = short ? `calendar.monthsShort.${monthKey}` : `calendar.months.${monthKey}`;
+    
+    // For now, return the key - the actual translation will be handled by the component using this function
+    return short ? `${translationKey} ${year}` : `${translationKey} ${year}`;
   } catch (error) {
     console.error("Error formatting month name:", error);
     return "Invalid Date";
@@ -487,21 +508,30 @@ export function formatDayNumber(date: Date): string {
 }
 
 /**
- * Get weekday headers (Sunday first to match calendar grid)
+ * Get weekday headers using translation keys (Sunday first to match calendar grid)
  */
 export function getWeekdayHeaders(short: boolean = true): string[] {
-  const days = short
-    ? ["S", "M", "T", "W", "T", "F", "S"] // Single letter initials, Sunday first
-    : [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ];
-  return days;
+  if (short) {
+    return [
+      "calendar.weekdaysShort.sun",
+      "calendar.weekdaysShort.mon", 
+      "calendar.weekdaysShort.tue",
+      "calendar.weekdaysShort.wed",
+      "calendar.weekdaysShort.thu",
+      "calendar.weekdaysShort.fri",
+      "calendar.weekdaysShort.sat"
+    ];
+  } else {
+    return [
+      "calendar.weekdays.sunday",
+      "calendar.weekdays.monday",
+      "calendar.weekdays.tuesday", 
+      "calendar.weekdays.wednesday",
+      "calendar.weekdays.thursday",
+      "calendar.weekdays.friday",
+      "calendar.weekdays.saturday"
+    ];
+  }
 }
 
 // Cache for calendar cells generation

@@ -122,6 +122,15 @@ const areOverlayPropsEqual = (
 
 const BookingOverlayComponent: React.FC<BookingOverlayProps> = React.memo(
   ({ booking, monthMatrix, dayWidth, dayHeight, onBookingPress }) => {
+    console.log("🎯 BookingOverlay: Rendering overlay", {
+      bookingId: booking.id,
+      guestName: booking.guestName,
+      startDate: booking.startDate.toISOString(),
+      endDate: booking.endDate.toISOString(),
+      dayWidth,
+      dayHeight,
+    });
+
     // Use cached styles
     const styles = useMemo(
       () => createOverlayStyles(dayWidth, dayHeight),
@@ -130,12 +139,20 @@ const BookingOverlayComponent: React.FC<BookingOverlayProps> = React.memo(
 
     // Memoize pill calculations to prevent recalculation on every render
     const pills = useMemo(() => {
-      return calculateBookingPillLayout(
+      const calculatedPills = calculateBookingPillLayout(
         booking,
         monthMatrix,
         dayWidth,
         dayHeight
       );
+
+      console.log("💊 BookingOverlay: Pills calculated", {
+        bookingId: booking.id,
+        pillsCount: calculatedPills.length,
+        pills: calculatedPills,
+      });
+
+      return calculatedPills;
     }, [booking, monthMatrix, dayWidth, dayHeight]);
 
     // Memoize color calculations
@@ -163,11 +180,28 @@ const BookingOverlayComponent: React.FC<BookingOverlayProps> = React.memo(
 
     // If no pills, render nothing
     if (!pills.length) {
+      console.log("❌ BookingOverlay: No pills to render", {
+        bookingId: booking.id,
+        pillsLength: pills.length,
+      });
       return null;
     }
+
+    console.log("✅ BookingOverlay: Rendering pills", {
+      bookingId: booking.id,
+      pillsCount: pills.length,
+      guestName: booking.guestName,
+    });
+
     return (
       <View style={styles.overlayContainer} pointerEvents="box-none">
         {pills.map((pill, index) => {
+          console.log("🔸 BookingOverlay: Rendering pill", {
+            bookingId: booking.id,
+            pillIndex: index,
+            pill: pill,
+          });
+
           // Pre-calculate pill style properties
           const pillStyleProps = {
             // Position to cover the price area (bottom part of the cell)

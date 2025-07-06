@@ -12,7 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { booking } from "@core/api/services";
 import { useTheme } from "@core/hooks";
-import { useDateSelection } from "@features/calendar/context/DateSelectionContext";
+import { useCalendarDateSelection } from "@features/calendar/context/CalendarContext";
 
 interface DateRangePickerProps {
   initialStartDate?: Date | null;
@@ -36,7 +36,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   const { theme, isDark } = useTheme();
   // const { t } = useTranslation();
   const { searchDates, propertyDates /* , selectDatesForProperty  */ } =
-    useDateSelection();
+    useCalendarDateSelection();
 
   // Get dates from context if specified
   const getInitialDates = () => {

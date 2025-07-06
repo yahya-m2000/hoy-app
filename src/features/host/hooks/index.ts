@@ -8,10 +8,10 @@ export { useProperties, useProperty } from "./useProperties";
 
 // Bookings
 export * from "./useHostBookings";
+export * from "./useBookingActions";
 
 // Dashboard - prioritize React Query version over basic implementation 
 export { useHostDashboard } from "./useHostDashboard";
-export { useDashboardData } from "./useDashboardData";
 
 // Calendar
 export * from "./useHostCalendar";

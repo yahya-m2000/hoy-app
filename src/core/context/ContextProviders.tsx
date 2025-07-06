@@ -15,6 +15,9 @@
  * @version 1.0.0
  */
 
+import "../api/init"; // Ensure API interceptors & auth manager are initialized
+
+// React
 import React, { ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -33,6 +36,11 @@ import {
   ContextErrorBoundary,
   GenericContextErrorBoundary,
 } from "../error";
+
+// API Initialization
+import { setupApiInterceptors } from "../api/interceptors";
+import { initializeAuthManager } from "../api/auth-manager";
+import { logger } from "../utils/sys/log/logger";
 
 // ========================================
 // QUERY CLIENT SETUP
@@ -54,6 +62,25 @@ const queryClient = new QueryClient({
 });
 
 // ========================================
+// API INITIALIZATION
+// ========================================
+
+// Initialize API interceptors immediately when this module is loaded
+// This ensures interceptors are ready before any context providers are created
+try {
+  logger.info(
+    "[ContextProviders] Initializing API interceptors synchronously..."
+  );
+  setupApiInterceptors();
+  logger.info("[ContextProviders] API interceptors initialized successfully");
+} catch (error) {
+  logger.error(
+    "[ContextProviders] Failed to initialize API interceptors",
+    error
+  );
+}
+
+// ========================================
 // CORE PROVIDERS WRAPPER
 // ========================================
 
@@ -61,25 +88,45 @@ const queryClient = new QueryClient({
  * Core Context Providers
  * Wraps essential app-wide context providers with error boundaries
  */
-const CoreProviders: React.FC<{ children: ReactNode }> = ({ children }) => (
-  <SafeAreaProvider>
-    <GenericContextErrorBoundary contextName="QueryClient" critical={true}>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider>
-          <NetworkProvider>
-            <AuthProvider>
-              <UserRoleProvider>
-                <CurrencyProvider>
-                  <ToastProvider>{children}</ToastProvider>
-                </CurrencyProvider>
-              </UserRoleProvider>
-            </AuthProvider>
-          </NetworkProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </GenericContextErrorBoundary>
-  </SafeAreaProvider>
-);
+const CoreProviders: React.FC<{ children: ReactNode }> = ({ children }) => {
+  // Initialize auth manager asynchronously after component mounts
+  React.useEffect(() => {
+    const initializeAuth = async () => {
+      try {
+        logger.info("[ContextProviders] Initializing auth manager...");
+        await initializeAuthManager();
+        logger.info("[ContextProviders] Auth manager initialized successfully");
+      } catch (error) {
+        logger.error(
+          "[ContextProviders] Failed to initialize auth manager",
+          error
+        );
+      }
+    };
+
+    initializeAuth();
+  }, []);
+
+  return (
+    <SafeAreaProvider>
+      <GenericContextErrorBoundary contextName="QueryClient" critical={true}>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider>
+            <NetworkProvider>
+              <AuthProvider>
+                <UserRoleProvider>
+                  <CurrencyProvider>
+                    <ToastProvider>{children}</ToastProvider>
+                  </CurrencyProvider>
+                </UserRoleProvider>
+              </AuthProvider>
+            </NetworkProvider>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </GenericContextErrorBoundary>
+    </SafeAreaProvider>
+  );
+};
 
 // ========================================
 // FEATURE PROVIDERS WRAPPER
@@ -104,17 +151,10 @@ export const FeatureProviders: React.FC<{
     const {
       CalendarProvider,
     } = require("../../features/calendar/context/CalendarContext");
-    const {
-      DateSelectionProvider,
-    } = require("../../features/calendar/context/DateSelectionContext");
 
     wrappedChildren = (
-      <GenericContextErrorBoundary contextName="DateSelection" critical={false}>
-        <DateSelectionProvider>
-          <GenericContextErrorBoundary contextName="Calendar" critical={false}>
-            <CalendarProvider>{wrappedChildren}</CalendarProvider>
-          </GenericContextErrorBoundary>
-        </DateSelectionProvider>
+      <GenericContextErrorBoundary contextName="Calendar" critical={false}>
+        <CalendarProvider>{wrappedChildren}</CalendarProvider>
       </GenericContextErrorBoundary>
     );
   }

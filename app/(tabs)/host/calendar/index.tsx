@@ -1,15 +1,15 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
   Easing,
 } from "react-native-reanimated";
+import { useTranslation } from "react-i18next";
 
 // Navigation
 import { useNavigation } from "@react-navigation/native";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 
 // Core
 import { fontSize, fontWeight, iconSize, radius, spacing } from "@core/design";
@@ -21,29 +21,48 @@ import { YearGrid } from "@features/calendar/components/YearGrid";
 import { MonthView } from "@features/calendar/components/MonthView";
 import { EditOverlay } from "@features/calendar/components/EditOverlay";
 import { PropertyHeader } from "@features/calendar/components/PropertyHeader";
-import PropertySelectorModal from "@features/calendar/components/PropertySelectorModal";
-import {
-  PropertyProvider,
-  useProperty,
-  Property,
-} from "@features/calendar/hooks/useProperty";
+import { useProperty, Property } from "@features/calendar/hooks/useProperty";
 
 // Shared
-import { Icon, Text } from "@shared/components";
+import { Container, Text, Icon, Button } from "@shared/components";
+import { Screen } from "@shared/components/layout/Screen";
 
 type ViewMode = "year" | "month";
 
 // Inner component that uses property context
 function CalendarScreenInner() {
+  const { t } = useTranslation();
   const { theme } = useTheme();
   const navigation = useNavigation();
   const router = useRouter();
+  const params = useLocalSearchParams();
   const { selectedProperty, properties, setSelectedProperty } = useProperty();
+
+  // Handle property selection from URL parameters
+  useEffect(() => {
+    if (params.propertyId && typeof params.propertyId === "string") {
+      const property = properties.find((p) => p.id === params.propertyId);
+      if (
+        property &&
+        (!selectedProperty || selectedProperty.id !== property.id)
+      ) {
+        console.log(
+          "🎯 CalendarScreen: Setting property from URL params",
+          property.id
+        );
+        setSelectedProperty(property);
+      }
+    }
+  }, [params.propertyId, properties, selectedProperty, setSelectedProperty]);
+
+  console.log("🏠 CalendarScreen: Property context state", {
+    selectedProperty,
+    propertiesCount: properties.length,
+    properties: properties.map((p) => ({ id: p.id, name: p.name })),
+  });
 
   const [viewMode, setViewMode] = useState<ViewMode>("year");
   const [currentYear] = useState(2025);
-  const [isPropertySelectorVisible, setIsPropertySelectorVisible] =
-    useState(false);
 
   // Get current month dynamically
   const getCurrentMonth = () => {
@@ -117,21 +136,24 @@ function CalendarScreenInner() {
   }, [viewMode, handleViewModeChange]);
 
   // Memoise handlers to prevent unnecessary re-renders
-  const handleMonthPress = useCallback((month: Date) => {
-    if (!month || !(month instanceof Date) || isNaN(month.getTime())) {
-      console.warn("handleMonthPress: Invalid month provided", month);
-      return; // Safety check
-    }
+  const handleMonthPress = useCallback(
+    (month: Date) => {
+      if (!month || !(month instanceof Date) || isNaN(month.getTime())) {
+        console.warn(t("calendar.error.invalidMonth"), month);
+        return; // Safety check
+      }
 
-    setCurrentMonth(month);
-    // Start exit animation for year view
-    setIsCurrentViewExiting(true);
-    // After exit animation, switch to month view
-    setTimeout(() => {
-      setViewMode("month");
-      setIsCurrentViewExiting(false); // This will trigger fade-in
-    }, TRANSITION_DURATION); // Match exit animation duration
-  }, []);
+      setCurrentMonth(month);
+      // Start exit animation for year view
+      setIsCurrentViewExiting(true);
+      // After exit animation, switch to month view
+      setTimeout(() => {
+        setViewMode("month");
+        setIsCurrentViewExiting(false); // This will trigger fade-in
+      }, TRANSITION_DURATION); // Match exit animation duration
+    },
+    [t]
+  );
   const handleBookingPress = useCallback(
     (booking: CalendarBookingData) => {
       // Navigate to booking details screen with booking ID
@@ -149,92 +171,134 @@ function CalendarScreenInner() {
     setCurrentMonth(month);
   }, []); // Handle property selector
   const handlePropertyHeaderPress = useCallback(() => {
-    setIsPropertySelectorVisible(true);
-  }, []);
+    // Navigate to the property selection screen using the [propertyId] route
+    router.push("/(tabs)/host/calendar/property/");
+  }, [router]);
 
-  const handlePropertySelectorClose = useCallback(() => {
-    setIsPropertySelectorVisible(false);
-  }, []);
-
-  const handlePropertySelect = useCallback(
-    (property: Property) => {
-      setSelectedProperty(property);
+  // Create header configuration for Screen component
+  const headerConfig = {
+    variant: "solid" as const,
+    left: {
+      children: (
+        <PropertyHeader
+          propertyName={selectedProperty?.name || t("calendar.selectProperty")}
+          propertyType={selectedProperty?.type || t("property.types.house")}
+          onPress={handlePropertyHeaderPress}
+        />
+      ),
     },
-    [setSelectedProperty]
-  );
+    right: {
+      children: (
+        <Container
+          flexDirection="row"
+          alignItems="center"
+          justifyContent="flex-end"
+        >
+          {/* Edit and View toggle buttons */}
+          <Button
+            title=""
+            variant="ghost"
+            size="small"
+            onPress={handleEditPress}
+            style={{
+              borderRadius: radius.sm,
+              backgroundColor: "transparent",
+              minWidth: 44,
+              minHeight: 44,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            accessibilityLabel={t("calendar.editMode")}
+            icon={
+              <Icon
+                name="create-outline"
+                size={iconSize.md}
+                color={theme.colors.black}
+              />
+            }
+          />
+          <Button
+            title=""
+            variant="ghost"
+            size="small"
+            onPress={handleViewToggle}
+            style={{
+              borderRadius: radius.sm,
+              backgroundColor: "transparent",
+              minWidth: 44,
+              minHeight: 44,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            accessibilityLabel={t("calendar.viewModeToggle")}
+            icon={
+              <Icon
+                name={viewMode === "year" ? "calendar-outline" : "grid-outline"}
+                size={iconSize.md}
+                color={theme.colors.black}
+              />
+            }
+          />
+        </Container>
+      ),
+    },
+    showDivider: true,
+  };
 
-  // Set up header button
-  useEffect(() => {
-    try {
-      navigation.setOptions({
-        headerLeft: () => {
-          return (
-            <PropertyHeader
-              propertyName={selectedProperty?.name || "Select Property"}
-              propertyType={selectedProperty?.type || "house"}
-              onPress={handlePropertyHeaderPress}
-            />
-          );
-        },
-        headerRight: () => {
-          return (
-            <View style={styles.headerButtons}>
-              {/* Edit and View toggle buttons */}
-              <TouchableOpacity
-                style={styles.headerButton}
-                onPress={() => {
-                  handleEditPress();
-                }}
-              >
-                <Icon
-                  name="create-outline"
-                  size={iconSize.md}
-                  color={theme.colors.black}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.headerButton}
-                onPress={() => {
-                  handleViewToggle();
-                }}
-              >
-                <Icon
-                  name={
-                    viewMode === "year" ? "calendar-outline" : "grid-outline"
-                  }
-                  size={iconSize.md}
-                  color={theme.colors.black}
-                />
-              </TouchableOpacity>
-            </View>
-          );
-        },
-      });
-    } catch (error) {
-      console.error("Error setting navigation options:", error);
-    }
-  }, [
-    navigation,
-    handleEditPress,
-    handleViewToggle,
-    viewMode,
-    theme,
-    handlePropertyHeaderPress,
-    selectedProperty,
-  ]);
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
+    <Screen
+      backgroundColor={theme.background}
+      header={headerConfig}
+      padding="none"
+    >
       {/* Animated Title Section - Only show for year view */}
       {viewMode === "year" && (
-        <View style={styles.titleContainer}>
-          <Animated.View style={[styles.titleWrapper, animatedStyle]}>
-            <Text style={styles.title}>{getYearTitle()}</Text>
+        <Container
+          flex={0}
+          style={{
+            zIndex: 10,
+            minHeight: 60,
+            position: "relative",
+          }}
+          marginBottom="lg"
+        >
+          <Animated.View
+            style={[
+              {
+                position: "absolute",
+              },
+              animatedStyle,
+            ]}
+          >
+            <Text
+              variant="h1"
+              weight="bold"
+              color="#333"
+              align="left"
+              style={{
+                padding: spacing.lg,
+              }}
+            >
+              {getYearTitle()}
+            </Text>
           </Animated.View>
-        </View>
+        </Container>
       )}
       {/* Calendar Container with conditional rendering */}
-      <View style={styles.calendarContainer}>
-        <Animated.View style={[styles.viewContainer, animatedStyle]}>
+      <Container
+        flex={1}
+        style={{
+          position: "relative",
+        }}
+      >
+        <Animated.View
+          style={[
+            {
+              flex: 1,
+            },
+            animatedStyle,
+          ]}
+        >
           {viewMode === "year" && (
             <YearGrid
               key={`year-${currentYear}-${selectedProperty?.id || "all"}`}
@@ -258,136 +322,18 @@ function CalendarScreenInner() {
             />
           )}
         </Animated.View>
-      </View>
+      </Container>
       {/* Edit Overlay - Independent Component */}
       <EditOverlay
         isVisible={isEditOverlayVisible}
         onClose={handleEditOverlayClose}
         selectedDaysCount={3}
       />
-      {/* Property Selector Modal */}
-      <PropertySelectorModal
-        isVisible={isPropertySelectorVisible}
-        onClose={handlePropertySelectorClose}
-        properties={properties}
-        selectedProperty={selectedProperty}
-        onPropertySelect={handlePropertySelect}
-      />
-    </View>
+    </Screen>
   );
 }
 
 // Main component that provides property context
 export default function CalendarScreen() {
-  return (
-    <PropertyProvider>
-      <CalendarScreenInner />
-    </PropertyProvider>
-  );
+  return <CalendarScreenInner />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    display: "flex",
-    flex: 1,
-  },
-  titleContainer: {
-    // Child 1: Title section
-    flex: 0,
-    zIndex: 10,
-    minHeight: 60,
-    position: "relative",
-  },
-  titleWrapper: {
-    position: "absolute",
-  },
-  title: {
-    fontSize: fontSize.xxxl,
-    fontWeight: fontWeight.bold,
-    padding: spacing.lg,
-    color: "#333",
-    textAlign: "left",
-  },
-  viewContainer: {
-    // Animated view containers within calendar
-    flex: 1,
-  },
-  calendarContainer: {
-    // Child 2: Calendar section
-    flex: 1,
-    position: "relative", // Allow absolute positioning of children
-  },
-  settingsContent: {
-    padding: spacing.lg,
-  },
-  settingsLabel: {
-    fontSize: fontSize.lg,
-    fontWeight: fontWeight.semibold,
-    marginBottom: spacing.md,
-    color: "#333",
-  },
-  viewModeOption: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: spacing.md,
-    marginVertical: spacing.xs,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: "transparent",
-  },
-  viewModeOptionActive: {
-    backgroundColor: "#E3F2FD",
-    borderColor: "#007AFF",
-  },
-  viewModeText: {
-    fontSize: fontSize.md,
-    color: "#333",
-    flex: 1,
-  },
-  viewModeTextActive: {
-    color: "#007AFF",
-    fontWeight: fontWeight.semibold,
-  },
-  viewModeTextDisabled: {
-    color: "#999",
-  },
-  bottomSheetBackground: {
-    backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: -2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 20,
-  },
-  bottomSheetModal: {
-    zIndex: 10000,
-    elevation: 10000, // For Android
-  },
-  settingsTitle: {
-    fontSize: fontSize.xl,
-    fontWeight: fontWeight.semibold,
-    textAlign: "center",
-    marginBottom: spacing.lg,
-    color: "#333",
-  },
-  headerButtons: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-end",
-  },
-  headerButton: {
-    // padding: spacing.lg, // Larger touch area
-    borderRadius: radius.sm,
-    backgroundColor: "transparent",
-    minWidth: 44, // iOS Human Interface Guidelines minimum touch target
-    minHeight: 44,
-    alignItems: "center", // Center the icons
-    justifyContent: "center",
-  },
-});

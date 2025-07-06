@@ -9,7 +9,9 @@ export type FilterType =
   | "currentlyHosting"
   | "arrivingSoon"
   | "upcoming"
-  | "pendingReview";
+  | "pendingReview"
+  | "pending"
+  | "cancelled";
 
 export interface FilterTab {
   key: FilterType;

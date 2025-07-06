@@ -1,5 +1,6 @@
 import React, { useMemo, useCallback } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
+import { useTranslation } from "react-i18next";
 import { MonthThumbnail } from "./MonthThumbnail";
 import { generateYearData, MonthData } from "../utils/dateUtils";
 import { spacing } from "@core/design";
@@ -10,6 +11,7 @@ interface YearGridProps {
   onBackPress?: () => void;
   selectedMonth?: Date | null;
   propertyId?: string;
+  isLoading?: boolean;
 }
 
 const YearGridComponent: React.FC<YearGridProps> = ({
@@ -18,7 +20,17 @@ const YearGridComponent: React.FC<YearGridProps> = ({
   onBackPress,
   selectedMonth,
   propertyId,
+  isLoading = false,
 }) => {
+  const { t } = useTranslation();
+
+  console.log("📅 YearGrid: Rendering with props", {
+    year,
+    propertyId,
+    isLoading,
+    selectedMonth: selectedMonth?.toISOString(),
+  });
+
   // Memoize year data generation
   const yearData = useMemo(
     () => generateYearData(year, propertyId),
@@ -34,6 +46,33 @@ const YearGridComponent: React.FC<YearGridProps> = ({
   ); // Memoize the render function for FlatList
   const renderMonth = useCallback(
     ({ item: monthData }: { item: MonthData }) => {
+      // Get month index and create translation key
+      const monthIndex = monthData.month.getMonth();
+      const monthKeys = [
+        "january",
+        "february",
+        "march",
+        "april",
+        "may",
+        "june",
+        "july",
+        "august",
+        "september",
+        "october",
+        "november",
+        "december",
+      ];
+      const monthKey = monthKeys[monthIndex];
+      const translationKey = `calendar.months.${monthKey}`;
+      const translatedMonthName = t(translationKey);
+      const year = monthData.month.getFullYear();
+
+      console.log("🗓️ YearGrid: Rendering MonthThumbnail", {
+        month: monthData.month.toISOString(),
+        propertyId,
+        monthName: `${translatedMonthName} ${year}`,
+      });
+
       return (
         <View style={styles.monthContainer}>
           <MonthThumbnail
@@ -44,7 +83,7 @@ const YearGridComponent: React.FC<YearGridProps> = ({
         </View>
       );
     },
-    [handleMonthPress, propertyId]
+    [handleMonthPress, propertyId, t]
   );
 
   // Memoize the key extractor

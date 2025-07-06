@@ -18,7 +18,7 @@ import {
   Toast,
 } from "@shared/components";
 import type { PropertyType, ICheckInExperience } from "@core/types";
-import { useDateSelection } from "@features/calendar/context/DateSelectionContext";
+import { useCalendarDateSelection } from "@features/calendar/context/CalendarContext";
 import { getPropertyById } from "@core/api/services/property";
 import { useAuth } from "@core/context/AuthContext";
 import { useWishlist } from "@features/wishlist/hooks/useWishlist";
@@ -69,7 +69,7 @@ const PropertyDetailsScreen = () => {
   const params = useLocalSearchParams();
   const router = useRouter();
   const segments = useSegments();
-  const { propertyDates } = useDateSelection();
+  const { propertyDates } = useCalendarDateSelection();
 
   // Property data parsing
   const propertyParam = params.property as string;
@@ -427,7 +427,7 @@ const PropertyDetailsScreen = () => {
         style={{ paddingBottom: 80 }}
       >
         <Container height={300}>
-          <PropertyImageCarousel property={property} images={[]} />
+          <PropertyImageCarousel property={property} />
         </Container>
         <Container
           paddingHorizontal="lg"

@@ -62,9 +62,14 @@ export const usePropertyActions = (property: PropertyType | null) => {
       return;
     }
 
+    console.log("handleReserve called with propertyDates:", propertyDates);
+    console.log("Property ID:", property._id);
+    console.log("Property dates from context:", propertyDates.get(property._id));
     const dates = propertyDates.get(property._id)?.selectedDates;
+    console.log("Selected dates:", dates);
 
     if (!dates?.startDate || !dates?.endDate) {
+      console.log("No dates selected, opening availability calendar");
       // No dates selected - open availability calendar modal (Check Availability flow)
       router.push({
         pathname: "/modules/properties/details/modals/availability-calendar",
@@ -76,6 +81,7 @@ export const usePropertyActions = (property: PropertyType | null) => {
       return;
     }
 
+    console.log("Dates selected, proceeding with reservation:", dates);
     // Dates selected - proceed with reservation (Reserve flow)
     if (openReservationModal) {
       openReservationModal({

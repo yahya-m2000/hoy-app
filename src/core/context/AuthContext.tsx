@@ -40,6 +40,10 @@ import { resetCircuitBreaker } from "@core/api/circuit-breaker";
 import { logger } from "../utils/sys/log/logger";
 import { getAuthDebugInfo } from "../auth/debug";
 import { ContextErrorBoundary } from "../error/ContextErrorBoundary";
+import { getValidAccessToken } from "@core/api/auth-manager";
+import { getTokenFromStorage } from "../auth/storage";
+import { testAuthTokenInterceptor } from "../api/auth-token-interceptor";
+import api from "../api/client";
 
 // ========================================
 // CONTEXT CREATION
@@ -75,7 +79,33 @@ const AuthProviderInternal: React.FC<AuthProviderProps> = ({ children }) => {
    */
   const checkAuthenticationState = async () => {
     try {
-      const authenticated = await hasValidAuthentication();
+      let authenticated = await hasValidAuthentication();
+
+      // If access token is expired but refresh token is still valid, attempt silent refresh
+      if (!authenticated) {
+        try {
+          const newAccessToken = await getValidAccessToken();
+          authenticated = !!newAccessToken;
+
+          if (authenticated) {
+            logger.debug(
+              "Silent token refresh succeeded during auth check",
+              undefined,
+              {
+                module: "AuthContext",
+              }
+            );
+          }
+        } catch (refreshError) {
+          logger.warn(
+            "Silent token refresh failed during auth check",
+            refreshError,
+            {
+              module: "AuthContext",
+            }
+          );
+        }
+      }
       setIsUserAuthenticated(authenticated);
       setIsAuthChecked(true);
 
@@ -138,9 +168,16 @@ const AuthProviderInternal: React.FC<AuthProviderProps> = ({ children }) => {
       // Store tokens in AsyncStorage
       if (loginResponse.accessToken) {
         await saveTokenToStorage(loginResponse.accessToken);
+        logger.auth("Access token saved to storage", { email });
+      } else {
+        logger.error("No access token in login response", { email });
       }
+
       if (loginResponse.refreshToken) {
         await saveRefreshTokenToStorage(loginResponse.refreshToken);
+        logger.auth("Refresh token saved to storage", { email });
+      } else {
+        logger.error("No refresh token in login response", { email });
       }
 
       // Clear any previous token invalidation flags (e.g., blacklisted)
@@ -176,6 +213,40 @@ const AuthProviderInternal: React.FC<AuthProviderProps> = ({ children }) => {
 
       // Debug: Check what's actually stored
       await getAuthDebugInfo();
+
+      // Test interceptor functionality
+      try {
+        const interceptorWorking = await testAuthTokenInterceptor();
+        logger.info(
+          `[AuthContext] Interceptor test result: ${
+            interceptorWorking ? "WORKING" : "FAILED"
+          }`,
+          undefined,
+          {
+            module: "AuthContext",
+          }
+        );
+      } catch (error) {
+        logger.warn("[AuthContext] Interceptor test failed", error, {
+          module: "AuthContext",
+        });
+      }
+
+      // Run comprehensive authentication flow test
+      await testAuthenticationFlow();
+
+      // Additional debug: Verify token storage
+      const storedToken = await getTokenFromStorage();
+      logger.auth("Token storage verification completed", { email });
+      logger.debug(
+        "Stored token details",
+        {
+          exists: !!storedToken,
+          length: storedToken?.length || 0,
+          preview: storedToken ? `${storedToken.substring(0, 20)}...` : "NONE",
+        },
+        { module: "AuthContext" }
+      );
 
       // Update auth state with user data
       setCurrentUser(loginResponse.user);
@@ -217,19 +288,31 @@ const AuthProviderInternal: React.FC<AuthProviderProps> = ({ children }) => {
         email: credentials.email,
       });
 
-      // If tokens are present use them, otherwise perform login to get tokens
-      let accessToken = registerResponse.tokens?.access;
-      let refreshToken = registerResponse.tokens?.refresh;
+      // The backend registration endpoint only returns user data, not tokens
+      // So we need to perform a login to get the tokens
+      let accessToken: string | undefined;
+      let refreshToken: string | undefined;
+      let userObj = registerResponse.user;
 
-      if (!accessToken) {
+      // Always perform login to get tokens since registration doesn't return them
+      try {
         const loginResponse = await AuthService.login({
           email: credentials.email,
           password: credentials.password,
         });
         accessToken = loginResponse.accessToken;
         refreshToken = loginResponse.refreshToken;
+        userObj = loginResponse.user; // Use user data from login response
+      } catch (loginError) {
+        logger.error("Auto-login after registration failed", loginError, {
+          module: "AuthContext",
+        });
+        throw new Error(
+          "Registration successful but automatic login failed. Please try logging in manually."
+        );
       }
 
+      // Store tokens
       if (accessToken) {
         await saveTokenToStorage(accessToken);
       }
@@ -241,7 +324,6 @@ const AuthProviderInternal: React.FC<AuthProviderProps> = ({ children }) => {
       await clearTokenInvalidation();
 
       // Store user ID for data integrity checks
-      const userObj = registerResponse.user;
       const userId = userObj?.id || (userObj as any)?._id;
       await AsyncStorage.setItem("currentUserId", userId);
 
@@ -342,6 +424,113 @@ const AuthProviderInternal: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error) {
       logger.error("Password reset failed", error, { module: "AuthContext" });
       throw error;
+    }
+  };
+
+  /**
+   * Test authentication flow and API interceptor setup
+   */
+  const testAuthenticationFlow = async (): Promise<void> => {
+    try {
+      logger.info(
+        "[AuthContext] 🔍 Starting comprehensive authentication flow test...",
+        undefined,
+        {
+          module: "AuthContext",
+        }
+      );
+
+      // 1. Test token storage
+      const storedToken = await getTokenFromStorage();
+      logger.info(
+        `[AuthContext] 1. Token storage test: ${storedToken ? "PASS" : "FAIL"}`,
+        undefined,
+        {
+          module: "AuthContext",
+        }
+      );
+
+      // 2. Test interceptor functionality
+      const interceptorWorking = await testAuthTokenInterceptor();
+      logger.info(
+        `[AuthContext] 2. Interceptor test: ${
+          interceptorWorking ? "PASS" : "FAIL"
+        }`,
+        undefined,
+        {
+          module: "AuthContext",
+        }
+      );
+
+      // 3. Test API client configuration
+      logger.info(
+        `[AuthContext] 3. API client config: baseURL=${api.defaults.baseURL}`,
+        undefined,
+        {
+          module: "AuthContext",
+        }
+      );
+
+      // 4. Test a simple API call to verify token attachment
+      if (storedToken) {
+        try {
+          logger.info(
+            "[AuthContext] 4. Testing API call with token...",
+            undefined,
+            {
+              module: "AuthContext",
+            }
+          );
+
+          // Make a test call to a protected endpoint
+          const response = await api.get("/users/me");
+          logger.info(
+            `[AuthContext] 4. API call test: PASS (status: ${response.status})`,
+            undefined,
+            {
+              module: "AuthContext",
+            }
+          );
+        } catch (apiError: any) {
+          if (apiError.response?.status === 401) {
+            logger.error(
+              "[AuthContext] 4. API call test: FAIL - 401 Unauthorized (token not attached)",
+              undefined,
+              {
+                module: "AuthContext",
+              }
+            );
+          } else {
+            logger.error(
+              "[AuthContext] 4. API call test: FAIL - Other error",
+              apiError,
+              {
+                module: "AuthContext",
+              }
+            );
+          }
+        }
+      } else {
+        logger.warn(
+          "[AuthContext] 4. API call test: SKIPPED - No token available",
+          undefined,
+          {
+            module: "AuthContext",
+          }
+        );
+      }
+
+      logger.info(
+        "[AuthContext] 🔍 Authentication flow test completed",
+        undefined,
+        {
+          module: "AuthContext",
+        }
+      );
+    } catch (error) {
+      logger.error("[AuthContext] Authentication flow test failed", error, {
+        module: "AuthContext",
+      });
     }
   };
 

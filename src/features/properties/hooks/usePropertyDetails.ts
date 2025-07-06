@@ -1,13 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@core/context/AuthContext";
+import { useCalendarDateSelection } from "@features/calendar/context/CalendarContext";
 import type { PropertyType } from "@core/types/property.types";
 import type { ExtendedUser } from "@core/types/user.types";
 
 export const usePropertyDetails = (property: PropertyType | null) => {
   const { isAuthenticated } = useAuth();
   
-  // TODO: Implement useDateSelection hook
-  const propertyDates = new Map();
+  // Use the consolidated CalendarContext
+  const { propertyDates } = useCalendarDateSelection();
   
   // TODO: Implement useWishlist hook
   const isPropertyWishlisted = (id: string) => false;

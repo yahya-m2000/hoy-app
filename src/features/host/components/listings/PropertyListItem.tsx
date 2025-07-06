@@ -1,7 +1,8 @@
 import React from "react";
-import { Alert, Image, TouchableOpacity } from "react-native";
-import { Property } from "@core/types/listings.types";
+import { Alert, TouchableOpacity } from "react-native";
+import { Property } from "@core/types/property.types";
 import { formatCurrency } from "@core/utils/data/currency";
+import { useTranslation } from "react-i18next";
 import {
   Container,
   Card,
@@ -9,15 +10,41 @@ import {
   Icon,
   Badge,
   Button,
-  Row,
+  PropertyImage,
 } from "@shared/components";
-import { iconSize, spacing } from "src/core/design";
+import { iconSize, spacing, radius } from "@core/design";
+
+// Custom status badge for this file only
+const StatusBadge: React.FC<{ status: "Active" | "Inactive" }> = ({
+  status,
+}) => {
+  const { t } = useTranslation();
+  const isActive = status === "Active";
+  return (
+    <Container
+      flexDirection="row"
+      alignItems="center"
+      paddingVertical="xxs"
+      style={{ alignSelf: "flex-start" }}
+    >
+      <Icon
+        name={isActive ? "checkmark-circle" : "close-circle"}
+        size={14}
+        style={{ marginRight: 4 }}
+      />
+      <Text variant="caption" weight="medium">
+        {isActive ? t("property.status.active") : t("property.status.inactive")}
+      </Text>
+    </Container>
+  );
+};
 
 interface PropertyListItemProps {
   property: Property;
   onPress: () => void;
   onEdit: () => void;
   onDelete: () => void;
+  onToggleStatus?: () => void;
   isDeleting?: boolean;
 }
 
@@ -37,138 +64,266 @@ export default function PropertyListItem({
   onPress,
   onEdit,
   onDelete,
+  onToggleStatus,
   isDeleting = false,
 }: PropertyListItemProps) {
+  const { t } = useTranslation();
   const primaryImage = property.images?.[0];
   const address = `${property.address.city}, ${property.address.state}`;
 
   const handleOptionsPress = () => {
-    Alert.alert("Property Options", `Options for \"${property.name}\"`, [
-      {
-        text: "Edit",
-        onPress: onEdit,
-      },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: onDelete,
-      },
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-    ]);
+    Alert.alert(
+      t("property.options.title"),
+      `Options for \"${property.name}\"`,
+      [
+        {
+          text: t("property.options.edit"),
+          onPress: () => {
+            Alert.alert(
+              t("property.options.editProperty"),
+              "What would you like to edit?",
+              [
+                {
+                  text: t("property.options.editDetails"),
+                  onPress: onEdit,
+                },
+                {
+                  text: t("property.options.toggleStatus"),
+                  onPress: handleToggleStatus,
+                },
+                {
+                  text: t("common.cancel"),
+                  style: "cancel",
+                },
+              ]
+            );
+          },
+        },
+        {
+          text: t("property.options.delete"),
+          style: "destructive",
+          onPress: onDelete,
+        },
+        {
+          text: t("common.cancel"),
+          style: "cancel",
+        },
+      ]
+    );
   };
 
-  const status = property.isActive
-    ? { text: "Active", variant: "success" as const }
-    : { text: "Inactive", variant: "error" as const };
+  const handleToggleStatus = () => {
+    if (!onToggleStatus) return;
+
+    const isCurrentlyActive = property.isActive;
+    const actionText = isCurrentlyActive
+      ? t("property.options.deactivateProperty")
+      : t("property.options.activateProperty");
+    const confirmMessage = isCurrentlyActive
+      ? t("property.options.deactivateConfirm")
+      : t("property.options.activateConfirm");
+    const additionalMessage = isCurrentlyActive
+      ? t("property.options.deactivateMessage")
+      : "";
+
+    Alert.alert(
+      actionText,
+      `${confirmMessage}${additionalMessage ? `\n\n${additionalMessage}` : ""}`,
+      [
+        {
+          text: t("common.cancel"),
+          style: "cancel",
+        },
+        {
+          text: property.isActive
+            ? t("property.options.deactivate")
+            : t("property.options.activate"),
+          onPress: onToggleStatus,
+        },
+      ]
+    );
+  };
+
+  const status = property.isActive ? "Active" : "Inactive";
 
   return (
-    <Container style={{ marginBottom: 16, opacity: isDeleting ? 0.6 : 1 }}>
+    <Container
+      marginBottom="md"
+      style={{ opacity: isDeleting ? 0.6 : 1 }}
+      padding="none"
+    >
       <TouchableOpacity
         onPress={onPress}
         disabled={isDeleting}
         activeOpacity={0.7}
       >
-        {/* Property Image */}
-        <Container style={{ position: "relative" }}>
-          {primaryImage ? (
-            <Image
-              source={{ uri: primaryImage }}
-              style={{
-                width: "100%",
-                height: 300,
-                borderRadius: 8,
-                backgroundColor: "#f0f0f0",
-              }}
-            />
-          ) : (
-            <Container
-              style={{
-                width: "100%",
-                height: 180,
-                borderRadius: 8,
-                backgroundColor: "#f0f0f0",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Icon name="image-outline" size={iconSize.lg} color="#999" />
-            </Container>
-          )}
-          <Container style={{ position: "absolute", top: 8, right: 8 }}>
-            <Badge content={status.text} variant={status.variant} size="md" />
-          </Container>
-        </Container>
-
-        {/* Property Details */}
-        <Container>
-          <Row justify="space-between" align="center" marginTop={spacing.xs}>
-            <Text variant="h6" weight="medium">
-              {property.name}
-            </Text>
-            <TouchableOpacity onPress={handleOptionsPress}>
-              <Icon
-                name={isDeleting ? "hourglass-outline" : "open-outline"}
-                size={iconSize.xs}
-                color="primary"
-              />
-            </TouchableOpacity>
-          </Row>
-          <Text variant="body" color="textSecondary" numberOfLines={1}>
-            {address}
-          </Text>
-          <Text
-            variant="caption"
-            color="primary"
-            weight="medium"
-            style={{ marginBottom: 8 }}
+        <Container flexDirection="row">
+          {/* Left: Property Image */}
+          <Container
+            style={{
+              position: "relative",
+              width: 120,
+            }}
           >
-            {property.propertyType.charAt(0).toUpperCase() +
-              property.propertyType.slice(1)}
-          </Text>
-
-          {/* Property Stats */}
-          <Row align="center" gap={16} wrap>
-            <Row align="center" gap={4}>
-              <Icon name="bed-outline" size={iconSize.xs} color="primary" />
-              <Text variant="caption">{property.bedrooms}</Text>
-            </Row>
-            <Row align="center" gap={4}>
-              <Icon name="water-outline" size={iconSize.xs} color="primary" />
-              <Text variant="caption">{property.bathrooms}</Text>
-            </Row>
-            <Row align="center" gap={4}>
-              <Icon name="people-outline" size={iconSize.xs} color="primary" />
-              <Text variant="caption">{property.maxGuests}</Text>
-            </Row>
-            {property.rating > 0 && (
-              <Row align="center" gap={4}>
-                <Icon name="star" size={iconSize.xs} color="primary" />
-                <Text variant="caption">{property.rating.toFixed(1)}</Text>
-              </Row>
+            {primaryImage ? (
+              <PropertyImage uri={primaryImage} fill borderRadius="md" />
+            ) : (
+              <Container
+                style={{
+                  width: 120,
+                  height: 120,
+                  borderTopLeftRadius: radius.md,
+                  borderBottomLeftRadius: radius.md,
+                  backgroundColor: "#f5f5f5",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Icon
+                  name="image-outline"
+                  size={iconSize.lg}
+                  color="secondary"
+                />
+              </Container>
             )}
-          </Row>
+          </Container>
 
-          {/* Price */}
-          <Row align="baseline" gap={4}>
-            <Text variant="body" weight="medium" color="primary">
-              {typeof property.price === "number"
-                ? formatCurrency(property.price, property.currency)
-                : isPriceObject(property.price)
-                ? formatCurrency(
-                    (property.price as { amount: number; currency?: string })
-                      .amount,
-                    (property.price as { amount: number; currency?: string })
-                      .currency || property.currency
-                  )
-                : "-"}
-            </Text>
-            <Text variant="caption" color="textSecondary">
-              / night
-            </Text>
-          </Row>
+          {/* Right: Property Details */}
+          <Container flex={1} paddingHorizontal="sm">
+            {/* Status Badge - Above Title */}
+            <Container
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center"
+              marginBottom="xs"
+            >
+              <StatusBadge status={status} />
+              <TouchableOpacity onPress={handleOptionsPress}>
+                <Icon
+                  name={
+                    isDeleting ? "hourglass-outline" : "ellipsis-horizontal"
+                  }
+                  size={iconSize.sm}
+                  color="primary"
+                />
+              </TouchableOpacity>
+            </Container>
+
+            <Container
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center"
+              marginBottom="xs"
+            >
+              <Text
+                variant="h6"
+                weight="medium"
+                numberOfLines={1}
+                style={{ flex: 1, paddingRight: 8 }}
+              >
+                {property.name}
+              </Text>
+            </Container>
+
+            <Container marginBottom="xs">
+              <Text variant="body" color="secondary" numberOfLines={1}>
+                {address}
+              </Text>
+            </Container>
+
+            <Container marginBottom="sm">
+              <Text variant="caption" color="primary" weight="medium">
+                {property.propertyType.charAt(0).toUpperCase() +
+                  property.propertyType.slice(1)}
+              </Text>
+            </Container>
+
+            {/* Property Stats */}
+            <Container
+              flexDirection="row"
+              alignItems="center"
+              marginBottom="sm"
+              flexWrap="wrap"
+            >
+              <Container
+                flexDirection="row"
+                alignItems="center"
+                marginRight="md"
+                marginBottom="xs"
+              >
+                <Icon name="bed-outline" size={iconSize.sm} color="secondary" />
+                <Container marginLeft="xs">
+                  <Text variant="caption">{property.bedrooms}</Text>
+                </Container>
+              </Container>
+
+              <Container
+                flexDirection="row"
+                alignItems="center"
+                marginRight="md"
+                marginBottom="xs"
+              >
+                <Icon
+                  name="water-outline"
+                  size={iconSize.sm}
+                  color="secondary"
+                />
+                <Container marginLeft="xs">
+                  <Text variant="caption">{property.bathrooms}</Text>
+                </Container>
+              </Container>
+
+              <Container
+                flexDirection="row"
+                alignItems="center"
+                marginRight="md"
+                marginBottom="xs"
+              >
+                <Icon
+                  name="people-outline"
+                  size={iconSize.sm}
+                  color="secondary"
+                />
+                <Container marginLeft="xs">
+                  <Text variant="caption">{property.maxGuests}</Text>
+                </Container>
+              </Container>
+
+              {property.rating > 0 && (
+                <Container
+                  flexDirection="row"
+                  alignItems="center"
+                  marginBottom="xs"
+                >
+                  <Icon name="star" size={iconSize.sm} color="warning" />
+                  <Container marginLeft="xs">
+                    <Text variant="caption">{property.rating.toFixed(1)}</Text>
+                  </Container>
+                </Container>
+              )}
+            </Container>
+
+            {/* Price */}
+            <Container flexDirection="row" alignItems="baseline">
+              <Text variant="body" weight="medium" color="primary">
+                {typeof property.price === "number"
+                  ? formatCurrency(property.price, property.currency)
+                  : isPriceObject(property.price)
+                  ? formatCurrency(
+                      (property.price as { amount: number; currency?: string })
+                        .amount,
+                      (property.price as { amount: number; currency?: string })
+                        .currency || property.currency
+                    )
+                  : "-"}
+              </Text>
+              <Container marginLeft="xs">
+                <Text variant="caption" color="secondary">
+                  {t("property.perNight")}
+                </Text>
+              </Container>
+            </Container>
+          </Container>
         </Container>
       </TouchableOpacity>
     </Container>

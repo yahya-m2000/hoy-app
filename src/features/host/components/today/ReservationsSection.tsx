@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
 import { useTheme } from "@core/hooks";
 import { fontSize, fontWeight, spacing } from "@core/design";
 import ReservationList from "./ReservationList";
@@ -20,6 +21,7 @@ const ReservationsSection: React.FC<ReservationsSectionProps> = ({
   onViewAllPress,
   showFilterTabs = true, // Default to showing filter tabs
 }) => {
+  const { t } = useTranslation();
   const { theme } = useTheme();
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
 
@@ -27,12 +29,12 @@ const ReservationsSection: React.FC<ReservationsSectionProps> = ({
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={[styles.title, { color: theme.text.primary }]}>
-          Your reservations
+          {t("host.today.reservations.title")}
         </Text>
         {onViewAllPress && (
           <TouchableOpacity onPress={onViewAllPress}>
             <Text style={[styles.viewAllText, { color: theme.colors.primary }]}>
-              View all
+              {t("host.today.reservations.viewAll")}
             </Text>
           </TouchableOpacity>
         )}

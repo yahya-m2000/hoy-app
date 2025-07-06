@@ -14,11 +14,17 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "icon": {
+        "light": "./assets/icons/ios-light.png",
+        "dark": "./assets/icons/ios-dark.png",
+        "tinted": "./assets/icons/ios-tinted.png"
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icons/adaptive-icon.png",
+        "monochromeImage": "./assets/icons/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.ym2000.mobile_app"
@@ -31,10 +37,24 @@
     "extra": {
       "environment": "development",
       "minApiCallInterval": 10000,
-      "offlineCacheMaxAge": 86400000
+      "offlineCacheMaxAge": 86400000,
+   
     },
     "plugins": [
-      "expo-secure-store"
+      "expo-secure-store",
+     [ "expo-splash-screen",
+      {
+        "image": "./assets/icons/splash-icon-light.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff",
+        "imageWidth": 200,
+        "dark": {
+          "image": "./assets/icons/splash-icon-dark.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#53E09C",
+          "imageWidth": 200
+        }
+      }]
     ]
   }
 }

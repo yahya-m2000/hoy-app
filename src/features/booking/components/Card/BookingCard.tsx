@@ -234,7 +234,6 @@ const styles = StyleSheet.create({
   },
   placeholderText: {
     fontSize: fontSize.sm,
-    color: "#6b7280",
     fontWeight: "500",
   },
   statusBadge: {

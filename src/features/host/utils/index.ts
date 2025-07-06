@@ -3,3 +3,4 @@
  */
 
 export * from "./hostUtils";
+export * from "./bookingUtils";

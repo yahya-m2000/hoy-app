@@ -16,8 +16,10 @@ interface DetailScreenProps extends Omit<ScreenProps, "header"> {
   title: string;
   onFavorite?: () => void;
   onShare?: () => void;
+  onEdit?: () => void;
   showFavorite?: boolean;
   showShare?: boolean;
+  showEdit?: boolean;
   isFavorited?: boolean; // Add this prop to show filled/outline heart
   headerVariant?: "transparent" | "solid";
 }
@@ -26,8 +28,10 @@ export const DetailScreen: React.FC<DetailScreenProps> = ({
   title,
   onFavorite,
   onShare,
+  onEdit,
   showFavorite = false,
   showShare = false,
+  showEdit = false,
   isFavorited = false,
   headerVariant = "transparent",
   children,
@@ -46,18 +50,22 @@ export const DetailScreen: React.FC<DetailScreenProps> = ({
           icon: "arrow-back",
           onPress: () => router.back(),
         },
-        right:
-          showFavorite && onFavorite
-            ? {
-                icon: isFavorited ? "heart" : "heart-outline",
-                onPress: onFavorite,
-              }
-            : showShare && onShare
-            ? {
-                icon: "share-outline",
-                onPress: onShare,
-              }
-            : undefined,
+        right: showEdit
+          ? {
+              icon: "pencil-outline",
+              onPress: onEdit,
+            }
+          : showFavorite && onFavorite
+          ? {
+              icon: isFavorited ? "heart" : "heart-outline",
+              onPress: onFavorite,
+            }
+          : showShare && onShare
+          ? {
+              icon: "share-outline",
+              onPress: onShare,
+            }
+          : undefined,
         scrollThreshold: 200,
       }}
       {...props}

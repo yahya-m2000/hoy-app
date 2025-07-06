@@ -46,6 +46,9 @@ export * as userUtils from "./user";
 // Data validation utilities
 export * as validationUtils from "./data/validation";
 
+// Date utilities
+export * as dateUtils from "./date";
+
 // ========================================
 // LEGACY COMPATIBILITY
 // ========================================

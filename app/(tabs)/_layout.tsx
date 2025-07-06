@@ -12,18 +12,15 @@ import { useUserRole } from "@core/context/UserRoleContext";
 
 // Main tabs layout serves as a router between host and traveler experiences
 export default function TabsLayout() {
-  const { isRoleLoading } = useUserRole();
-
-  // Show nothing while loading to avoid flicker between experiences
-  if (isRoleLoading) {
-    return null;
-  }
+  const { isRoleLoading } = useUserRole(); // retained for potential future use
 
   // Render stack navigation for both host and traveler experiences
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="host" />
-      <Stack.Screen name="traveler" />
-    </Stack>
+    <>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="host" />
+        <Stack.Screen name="traveler" />
+      </Stack>
+    </>
   );
 }

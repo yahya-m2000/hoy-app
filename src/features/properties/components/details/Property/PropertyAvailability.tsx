@@ -8,7 +8,7 @@ import { TextStyle } from "react-native";
 import { Text } from "@shared/components";
 import { useTheme } from "@core/hooks";
 import { fontSize, fontWeight } from "@core/design";
-import { useDateSelection } from "@features/calendar/context/DateSelectionContext";
+import { useCalendarDateSelection } from "@features/calendar/context/CalendarContext";
 
 export interface PropertyAvailabilityProps {
   /** Custom text styles */
@@ -27,7 +27,7 @@ const PropertyAvailability: React.FC<PropertyAvailabilityProps> = ({
   endDate: customEndDate,
 }) => {
   const { theme, isDark } = useTheme();
-  const { searchDates } = useDateSelection();
+  const { searchDates } = useCalendarDateSelection();
 
   const textSize = variant === "small" ? fontSize.xs - 1 : fontSize.sm;
   const textColor = isDark ? theme.colors.gray[400] : theme.colors.gray[500];

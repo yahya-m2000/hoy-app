@@ -9,6 +9,7 @@ import { FlatList } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "expo-router";
+import { COUNTRIES } from "@core/utils/data/countries";
 
 // Base components
 import {
@@ -33,6 +34,48 @@ import {
   RecentSearchManager,
   type RecentSearch,
 } from "src/features/search/components/RecentSearchManager";
+
+// Utility to break a location string into { city, state, country }
+const parseLocation = (
+  locationStr: string
+): { city?: string; state?: string; country?: string } => {
+  if (!locationStr) return {};
+
+  const tokens = locationStr.split(",").map((t) => t.trim());
+  const lastToken = tokens[tokens.length - 1];
+
+  // Attempt to match last token (or whole string) to a country
+  const countryMatch =
+    COUNTRIES.find((c) => c.name.toLowerCase() === lastToken.toLowerCase()) ||
+    COUNTRIES.find((c) => c.name.toLowerCase() === locationStr.toLowerCase());
+
+  if (!countryMatch) {
+    return {};
+  }
+
+  let city: string | undefined;
+  let state: string | undefined;
+
+  // If there is a token before the country token, try to assign city/state
+  if (tokens.length > 1) {
+    const first = tokens[0];
+    if (
+      countryMatch.cities.some((ct) => ct.toLowerCase() === first.toLowerCase())
+    ) {
+      city = first;
+    } else if (
+      countryMatch.states.some((st) => st.toLowerCase() === first.toLowerCase())
+    ) {
+      state = first;
+    }
+  }
+
+  return {
+    ...(city ? { city } : {}),
+    ...(state ? { state } : {}),
+    country: countryMatch.name,
+  };
+};
 
 export default function SearchScreen() {
   const { theme, isDark } = useTheme();
@@ -136,8 +179,14 @@ export default function SearchScreen() {
     // Create a timestamp to force a new search (prevents caching issues)
     const timestamp = Date.now();
 
-    // Navigate to results page with search parameters
+    // Break the location string into structured parts
+    const { city, state, country } = parseLocation(location);
+
+    // Build search params
     const searchParams: any = {
+      ...(city ? { city } : {}),
+      ...(state ? { state } : {}),
+      ...(country ? { country } : {}),
       location,
       startDate: searchState?.startDate || "",
       endDate: searchState?.endDate || "",
@@ -146,7 +195,6 @@ export default function SearchScreen() {
       children: searchState?.children ? String(searchState.children) : "0",
       rooms: searchState?.rooms ? String(searchState.rooms) : "1",
       displayTravelers: searchState?.displayTravelers || "2 guests, 1 room",
-      // Add timestamp to force a fresh search (avoids caching issues with same parameters)
       _ts: timestamp.toString(),
     };
 

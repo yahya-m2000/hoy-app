@@ -13,7 +13,8 @@ import { router } from "expo-router";
 
 // Features
 import { useProperties } from "@features/host/hooks/useProperties";
-import { Property } from "@core/types/listings.types";
+import { host } from "@core/api/services";
+import { Property as HostProperty } from "@core/types/property.types";
 import PropertyListItem from "@features/host/components/listings/PropertyListItem";
 import EmptyState from "@features/host/components/listings/EmptyState";
 import LoadingState from "@features/host/components/listings/LoadingState";
@@ -23,24 +24,26 @@ import { useTheme } from "@core/hooks";
 // Shared Components
 import { Container, Header } from "@shared/components";
 import { spacing } from "src/core/design";
+import { useTranslation } from "react-i18next";
 
 export default function ListingsPage() {
+  const { t } = useTranslation();
   const { theme, isDark } = useTheme();
   const { properties, loading, error, refreshing, refresh, deleteProperty } =
     useProperties();
   const [deletingPropertyId, setDeletingPropertyId] = useState<string | null>(
     null
   );
-  const handlePropertyPress = (property: Property) => {
+  const handlePropertyPress = (property: HostProperty) => {
     router.push({
-      pathname: "/(tabs)/host/listings/property-details",
+      pathname: "/(tabs)/host/listings/details/",
       params: { id: property._id },
     });
   };
 
-  const handleEditProperty = (property: Property) => {
+  const handleEditProperty = (property: HostProperty) => {
     router.push({
-      pathname: "/(tabs)/host/listings/add-property",
+      pathname: "/(tabs)/host/listings/add/",
       params: {
         mode: "edit",
         propertyId: property._id,
@@ -50,7 +53,7 @@ export default function ListingsPage() {
 
   const HeaderAddButton = () => (
     <TouchableOpacity
-      onPress={() => router.push("/(tabs)/host/listings/add-property")}
+      onPress={() => router.push("/(tabs)/host/listings/add/")}
       style={{ padding: 8 }}
     >
       <Ionicons
@@ -61,7 +64,7 @@ export default function ListingsPage() {
     </TouchableOpacity>
   );
 
-  const handleDeleteProperty = (property: Property) => {
+  const handleDeleteProperty = (property: HostProperty) => {
     Alert.alert(
       "Delete Property",
       `Are you sure you want to delete "${property.name}"? This action cannot be undone.`,
@@ -91,16 +94,39 @@ export default function ListingsPage() {
       ]
     );
   };
-  const handleAddProperty = () => {
-    router.push("/(tabs)/host/listings/add-property");
+
+  const handleTogglePropertyStatus = async (property: HostProperty) => {
+    const action = property.isActive
+      ? t("property.options.deactivate")
+      : t("property.options.activate");
+    const newStatus = property.isActive ? "inactive" : "active";
+
+    try {
+      setDeletingPropertyId(property._id);
+      await host.HostPropertyService.updateStatus(property._id, newStatus);
+      Alert.alert(
+        t("common.success"),
+        t("property.options.statusUpdated", { action })
+      );
+      await refresh();
+    } catch (err) {
+      Alert.alert(t("common.error"), t("property.options.statusUpdateFailed"));
+    } finally {
+      setDeletingPropertyId(null);
+    }
   };
 
-  const renderProperty = ({ item }: { item: Property }) => (
+  const handleAddProperty = () => {
+    router.push("/(tabs)/host/listings/add/");
+  };
+
+  const renderProperty = ({ item }: { item: HostProperty }) => (
     <PropertyListItem
       property={item}
       onPress={() => handlePropertyPress(item)}
       onEdit={() => handleEditProperty(item)}
       onDelete={() => handleDeleteProperty(item)}
+      onToggleStatus={() => handleTogglePropertyStatus(item)}
       isDeleting={deletingPropertyId === item._id}
     />
   );
@@ -111,7 +137,7 @@ export default function ListingsPage() {
   return (
     <Container flex={1} backgroundColor="background">
       <Header
-        title="My Properties"
+        title={t("navigation.listings")}
         rightIcon="add"
         onRightPress={handleAddProperty}
       />

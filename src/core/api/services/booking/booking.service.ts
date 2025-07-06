@@ -40,7 +40,7 @@ const BOOKING_ENDPOINTS = {
   CHECK_OUT: (id: string) => `/bookings/${id}/check-out`,
   AVAILABILITY: "/bookings/check-availability",
   CALCULATE_PRICE: "/bookings/calculate-price",
-  BOOKED_DATES: (propertyId: string) => `/bookings/property/${propertyId}/booked-dates`,
+  BOOKED_DATES: (propertyId: string) => `/properties/${propertyId}/booked-dates`,
   REVIEW: (bookingId: string) => `/bookings/${bookingId}/review`,
 } as const;
 

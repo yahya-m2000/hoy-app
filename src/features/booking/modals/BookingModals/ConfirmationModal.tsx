@@ -11,7 +11,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // Context and hooks
 import { useToast } from "@core/context";
-import { useDateSelection } from "@features/calendar/context/DateSelectionContext";
+import { useCalendarDateSelection } from "@features/calendar/context/CalendarContext";
 import { useTranslation } from "react-i18next";
 import { useCurrentUser } from "@features/user/hooks";
 import { useTheme } from "@core/hooks";
@@ -68,7 +68,7 @@ export default function BookingConfirmationModal({
   const { t } = useTranslation();
   const { data: currentUser } = useCurrentUser();
   const { showToast } = useToast();
-  const { selectDatesForProperty } = useDateSelection();
+  const { selectDatesForProperty } = useCalendarDateSelection();
   const { theme, isDark } = useTheme();
   const insets = useSafeAreaInsets();
 

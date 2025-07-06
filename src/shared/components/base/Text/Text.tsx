@@ -15,11 +15,19 @@ import { text, getFontFamily } from "@core/design/typography";
 
 // Types
 import { BaseTextProps } from "./Text.types";
+import { spacing } from "src/core/design";
 
 const Text: React.FC<BaseTextProps> = ({
   children,
   variant = "body",
   size = "md",
+  margin,
+  marginBottom,
+  marginTop,
+  marginLeft,
+  marginRight,
+  marginHorizontal,
+  marginVertical,
   weight,
   color,
   align = "left",
@@ -138,6 +146,53 @@ const Text: React.FC<BaseTextProps> = ({
         return themeColors.primary || "#000000";
     }
   };
+  const getMargin = () => {
+    const marginStyles: any = {};
+
+    if (margin !== undefined) {
+      marginStyles.margin = getMarginValue(margin);
+    }
+    if (marginBottom !== undefined) {
+      marginStyles.marginBottom = getMarginValue(marginBottom);
+    }
+    if (marginTop !== undefined) {
+      marginStyles.marginTop = getMarginValue(marginTop);
+    }
+    if (marginLeft !== undefined) {
+      marginStyles.marginLeft = getMarginValue(marginLeft);
+    }
+    if (marginRight !== undefined) {
+      marginStyles.marginRight = getMarginValue(marginRight);
+    }
+    if (marginHorizontal !== undefined) {
+      marginStyles.marginHorizontal = getMarginValue(marginHorizontal);
+    }
+    if (marginVertical !== undefined) {
+      marginStyles.marginVertical = getMarginValue(marginVertical);
+    }
+
+    return marginStyles;
+  };
+  const getMarginValue = (
+    value: "none" | "sm" | "md" | "lg" | "xl" | "2xl"
+  ) => {
+    switch (value) {
+      case "none":
+        return 0;
+      case "sm":
+        return spacing.sm;
+      case "md":
+        return spacing.md;
+      case "lg":
+        return spacing.lg;
+      case "xl":
+        return spacing.xl;
+      case "2xl":
+        return spacing.xxl;
+      default:
+        return 0;
+    }
+  };
 
   return (
     <RNText
@@ -148,6 +203,7 @@ const Text: React.FC<BaseTextProps> = ({
           color: getDefaultColor(),
           textAlign: align,
         },
+        getMargin(),
         style,
       ]}
       numberOfLines={numberOfLines}

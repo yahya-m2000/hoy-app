@@ -28,15 +28,16 @@ export default function ListingsLayout() {
         }}
       />
       <Stack.Screen
-        name="property-details"
+        name="details/index"
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name="add-property"
+        name="add/index"
         options={{
           headerShown: false,
+          presentation: "fullScreenModal",
         }}
       />
     </Stack>

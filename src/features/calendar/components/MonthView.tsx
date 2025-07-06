@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   View,
   Text,
@@ -7,6 +13,7 @@ import {
   Dimensions,
   StyleSheet,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 import { MemoizedMonth } from "./MemoizedMonth";
 import { formatMonthName, getWeekdayHeaders } from "../utils/dateUtils";
 import {
@@ -28,6 +35,7 @@ const globalCache = {
   weekdayHeaders: null as string[] | null,
   screenDimensions: { width: 0, height: 0 },
   monthPositionsCacheKey: "",
+  loadingStates: new Map<string, boolean>(),
 };
 
 // Style cache to prevent recreation on every render
@@ -139,11 +147,16 @@ export const MonthView: React.FC<MonthViewProps> = ({
   propertyId,
 }) => {
   // ALL hooks must be called first, in the same order every time - before any early returns
+  const { t } = useTranslation();
   const themeResult = useTheme();
   const { currentHeaderMonthIndex, setCurrentHeaderMonthIndex } =
     useMonthNavigation(12);
   const scrollViewRef = useRef<ScrollView>(null);
   const { width: screenWidth } = Dimensions.get("window");
+
+  // Add state for async month data
+  const [months, setMonths] = useState<MonthViewData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Create a default fallback theme to prevent undefined access
   const fallbackTheme = {
@@ -159,29 +172,93 @@ export const MonthView: React.FC<MonthViewProps> = ({
   const styles = useMemo(
     () => createGlobalStyles(theme, screenWidth),
     [theme, screenWidth]
-  ); // Cache expensive calculations globally to avoid recreation
-  const months = useMemo(() => {
-    // Include propertyId in cache key to ensure fresh data when property changes
-    const cacheKey = `months-${propertyId || "all"}`;
+  );
 
-    if (
-      !globalCache.monthsData ||
-      globalCache.monthPositionsCacheKey !== cacheKey
-    ) {
-      const monthsArray = generateStableMonthsArray();
-      globalCache.monthsData = generateMonthsData(monthsArray, propertyId);
-      globalCache.monthPositionsCacheKey = cacheKey;
-    }
-    return globalCache.monthsData;
+  // Load month data asynchronously
+  useEffect(() => {
+    const loadMonthData = async () => {
+      const cacheKey = `months-${propertyId || "all"}`;
+
+      console.log("📋 MonthView: Loading month data", {
+        propertyId,
+        cacheKey,
+        currentMonth: currentMonth.toISOString(),
+      });
+
+      // Check if we're already loading this data
+      if (globalCache.loadingStates.get(cacheKey)) {
+        console.log("⏳ MonthView: Already loading, skipping...");
+        return;
+      }
+
+      // Check if we have cached data
+      if (
+        globalCache.monthsData &&
+        globalCache.monthPositionsCacheKey === cacheKey
+      ) {
+        console.log("✅ MonthView: Using cached month data", {
+          monthsCount: globalCache.monthsData.length,
+        });
+        setMonths(globalCache.monthsData);
+        setIsLoading(false);
+        return;
+      }
+
+      // Mark as loading
+      globalCache.loadingStates.set(cacheKey, true);
+      setIsLoading(true);
+      console.log("🔄 MonthView: Starting fresh data load...");
+
+      try {
+        const monthsArray = generateStableMonthsArray();
+        console.log("📅 MonthView: Generated months array", {
+          monthsCount: monthsArray.length,
+          firstMonth: monthsArray[0]?.toISOString(),
+          lastMonth: monthsArray[monthsArray.length - 1]?.toISOString(),
+        });
+
+        const monthData = await generateMonthsData(monthsArray, propertyId);
+        console.log("🎯 MonthView: Generated month data", {
+          monthDataCount: monthData.length,
+          sampleMonthBookings: monthData[0]?.bookings?.length || 0,
+        });
+
+        // Log each month's booking data
+        monthData.forEach((month, index) => {
+          if (month.bookings.length > 0) {
+            console.log(
+              `📊 Month ${index} (${month.month.toISOString()}) bookings:`,
+              month.bookings
+            );
+          }
+        });
+
+        // Cache the result
+        globalCache.monthsData = monthData;
+        globalCache.monthPositionsCacheKey = cacheKey;
+
+        setMonths(monthData);
+        console.log("✅ MonthView: Month data loaded successfully");
+      } catch (error) {
+        console.error("❌ MonthView: Error loading month data:", error);
+        setMonths([]);
+      } finally {
+        setIsLoading(false);
+        globalCache.loadingStates.set(cacheKey, false);
+      }
+    };
+
+    loadMonthData();
   }, [propertyId]);
 
-  // Cache weekday headers globally
+  // Cache weekday headers globally with translation
   const weekdayHeaders = useMemo(() => {
     if (!globalCache.weekdayHeaders) {
-      globalCache.weekdayHeaders = getWeekdayHeaders();
+      const headerKeys = getWeekdayHeaders();
+      globalCache.weekdayHeaders = headerKeys.map((key) => t(key));
     }
     return globalCache.weekdayHeaders;
-  }, []);
+  }, [t]);
 
   // Calculate dimensions once and cache them
   const dimensions = useMemo(() => {
@@ -289,7 +366,16 @@ export const MonthView: React.FC<MonthViewProps> = ({
     );
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Loading theme...</Text>
+        <Text>{t("calendar.loading.theme")}</Text>
+      </View>
+    );
+  }
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>{t("calendar.loading.calendar")}</Text>
       </View>
     );
   }
@@ -303,7 +389,16 @@ export const MonthView: React.FC<MonthViewProps> = ({
     console.warn("MonthView: Invalid currentMonth provided", currentMonth);
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Invalid date provided</Text>
+        <Text>{t("calendar.loading.invalidDate")}</Text>
+      </View>
+    );
+  }
+
+  // Handle empty months array
+  if (!months || months.length === 0) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>{t("calendar.loading.noData")}</Text>
       </View>
     );
   }
@@ -314,12 +409,24 @@ export const MonthView: React.FC<MonthViewProps> = ({
       {!hideHeader && (
         <View style={styles.header}>
           <TouchableOpacity onPress={onBackPress} style={styles.backButton}>
-            <Text style={styles.backButtonText}>← Year View</Text>
+            <Text style={styles.backButtonText}>
+              {t("calendar.navigation.backToYearView")}
+            </Text>
           </TouchableOpacity>
           <Text style={styles.headerTitle}>
-            {formatMonthName(
-              months[currentHeaderMonthIndex]?.month || currentMonth
-            )}
+            {(() => {
+              const monthKey = formatMonthName(
+                months[currentHeaderMonthIndex]?.month || currentMonth
+              );
+              // Extract the translation key and year from the formatMonthName result
+              const parts = monthKey.split(" ");
+              if (parts.length >= 2) {
+                const translationKey = parts[0];
+                const year = parts[1];
+                return `${t(translationKey)} ${year}`;
+              }
+              return monthKey;
+            })()}
           </Text>
           <View />
         </View>

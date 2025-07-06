@@ -1,5 +1,6 @@
 import React, { memo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useTranslation } from "react-i18next";
 import { iconSize, fontSize, fontWeight, spacing, radius } from "@core/design";
 
 import { useTheme } from "@core/hooks";
@@ -14,12 +15,16 @@ interface PropertyHeaderProps {
 
 const PropertyHeader: React.FC<PropertyHeaderProps> = memo(
   ({
-    propertyName = "House",
+    propertyName,
     propertyType = "house",
     onPress,
     showDropdownIndicator = true,
   }) => {
+    const { t } = useTranslation();
     const { theme } = useTheme();
+
+    // Use translation for default property name if not provided
+    const displayPropertyName = propertyName || t("property.defaultName");
 
     return (
       <TouchableOpacity
@@ -46,7 +51,7 @@ const PropertyHeader: React.FC<PropertyHeaderProps> = memo(
           numberOfLines={1}
           ellipsizeMode="tail"
         >
-          {propertyName}
+          {displayPropertyName}
         </Text>
         {/* Dropdown Indicator */}
         {showDropdownIndicator && (

@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
+import { useHostProperties } from "@features/properties/hooks";
+import { Property as APIProperty } from "@core/types/property.types";
 
 export interface Property {
   id: string;
@@ -12,7 +14,7 @@ export interface Property {
 interface PropertyContextType {
   selectedProperty: Property | null;
   properties: Property[];
-  setSelectedProperty: (property: Property) => void;
+  setSelectedProperty: (property: Property | null) => void;
   getPropertyById: (id: string) => Property | undefined;
   isLoading: boolean;
 }
@@ -21,53 +23,69 @@ const PropertyContext = createContext<PropertyContextType | undefined>(
   undefined
 );
 
-// Mock properties data - in real app this would come from API
-const mockProperties: Property[] = [
-  {
-    id: "6841de513b269513a6e77fb5",
-    name: "Modern Williamsburg Loft",
-    address: "501 Bedford Ave, Brooklyn, NY 11211",
-    type: "loft",
-    images: ["https://example.com/williamsburg1.jpg"],
-    isActive: true,
-  },
-  {
-    id: "6841de513b269513a6e77fb6",
-    name: "Cozy Downtown Studio",
-    address: "123 Main St, New York, NY 10001",
-    type: "apartment",
-    images: ["https://example.com/studio1.jpg"],
-    isActive: true,
-  },
-  {
-    id: "6841de513b269513a6e77fb7",
-    name: "Luxury Manhattan Penthouse",
-    address: "789 Fifth Ave, New York, NY 10022",
-    type: "penthouse",
-    images: ["https://example.com/penthouse1.jpg"],
-    isActive: true,
-  },
-  {
-    id: "6841de513b269513a6e77fb8",
-    name: "Brooklyn Heights Brownstone",
-    address: "456 Remsen St, Brooklyn, NY 11201",
-    type: "house",
-    images: ["https://example.com/brownstone1.jpg"],
-    isActive: true,
-  },
-];
+/**
+ * Transform API Property to Calendar Property interface
+ */
+const transformAPIProperty = (apiProperty: APIProperty): Property => {
+  return {
+    id: apiProperty._id,
+    name: apiProperty.name,
+    address:
+      `${apiProperty.address?.street || ""} ${
+        apiProperty.address?.city || ""
+      } ${apiProperty.address?.state || ""}`.trim() || "Address not available",
+    type: apiProperty.type,
+    images: apiProperty.images || [],
+    isActive: apiProperty.isActive,
+  };
+};
 
 export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const { properties: apiProperties, loading: isLoading } = useHostProperties();
   const [selectedProperty, setSelectedPropertyState] =
-    useState<Property | null>(
-      mockProperties[0] // Default to first property
-    );
-  const [properties] = useState<Property[]>(mockProperties);
-  const [isLoading] = useState(false);
+    useState<Property | null>(null);
 
-  const setSelectedProperty = useCallback((property: Property) => {
+  console.log("🏢 PropertyProvider: State update", {
+    apiPropertiesCount: apiProperties.length,
+    isLoading,
+    selectedProperty: selectedProperty?.id,
+    apiProperties: apiProperties.map((p) => ({
+      id: p._id,
+      name: p.name,
+      isActive: p.isActive,
+    })),
+  });
+
+  // Transform API properties to calendar properties - only active properties
+  const properties = apiProperties
+    .filter((property) => property.isActive) // Only show active properties
+    .map(transformAPIProperty);
+
+  console.log("🔄 PropertyProvider: Transformed properties", {
+    filteredCount: properties.length,
+    transformedProperties: properties.map((p) => ({ id: p.id, name: p.name })),
+  });
+
+  // Set default selected property when properties are loaded
+  React.useEffect(() => {
+    console.log("🎯 PropertyProvider: Effect for default selection", {
+      propertiesLength: properties.length,
+      hasSelectedProperty: !!selectedProperty,
+      firstProperty: properties[0]?.id,
+    });
+
+    if (properties.length > 0 && !selectedProperty) {
+      console.log(
+        "✅ PropertyProvider: Setting default selected property",
+        properties[0]
+      );
+      setSelectedPropertyState(properties[0]);
+    }
+  }, [properties]); // Removed selectedProperty dependency to prevent conflicts
+
+  const setSelectedProperty = useCallback((property: Property | null) => {
     setSelectedPropertyState(property);
   }, []);
 

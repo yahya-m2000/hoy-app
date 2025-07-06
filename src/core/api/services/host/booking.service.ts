@@ -26,16 +26,28 @@ export const fetchHostBookings = async (
   totalPages: number;
 }> => {
   try {
-    const response = await api.get<{
-      success: boolean;
-      data: {
-        bookings: PopulatedBooking[];
-        total: number;
-        page: number;
-        totalPages: number;
-      };
-    }>("/host/bookings", { params: filters });
-    return response.data.data;
+    const response = await api.get<any>("/host/reservations", { params: filters });
+    const respData = response.data.data;
+    let bookings: PopulatedBooking[] = [];
+    let total = 0;
+    let page = 1;
+    let totalPages = 1;
+
+    if (Array.isArray(respData)) {
+      // New API format: data is array, pagination separate field
+      bookings = respData;
+      total = response.data.pagination?.total || respData.length;
+      page = response.data.pagination?.page || 1;
+      totalPages = response.data.pagination?.pages || 1;
+    } else if (respData && typeof respData === "object") {
+      // Legacy/alternative format: data has bookings object
+      bookings = respData.bookings || [];
+      total = respData.total || bookings.length;
+      page = respData.page || 1;
+      totalPages = respData.totalPages || 1;
+    }
+
+    return { bookings, total, page, totalPages };
   } catch (error) {
     logErrorWithContext("fetchHostBookings", error);
     throw error;
@@ -52,7 +64,7 @@ export const fetchBookingsByDate = async (
     const response = await api.get<{
       success: boolean;
       data: PopulatedBooking[];
-    }>(`/host/bookings/date/${date}`);
+    }>(`/host/reservations/date/${date}`);
     return response.data.data;
   } catch (error) {
     logErrorWithContext("fetchBookingsByDate", error);
@@ -69,7 +81,7 @@ export const fetchBookingsForDateRange = async (
 ): Promise<BookingsByDate> => {
   try {
     const response = await api.get<{ success: boolean; data: BookingsByDate }>(
-      "/host/bookings/date-range",
+      "/host/reservations/date-range",
       {
         params: { startDate, endDate },
       }
@@ -89,7 +101,7 @@ export const fetchTodayBookings = async (): Promise<TodayBookings> => {
     const response = await api.get<{
       success: boolean;
       data: TodayBookings;
-    }>("/host/bookings/today");
+    }>("/host/reservations/today");
     return response.data.data;
   } catch (error) {
     logErrorWithContext("fetchTodayBookings", error);
@@ -103,7 +115,7 @@ export const fetchTodayBookings = async (): Promise<TodayBookings> => {
 export const fetchBookingDashboardStats = async (): Promise<BookingDashboardStats> => {
   try {
     const response = await api.get<{ success: boolean; data: BookingDashboardStats }>(
-      "/host/dashboard/stats"
+      "/host/dashboard/"
     );
     return response.data.data;
   } catch (error) {
@@ -121,7 +133,7 @@ export const updateBookingStatus = async (
 ): Promise<Booking> => {
   try {
     const response = await api.patch<{ success: boolean; data: Booking }>(
-      `/host/bookings/${bookingId}/status`,
+      `/host/reservations/${bookingId}/status`,
       { status }
     );
     return response.data.data;
@@ -138,11 +150,13 @@ export const fetchHostBooking = async (
   bookingId: string
 ): Promise<PopulatedBooking> => {
   try {
-    const response = await api.get<{
-      success: boolean;
-      data: PopulatedBooking;
-    }>(`/host/bookings/${bookingId}`);
-    return response.data.data;
+    const response = await api.get<any>(`/host/reservations/${bookingId}`);
+    // Some API versions return { success, data }, others return the object directly
+    const respData = response.data;
+    const booking: PopulatedBooking = respData && typeof respData === "object" && "data" in respData
+      ? respData.data
+      : respData;
+    return booking as PopulatedBooking;
   } catch (error) {
     logErrorWithContext("fetchHostBooking", error);
     throw error;

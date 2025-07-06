@@ -18,6 +18,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@core/hooks";
 import { useUserRole } from "@core/context";
 
+// Components
+// (RoleChangeLoadingOverlay handled at root level)
+
 const TravelerLayout = () => {
   const { t } = useTranslation();
   const { theme, isDark } = useTheme();
@@ -131,127 +134,133 @@ const TravelerLayout = () => {
     return <Redirect href="/(tabs)/host/today" />;
   }
 
-  // Show nothing while loading to avoid flicker
-  if (isRoleLoading) {
-    return null;
-  }
   return (
-    <Tabs
-      initialRouteName="home"
-      screenOptions={{
-        animation: "fade",
-        tabBarActiveTintColor: theme.colors.primaryPalette[500],
-        tabBarInactiveTintColor: isDark
-          ? theme.colors.gray[400]
-          : theme.colors.gray[500],
-        tabBarStyle: [
-          {
-            backgroundColor: theme.background,
-            borderTopColor: isDark
-              ? theme.colors.gray[800]
-              : theme.colors.gray[200],
-            height: tabBarHeight,
-            paddingBottom: insets.bottom,
-            position: "absolute",
+    <>
+      <Tabs
+        initialRouteName="home"
+        screenOptions={{
+          animation: "fade",
+          tabBarActiveTintColor: theme.colors.primary,
+          tabBarInactiveTintColor: isDark
+            ? theme.colors.gray[400]
+            : theme.colors.gray[500],
+          tabBarStyle: [
+            {
+              backgroundColor: theme.background,
+              borderTopColor: isDark
+                ? theme.colors.gray[800]
+                : theme.colors.gray[200],
+              height: tabBarHeight,
+              paddingBottom: insets.bottom,
+              position: "absolute",
+            },
+            {
+              transform: [{ translateY: tabBarTranslateY }],
+            },
+          ],
+          tabBarShowLabel: true,
+          tabBarLabelStyle: {
+            fontSize: 12,
+            fontWeight: "500",
           },
-          {
-            transform: [{ translateY: tabBarTranslateY }],
+          tabBarHideOnKeyboard: true,
+          headerStyle: {
+            backgroundColor: isDark ? theme.colors.gray[900] : theme.white,
           },
-        ],
-        tabBarShowLabel: true,
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: "500",
-        },
-        tabBarHideOnKeyboard: true,
-        headerStyle: {
-          backgroundColor: isDark ? theme.colors.gray[900] : theme.white,
-        },
-        headerTintColor: isDark ? theme.white : theme.colors.gray[900],
-        headerShadowVisible: false,
-      }}
-      screenListeners={{
-        state: (e) => {
-          // Check if we should hide the tab bar based on current navigation state
-          const shouldHide = isOnPropertyDetailsScreen(e.data.state);
-          animateTabBar(shouldHide);
-        },
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          href: null, // This completely hides the tab from the tab bar
-          headerShown: false,
+          headerTintColor: isDark ? theme.white : theme.colors.gray[900],
+          headerShadowVisible: false,
         }}
-      />
-      <Tabs.Screen
-        name="home"
-        options={{
-          title: t("navigation.home"),
-          tabBarLabel: t("navigation.home"),
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <AnimatedTabIcon name="home-outline" size={size} color={color} />
-          ),
+        screenListeners={{
+          state: (e) => {
+            // Check if we should hide the tab bar based on current navigation state
+            const shouldHide = isOnPropertyDetailsScreen(e.data.state);
+            animateTabBar(shouldHide);
+          },
         }}
-      />
-      <Tabs.Screen
-        name="search"
-        options={{
-          title: t("navigation.search"),
-          tabBarLabel: t("navigation.search"),
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <AnimatedTabIcon name="search-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="bookings"
-        options={{
-          title: t("navigation.bookings"),
-          tabBarLabel: t("navigation.bookings"),
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <AnimatedTabIcon
-              name="calendar-outline"
-              size={size}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="wishlist"
-        options={{
-          title: t("navigation.wishlist"),
-          tabBarLabel: t("navigation.wishlist"),
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <AnimatedTabIcon name="heart-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="properties"
-        options={{
-          href: null, // This completely hides the tab from the tab bar
-          headerShown: false,
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: t("navigation.profile"),
-          tabBarLabel: t("navigation.profile"),
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <AnimatedTabIcon name="person-outline" size={size} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
+      >
+        <Tabs.Screen
+          name="index"
+          options={{
+            href: null, // This completely hides the tab from the tab bar
+            headerShown: false,
+          }}
+        />
+        <Tabs.Screen
+          name="home"
+          options={{
+            title: t("navigation.home"),
+            tabBarLabel: t("navigation.home"),
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <AnimatedTabIcon name="home-outline" size={size} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="search"
+          options={{
+            title: t("navigation.search"),
+            tabBarLabel: t("navigation.search"),
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <AnimatedTabIcon
+                name="search-outline"
+                size={size}
+                color={color}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="bookings"
+          options={{
+            title: t("navigation.bookings"),
+            tabBarLabel: t("navigation.bookings"),
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <AnimatedTabIcon
+                name="calendar-outline"
+                size={size}
+                color={color}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="wishlist"
+          options={{
+            title: t("navigation.wishlist"),
+            tabBarLabel: t("navigation.wishlist"),
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <AnimatedTabIcon name="heart-outline" size={size} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="properties"
+          options={{
+            href: null, // This completely hides the tab from the tab bar
+            headerShown: false,
+          }}
+        />
+        <Tabs.Screen
+          name="profile"
+          options={{
+            title: t("navigation.profile"),
+            tabBarLabel: t("navigation.profile"),
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <AnimatedTabIcon
+                name="person-outline"
+                size={size}
+                color={color}
+              />
+            ),
+          }}
+        />
+      </Tabs>
+    </>
   );
 };
 

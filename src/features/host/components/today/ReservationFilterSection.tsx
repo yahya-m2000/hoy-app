@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
 import { spacing } from "@core/design";
 import FilterTabs, { FilterType } from "./FilterTabs";
 import { Reservation } from "./ReservationCard";
@@ -14,7 +15,7 @@ interface ReservationFilterSectionProps {
 
 // Helper function to categorize reservations by status
 const categorizeReservations = (reservations: Reservation[]) => {
-  const now = new Date(); 
+  const now = new Date();
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const tomorrowStart = new Date(todayStart.getTime() + 24 * 60 * 60 * 1000);
 
@@ -24,11 +25,25 @@ const categorizeReservations = (reservations: Reservation[]) => {
     arrivingSoon: [] as Reservation[],
     upcoming: [] as Reservation[],
     pendingReview: [] as Reservation[],
+    pending: [] as Reservation[],
+    cancelled: [] as Reservation[],
   };
 
   reservations.forEach((reservation) => {
     const checkIn = new Date(reservation.checkIn);
     const checkOut = new Date(reservation.checkOut);
+
+    // Handle cancelled and pending first
+    if (reservation.status === "cancelled") {
+      categories.cancelled.push(reservation);
+      return;
+    }
+
+    if (reservation.status === "pending") {
+      categories.pending.push(reservation);
+      return;
+    }
+
     if (reservation.status === "active") {
       // Checking out today
       if (checkOut >= todayStart && checkOut < tomorrowStart) {
@@ -63,6 +78,7 @@ const ReservationFilterSection: React.FC<ReservationFilterSectionProps> = ({
   noPaddingHorizontal = false,
   showFilterTabs = true,
 }) => {
+  const { t } = useTranslation();
   const categorizedReservations = categorizeReservations(reservations);
 
   // Calculate counts for tabs
@@ -73,6 +89,8 @@ const ReservationFilterSection: React.FC<ReservationFilterSectionProps> = ({
     arrivingSoon: categorizedReservations.arrivingSoon.length,
     upcoming: categorizedReservations.upcoming.length,
     pendingReview: categorizedReservations.pendingReview.length,
+    pending: categorizedReservations.pending.length,
+    cancelled: categorizedReservations.cancelled.length,
   });
 
   const tabCounts = getTabCounts();
@@ -85,27 +103,45 @@ const ReservationFilterSection: React.FC<ReservationFilterSectionProps> = ({
     <View style={styles.filterTabsContainer}>
       <FilterTabs
         tabs={[
-          { key: "all", label: "All", count: tabCounts.all },
+          {
+            key: "all",
+            label: t("host.today.filters.all"),
+            count: tabCounts.all,
+          },
+          {
+            key: "pending",
+            label: t("host.today.filters.pending"),
+            count: tabCounts.pending,
+          },
           {
             key: "checkingOut",
-            label: "Checking out",
+            label: t("host.today.filters.checkingOut"),
             count: tabCounts.checkingOut,
           },
           {
             key: "currentlyHosting",
-            label: "Currently hosting",
+            label: t("host.today.filters.currentlyHosting"),
             count: tabCounts.currentlyHosting,
           },
           {
             key: "arrivingSoon",
-            label: "Arriving soon",
+            label: t("host.today.filters.arrivingSoon"),
             count: tabCounts.arrivingSoon,
           },
-          { key: "upcoming", label: "Upcoming", count: tabCounts.upcoming },
+          {
+            key: "upcoming",
+            label: t("host.today.filters.upcoming"),
+            count: tabCounts.upcoming,
+          },
           {
             key: "pendingReview",
-            label: "Pending review",
+            label: t("host.today.filters.pendingReview"),
             count: tabCounts.pendingReview,
+          },
+          {
+            key: "cancelled",
+            label: t("host.today.filters.cancelled"),
+            count: tabCounts.cancelled,
           },
         ]}
         activeFilter={activeFilter}

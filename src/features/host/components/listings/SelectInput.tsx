@@ -1,13 +1,9 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Modal,
-  FlatList,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { TouchableOpacity, Modal, FlatList } from "react-native";
+import { Container, Text, Icon } from "@shared/components";
+import { spacing, iconSize } from "@core/design";
+import { useTheme } from "@core/hooks";
 
 interface Option {
   label: string;
@@ -26,12 +22,13 @@ export default function SelectInput({
   value,
   onValueChange,
   options,
-  placeholder = 'Select an option',
+  placeholder = "Select an option",
   error = false,
 }: SelectInputProps) {
+  const { t } = useTranslation();
   const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const selectedOption = options.find(option => option.value === value);
+  const { theme } = useTheme();
+  const selectedOption = options.find((option) => option.value === value);
 
   const handleSelect = (selectedValue: string) => {
     onValueChange(selectedValue);
@@ -39,15 +36,33 @@ export default function SelectInput({
   };
 
   return (
-    <View>
+    <Container>
       <TouchableOpacity
-        style={[styles.selector, error && styles.selectorError]}
         onPress={() => setIsModalVisible(true)}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          borderWidth: 1,
+          borderColor: error ? "#FF6B6B" : "#E5E7EB",
+          borderRadius: 8,
+          padding: spacing.md,
+          backgroundColor: "#FFFFFF",
+          minHeight: 56,
+        }}
       >
-        <Text style={[styles.selectorText, !selectedOption && styles.placeholderText]}>
+        <Text
+          variant="body"
+          color={selectedOption ? "onSurface" : "onSurfaceVariant"}
+          style={{ flex: 1 }}
+        >
           {selectedOption ? selectedOption.label : placeholder}
         </Text>
-        <Ionicons name="chevron-down" size={20} color="#666" />
+        <Icon
+          name="chevron-down"
+          size={iconSize.sm}
+          color={theme.text.primary}
+        />
       </TouchableOpacity>
 
       <Modal
@@ -55,114 +70,78 @@ export default function SelectInput({
         animationType="slide"
         presentationStyle="pageSheet"
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalHeader}>
+        <Container flex={1} backgroundColor="background">
+          {/* Modal Header */}
+          <Container
+            flexDirection="row"
+            alignItems="center"
+            justifyContent="space-between"
+            padding="lg"
+            style={{
+              borderBottomWidth: 1,
+              borderBottomColor: "#E5E7EB",
+            }}
+          >
             <TouchableOpacity
-              style={styles.modalCloseButton}
               onPress={() => setIsModalVisible(false)}
+              style={{ padding: spacing.xs }}
             >
-              <Text style={styles.modalCloseText}>Cancel</Text>
+              <Text variant="body" color="primary">
+                {t("common.cancel")}
+              </Text>
             </TouchableOpacity>
-            <Text style={styles.modalTitle}>Select Option</Text>
-            <View style={styles.modalSpacer} />
-          </View>
 
+            <Text variant="h4" color="onBackground">
+              {t("common.selectOption")}
+            </Text>
+
+            <Container style={{ width: 60 }}>
+              <></>
+            </Container>
+          </Container>
+
+          {/* Options List */}
           <FlatList
             data={options}
             keyExtractor={(item) => item.value}
+            contentContainerStyle={{ paddingBottom: spacing.xxl }}
             renderItem={({ item }) => (
               <TouchableOpacity
-                style={[
-                  styles.optionItem,
-                  item.value === value && styles.selectedOptionItem
-                ]}
                 onPress={() => handleSelect(item.value)}
+                style={{
+                  backgroundColor:
+                    item.value === value ? "#F0F8FF" : "transparent",
+                }}
               >
-                <Text style={[
-                  styles.optionText,
-                  item.value === value && styles.selectedOptionText
-                ]}>
-                  {item.label}
-                </Text>
-                {item.value === value && (
-                  <Ionicons name="checkmark" size={20} color="#007AFF" />
-                )}
+                <Container
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  padding="lg"
+                  style={{
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#F3F4F6",
+                  }}
+                >
+                  <Text
+                    variant="body"
+                    color={item.value === value ? "primary" : "onBackground"}
+                    style={{
+                      flex: 1,
+                      fontWeight: item.value === value ? "600" : "400",
+                    }}
+                  >
+                    {item.label}
+                  </Text>
+                  {item.value === value && (
+                    <Icon name="checkmark" size={iconSize.md} color="#007AFF" />
+                  )}
+                </Container>
               </TouchableOpacity>
             )}
           />
-        </View>
+        </Container>
       </Modal>
-    </View>
+    </Container>
   );
 }
-
-const styles = StyleSheet.create({
-  selector: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  selectorError: {
-    borderColor: '#FF6B6B',
-  },
-  selectorText: {
-    fontSize: 16,
-    color: '#333',
-    flex: 1,
-  },
-  placeholderText: {
-    color: '#999',
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  modalCloseButton: {
-    padding: 4,
-  },
-  modalCloseText: {
-    color: '#007AFF',
-    fontSize: 16,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
-  },
-  modalSpacer: {
-    width: 60, // Balance the header
-  },
-  optionItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  selectedOptionItem: {
-    backgroundColor: '#f0f8ff',
-  },
-  optionText: {
-    fontSize: 16,
-    color: '#333',
-    flex: 1,
-  },
-  selectedOptionText: {
-    color: '#007AFF',
-    fontWeight: '600',
-  },
-});

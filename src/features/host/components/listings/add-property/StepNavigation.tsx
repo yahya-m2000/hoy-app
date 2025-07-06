@@ -1,186 +1,137 @@
-import React from 'react';
+import React from "react";
 import {
   View,
-  Text,
-  TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
-} from 'react-native';
+  TouchableOpacity,
+} from "react-native";
+import { Container, Button, Text } from "@shared/components";
+import { spacing } from "@core/design";
+import { useTheme } from "@core/hooks";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface StepNavigationProps {
-  currentStep: number;
-  totalSteps: number;
   onNext: () => void;
   onPrev: () => void;
-  onSubmit: () => void;
+  onSubmit?: () => void;
   onCancel: () => void;
   loading?: boolean;
-  isEditMode?: boolean;
+  isFirstStep?: boolean;
+  isLastStep?: boolean;
+  isReviewStep?: boolean;
+  nextLabel?: string;
+  prevLabel?: string;
+  hasErrors?: boolean;
+  isSuccessStep?: boolean;
+  onSuccess?: () => void;
 }
 
 export default function StepNavigation({
-  currentStep,
-  totalSteps,
   onNext,
   onPrev,
   onSubmit,
   onCancel,
   loading = false,
-  isEditMode = false,
+  isFirstStep = false,
+  isLastStep = false,
+  isReviewStep = false,
+  nextLabel = "Next",
+  prevLabel = "Back",
+  hasErrors = false,
+  isSuccessStep = false,
+  onSuccess,
 }: StepNavigationProps) {
-  const isFirstStep = currentStep === 1;
-  const isLastStep = currentStep === totalSteps;
+  const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
+
+  const isNextDisabled = hasErrors || loading;
 
   return (
-    <View style={styles.container}>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[styles.button, styles.cancelButton]}
-          onPress={onCancel}
-          disabled={loading}
-        >
-          <Text style={styles.cancelButtonText}>Cancel</Text>
-        </TouchableOpacity>
-
-        <View style={styles.rightButtons}>
-          {!isFirstStep && (
-            <TouchableOpacity
-              style={[styles.button, styles.prevButton]}
-              onPress={onPrev}
-              disabled={loading}
-            >
-              <Text style={styles.prevButtonText}>Previous</Text>
-            </TouchableOpacity>
-          )}
-
-          {isLastStep ? (
-            <TouchableOpacity
-              style={[styles.button, styles.submitButton, loading && styles.disabledButton]}
-              onPress={onSubmit}
-              disabled={loading}
-            >
-              {loading ? (
-                <ActivityIndicator size="small" color="#fff" />
-              ) : (
-                <Text style={styles.submitButtonText}>
-                  {isEditMode ? 'Update Property' : 'Create Property'}
-                </Text>
-              )}
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={[styles.button, styles.nextButton]}
-              onPress={onNext}
-              disabled={loading}
-            >
-              <Text style={styles.nextButtonText}>Next</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      </View>
-
-      {/* Progress indicator */}
-      <View style={styles.progressContainer}>
-        <Text style={styles.progressText}>
-          Step {currentStep} of {totalSteps}
-        </Text>
-        <View style={styles.progressBar}>
-          <View 
-            style={[
-              styles.progressFill,
-              { width: `${(currentStep / totalSteps) * 100}%` }
-            ]} 
+    <Container
+      style={[styles.container, { paddingBottom: insets.bottom + 20 }]}
+      backgroundColor="background"
+    >
+      <View style={styles.navigationButtons}>
+        {!isFirstStep && (
+          <Button
+            title={prevLabel}
+            variant="outline"
+            onPress={onPrev}
+            style={styles.navButton}
+            disabled={loading}
           />
-        </View>
+        )}
+
+        {isReviewStep && onSubmit ? (
+          <Button
+            title="Publish"
+            variant="primary"
+            onPress={onSubmit}
+            style={isFirstStep ? styles.fullWidthButton : styles.navButton}
+            loading={loading}
+          />
+        ) : (
+          <Button
+            title={isLastStep ? "Review" : nextLabel}
+            variant="primary"
+            onPress={onNext}
+            style={isFirstStep ? styles.fullWidthButton : styles.navButton}
+            disabled={isNextDisabled}
+          />
+        )}
       </View>
-    </View>
+
+      <Container paddingTop="sm" alignItems="center">
+        <TouchableOpacity onPress={onCancel} disabled={loading}>
+          <Text
+            variant="body"
+            color="primary"
+            style={{ textDecorationLine: "underline" }}
+          >
+            Save & Exit
+          </Text>
+        </TouchableOpacity>
+      </Container>
+
+      {isSuccessStep && onSuccess && (
+        <TouchableOpacity
+          style={[styles.button, styles.successButton]}
+          onPress={onSuccess}
+        >
+          <Text style={styles.successButtonText}>View Your Listing</Text>
+        </TouchableOpacity>
+      )}
+    </Container>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
-    paddingTop: 16,
-    paddingBottom: 32,
-    paddingHorizontal: 20,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.lg,
     borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
+    borderTopColor: "rgba(0,0,0,0.05)",
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
+  navigationButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: spacing.sm,
   },
-  rightButtons: {
-    flexDirection: 'row',
-    gap: 12,
+  navButton: {
+    flex: 1,
+  },
+  fullWidthButton: {
+    flex: 1,
   },
   button: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    minWidth: 80,
-    alignItems: 'center',
+    flex: 1,
+    marginHorizontal: spacing.xs,
   },
-  cancelButton: {
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: '#ccc',
+  successButton: {
+    // Add appropriate styles for success button
   },
-  cancelButtonText: {
-    color: '#666',
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  prevButton: {
-    backgroundColor: '#f8f9fa',
-    borderWidth: 1,
-    borderColor: '#dee2e6',
-  },
-  prevButtonText: {
-    color: '#333',
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  nextButton: {
-    backgroundColor: '#007AFF',
-  },
-  nextButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  submitButton: {
-    backgroundColor: '#4CAF50',
-    minWidth: 140,
-  },
-  submitButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  disabledButton: {
-    backgroundColor: '#ccc',
-  },
-  progressContainer: {
-    alignItems: 'center',
-  },
-  progressText: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 8,
-  },
-  progressBar: {
-    width: '100%',
-    height: 4,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 2,
-    overflow: 'hidden',
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#007AFF',
-    borderRadius: 2,
+  successButtonText: {
+    // Add appropriate styles for success button text
   },
 });

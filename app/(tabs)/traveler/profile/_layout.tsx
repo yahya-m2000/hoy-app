@@ -11,6 +11,15 @@ export default function AccountLayout() {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="language" options={{ headerShown: false }} />
+      <Stack.Screen name="personal-info" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="[setting]"
+        options={{
+          headerShown: false,
+          presentation: "fullScreenModal",
+          animation: "fade",
+        }}
+      />
     </Stack>
   );
 }

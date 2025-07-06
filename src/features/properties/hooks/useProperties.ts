@@ -38,7 +38,19 @@ const transformPropertyData = (apiProperty: any): PropertyType => {
     type: apiProperty.type || "apartment",
     propertyType: apiProperty.propertyType || "entire_place",
     description: apiProperty.description || "",
-    status: apiProperty.status || "active",
+    status: apiProperty.status || "published",
+    // Add missing required fields
+    guestAccessType: apiProperty.guestAccessType || "entire_place",
+    hostType: apiProperty.hostType || "individual",
+    tags: apiProperty.tags || [],
+    weekdayPrice: apiProperty.weekdayPrice || apiProperty.price?.amount || apiProperty.price || 0,
+    weekendPrice: apiProperty.weekendPrice || apiProperty.price?.amount || apiProperty.price || 0,
+    discounts: apiProperty.discounts || {
+      newListingPromo: false,
+      lastMinuteDiscount: false,
+      weeklyDiscount: { enabled: false, percentage: 0 },
+      monthlyDiscount: { enabled: false, percentage: 0 },
+    },
     images: apiProperty.photos || apiProperty.images || [], // Check both photos and images arrays
     price:
       typeof (apiProperty.price || price) === "object"
@@ -71,9 +83,9 @@ const transformPropertyData = (apiProperty: any): PropertyType => {
     isSuperHost: apiProperty.isSuperHost || false, // Use provided value if available
     isWishlisted: apiProperty.isWishlisted || false, // Use provided value if available
     amenities: apiProperty.commonAmenities || apiProperty.amenities || [],
-    bedrooms: apiProperty.units?.[0]?.bedrooms || 1,
-    beds: apiProperty.units?.[0]?.beds || 1,
-    bathrooms: apiProperty.units?.[0]?.bathrooms || 1,
+    bedrooms: apiProperty.units?.[0]?.bedrooms || apiProperty.bedrooms || 1,
+    beds: apiProperty.units?.[0]?.beds || apiProperty.beds || 1,
+    bathrooms: apiProperty.units?.[0]?.bathrooms || apiProperty.bathrooms || 1,
     maxGuests: apiProperty.maxGuests || apiProperty.units?.[0]?.maxGuests || 2,
     host:
       typeof apiProperty.host === "object"

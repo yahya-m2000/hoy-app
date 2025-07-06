@@ -131,7 +131,7 @@ export const CircuitBreakerMonitor: React.FC<CircuitBreakerMonitorProps> = ({
       case CircuitBreakerState.OPEN:
         return "#ef4444"; // red
       default:
-        return "#6b7280"; // gray
+        return theme.colors.primary; // gray
     }
   };
 

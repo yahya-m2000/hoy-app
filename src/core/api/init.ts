@@ -17,7 +17,7 @@ const initializeAPI = async () => {
     // Add a logger message showing the platform info
     logger.log(`[API INIT] Initializing API for platform: ${Platform.OS}`);
 
-    // Set up API interceptors for token refresh and error handling
+    // Set up API interceptors for token refresh and error handling (SYNCHRONOUS)
     setupApiInterceptors();
     logger.log("[API INIT] API interceptors initialized successfully");
 
@@ -51,7 +51,20 @@ const initializeAPI = async () => {
   }
 };
 
-// Initialize immediately
+// ========================================
+// IMMEDIATE INITIALIZATION
+// ========================================
+
+// Initialize interceptors immediately (synchronous)
+try {
+  logger.log(`[API INIT] Immediate initialization for platform: ${Platform.OS}`);
+  setupApiInterceptors();
+  logger.log("[API INIT] ✅ API interceptors initialized immediately");
+} catch (error) {
+  logger.error("[API INIT] ❌ Failed to initialize API interceptors immediately", error);
+}
+
+// Initialize the rest asynchronously
 const initResult = initializeAPI();
 
 export default initResult;

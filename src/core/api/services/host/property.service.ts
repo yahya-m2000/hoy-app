@@ -240,13 +240,14 @@ export class HostPropertyService {
    * @returns Promise<Property> - Updated property
    * @throws Error if status update fails
    */
-  static async updateStatus(propertyId: string, status: string): Promise<Property> {
+  static async updateStatus(propertyId: string, status: "active" | "inactive"): Promise<Property> {
     try {
-      const response = await api.patch<{
+      // Backend expects isActive boolean in standard update endpoint
+      const isActive = status === "active";
+      const response = await api.put<{
         success: boolean;
         data: Property;
-      }>(`/host/properties/${propertyId}/status`, { status });
-      
+      }>(`/host/properties/${propertyId}`, { isActive });
       return response.data.data;
     } catch (error) {
       logErrorWithContext("updatePropertyStatus", error);

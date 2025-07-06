@@ -21,6 +21,7 @@ import type {
   Reservation,
 } from "@core/types";
 import { logger } from "@core/utils/sys/log";
+import { logErrorWithContext } from "src/core/utils/sys/error";
 
 // ========================================
 // TYPE DEFINITIONS
@@ -121,14 +122,18 @@ export class HostDashboardService {
    */
   static async getDashboardData(): Promise<HostDashboard> {
     try {
-      const response = await api.get<{ data: HostDashboard }>("/host/dashboard");
-      return response.data.data;
-    } catch (error: any) {
-      logger.error("Error fetching host dashboard data:", error);
-      throw new Error(`Failed to load dashboard data: ${error.message}`);
+      const response = await api.get<{ success: boolean; data: HostDashboard }>("/host/dashboard");
+      const respData = response.data;
+      const dashboard: HostDashboard = respData && typeof respData === "object" && "data" in respData
+        ? respData.data
+        : respData;
+        console.log("🔍 getDashboardData: dashboard", dashboard);
+      return dashboard as HostDashboard;
+    } catch (error) {
+      logErrorWithContext("getDashboardData", error);
+      throw error;
     }
   }
-
   /**
    * Get host analytics for specified period with performance metrics
    * 

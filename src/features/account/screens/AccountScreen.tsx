@@ -54,7 +54,11 @@ const AccountScreen: React.FC = () => {
 
   // Handle QR code navigation - Navigate to QRCodeScreen
   const handleQRCodePress = () => {
-    router.push("/account/qr-code");
+    if (isHost) {
+      router.push("/host/profile/qr-code");
+    } else {
+      router.push("/traveler/profile/qr-code");
+    }
   };
 
   // Handle refresh - only if authenticated

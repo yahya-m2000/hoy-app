@@ -137,8 +137,6 @@ const Badge: React.FC<BadgeProps> = ({
         styles.badge,
         {
           backgroundColor: getBackgroundColor(),
-          ...sizeDimensions,
-          borderRadius: dot ? radius.circle : radius.pill,
         },
         style,
       ]}
@@ -154,7 +152,7 @@ const Badge: React.FC<BadgeProps> = ({
             textStyle,
           ]}
         >
-          {content}
+          {content?.toString().toUpperCase()}
         </Text>
       )}
     </View>

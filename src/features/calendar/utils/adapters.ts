@@ -1,6 +1,11 @@
 /**
- * Data adapter functions for calendar types
- * Separated to avoid circular dependencies
+ * Calendar Data Adapters
+ * 
+ * Data transformation utilities for calendar types
+ * 
+ * @module @features/calendar/utils/adapters
+ * @author Hoy Development Team
+ * @version 1.0.0
  */
 
 import { DetailedBookingData, CalendarBookingData } from "@core/types/booking.types";
@@ -43,4 +48,30 @@ export function adaptBookingsData(
   detailedBookings: DetailedBookingData[]
 ): CalendarBookingData[] {
   return detailedBookings.map(adaptBookingData);
+}
+
+/**
+ * Adapter function to convert property data to calendar property format
+ */
+export function adaptPropertyData(rawProperty: any): {
+  id: string;
+  name: string;
+  type: string;
+} {
+  return {
+    id: rawProperty._id || rawProperty.id,
+    name: rawProperty.name || rawProperty.title || 'Untitled Property',
+    type: rawProperty.type || 'house',
+  };
+}
+
+/**
+ * Adapter function to convert an array of property data
+ */
+export function adaptPropertiesData(rawProperties: any[]): {
+  id: string;
+  name: string;
+  type: string;
+}[] {
+  return rawProperties.map(adaptPropertyData);
 } 

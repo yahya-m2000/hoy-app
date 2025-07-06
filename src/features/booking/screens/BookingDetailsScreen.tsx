@@ -1,495 +1,1027 @@
-import React, { useMemo } from "react";
+/**
+ * Booking Details Screen
+ * Displays comprehensive booking information with actions
+ * Unified component for both host and traveler views
+ */
+
+import React, { useState, useEffect } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
   TouchableOpacity,
+  Alert,
   Linking,
+  ScrollView,
+  Platform,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useTheme } from "@core/hooks";
-import { StatusBar } from "expo-status-bar";
-import { fontSize, fontWeight, radius, spacing, iconSize } from "@core/design";
-import { Icon } from "@shared/components";
+import * as LinkingExpo from "expo-linking";
+import { useTranslation } from "react-i18next";
 
-export default function BookingDetailsScreen() {
-  const { bookingId } = useLocalSearchParams<{ bookingId: string }>();
-  const router = useRouter();
+// Context and hooks
+import { useToast } from "@core/context";
+import { useTheme, useCurrencyConversion } from "@core/hooks";
+import { useCurrency } from "@core/context";
+import { useBookingDetails } from "@features/booking/hooks";
+import { useHostBooking } from "@features/host/hooks/useHostBookings";
+import { useBookingActions } from "@features/host/hooks";
+import { calculateDaysCount, canUpdateBooking } from "@features/host/utils";
+
+// Components
+import {
+  Container,
+  LoadingSpinner,
+  EmptyState,
+  Text,
+  Button,
+  Section,
+  Header,
+  Icon,
+  BookingStatusBadge,
+  Screen,
+} from "@shared/components";
+
+import { PropertyImageContainer } from "src/features/properties/components/details";
+
+// Utils
+import {
+  formatDate,
+  formatCurrency,
+} from "@core/utils/data/formatting/data-formatters";
+import { iconSize } from "@core/design";
+
+interface BookingDetailsScreenProps {
+  /** Whether this is a host view (default: false for traveler) */
+  isHostView?: boolean;
+  /** Custom title for the screen */
+  customTitle?: string;
+  /** Custom back navigation handler */
+  onBackPress?: () => void;
+}
+
+export default function BookingDetailsScreen({
+  isHostView = false,
+  customTitle,
+  onBackPress,
+}: BookingDetailsScreenProps = {}) {
   const { theme } = useTheme();
+  const router = useRouter();
+  const { showToast } = useToast();
+  const { currency, supportedCurrencies } = useCurrency();
+  const { convertAmount } = useCurrencyConversion();
 
-  // Find the booking by ID
-  const booking = useMemo(() => {
-    return mockDetailedBookings.find((b) => b._id === bookingId);
-  }, [bookingId]);
+  // Extract booking ID from route parameters
+  const { bookingId, id, reservationId } = useLocalSearchParams<{
+    bookingId?: string;
+    id?: string;
+    reservationId?: string;
+  }>();
+  const bookingIdParam = bookingId || id || reservationId || "";
 
-  const handleCall = (phoneNumber: string) => {
-    Linking.openURL(`tel:${phoneNumber}`);
+  // Temporary debugging
+  console.log("🔍 BookingDetailsScreen - Route params:", {
+    bookingId,
+    id,
+    bookingIdParam,
+    isHostView,
+  });
+
+  const { t } = useTranslation();
+
+  // State for converted amounts (host view only)
+  const [convertedTotalAmount, setConvertedTotalAmount] = useState<
+    number | null
+  >(null);
+
+  // Fetch booking details based on view type
+  const {
+    data: travelerBooking,
+    isLoading: travelerLoading,
+    error: travelerError,
+    refetch: travelerRefetch,
+  } = useBookingDetails(isHostView ? "" : bookingIdParam); // Only call for traveler view
+
+  const {
+    booking: hostBooking,
+    isLoading: hostLoading,
+    error: hostError,
+    refetch: hostRefetch,
+  } = useHostBooking(isHostView ? bookingIdParam : ""); // Only call for host view
+
+  // Use the appropriate booking data and loading states
+  const booking = isHostView ? hostBooking : travelerBooking;
+  const isLoading = isHostView ? hostLoading : travelerLoading;
+  const error = isHostView ? hostError : travelerError;
+  const refetch = isHostView ? hostRefetch : travelerRefetch;
+
+  // Temporary debugging
+  console.log("🔍 BookingDetailsScreen - Hook results:", {
+    isHostView,
+    bookingIdParam,
+    hostBooking: hostBooking ? "Found" : "Not found",
+    travelerBooking: travelerBooking ? "Found" : "Not found",
+    hostLoading,
+    travelerLoading,
+    hostError: hostError?.message,
+    travelerError: travelerError?.message,
+    finalBooking: booking ? "Found" : "Not found",
+    finalLoading: isLoading,
+    finalError: error?.message,
+  });
+
+  // Get booking actions for host view
+  const {
+    handleViewProperty: handleHostViewProperty,
+    handleUpdateStatus,
+    handleCalendarAction,
+    handleDirectionsAction,
+    handleContactAction,
+    handleBackNavigation,
+  } = useBookingActions();
+
+  // Get currency symbol
+  const getCurrencySymbol = () => {
+    const currencyInfo = supportedCurrencies.find(
+      (curr) => curr.code === currency
+    );
+    return currencyInfo?.symbol || currency;
   };
 
-  const handleEmail = (email: string) => {
-    Linking.openURL(`mailto:${email}`);
+  // Calculate days
+  const getDaysCount = () => {
+    if (!booking) return 0;
+    if (isHostView) {
+      return calculateDaysCount(booking.checkIn, booking.checkOut);
+    }
+    const checkIn = new Date(booking.checkIn);
+    const checkOut = new Date(booking.checkOut);
+    return Math.ceil(
+      (checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24)
+    );
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+  // Convert total amount when currency or booking changes (host view only)
+  useEffect(() => {
+    if (!isHostView) return;
+
+    const convertTotalAmount = async () => {
+      if (booking) {
+        const totalAmount = booking.totalPrice || 0;
+        const converted = await convertAmount(totalAmount, "USD");
+        setConvertedTotalAmount(converted);
+      }
+    };
+
+    convertTotalAmount();
+  }, [booking, currency, convertAmount, isHostView]);
+
+  // Handle calendar actions (traveler view)
+  const handleAddToCalendar = () => {
+    if (!booking) return;
+    const property = booking.propertyId as any;
+    const checkInDate = new Date(booking.checkIn);
+    const checkOutDate = new Date(booking.checkOut);
+    const title = t("bookings.calendarTitle", {
+      property: property?.name || t("bookings.property"),
     });
-  };
-
-  const formatTime = (dateString: string) => {
-    return new Date(dateString).toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
+    const details = t("bookings.calendarDetails", {
+      checkIn: formatDate(checkInDate, "long"),
+      checkOut: formatDate(checkOutDate, "long"),
+      guests: booking.guests.adults + (booking.guests.children || 0),
     });
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "confirmed":
-        return "#10B981"; // green
-      case "completed":
-        return "#6B7280"; // gray
-      case "cancelled":
-        return "#EF4444"; // red
-      default:
-        return theme.colors.primary;
+    if (Platform.OS === "ios") {
+      // Use Apple Calendar
+      const startDate =
+        checkInDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+      const endDate =
+        checkOutDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+      const appleCalUrl = `calshow:${checkInDate.getTime() / 1000}`;
+      LinkingExpo.openURL(appleCalUrl).catch(() => {
+        showToast({ message: t("bookings.calendarError"), type: "error" });
+      });
+    } else {
+      // Use Google Calendar
+      const startDate =
+        checkInDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+      const endDate =
+        checkOutDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+      const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
+        title
+      )}&dates=${startDate}/${endDate}&details=${encodeURIComponent(details)}`;
+      LinkingExpo.openURL(calendarUrl).catch(() => {
+        showToast({ message: t("bookings.calendarError"), type: "error" });
+      });
     }
   };
 
-  const getPaymentStatusColor = (status: string) => {
-    switch (status) {
-      case "paid":
-        return "#10B981"; // green
-      case "pending":
-        return "#F59E0B"; // amber
-      case "failed":
-        return "#EF4444"; // red
-      default:
-        return theme.colors.secondary;
+  // Handle directions (traveler view)
+  const handleGetDirections = () => {
+    const property = booking?.propertyId as any;
+    if (!property?.coordinates) {
+      showToast({ message: t("bookings.locationError"), type: "error" });
+      return;
     }
+    const { latitude, longitude } = property.coordinates;
+    let url = "";
+    if (Platform.OS === "ios") {
+      // Apple Maps
+      url = `http://maps.apple.com/?daddr=${latitude},${longitude}`;
+    } else {
+      // Google Maps
+      url = `https://maps.google.com/maps?daddr=${latitude},${longitude}`;
+    }
+    LinkingExpo.openURL(url).catch(() => {
+      showToast({ message: t("bookings.mapsError"), type: "error" });
+    });
   };
 
-  if (!booking) {
+  // Handle contact host (traveler view)
+  const handleContactHost = () => {
+    const property = booking?.propertyId as any;
+    const phone = property?.host?.phoneNumber || booking?.contactInfo?.phone;
+    if (!phone) {
+      showToast({ message: t("bookings.whatsappError"), type: "error" });
+      return;
+    }
+    // WhatsApp deep link
+    const url = `https://wa.me/${phone}`;
+    LinkingExpo.openURL(url).catch(() => {
+      showToast({ message: t("bookings.whatsappError"), type: "error" });
+    });
+  };
+
+  // Handle cancel booking (traveler view)
+  const handleCancelBooking = () => {
+    Alert.alert(
+      t("bookings.cancelBookingTitle"),
+      t("bookings.cancelBookingMessage"),
+      [
+        {
+          text: t("bookings.keepBooking"),
+          style: "cancel",
+        },
+        {
+          text: t("bookings.confirmCancel"),
+          style: "destructive",
+          onPress: () => {
+            showToast({
+              message: t("bookings.cancellationComingSoon"),
+              type: "info",
+            });
+          },
+        },
+      ]
+    );
+  };
+
+  // Handle property navigation (traveler view)
+  const handleViewProperty = () => {
+    if (!booking?.propertyId) return;
+
+    router.push({
+      pathname: "/(tabs)/traveler/bookings/property/[id]",
+      params: {
+        property: JSON.stringify(booking.propertyId),
+        returnTo: `/(tabs)/traveler/bookings/${bookingIdParam}`,
+      },
+    });
+  };
+
+  // Check if booking can be cancelled (traveler view)
+  const canCancelBooking = () => {
+    if (!booking) return false;
+    return booking.status === "confirmed" || booking.status === "pending";
+  };
+
+  // Get screen title
+  const getScreenTitle = () => {
+    if (customTitle) return customTitle;
+    return isHostView
+      ? t("host.today.reservations.detailsTitle")
+      : t("bookings.detailsTitle");
+  };
+
+  // Get back navigation handler
+  const getBackHandler = () => {
+    if (onBackPress) return onBackPress;
+    if (isHostView) return handleBackNavigation;
+    return () => router.back();
+  };
+
+  if (isLoading) {
     return (
-      <View style={[styles.container, { backgroundColor: "#FFFFFF" }]}>
-        <StatusBar style="dark" />
-        <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => router.back()}
-          >
-            <Icon
-              name="arrow-back"
-              size={iconSize.md}
-              color={theme.colors.black}
-            />
-          </TouchableOpacity>
-          <Text style={[styles.headerTitle, { color: theme.colors.black }]}>
-            Booking Details
-          </Text>
-        </View>
-        <View style={styles.errorContainer}>
-          <Icon
-            name="alert-circle"
-            size={iconSize.xl}
-            color={theme.colors.error}
-          />
-          <Text style={[styles.errorText, { color: theme.colors.black }]}>
-            Booking not found
-          </Text>
-        </View>
-      </View>
+      <Screen backgroundColor="background">
+        <Header title={getScreenTitle()} />
+        <Container flex={1} justifyContent="center" alignItems="center">
+          <LoadingSpinner size="large" />
+        </Container>
+      </Screen>
     );
   }
 
+  if (error || !booking) {
+    return (
+      <Screen backgroundColor="background">
+        <Header title={getScreenTitle()} />
+        <EmptyState
+          icon="calendar-outline"
+          title={
+            isHostView
+              ? t("host.today.reservations.notFound")
+              : t("bookings.notFound")
+          }
+          message={
+            isHostView
+              ? t("host.today.reservations.notFoundMessage")
+              : t("bookings.notFoundMessage")
+          }
+          action={{
+            label: t("common.retry"),
+            onPress: () => refetch(),
+          }}
+        />
+      </Screen>
+    );
+  }
+
+  const property = booking.propertyId as any; // Type cast since backend returns populated property
+  const daysCount = getDaysCount();
+
   return (
-    <View style={[styles.container, { backgroundColor: "#FFFFFF" }]}>
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+    <Screen
+      header={{
+        title: getScreenTitle(),
+        showDivider: false,
+        left: {
+          icon: "arrow-back",
+          onPress: getBackHandler(),
+        },
+      }}
+    >
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 32 }}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Property Information */}
-        <View style={[styles.section, { backgroundColor: "#F9FAFB" }]}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.black }]}>
-            Property
-          </Text>
-          <Text style={[styles.propertyName, { color: theme.colors.black }]}>
-            {booking.propertyId.name}
-          </Text>
-          <Text style={[styles.propertyAddress, { color: "#6B7280" }]}>
-            {booking.propertyId.address.street},
-            {booking.propertyId.address.city},{booking.propertyId.address.state}
-            {booking.propertyId.address.postalCode}
-          </Text>
-          <View style={styles.propertyDetails}>
-            <View style={styles.propertyDetailItem}>
-              <Icon name="bed" size={iconSize.sm} color="#6B7280" />
-              <Text style={[styles.propertyDetailText, { color: "#6B7280" }]}>
-                {booking.propertyId.bedrooms} bed
-                {booking.propertyId.bedrooms !== 1 ? "s" : ""}
-              </Text>
-            </View>
-            <View style={styles.propertyDetailItem}>
-              <Icon name="people" size={iconSize.sm} color="#6B7280" />
-              <Text style={[styles.propertyDetailText, { color: "#6B7280" }]}>
-                {booking.propertyId.maxGuests} guests max
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Guest Information */}
-        <View style={[styles.section, { backgroundColor: "#F9FAFB" }]}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.black }]}>
-            Guest Information
-          </Text>
-          <Text style={[styles.guestName, { color: theme.colors.black }]}>
-            {booking.contactInfo.name}
-          </Text>
-
-          <View style={styles.contactRow}>
-            <TouchableOpacity
-              style={styles.contactButton}
-              onPress={() => handleEmail(booking.contactInfo.email)}
-            >
-              <Icon
-                name="mail"
-                size={iconSize.sm}
-                color={theme.colors.primary}
-              />
-              <Text
-                style={[styles.contactText, { color: theme.colors.primary }]}
+        {property && (
+          <Container marginBottom="lg">
+            <Section>
+              <TouchableOpacity
+                onPress={
+                  isHostView ? handleHostViewProperty : handleViewProperty
+                }
+                activeOpacity={0.7}
               >
-                {booking.contactInfo.email}
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.contactRow}>
-            <TouchableOpacity
-              style={styles.contactButton}
-              onPress={() => handleCall(booking.contactInfo.phone)}
-            >
-              <Icon
-                name="call"
-                size={iconSize.sm}
-                color={theme.colors.primary}
-              />
-              <Text
-                style={[styles.contactText, { color: theme.colors.primary }]}
-              >
-                {booking.contactInfo.phone}
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.guestCounts}>
-            <View style={styles.guestCountItem}>
-              <Text
-                style={[styles.guestCountNumber, { color: theme.colors.black }]}
-              >
-                {booking.guests.adults}
-              </Text>
-              <Text style={[styles.guestCountLabel, { color: "#6B7280" }]}>
-                Adult{booking.guests.adults !== 1 ? "s" : ""}
-              </Text>
-            </View>
-            {booking.guests.children > 0 && (
-              <View style={styles.guestCountItem}>
-                <Text
-                  style={[
-                    styles.guestCountNumber,
-                    { color: theme.colors.black },
-                  ]}
+                <Container
+                  padding="md"
+                  borderRadius="md"
+                  backgroundColor="rgba(0,0,0,0.02)"
                 >
-                  {booking.guests.children}
-                </Text>
-                <Text style={[styles.guestCountLabel, { color: "#6B7280" }]}>
-                  Child{booking.guests.children !== 1 ? "ren" : ""}
-                </Text>
-              </View>
-            )}
-            {booking.guests.infants > 0 && (
-              <View style={styles.guestCountItem}>
-                <Text
-                  style={[
-                    styles.guestCountNumber,
-                    { color: theme.colors.black },
-                  ]}
+                  <Container flexDirection="row" alignItems="center">
+                    <Container width={60} height={60} marginRight="md">
+                      <PropertyImageContainer
+                        images={property.images}
+                        containerStyle={{ borderRadius: 8 }}
+                        variant="small"
+                      />
+                    </Container>
+                    <Container flex={1}>
+                      <Text variant="body" weight="semibold" numberOfLines={2}>
+                        {property.name}
+                      </Text>
+                      <Container marginTop="xs">
+                        <Text
+                          variant="caption"
+                          color={theme.colors.gray[600]}
+                          numberOfLines={1}
+                        >
+                          {property.propertyType.charAt(0).toUpperCase() +
+                            property.propertyType.slice(1)}
+                          • {property.address?.city}, {property.address?.state}
+                        </Text>
+                      </Container>
+                      <Container
+                        flexDirection="row"
+                        alignItems="center"
+                        marginTop="xs"
+                      >
+                        <Icon
+                          name="star"
+                          size={iconSize.xs}
+                          color={theme.colors.primary}
+                        />
+                        <Container marginLeft="xs">
+                          <Text
+                            variant="caption"
+                            color={theme.colors.gray[600]}
+                          >
+                            {property.rating?.toFixed(1) ||
+                              t("bookings.newProperty")}
+                            {property.reviewCount
+                              ? ` (${property.reviewCount})`
+                              : ""}
+                          </Text>
+                        </Container>
+                      </Container>
+                    </Container>
+                    <Icon
+                      name="chevron-forward"
+                      size={iconSize.sm}
+                      color={theme.colors.gray[400]}
+                    />
+                  </Container>
+                </Container>
+              </TouchableOpacity>
+            </Section>
+          </Container>
+        )}
+
+        {/* Booking Status */}
+        <Container marginBottom="lg">
+          <Section
+            title={
+              isHostView
+                ? t("host.today.reservations.statusTitle")
+                : t("bookings.statusTitle")
+            }
+          >
+            <Container flexDirection="row" style={{ gap: 16 }}>
+              <Container flex={1}>
+                <Container marginBottom="xs">
+                  <Text variant="caption" color={theme.colors.gray[600]}>
+                    {isHostView
+                      ? t("host.today.reservations.reservation")
+                      : t("bookings.booking")}
+                  </Text>
+                </Container>
+                <BookingStatusBadge
+                  status={booking.status}
+                  type="booking"
+                  size="medium"
+                />
+              </Container>
+              <Container flex={1}>
+                <Container marginBottom="xs">
+                  <Text variant="caption" color={theme.colors.gray[600]}>
+                    {isHostView
+                      ? t("host.today.reservations.paymentStatus")
+                      : t("bookings.paymentStatus")}
+                  </Text>
+                </Container>
+                <BookingStatusBadge
+                  status={
+                    [
+                      "pending",
+                      "confirmed",
+                      "cancelled",
+                      "completed",
+                      "in_progress",
+                      "refunded",
+                      "disputed",
+                      "paid",
+                      "partial",
+                      "failed",
+                    ].includes(booking.paymentStatus)
+                      ? (booking.paymentStatus as any)
+                      : "pending"
+                  }
+                  type="payment"
+                  size="medium"
+                />
+              </Container>
+            </Container>
+          </Section>
+        </Container>
+
+        {/* Dates & Guests */}
+        <Container marginBottom="lg">
+          <Section
+            title={
+              isHostView
+                ? t("host.today.reservations.tripDetailsTitle")
+                : t("bookings.tripDetailsTitle")
+            }
+          >
+            <Container style={{ gap: 16 }}>
+              <Container flexDirection="row" alignItems="flex-start">
+                <Container width={32} alignItems="center" marginTop="sm">
+                  <Icon
+                    name="calendar-outline"
+                    size={iconSize.sm}
+                    color={theme.colors.primary}
+                  />
+                </Container>
+                <Container flex={1} marginLeft="md">
+                  <Text variant="body" weight="medium">
+                    {isHostView
+                      ? t("host.today.reservations.checkIn")
+                      : t("bookings.checkIn")}
+                  </Text>
+                  <Container marginTop="xs">
+                    <Text variant="caption" color={theme.colors.gray[600]}>
+                      {formatDate(booking.checkIn, "long")}
+                    </Text>
+                  </Container>
+                </Container>
+              </Container>
+
+              <Container flexDirection="row" alignItems="flex-start">
+                <Container width={32} alignItems="center" marginTop="sm">
+                  <Icon
+                    name="calendar-outline"
+                    size={iconSize.sm}
+                    color={theme.colors.primary}
+                  />
+                </Container>
+                <Container flex={1} marginLeft="md">
+                  <Text variant="body" weight="medium">
+                    {isHostView
+                      ? t("host.today.reservations.checkOut")
+                      : t("bookings.checkOut")}
+                  </Text>
+                  <Container marginTop="xs">
+                    <Text variant="caption" color={theme.colors.gray[600]}>
+                      {formatDate(booking.checkOut, "long")}
+                    </Text>
+                  </Container>
+                </Container>
+              </Container>
+
+              <Container flexDirection="row" alignItems="flex-start">
+                <Container width={32} alignItems="center" marginTop="sm">
+                  <Icon
+                    name="people-outline"
+                    size={iconSize.sm}
+                    color={theme.colors.primary}
+                  />
+                </Container>
+                <Container flex={1} marginLeft="md">
+                  <Text variant="body" weight="medium">
+                    {isHostView
+                      ? t("host.today.reservations.guests")
+                      : t("bookings.guests")}
+                  </Text>
+                  <Container marginTop="xs">
+                    <Text variant="caption" color={theme.colors.gray[600]}>
+                      {isHostView ? (
+                        <>
+                          {booking.guests.adults}{" "}
+                          {booking.guests.adults === 1
+                            ? t("host.today.reservations.adult")
+                            : t("host.today.reservations.adults")}
+                          {booking.guests.children
+                            ? `, ${booking.guests.children} ${
+                                booking.guests.children === 1
+                                  ? t("host.today.reservations.child")
+                                  : t("host.today.reservations.children")
+                              }`
+                            : ""}
+                          {booking.guests.infants
+                            ? `, ${booking.guests.infants} ${
+                                booking.guests.infants === 1
+                                  ? t("host.today.reservations.infant")
+                                  : t("host.today.reservations.infants")
+                              }`
+                            : ""}
+                        </>
+                      ) : (
+                        <>
+                          {booking.guests.adults} {t("bookings.adult")}
+                          {booking.guests.adults !== 1 ? "s" : ""}
+                          {booking.guests.children
+                            ? `, ${booking.guests.children} ${t(
+                                "bookings.child"
+                              )}${booking.guests.children !== 1 ? "ren" : ""}`
+                            : ""}
+                          {booking.guests.infants
+                            ? `, ${booking.guests.infants} ${t(
+                                "bookings.infant"
+                              )}${booking.guests.infants !== 1 ? "s" : ""}`
+                            : ""}
+                        </>
+                      )}
+                    </Text>
+                  </Container>
+                </Container>
+              </Container>
+
+              <Container flexDirection="row" alignItems="flex-start">
+                <Container width={32} alignItems="center" marginTop="sm">
+                  <Icon
+                    name="time-outline"
+                    size={iconSize.sm}
+                    color={theme.colors.primary}
+                  />
+                </Container>
+                <Container flex={1} marginLeft="md">
+                  <Text variant="body" weight="medium">
+                    {isHostView
+                      ? t("host.today.reservations.duration")
+                      : t("bookings.duration")}
+                  </Text>
+                  <Container marginTop="xs">
+                    <Text variant="caption" color={theme.colors.gray[600]}>
+                      {isHostView ? (
+                        <>
+                          {daysCount}{" "}
+                          {daysCount === 1
+                            ? t("host.today.reservations.night")
+                            : t("host.today.reservations.nights")}
+                        </>
+                      ) : (
+                        <>
+                          {daysCount} {t("bookings.night")}
+                          {daysCount !== 1 ? "s" : ""}
+                        </>
+                      )}
+                    </Text>
+                  </Container>
+                </Container>
+              </Container>
+            </Container>
+          </Section>
+        </Container>
+
+        {/* Guest Information (Host view only) */}
+        {isHostView && booking.contactInfo && (
+          <Container marginBottom="lg">
+            <Section title={t("host.today.reservations.guestInfoTitle")}>
+              <Container style={{ gap: 16 }}>
+                <Container flexDirection="row" alignItems="flex-start">
+                  <Container width={32} alignItems="center" marginTop="sm">
+                    <Icon
+                      name="person-outline"
+                      size={iconSize.sm}
+                      color={theme.colors.primary}
+                    />
+                  </Container>
+                  <Container flex={1} marginLeft="md">
+                    <Text variant="body" weight="medium">
+                      {t("host.today.reservations.guestName")}
+                    </Text>
+                    <Container marginTop="xs">
+                      <Text variant="caption" color={theme.colors.gray[600]}>
+                        {booking.contactInfo.name}
+                      </Text>
+                    </Container>
+                  </Container>
+                </Container>
+
+                <Container flexDirection="row" alignItems="flex-start">
+                  <Container width={32} alignItems="center" marginTop="sm">
+                    <Icon
+                      name="mail-outline"
+                      size={iconSize.sm}
+                      color={theme.colors.primary}
+                    />
+                  </Container>
+                  <Container flex={1} marginLeft="md">
+                    <Text variant="body" weight="medium">
+                      {t("host.today.reservations.guestEmail")}
+                    </Text>
+                    <Container marginTop="xs">
+                      <Text variant="caption" color={theme.colors.gray[600]}>
+                        {booking.contactInfo.email}
+                      </Text>
+                    </Container>
+                  </Container>
+                </Container>
+
+                {booking.contactInfo.phone && (
+                  <Container flexDirection="row" alignItems="flex-start">
+                    <Container width={32} alignItems="center" marginTop="sm">
+                      <Icon
+                        name="call-outline"
+                        size={iconSize.sm}
+                        color={theme.colors.primary}
+                      />
+                    </Container>
+                    <Container flex={1} marginLeft="md">
+                      <Text variant="body" weight="medium">
+                        {t("host.today.reservations.guestPhone")}
+                      </Text>
+                      <Container marginTop="xs">
+                        <Text variant="caption" color={theme.colors.gray[600]}>
+                          {booking.contactInfo.phone}
+                        </Text>
+                      </Container>
+                    </Container>
+                  </Container>
+                )}
+              </Container>
+            </Section>
+          </Container>
+        )}
+
+        {/* Contact Information (Traveler view only) */}
+        {!isHostView && booking.contactInfo && (
+          <Container marginBottom="lg">
+            <Section title={t("bookings.contactInfoTitle")}>
+              <Container style={{ gap: 16 }}>
+                <Container flexDirection="row" alignItems="flex-start">
+                  <Container width={32} alignItems="center" marginTop="sm">
+                    <Icon
+                      name="person-outline"
+                      size={iconSize.sm}
+                      color={theme.colors.primary}
+                    />
+                  </Container>
+                  <Container flex={1} marginLeft="md">
+                    <Text variant="body" weight="medium">
+                      {t("bookings.contactName")}
+                    </Text>
+                    <Container marginTop="xs">
+                      <Text variant="caption" color={theme.colors.gray[600]}>
+                        {booking.contactInfo.name}
+                      </Text>
+                    </Container>
+                  </Container>
+                </Container>
+
+                <Container flexDirection="row" alignItems="flex-start">
+                  <Container width={32} alignItems="center" marginTop="sm">
+                    <Icon
+                      name="mail-outline"
+                      size={iconSize.sm}
+                      color={theme.colors.primary}
+                    />
+                  </Container>
+                  <Container flex={1} marginLeft="md">
+                    <Text variant="body" weight="medium">
+                      {t("bookings.contactEmail")}
+                    </Text>
+                    <Container marginTop="xs">
+                      <Text variant="caption" color={theme.colors.gray[600]}>
+                        {booking.contactInfo.email}
+                      </Text>
+                    </Container>
+                  </Container>
+                </Container>
+
+                {booking.contactInfo.phone && (
+                  <Container flexDirection="row" alignItems="flex-start">
+                    <Container width={32} alignItems="center" marginTop="sm">
+                      <Icon
+                        name="call-outline"
+                        size={iconSize.sm}
+                        color={theme.colors.primary}
+                      />
+                    </Container>
+                    <Container flex={1} marginLeft="md">
+                      <Text variant="body" weight="medium">
+                        {t("bookings.contactPhone")}
+                      </Text>
+                      <Container marginTop="xs">
+                        <Text variant="caption" color={theme.colors.gray[600]}>
+                          {booking.contactInfo.phone}
+                        </Text>
+                      </Container>
+                    </Container>
+                  </Container>
+                )}
+              </Container>
+            </Section>
+          </Container>
+        )}
+
+        {/* Price Breakdown */}
+        <Container marginBottom="lg">
+          <Section
+            title={
+              isHostView
+                ? t("host.today.reservations.priceDetailsTitle")
+                : t("bookings.priceDetailsTitle")
+            }
+          >
+            <Container style={{ gap: 8 }}>
+              {!isHostView && (
+                <Container
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
                 >
-                  {booking.guests.infants}
-                </Text>
-                <Text style={[styles.guestCountLabel, { color: "#6B7280" }]}>
-                  Infant{booking.guests.infants !== 1 ? "s" : ""}
-                </Text>
-              </View>
-            )}
-          </View>
-        </View>
-
-        {/* Booking Information */}
-        <View style={[styles.section, { backgroundColor: "#F9FAFB" }]}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.black }]}>
-            Booking Information
-          </Text>
-
-          <View style={styles.infoRow}>
-            <Text style={[styles.infoLabel, { color: "#6B7280" }]}>
-              Check-in
-            </Text>
-            <View style={styles.infoValueContainer}>
-              <Text style={[styles.infoValue, { color: theme.colors.black }]}>
-                {formatDate(booking.checkIn)}
-              </Text>
-              <Text style={[styles.infoTime, { color: "#6B7280" }]}>
-                {formatTime(booking.checkIn)}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.infoRow}>
-            <Text style={[styles.infoLabel, { color: "#6B7280" }]}>
-              Check-out
-            </Text>
-            <View style={styles.infoValueContainer}>
-              <Text style={[styles.infoValue, { color: theme.colors.black }]}>
-                {formatDate(booking.checkOut)}
-              </Text>
-              <Text style={[styles.infoTime, { color: "#6B7280" }]}>
-                {formatTime(booking.checkOut)}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.infoRow}>
-            <Text style={[styles.infoLabel, { color: "#6B7280" }]}>Status</Text>
-            <View
-              style={[
-                styles.statusBadge,
-                { backgroundColor: getStatusColor(booking.bookingStatus) },
-              ]}
-            >
-              <Text style={styles.statusText}>
-                {booking.bookingStatus.charAt(0).toUpperCase() +
-                  booking.bookingStatus.slice(1)}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.infoRow}>
-            <Text style={[styles.infoLabel, { color: "#6B7280" }]}>
-              Payment
-            </Text>
-            <View
-              style={[
-                styles.statusBadge,
-                {
-                  backgroundColor: getPaymentStatusColor(booking.paymentStatus),
-                },
-              ]}
-            >
-              <Text style={styles.statusText}>
-                {booking.paymentStatus.charAt(0).toUpperCase() +
-                  booking.paymentStatus.slice(1)}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.infoRow}>
-            <Text style={[styles.infoLabel, { color: "#6B7280" }]}>
-              Total Amount
-            </Text>
-            <Text style={[styles.totalAmount, { color: theme.colors.black }]}>
-              ${booking.totalPrice.toLocaleString()}
-            </Text>
-          </View>
-
-          {booking.specialRequests && (
-            <View style={styles.specialRequestsContainer}>
-              <Text style={[styles.infoLabel, { color: "#6B7280" }]}>
-                Special Requests
-              </Text>
-              <Text
-                style={[
-                  styles.specialRequestsText,
-                  { color: theme.colors.black },
-                ]}
+                  <Text variant="body">
+                    $
+                    {Math.round(
+                      ((booking.pricing?.totalPrice ?? booking.totalAmount) ||
+                        0) / daysCount
+                    )}{" "}
+                    x {daysCount} {t("bookings.night")}
+                    {daysCount !== 1 ? "s" : ""}
+                  </Text>
+                  <Text variant="body">
+                    $
+                    {formatCurrency(
+                      booking.pricing?.totalPrice ?? booking.totalAmount
+                    )}
+                  </Text>
+                </Container>
+              )}
+              <Container
+                flexDirection="row"
+                justifyContent="space-between"
+                alignItems="center"
+                paddingTop="sm"
+                borderTopWidth={1}
+                borderColor="rgba(0,0,0,0.1)"
+                marginTop="xs"
               >
+                <Text variant="body" weight="semibold">
+                  {isHostView
+                    ? t("host.today.reservations.total")
+                    : t("bookings.total")}
+                </Text>
+                <Text variant="body" weight="semibold">
+                  {isHostView ? (
+                    <>
+                      {getCurrencySymbol()}
+                      {formatCurrency(convertedTotalAmount || 0)}
+                    </>
+                  ) : (
+                    <>
+                      $
+                      {formatCurrency(
+                        booking.pricing?.totalPrice ?? booking.totalAmount
+                      )}
+                    </>
+                  )}
+                </Text>
+              </Container>
+            </Container>
+          </Section>
+        </Container>
+
+        {/* Special Requests */}
+        {booking.specialRequests && (
+          <Container marginBottom="lg">
+            <Section
+              title={
+                isHostView
+                  ? t("host.today.reservations.specialRequestsTitle")
+                  : t("bookings.specialRequestsTitle")
+              }
+            >
+              <Text variant="body" color={theme.colors.gray[700]}>
                 {booking.specialRequests}
               </Text>
-            </View>
-          )}
-        </View>
+            </Section>
+          </Container>
+        )}
+
+        {/* Actions */}
+        <Container marginBottom="lg">
+          <Section>
+            <Container style={{ gap: 16 }}>
+              {isHostView ? (
+                // Host actions
+                <>
+                  <Button
+                    variant="primary"
+                    title={t("host.today.reservations.addToCalendar")}
+                    onPress={() => handleCalendarAction(booking)}
+                    icon={
+                      <Icon
+                        name="calendar-outline"
+                        size={iconSize.sm}
+                        color={theme.colors.white}
+                      />
+                    }
+                    iconPosition="left"
+                  />
+                  {(property as any)?.coordinates && (
+                    <Button
+                      variant="primary"
+                      title={t("host.today.reservations.getDirections")}
+                      onPress={() => handleDirectionsAction(booking)}
+                      icon={
+                        <Icon
+                          name="navigate-outline"
+                          size={iconSize.sm}
+                          color={theme.colors.white}
+                        />
+                      }
+                      iconPosition="left"
+                    />
+                  )}
+                  <Button
+                    variant="primary"
+                    title={t("host.today.reservations.contactGuest")}
+                    onPress={() => handleContactAction(booking)}
+                    icon={
+                      <Icon
+                        name="logo-whatsapp"
+                        size={iconSize.sm}
+                        color={theme.colors.white}
+                      />
+                    }
+                    iconPosition="left"
+                  />
+                  {canUpdateBooking(booking) && (
+                    <Button
+                      variant="primary"
+                      title={t("host.today.reservations.updateStatus")}
+                      onPress={() => handleUpdateStatus(booking, "confirmed")}
+                      icon={
+                        <Icon
+                          name="checkmark-circle-outline"
+                          size={iconSize.sm}
+                          color={theme.colors.white}
+                        />
+                      }
+                      iconPosition="left"
+                    />
+                  )}
+                </>
+              ) : (
+                // Traveler actions
+                <>
+                  <Button
+                    variant="primary"
+                    title={t("bookings.addToCalendar")}
+                    onPress={handleAddToCalendar}
+                    icon={
+                      <Icon
+                        name="calendar-outline"
+                        size={iconSize.sm}
+                        color={theme.colors.white}
+                      />
+                    }
+                    iconPosition="left"
+                  />
+                  {(property as any)?.coordinates && (
+                    <Button
+                      variant="primary"
+                      title={t("bookings.getDirections")}
+                      onPress={handleGetDirections}
+                      icon={
+                        <Icon
+                          name="navigate-outline"
+                          size={iconSize.sm}
+                          color={theme.colors.white}
+                        />
+                      }
+                      iconPosition="left"
+                    />
+                  )}
+                  <Button
+                    variant="primary"
+                    title={t("bookings.contactHost")}
+                    onPress={handleContactHost}
+                    icon={
+                      <Icon
+                        name="logo-whatsapp"
+                        size={iconSize.sm}
+                        color={theme.colors.white}
+                      />
+                    }
+                    iconPosition="left"
+                  />
+                  {canCancelBooking() && (
+                    <Button
+                      variant="primary"
+                      title={t("bookings.cancelBooking")}
+                      onPress={handleCancelBooking}
+                      icon={
+                        <Icon
+                          name="close-circle-outline"
+                          size={iconSize.sm}
+                          color={theme.colors.white}
+                        />
+                      }
+                      iconPosition="left"
+                    />
+                  )}
+                </>
+              )}
+            </Container>
+          </Section>
+        </Container>
 
         {/* Booking ID */}
-        <View style={[styles.section, { backgroundColor: "#F9FAFB" }]}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.black }]}>
-            Reference
-          </Text>
-          <Text style={[styles.bookingId, { color: "#6B7280" }]}>
-            Booking ID: {booking._id}
-          </Text>
-          <Text style={[styles.createdDate, { color: "#6B7280" }]}>
-            Created: {formatDate(booking.createdAt)}
-          </Text>
-        </View>
+        <Container marginBottom="xl">
+          <Section>
+            <Text
+              variant="caption"
+              color={theme.colors.gray[500]}
+              style={{ textAlign: "center" }}
+            >
+              {isHostView
+                ? t("host.today.reservations.reservationId")
+                : t("bookings.bookingId")}
+              : {booking._id}
+            </Text>
+            <Text
+              variant="caption"
+              color={theme.colors.gray[400]}
+              style={{ textAlign: "center", marginTop: 4 }}
+            >
+              {isHostView
+                ? t("host.today.reservations.bookedOn")
+                : t("bookings.bookedOn")}
+              : {formatDate(booking.createdAt, "medium")}
+            </Text>
+          </Section>
+        </Container>
       </ScrollView>
-    </View>
+    </Screen>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.xl,
-    paddingBottom: spacing.md,
-    borderBottomWidth: 1,
-  },
-  backButton: {
-    padding: spacing.xs,
-    marginRight: spacing.sm,
-  },
-  headerTitle: {
-    fontSize: fontSize.lg,
-    fontWeight: fontWeight.semibold,
-  },
-  content: {
-    flex: 1,
-    padding: spacing.md,
-  },
-  section: {
-    borderRadius: radius.md,
-    padding: spacing.md,
-    marginBottom: spacing.md,
-  },
-  sectionTitle: {
-    fontSize: fontSize.md,
-    fontWeight: fontWeight.semibold,
-    marginBottom: spacing.sm,
-  },
-  propertyName: {
-    fontSize: fontSize.lg,
-    fontWeight: fontWeight.medium,
-    marginBottom: spacing.xs,
-  },
-  propertyAddress: {
-    fontSize: fontSize.sm,
-    marginBottom: spacing.sm,
-  },
-  propertyDetails: {
-    flexDirection: "row",
-    gap: spacing.md,
-  },
-  propertyDetailItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xs,
-  },
-  propertyDetailText: {
-    fontSize: fontSize.sm,
-  },
-  guestName: {
-    fontSize: fontSize.lg,
-    fontWeight: fontWeight.medium,
-    marginBottom: spacing.sm,
-  },
-  contactRow: {
-    marginBottom: spacing.sm,
-  },
-  contactButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xs,
-  },
-  contactText: {
-    fontSize: fontSize.sm,
-  },
-  guestCounts: {
-    flexDirection: "row",
-    gap: spacing.lg,
-    marginTop: spacing.sm,
-  },
-  guestCountItem: {
-    alignItems: "center",
-  },
-  guestCountNumber: {
-    fontSize: fontSize.lg,
-    fontWeight: fontWeight.semibold,
-  },
-  guestCountLabel: {
-    fontSize: fontSize.xs,
-    marginTop: spacing.xs,
-  },
-  infoRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: spacing.sm,
-  },
-  infoLabel: {
-    fontSize: fontSize.sm,
-    flex: 1,
-  },
-  infoValueContainer: {
-    alignItems: "flex-end",
-    flex: 2,
-  },
-  infoValue: {
-    fontSize: fontSize.sm,
-    fontWeight: fontWeight.medium,
-  },
-  infoTime: {
-    fontSize: fontSize.xs,
-    marginTop: spacing.xs,
-  },
-  statusBadge: {
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderRadius: radius.sm,
-  },
-  statusText: {
-    color: "white",
-    fontSize: fontSize.xs,
-    fontWeight: fontWeight.medium,
-  },
-  totalAmount: {
-    fontSize: fontSize.lg,
-    fontWeight: fontWeight.semibold,
-  },
-  specialRequestsContainer: {
-    marginTop: spacing.sm,
-    paddingTop: spacing.sm,
-    borderTopWidth: 1,
-    borderTopColor: "#E5E7EB",
-  },
-  specialRequestsText: {
-    fontSize: fontSize.sm,
-    marginTop: spacing.xs,
-    fontStyle: "italic",
-  },
-  bookingId: {
-    fontSize: fontSize.sm,
-    fontFamily: "monospace",
-  },
-  createdDate: {
-    fontSize: fontSize.sm,
-    marginTop: spacing.xs,
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: spacing.md,
-  },
-  errorText: {
-    fontSize: fontSize.md,
-    fontWeight: fontWeight.medium,
-  },
-});

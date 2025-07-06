@@ -5,7 +5,7 @@
  */
 
 import React from "react";
-import { Alert, Switch } from "react-native";
+import { Alert } from "react-native";
 import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
 
@@ -92,6 +92,8 @@ export default function ProfileSection({
         return "Français";
       case "ar":
         return "العربية";
+      case "so":
+        return "Soomaali";
       default:
         return "English";
     }
@@ -120,7 +122,13 @@ export default function ProfileSection({
           id: "personal",
           icon: "person-outline",
           title: t("profile.personalInfo"),
-          action: () => router.push("/account/personal-info"),
+          subtitle: t("profile.personalInfoDesc"),
+          action: () =>
+            router.push(
+              isHost
+                ? "/(tabs)/host/profile/personal-info"
+                : "/(tabs)/traveler/profile/personal-info"
+            ),
         },
         {
           id: "logout",
@@ -139,63 +147,48 @@ export default function ProfileSection({
       icon: "language-outline",
       title: t("profile.language"),
       subtitle: getLanguageDisplayName(),
-      action: () => router.push("/(overlays)/common/language"),
+      action: () =>
+        router.push(
+          isHost
+            ? "/(tabs)/host/profile/language"
+            : "/(tabs)/traveler/profile/language"
+        ),
     },
     {
       id: "currency",
       icon: "cash-outline",
       title: t("profile.currency"),
       subtitle: `${currency} (${getSymbol(currency)})`,
-      action: () => router.push("/(overlays)/common/currency"),
+      action: () =>
+        router.push(
+          isHost
+            ? "/(tabs)/host/profile/currency"
+            : "/(tabs)/traveler/profile/currency"
+        ),
     },
     {
       id: "theme",
       icon: isDark ? "moon-outline" : "sunny-outline",
       title: t("profile.theme"),
-      subtitle:
-        mode === "system"
-          ? t("profile.themeSystem")
-          : isDark
-          ? t("profile.themeDark")
-          : t("profile.themeLight"),
-      action: () => toggleTheme(),
-      rightElement: (
-        <Switch
-          value={isDark}
-          onValueChange={toggleTheme}
-          trackColor={{
-            false: isDark ? theme.colors.gray[700] : theme.colors.gray[300],
-            true: theme.colors.primaryPalette[500],
-          }}
-          thumbColor={theme.white}
-        />
-      ),
+      subtitle: t("profile.themeDesc"),
+      action: () =>
+        router.push(
+          isHost
+            ? "/(tabs)/host/profile/theme"
+            : "/(tabs)/traveler/profile/theme"
+        ),
     },
     // Only show host mode toggle for authenticated users
     ...(isAuthenticated
       ? [
           {
             id: "hostMode",
-            icon: "home-outline",
-            title: t("profile.hostMode"),
-            subtitle: isHost
-              ? t("profile.hostModeOn")
-              : t("profile.hostModeOff"),
+            icon: "swap-horizontal-outline",
+            title: isHost
+              ? t("profile.switchToTraveler")
+              : t("profile.switchToHost"),
+            subtitle: t("profile.hostModeDesc"),
             action: () => toggleUserRole(),
-            rightElement: (
-              <Switch
-                value={isHost}
-                onValueChange={toggleUserRole}
-                trackColor={{
-                  false: isDark
-                    ? theme.colors.gray[700]
-                    : theme.colors.gray[300],
-                  true: theme.colors.primaryPalette[500],
-                }}
-                thumbColor={theme.white}
-                disabled={isRoleLoading}
-              />
-            ),
           },
         ]
       : []),
@@ -207,13 +200,25 @@ export default function ProfileSection({
       id: "help",
       icon: "help-circle-outline",
       title: t("profile.helpCenter"),
-      action: () => showComingSoonAlert(t("profile.helpCenter")),
+      subtitle: t("profile.helpCenterDesc"),
+      action: () =>
+        router.push(
+          isHost
+            ? "/(tabs)/host/profile/help-center"
+            : "/(tabs)/traveler/profile/help-center"
+        ),
     },
     {
       id: "feedback",
       icon: "chatbubble-outline",
       title: t("profile.giveFeedback"),
-      action: () => showComingSoonAlert(t("profile.giveFeedback")),
+      subtitle: t("profile.giveFeedbackDesc"),
+      action: () =>
+        router.push(
+          isHost
+            ? "/(tabs)/host/profile/feedback"
+            : "/(tabs)/traveler/profile/feedback"
+        ),
     },
     {
       id: "resetApp",
@@ -227,7 +232,13 @@ export default function ProfileSection({
       id: "terms",
       icon: "document-text-outline",
       title: t("profile.termsOfService"),
-      action: () => showComingSoonAlert(t("profile.termsOfService")),
+      subtitle: t("profile.termsOfServiceDesc"),
+      action: () =>
+        router.push(
+          isHost
+            ? "/(tabs)/host/profile/terms-of-service"
+            : "/(tabs)/traveler/profile/terms-of-service"
+        ),
     },
     // Developer options (if enabled)
     ...(showDevOptions

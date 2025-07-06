@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, OverlayScreen, Calendar } from "@shared/components";
-import { useDateSelection } from "src/features/calendar/context/DateSelectionContext";
+import { useCalendarDateSelection } from "src/features/calendar/context/CalendarContext";
 
 interface DateSelectionModalProps {
   propertyId?: string;
@@ -13,17 +13,25 @@ const DateSelectionModal: React.FC<DateSelectionModalProps> = ({
   onClose,
   onDateSelect,
 }) => {
-  const { selectDatesForProperty } = useDateSelection();
+  const { selectDatesForProperty } = useCalendarDateSelection();
 
   // Note: Calendar context automatically clears selection when property changes
   // No need to manually clear on modal open
 
   const handleDateSelect = (startDate: Date, endDate?: Date) => {
-    if (!startDate || !endDate) {
-      console.log("Invalid date selection");
+    // Handle two-phase selection: first startDate only, then both dates
+    if (!startDate) {
+      console.log("Invalid date selection: missing startDate");
       return;
     }
 
+    if (!endDate) {
+      // First phase: only start date selected, don't close modal yet
+      console.log("Start date selected:", startDate);
+      return;
+    }
+
+    // Second phase: both dates selected, complete the selection
     console.log("Selected dates:", { startDate, endDate, propertyId });
 
     // Update dates for the specific property if propertyId is provided

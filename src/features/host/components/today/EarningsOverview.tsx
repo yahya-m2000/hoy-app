@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { useTranslation } from "react-i18next";
 import { useTheme } from "@core/hooks";
+import { useCurrency } from "@core/context";
+import { useCurrencyConversion } from "@core/hooks";
 import { Text, BaseCard } from "@shared/components";
 import { spacing } from "@core/design";
 import { Ionicons } from "@expo/vector-icons";
@@ -23,13 +26,62 @@ export default function EarningsOverview({
   data,
   loading,
 }: EarningsOverviewProps) {
+  const { t } = useTranslation();
   const { theme } = useTheme();
+  const { currency, supportedCurrencies } = useCurrency();
+  const { convertAmount } = useCurrencyConversion();
+
+  // State for converted amounts
+  const [convertedData, setConvertedData] = useState({
+    thisWeek: 0,
+    thisMonth: 0,
+    lastMonth: 0,
+    yearToDate: 0,
+    nextPayout: { amount: 0, date: "" },
+  });
+
+  // Get currency symbol
+  const getCurrencySymbol = () => {
+    const currencyInfo = supportedCurrencies.find(
+      (curr) => curr.code === currency
+    );
+    return currencyInfo?.symbol || currency;
+  };
+
+  // Convert amounts when currency or data changes
+  useEffect(() => {
+    const convertAllAmounts = async () => {
+      if (data) {
+        const thisWeek = await convertAmount(data.thisWeek || 0, "USD");
+        const thisMonth = await convertAmount(data.thisMonth || 0, "USD");
+        const lastMonth = await convertAmount(data.lastMonth || 0, "USD");
+        const yearToDate = await convertAmount(data.yearToDate || 0, "USD");
+        const nextPayoutAmount = await convertAmount(
+          data.nextPayout?.amount || 0,
+          "USD"
+        );
+
+        setConvertedData({
+          thisWeek,
+          thisMonth,
+          lastMonth,
+          yearToDate,
+          nextPayout: {
+            amount: nextPayoutAmount,
+            date: data.nextPayout?.date || "",
+          },
+        });
+      }
+    };
+
+    convertAllAmounts();
+  }, [data, currency, convertAmount]);
 
   if (loading) {
     return (
       <View style={styles.container}>
         <Text variant="h3" style={styles.sectionTitle}>
-          Earnings
+          {t("host.today.earnings.title")}
         </Text>
         <BaseCard style={styles.earningsCard}>
           <View style={styles.loadingContainer}>
@@ -39,7 +91,7 @@ export default function EarningsOverview({
               color={theme.colors.gray[400]}
             />
             <Text variant="body" color={theme.text.secondary}>
-              Loading earnings...
+              {t("host.today.earnings.loadingEarnings")}
             </Text>
           </View>
         </BaseCard>
@@ -51,11 +103,11 @@ export default function EarningsOverview({
     <View style={styles.container}>
       <View style={styles.sectionHeader}>
         <Text variant="h3" style={styles.sectionTitle}>
-          Earnings
+          {t("host.today.earnings.title")}
         </Text>
         <TouchableOpacity style={styles.viewAllButton}>
           <Text variant="caption" color={theme.colors.primary}>
-            View All
+            {t("host.today.earnings.viewAll")}
           </Text>
           <Ionicons
             name="chevron-forward"
@@ -75,14 +127,16 @@ export default function EarningsOverview({
               color={theme.colors.success}
             />
             <Text variant="body" style={styles.payoutTitle}>
-              Next Payout
+              {t("host.today.earnings.nextPayout")}
             </Text>
           </View>
           <Text variant="h2" color={theme.colors.success}>
-            ${data?.nextPayout?.amount?.toLocaleString() || "0"}
+            {getCurrencySymbol()}{" "}
+            {convertedData.nextPayout.amount?.toLocaleString() || "0"}
           </Text>
           <Text variant="caption" color={theme.text.secondary}>
-            {data?.nextPayout?.date || "No upcoming payouts"}
+            {convertedData.nextPayout.date ||
+              t("host.today.earnings.noUpcomingPayouts")}
           </Text>
         </View>
 
@@ -92,34 +146,38 @@ export default function EarningsOverview({
         <View style={styles.earningsBreakdown}>
           <View style={styles.earningsRow}>
             <Text variant="body" color={theme.text.secondary}>
-              This Week
+              {t("host.today.earnings.thisWeek")}
             </Text>
             <Text variant="body" style={styles.earningsAmount}>
-              ${data?.thisWeek?.toLocaleString() || "0"}
+              {getCurrencySymbol()}{" "}
+              {convertedData.thisWeek?.toLocaleString() || "0"}
             </Text>
           </View>
           <View style={styles.earningsRow}>
             <Text variant="body" color={theme.text.secondary}>
-              This Month
+              {t("host.today.earnings.thisMonth")}
             </Text>
             <Text variant="body" style={styles.earningsAmount}>
-              ${data?.thisMonth?.toLocaleString() || "0"}
+              {getCurrencySymbol()}{" "}
+              {convertedData.thisMonth?.toLocaleString() || "0"}
             </Text>
           </View>
           <View style={styles.earningsRow}>
             <Text variant="body" color={theme.text.secondary}>
-              Last Month
+              {t("host.today.earnings.lastMonth")}
             </Text>
             <Text variant="body" style={styles.earningsAmount}>
-              ${data?.lastMonth?.toLocaleString() || "0"}
+              {getCurrencySymbol()}{" "}
+              {convertedData.lastMonth?.toLocaleString() || "0"}
             </Text>
           </View>
           <View style={styles.earningsRow}>
             <Text variant="body" color={theme.text.secondary}>
-              Year to Date
+              {t("host.today.earnings.yearToDate")}
             </Text>
             <Text variant="h4" color={theme.colors.primary}>
-              ${data?.yearToDate?.toLocaleString() || "0"}
+              {getCurrencySymbol()}{" "}
+              {convertedData.yearToDate?.toLocaleString() || "0"}
             </Text>
           </View>
         </View>

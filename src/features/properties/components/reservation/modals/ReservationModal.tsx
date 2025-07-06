@@ -209,7 +209,7 @@ export default function ReservationModal({
           : undefined;
 
       // Prepare booking data using the real API structure
-      const bookingData: CalendarBookingData = {
+      const bookingData = {
         propertyId: property._id,
         unitId: unit?._id || property._id,
         checkIn: startDate.toISOString(),
@@ -231,10 +231,10 @@ export default function ReservationModal({
           email: currentUser?.email || "",
           phone: currentUser?.phoneNumber || "",
         },
-        // Only include paymentId if it's a valid ObjectId, otherwise omit it
+        // Only include paymentId if it's valid, don't include paymentType and paymentStatus as they're not in server schema
         ...(paymentId && { paymentId }),
-        specialRequests: "", // You may want to add a special requests field
-      };
+        specialRequests: "",
+      } as const;
 
       // Create the booking using the real API
       const createdBooking = await createBooking(bookingData);

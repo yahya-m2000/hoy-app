@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
 import { DayCell } from "./DayCell";
 import { BookingOverlay } from "./BookingOverlay";
 import type { MonthViewData } from "../utils/monthDataUtils";
@@ -134,7 +135,32 @@ const MemoizedMonthComponent = React.memo<MemoizedMonthProps>(
     monthSpacing,
     onBookingPress,
   }) => {
+    const { t } = useTranslation();
     const { matrix, bookings } = monthData;
+
+    // Helper function to translate month name
+    const getTranslatedMonthName = React.useCallback(
+      (date: Date) => {
+        const monthKey = formatMonthName(date);
+        const parts = monthKey.split(" ");
+        if (parts.length >= 2) {
+          const translationKey = parts[0];
+          const year = parts[1];
+          return `${t(translationKey)} ${year}`;
+        }
+        return monthKey;
+      },
+      [t]
+    );
+
+    console.log("📋 MemoizedMonth: Rendering month", {
+      monthTitle: getTranslatedMonthName(monthData.month),
+      monthIndex,
+      bookingsReceived: bookings.length,
+      bookingsData: bookings,
+      monthKey: monthData.key,
+    });
+
     const themeResult = useTheme();
 
     // Create a fallback theme to prevent undefined access errors
@@ -169,8 +195,8 @@ const MemoizedMonthComponent = React.memo<MemoizedMonthProps>(
 
     // Memoize month title to prevent unnecessary recalculations
     const monthTitle = React.useMemo(() => {
-      return formatMonthName(monthData.month).toUpperCase();
-    }, [monthData.month]);
+      return getTranslatedMonthName(monthData.month).toUpperCase();
+    }, [monthData.month, getTranslatedMonthName]);
 
     // Filter bookings that have days in this month (memoized to prevent recalculation)
     const filteredBookings = React.useMemo(() => {
@@ -185,14 +211,27 @@ const MemoizedMonthComponent = React.memo<MemoizedMonthProps>(
         0
       );
 
-      return bookings.filter((booking) => {
+      const filtered = bookings.filter((booking) => {
         const bookingStart = new Date(booking.startDate);
         const bookingEnd = new Date(booking.endDate);
 
         // Check if booking overlaps with this month
         return bookingStart <= monthEnd && bookingEnd >= monthStart;
       });
-    }, [bookings, monthData.month]); // Memoize week rows to prevent recreation
+
+      console.log("🔍 MemoizedMonth: Filtered bookings", {
+        monthTitle: getTranslatedMonthName(monthData.month),
+        originalBookings: bookings.length,
+        filteredBookings: filtered.length,
+        monthStart: monthStart.toISOString(),
+        monthEnd: monthEnd.toISOString(),
+        filtered: filtered,
+      });
+
+      return filtered;
+    }, [bookings, monthData.month, getTranslatedMonthName]);
+
+    // Filter bookings that have days in this month (memoized to prevent recalculation)
     const weekRows = React.useMemo(() => {
       return matrix.map((week: any[], weekIndex: number) => {
         const weekKey = `week-${monthIndex}-${weekIndex}`;

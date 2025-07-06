@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import en from "./en/translation.json";
 import fr from "./fr/translation.json";
 import ar from "./ar/translation.json";
+import so from "./so/translation.json";
 import { logger } from "../utils/sys/log";
 
 const LANGUAGE_STORAGE_KEY = "hoy_language";
@@ -56,6 +57,7 @@ i18n
       en: { translation: en },
       fr: { translation: fr },
       ar: { translation: ar },
+      so: { translation: so },
     },
     fallbackLng: "en",
     debug: false,
@@ -72,7 +74,18 @@ export default i18n;
 // Custom hook for handling language
 export const useLanguage = () => {
   const changeLanguage = async (language: string) => {
-    await i18n.changeLanguage(language);
+    try {
+      // Change the language
+      await i18n.changeLanguage(language);
+      
+      // Cache the language selection
+      await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+      
+      logger.info(`Language changed to: ${language}`);
+    } catch (error) {
+      logger.error("Error changing language:", error);
+      throw error;
+    }
   };
 
   return {
@@ -82,6 +95,7 @@ export const useLanguage = () => {
       { code: "en", name: "English", nativeName: "English", isRTL: false },
       { code: "fr", name: "French", nativeName: "Français", isRTL: false },
       { code: "ar", name: "Arabic", nativeName: "العربية", isRTL: true },
+      { code: "so", name: "Somali", nativeName: "Soomaali", isRTL: false },
     ],
   };
 };

@@ -12,12 +12,12 @@ const Pill = ({ label, variant = "default", ...props }: any) => {
         return {
           backgroundColor: theme.info,
           textColor: theme.white,
-        };
+        } as const;
       default:
         return {
           backgroundColor: theme.surface,
-          textColor: theme.text,
-        };
+          textColor: theme.text.primary,
+        } as const;
     }
   };
 

@@ -11,46 +11,46 @@
 import { fontSize, fontWeight } from "./typography";
 import { spacing } from "./spacing";
 
-// Primary brand colors - Orange (#F56320)
+// Primary brand colors - Green (#53E09C)
 export const primary = {
-  50: "#FFF7ED",
-  100: "#FFEDD5",
-  200: "#FED7AA",
-  300: "#FDBA74",
-  400: "#FB923C",
-  500: "#F56320",
-  600: "#EA580C",
-  700: "#C2410C",
-  800: "#9A3412",
-  900: "#7C2D12",
+  50: "#F0FDF4",
+  100: "#DCFCE7",
+  200: "#BBF7D0",
+  300: "#86EFAC",
+  400: "#4ADE80",
+  500: "#53E09C",
+  600: "#16A34A",
+  700: "#15803D",
+  800: "#166534",
+  900: "#14532D",
 };
 
-// Secondary brand colors - Blue (#3B82F6) - Complementary to orange
+// Secondary brand colors - Teal (#0D9488) - Close to green on color wheel
 export const secondary = {
-  50: "#EFF6FF",
-  100: "#DBEAFE",
-  200: "#BFDBFE",
-  300: "#93C5FD",
-  400: "#60A5FA",
-  500: "#3B82F6",
-  600: "#2563EB",
-  700: "#1D4ED8",
-  800: "#1E40AF",
-  900: "#1E3A8A",
+  50: "#F0FDFA",
+  100: "#CCFBF1",
+  200: "#99F6E4",
+  300: "#5EEAD4",
+  400: "#2DD4BF",
+  500: "#0D9488",
+  600: "#0F766E",
+  700: "#115E59",
+  800: "#134E4A",
+  900: "#134E4A",
 };
 
-// Tertiary brand colors - Yellow (#FDE047) - Complementary accent to orange and blue
+// Tertiary brand colors - Blue-Green (#0891B2) - Complementary accent
 export const tertiary = {
-  50: "#FEFCE8",
-  100: "#FEF9C3",
-  200: "#FEF08A",
-  300: "#FDE047",
-  400: "#FACC15",
-  500: "#EAB308",
-  600: "#CA8A04",
-  700: "#A16207",
-  800: "#854D0E",
-  900: "#713F12",
+  50: "#ECFEFF",
+  100: "#CFFAFE",
+  200: "#A5F3FC",
+  300: "#67E8F9",
+  400: "#22D3EE",
+  500: "#0891B2",
+  600: "#0E7490",
+  700: "#155E75",
+  800: "#164E63",
+  900: "#164E63",
 };
 
 // Grayscale palette

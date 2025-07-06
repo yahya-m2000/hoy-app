@@ -16,7 +16,7 @@ import {
 
 // Hooks and utilities
 import { useTheme } from "@core/hooks";
-import { useDateSelection } from "@features/calendar/context/DateSelectionContext";
+import { useCalendarDateSelection } from "@features/calendar/context/CalendarContext";
 import { spacing, fontSize, radius } from "@core/design";
 import {
   formatPrice,
@@ -64,7 +64,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   country,
 }) => {
   const { theme } = useTheme();
-  const { searchDates } = useDateSelection();
+  const { searchDates } = useCalendarDateSelection();
 
   // Collections modal state
   const [showCollectionsModal, setShowCollectionsModal] = useState(false);

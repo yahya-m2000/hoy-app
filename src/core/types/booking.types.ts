@@ -342,8 +342,10 @@ export interface Booking {
   contactInfo: BookingContactInfo;
   /** Price breakdown */
   pricing: BookingPriceDetails;
-  /** Total amount */
+  /** Total amount (legacy field) */
   totalAmount: number;
+  /** Total price (actual field from API) */
+  totalPrice: number;
   /** Currency */
   currency: string;
   /** Booking status */

@@ -31,6 +31,13 @@ export interface BaseTextProps {
   align?: "left" | "center" | "right";
   style?: any;
   numberOfLines?: number;
+  margin?: "none" | "sm" | "md" | "lg" | "xl" | "2xl";
+  marginBottom?: "none" | "sm" | "md" | "lg" | "xl" | "2xl";
+  marginTop?: "none" | "sm" | "md" | "lg" | "xl" | "2xl";
+  marginLeft?: "none" | "sm" | "md" | "lg" | "xl" | "2xl";
+  marginRight?: "none" | "sm" | "md" | "lg" | "xl" | "2xl";
+  marginHorizontal?: "none" | "sm" | "md" | "lg" | "xl" | "2xl";
+  marginVertical?: "none" | "sm" | "md" | "lg" | "xl" | "2xl";
 }
 
 export interface HeadingProps {

@@ -515,12 +515,13 @@ export interface CategoryListingsCarouselProps {
 }
 
 export interface PropertyImageCarouselProps {
-  images: string[];
+  images?: string[];
   property: Property;
   showPropertyInfo?: boolean;
   overlayGradient?: boolean;
   fallbackImage?: string;
   style?: ViewStyle;
+  onImagePress?: (index: number) => void;
 }
 
 export interface SimpleImageCarouselProps {
