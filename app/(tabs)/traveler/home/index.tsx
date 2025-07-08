@@ -28,7 +28,7 @@ import { userUtils } from "@shared/utils";
 
 // Constants
 import { spacing, radius } from "@core/design";
-import { Skeleton } from "@rneui/themed/dist";
+import { Skeleton } from "@rneui/base/dist";
 import { t } from "i18next";
 
 export default function HomeScreen() {

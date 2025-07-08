@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "mobile_app",
-    "slug": "mobile_app",
-    "scheme": "hoyapp",
+    "name": "hoy",
+    "slug": "hoy",
+    "scheme": "hoy",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,11 +14,17 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
+      "bundleIdentifier": "com.ym2000.hoy",
+      "buildNumber": "2",
       "supportsTablet": true,
       "icon": {
         "light": "./assets/icons/ios-light.png",
         "dark": "./assets/icons/ios-dark.png",
         "tinted": "./assets/icons/ios-tinted.png"
+      },
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSCalendarsUsageDescription": "This app needs access to your calendar to help you manage your travel bookings and reservations."
       }
     },
     "android": {
@@ -27,34 +33,38 @@
         "monochromeImage": "./assets/icons/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.ym2000.mobile_app"
-    },    "web": {
+      "package": "com.ym2000.hoy"
+    },
+    "web": {
       "favicon": "./assets/favicon.png"
     },
-    "assetBundlePatterns": [
-      "assets/fonts/*"
-    ],
+    "assetBundlePatterns": ["assets/fonts/*"],
     "extra": {
       "environment": "development",
       "minApiCallInterval": 10000,
       "offlineCacheMaxAge": 86400000,
-   
+      "eas": {
+        "projectId": "ec4a30fe-59ce-49a3-ab69-e8020236a7f8"
+      }
     },
     "plugins": [
       "expo-secure-store",
-     [ "expo-splash-screen",
-      {
-        "image": "./assets/icons/splash-icon-light.png",
-        "resizeMode": "contain",
-        "backgroundColor": "#ffffff",
-        "imageWidth": 200,
-        "dark": {
-          "image": "./assets/icons/splash-icon-dark.png",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/icons/splash-icon-light.png",
           "resizeMode": "contain",
-          "backgroundColor": "#53E09C",
-          "imageWidth": 200
+          "backgroundColor": "#ffffff",
+          "imageWidth": 200,
+          "dark": {
+            "image": "./assets/icons/splash-icon-dark.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#53E09C",
+            "imageWidth": 200
+          }
         }
-      }]
-    ]
+      ]
+    ],
+    "owner": "y-m2000"
   }
 }

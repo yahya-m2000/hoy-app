@@ -1,0 +1,12 @@
+{
+  "build": {
+    "production": {
+      "android": {},
+      "ios": {}
+    },
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    }
+  }
+}

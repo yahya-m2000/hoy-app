@@ -12,7 +12,7 @@ import { Container, PropertyCardSkeleton, Text } from "@shared/components";
 
 // Third-party libraries
 import { useRouter } from "expo-router";
-import { Skeleton } from "@rneui/themed/dist";
+import { Skeleton } from "@rneui/base/dist";
 import { t } from "i18next";
 
 // Shared utilities and hooks

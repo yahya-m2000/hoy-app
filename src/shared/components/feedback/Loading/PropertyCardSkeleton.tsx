@@ -7,7 +7,7 @@
 
 import React from "react";
 import { Container } from "../../layout";
-import { Skeleton } from "@rneui/themed/dist";
+import { Skeleton } from "@rneui/base/dist";
 import { radius, spacing, fontSize } from "@core/design";
 import { useTheme } from "@core/hooks";
 
