@@ -498,12 +498,177 @@ export class AuthService {
           const fallbackResponse = await api.get<{ data: any }>("/auth/me");
           return fallbackResponse.data.data;
         } catch (fallbackError: any) {
-          logErrorWithContext("AuthService.getCurrentUser fallback", fallbackError);
           throw new Error("Failed to get user profile");
         }
       }
       
-      throw new Error("Failed to get user profile");
+      throw new Error(error.response?.data?.message || "Failed to get user profile");
+    }
+  }
+
+  /**
+   * SSO Authentication
+   * 
+   * @param ssoData - SSO authentication data
+   * @returns Promise<LoginResponse> - Authentication result with user data and tokens
+   * @throws Will throw error if SSO authentication fails
+   */
+  static async ssoAuth(ssoData: {
+    email: string;
+    provider: string;
+    ssoId: string;
+    firstName?: string;
+    lastName?: string;
+    profilePicture?: string;
+  }): Promise<LoginResponse> {
+    try {
+      logger.log("Attempting SSO authentication", { provider: ssoData.provider, email: ssoData.email });
+
+      // Backend returns: { data: { user, tokens: { accessToken, refreshToken } } }
+      const response = await api.post<{ data: { user: any; tokens: { accessToken: string; refreshToken: string } } }>("/auth/sso", ssoData);
+
+      logger.log("SSO authentication successful", { provider: ssoData.provider, email: ssoData.email });
+      
+      // Transform backend response to match LoginResponse structure
+      const { user, tokens } = response.data.data;
+      return {
+        user,
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+      };
+
+    } catch (error: any) {
+      // Check if user doesn't exist (needs signup) - this is expected, not an error
+      if (error.response?.status === 404) {
+        // Check if the response contains signup data
+        if (error.response?.data?.message === 'USER_NEEDS_SIGNUP') {
+          // Store the signup data for the signup flow
+          const signupData = error.response.data.signupData;
+          logger.info("User needs signup, signup data available", { signupData });
+          
+          // Throw a specific error that the Auth0 integration can handle
+          const signupError = new Error('USER_NEEDS_SIGNUP');
+          (signupError as any).signupData = signupData;
+          throw signupError;
+        }
+        
+        // For 404 errors, try the signup endpoint directly
+        logger.info("User not found, attempting SSO signup", { provider: ssoData.provider, email: ssoData.email });
+        
+        try {
+          const signupResponse = await api.post<{ data: { user: any; tokens: { accessToken: string; refreshToken: string } } }>("/auth/sso/signup", ssoData);
+          logger.log("SSO signup successful", { provider: ssoData.provider, email: ssoData.email });
+          
+          const { user, tokens } = signupResponse.data.data;
+          return {
+            user,
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken,
+          };
+        } catch (signupError: any) {
+          logger.error("SSO signup failed", { error: signupError });
+          throw new Error("USER_NOT_FOUND");
+        }
+      }
+      
+      // Log actual errors
+      logErrorWithContext("AuthService.ssoAuth", error);
+      
+      // Check if account linking is required
+      if (error.response?.status === 409) {
+        // Check if the response contains linking data
+        if (error.response?.data?.message === 'ACCOUNT_LINKING_REQUIRED') {
+          // Store the linking data for the account linking flow
+          const linkingData = error.response.data.context;
+          logger.log("Account linking required, linking data available", { 
+            linkingData,
+            fullResponse: error.response.data,
+            status: error.response.status
+          });
+          
+          // Throw a specific error that the Auth0 integration can handle
+          const linkingError = new Error('ACCOUNT_LINKING_REQUIRED');
+          (linkingError as any).context = linkingData;
+          throw linkingError;
+        }
+      }
+      
+      throw new Error(error.response?.data?.message || "SSO authentication failed");
+    }
+  }
+
+  /**
+   * Link SSO Account
+   * 
+   * @param linkData - SSO account linking data
+   * @returns Promise<LoginResponse> - Authentication result with user data and tokens
+   * @throws Will throw error if SSO account linking fails
+   */
+  static async linkSsoAccount(linkData: {
+    userId: string;
+    provider: string;
+    ssoId: string;
+    profilePicture?: string;
+  }): Promise<LoginResponse> {
+    try {
+      logger.log("Attempting SSO account linking", { provider: linkData.provider, userId: linkData.userId });
+
+      // Backend returns: { data: { user, tokens: { accessToken, refreshToken } } }
+      const response = await api.post<{ data: { user: any; tokens: { accessToken: string; refreshToken: string } } }>("/auth/sso/link", linkData);
+
+      logger.log("SSO account linking successful", { provider: linkData.provider, userId: linkData.userId });
+      
+      // Transform backend response to match LoginResponse structure
+      const { user, tokens } = response.data.data;
+      return {
+        user,
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+      };
+
+    } catch (error: any) {
+      logErrorWithContext("AuthService.linkSsoAccount", error);
+      throw new Error(error.response?.data?.message || "SSO account linking failed");
+    }
+  }
+
+  /**
+   * SSO Signup
+   * 
+   * @param signupData - SSO signup data
+   * @returns Promise<LoginResponse> - Authentication result with user data and tokens
+   * @throws Will throw error if SSO signup fails
+   */
+  static async ssoSignup(signupData: {
+    email: string;
+    provider: string;
+    ssoId: string;
+    firstName?: string;
+    lastName?: string;
+    profilePicture?: string;
+    password?: string;
+  }): Promise<LoginResponse> {
+    try {
+      logger.log("Attempting SSO signup", { provider: signupData.provider, email: signupData.email });
+      console.log("AuthService.ssoSignup - calling /auth/sso/signup with:", signupData);
+
+      // Backend returns: { user, tokens: { accessToken, refreshToken } }
+      const response = await api.post<{ user: any; tokens: { accessToken: string; refreshToken: string } }>("/auth/sso/signup", signupData);
+
+      console.log("AuthService.ssoSignup - response received:", response.data);
+      logger.log("SSO signup successful", { provider: signupData.provider, email: signupData.email });
+      
+      // Transform backend response to match LoginResponse structure
+      const { user, tokens } = response.data;
+      return {
+        user,
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+      };
+
+    } catch (error: any) {
+      logErrorWithContext("AuthService.ssoSignup", error);
+      throw new Error(error.response?.data?.message || "SSO signup failed");
     }
   }
 }

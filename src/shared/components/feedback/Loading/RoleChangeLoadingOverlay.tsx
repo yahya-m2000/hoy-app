@@ -3,7 +3,8 @@ import { Modal, Animated } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "@core/hooks";
 import { useUserRole } from "@core/context";
-import { Container, Text } from "@shared/components";
+import { Container } from "../../layout";
+import { Text } from "../../base";
 
 interface RoleChangeLoadingOverlayProps {
   visible: boolean;

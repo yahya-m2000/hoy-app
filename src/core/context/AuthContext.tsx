@@ -6,6 +6,7 @@
  * - Login/logout functionality
  * - Token management
  * - User session management
+ * - Registration form state management
  *
  * @module @core/auth/context
  * @author Hoy Development Team
@@ -21,6 +22,10 @@ import {
   AuthUser,
   RegisterCredentials,
   PasswordResetCredentials,
+  RegistrationFormState,
+  RegistrationFormErrors,
+  RegistrationState,
+  SSOSignupData,
 } from "../types/auth.types";
 import {
   hasValidAuthentication,
@@ -36,13 +41,19 @@ import {
   clearUserIdentity,
 } from "src/core/utils/data/validation/integrity-check";
 import { AuthService } from "@core/api/services/auth";
+import { UploadService } from "@core/api/services/upload/upload.service";
 import { resetCircuitBreaker } from "@core/api/circuit-breaker";
 import { logger } from "../utils/sys/log/logger";
 import { getAuthDebugInfo } from "../auth/debug";
 import { ContextErrorBoundary } from "../error/ContextErrorBoundary";
 import { getValidAccessToken } from "@core/api/auth-manager";
 import { getTokenFromStorage } from "../auth/storage";
-import { testAuthTokenInterceptor } from "../api/auth-token-interceptor";
+import {
+  testAuthTokenInterceptor,
+  testAuthTokenInterceptorComprehensive,
+} from "../api/auth-token-interceptor";
+import { COUNTRIES } from "../utils/data/countries";
+import { validateCountryCityState } from "../utils/data/countries";
 import api from "../api/client";
 
 // ========================================
@@ -60,6 +71,34 @@ const AuthProviderInternal: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthChecked, setIsAuthChecked] = useState(false);
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const queryClient = useQueryClient();
+
+  // Registration state management
+  const [registrationState, setRegistrationState] = useState<RegistrationState>(
+    {
+      formState: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        phoneNumber: "",
+        country: "",
+        city: "",
+        state: "",
+        avatar: null,
+        agreeToTerms: false,
+        selectedCountry: COUNTRIES[0],
+        countryModalVisible: false,
+        cityModalVisible: false,
+        countrySearch: "",
+        citySearch: "",
+        ssoData: null,
+      },
+      errors: {},
+      loading: false,
+      isValid: false,
+    }
+  );
 
   // Reset circuit breaker for user endpoints on mount to prevent blocking
   useEffect(() => {
@@ -216,12 +255,15 @@ const AuthProviderInternal: React.FC<AuthProviderProps> = ({ children }) => {
 
       // Test interceptor functionality
       try {
-        const interceptorWorking = await testAuthTokenInterceptor();
+        const testResult = await testAuthTokenInterceptorComprehensive();
         logger.info(
-          `[AuthContext] Interceptor test result: ${
-            interceptorWorking ? "WORKING" : "FAILED"
-          }`,
-          undefined,
+          `[AuthContext] Interceptor test result:`,
+          {
+            interceptorWorking: testResult.interceptorWorking,
+            tokenFound: testResult.tokenFound,
+            storageAccessible: testResult.storageAccessible,
+            error: testResult.error,
+          },
           {
             module: "AuthContext",
           }
@@ -451,12 +493,15 @@ const AuthProviderInternal: React.FC<AuthProviderProps> = ({ children }) => {
       );
 
       // 2. Test interceptor functionality
-      const interceptorWorking = await testAuthTokenInterceptor();
+      const testResult = await testAuthTokenInterceptorComprehensive();
       logger.info(
-        `[AuthContext] 2. Interceptor test: ${
-          interceptorWorking ? "PASS" : "FAIL"
-        }`,
-        undefined,
+        `[AuthContext] 2. Interceptor test:`,
+        {
+          interceptorWorking: testResult.interceptorWorking ? "PASS" : "FAIL",
+          tokenFound: testResult.tokenFound,
+          storageAccessible: testResult.storageAccessible,
+          error: testResult.error,
+        },
         {
           module: "AuthContext",
         }
@@ -535,6 +580,331 @@ const AuthProviderInternal: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   // ========================================
+  // REGISTRATION STATE MANAGEMENT
+  // ========================================
+
+  /**
+   * Update a single registration form field
+   */
+  const updateRegistrationField = <K extends keyof RegistrationFormState>(
+    field: K,
+    value: RegistrationFormState[K]
+  ) => {
+    setRegistrationState((prev) => ({
+      ...prev,
+      formState: {
+        ...prev.formState,
+        [field]: value,
+      },
+    }));
+  };
+
+  /**
+   * Update multiple registration form fields
+   */
+  const updateRegistrationFields = (fields: Partial<RegistrationFormState>) => {
+    setRegistrationState((prev) => ({
+      ...prev,
+      formState: {
+        ...prev.formState,
+        ...fields,
+      },
+    }));
+  };
+
+  /**
+   * Validate registration form
+   */
+  const validateRegistrationForm = (): RegistrationFormErrors => {
+    const { formState } = registrationState;
+    const newErrors: RegistrationFormErrors = {};
+
+    if (!formState.firstName.trim()) {
+      newErrors.firstName = "First name is required";
+    }
+
+    if (!formState.lastName.trim()) {
+      newErrors.lastName = "Last name is required";
+    }
+
+    if (!formState.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formState.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    // Password validation - required for regular users, optional for SSO users
+    if (!formState.ssoData) {
+      // Regular users must have a password
+      if (!formState.password) {
+        newErrors.password = "Password is required";
+      } else if (formState.password.length < 8) {
+        newErrors.password = "Password must be at least 8 characters";
+      } else if (
+        !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+          formState.password
+        )
+      ) {
+        newErrors.password =
+          "Password must contain uppercase, lowercase, number, and special character";
+      }
+
+      if (formState.password !== formState.confirmPassword) {
+        newErrors.confirmPassword = "Passwords do not match";
+      }
+    } else {
+      // SSO users can optionally set a password
+      if (formState.password) {
+        // If they provide a password, validate it
+        if (formState.password.length < 8) {
+          newErrors.password = "Password must be at least 8 characters";
+        } else if (
+          !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+            formState.password
+          )
+        ) {
+          newErrors.password =
+            "Password must contain uppercase, lowercase, number, and special character";
+        }
+
+        if (formState.password !== formState.confirmPassword) {
+          newErrors.confirmPassword = "Passwords do not match";
+        }
+      }
+    }
+
+    if (!formState.phoneNumber.trim()) {
+      newErrors.phoneNumber = "Phone number is required";
+    }
+
+    if (!formState.country.trim()) {
+      newErrors.country = "Country is required";
+    }
+
+    if (!formState.city.trim()) {
+      newErrors.city = "City is required";
+    } else {
+      // Validate that the city belongs to the selected country
+      const validation = validateCountryCityState(
+        formState.selectedCountry.code,
+        formState.city,
+        formState.state
+      );
+
+      if (!validation.isValid) {
+        newErrors.city = "Please select a valid city for the chosen country";
+      }
+    }
+
+    return newErrors;
+  };
+
+  /**
+   * Clear registration form errors
+   */
+  const clearRegistrationErrors = () => {
+    setRegistrationState((prev) => ({
+      ...prev,
+      errors: {},
+    }));
+  };
+
+  /**
+   * Reset registration form to initial state
+   */
+  const resetRegistrationForm = () => {
+    setRegistrationState({
+      formState: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        phoneNumber: "",
+        country: "",
+        city: "",
+        state: "",
+        avatar: null,
+        agreeToTerms: false,
+        selectedCountry: COUNTRIES[0],
+        countryModalVisible: false,
+        cityModalVisible: false,
+        countrySearch: "",
+        citySearch: "",
+        ssoData: null,
+      },
+      errors: {},
+      loading: false,
+      isValid: false,
+    });
+  };
+
+  /**
+   * Set SSO signup data
+   */
+  const setSSOSignupData = (data: SSOSignupData | null) => {
+    console.log("Setting SSO signup data:", data);
+    setRegistrationState((prev) => {
+      const newState = {
+        ...prev,
+        formState: {
+          ...prev.formState,
+          ssoData: data,
+          // Prefill form with SSO data if available
+          ...(data && {
+            email: data.email || "",
+            firstName: data.firstName || "",
+            lastName: data.lastName || "",
+            avatar: data.profilePicture || null,
+          }),
+        },
+      };
+      console.log("Updated registration state:", newState.formState);
+      return newState;
+    });
+  };
+
+  /**
+   * Handle registration submission
+   */
+  const handleRegistration = async () => {
+    const { formState } = registrationState;
+    const formErrors = validateRegistrationForm();
+
+    console.log("AuthContext handleRegistration - form state:", {
+      hasSSOData: !!formState.ssoData,
+      ssoData: formState.ssoData,
+      email: formState.email,
+      firstName: formState.firstName,
+      lastName: formState.lastName,
+      hasPassword: !!formState.password,
+      agreeToTerms: formState.agreeToTerms,
+    });
+
+    if (Object.keys(formErrors).length > 0) {
+      console.log("Validation errors:", formErrors);
+      setRegistrationState((prev) => ({
+        ...prev,
+        errors: formErrors,
+      }));
+      return;
+    }
+
+    if (!formState.agreeToTerms) {
+      throw new Error("Please agree to the terms and conditions");
+    }
+
+    setRegistrationState((prev) => ({
+      ...prev,
+      loading: true,
+      errors: {},
+    }));
+
+    try {
+      // If this is an SSO signup, use the SSO signup endpoint
+      if (formState.ssoData) {
+        console.log("Starting SSO signup with data:", formState.ssoData);
+
+        const ssoSignupData = {
+          email: formState.email,
+          provider: formState.ssoData.provider,
+          ssoId: formState.ssoData.ssoId,
+          firstName: formState.firstName,
+          lastName: formState.lastName,
+          profilePicture: formState.avatar || formState.ssoData.profilePicture,
+          password: formState.password || undefined, // Include password if provided
+          phoneNumber: formState.phoneNumber,
+          address: {
+            city: formState.city,
+            country: formState.country,
+            countryCode: formState.selectedCountry.code,
+            state: formState.state,
+          },
+        };
+
+        console.log("Calling AuthService.ssoSignup with:", ssoSignupData);
+        const ssoResponse = await AuthService.ssoSignup(ssoSignupData);
+
+        // Store tokens from SSO signup
+        if (ssoResponse.accessToken) {
+          await saveTokenToStorage(ssoResponse.accessToken);
+        }
+        if (ssoResponse.refreshToken) {
+          await saveRefreshTokenToStorage(ssoResponse.refreshToken);
+        }
+
+        // Clear any previous token invalidation flags
+        await clearTokenInvalidation();
+
+        // Store user ID for data integrity checks
+        const userId = ssoResponse.user?.id || (ssoResponse.user as any)?._id;
+        await AsyncStorage.setItem("currentUserId", userId);
+
+        // Set user identity for integrity checks
+        await setUserIdentity(userId, ssoResponse.user?.email);
+
+        // Upload profile picture to B2 if it's a remote URL (from SSO)
+        if (
+          formState.avatar &&
+          (formState.avatar.startsWith("http://") ||
+            formState.avatar.startsWith("https://"))
+        ) {
+          try {
+            logger.log("Uploading SSO profile picture to B2", {
+              imageUrl: formState.avatar,
+            });
+            await UploadService.uploadProfileImage(formState.avatar);
+            logger.log("SSO profile picture uploaded to B2 successfully");
+          } catch (uploadError) {
+            logger.error(
+              "Failed to upload SSO profile picture to B2",
+              uploadError
+            );
+            // Don't fail the signup if image upload fails
+          }
+        }
+
+        // Mark user as authenticated
+        markAsAuthenticated(ssoResponse.user);
+
+        logger.auth("SSO signup completed successfully", {
+          email: formState.email,
+        });
+      } else {
+        // Regular registration
+        const registerData: RegisterCredentials = {
+          email: formState.email,
+          password: formState.password,
+          firstName: formState.firstName,
+          lastName: formState.lastName,
+          phoneNumber: formState.phoneNumber,
+          profilePicture: formState.avatar || undefined,
+          address: {
+            city: formState.city,
+            country: formState.country,
+            countryCode: formState.selectedCountry.code,
+            state: formState.state,
+          },
+          agreeToTerms: formState.agreeToTerms,
+        };
+
+        await register(registerData);
+      }
+
+      // Reset form after successful registration
+      resetRegistrationForm();
+    } catch (error) {
+      logger.error("Registration failed", error, { module: "AuthContext" });
+      throw error;
+    } finally {
+      setRegistrationState((prev) => ({
+        ...prev,
+        loading: false,
+      }));
+    }
+  };
+
+  // ========================================
   // LIFECYCLE MANAGEMENT
   // ========================================
 
@@ -567,6 +937,17 @@ const AuthProviderInternal: React.FC<AuthProviderProps> = ({ children }) => {
     logout,
     requestPasswordReset,
     resetPassword,
+    testAuthenticationFlow,
+
+    // Registration state management
+    registrationState,
+    updateRegistrationField,
+    updateRegistrationFields,
+    validateRegistrationForm,
+    clearRegistrationErrors,
+    resetRegistrationForm,
+    setSSOSignupData,
+    handleRegistration,
   };
 
   return (

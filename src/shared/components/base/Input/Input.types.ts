@@ -30,6 +30,10 @@ export interface BaseInputProps {
   autoCapitalize?: RNTextInputProps["autoCapitalize"];
   autoCorrect?: boolean;
   maxLength?: number;
+  // Password suggestion props
+  textContentType?: RNTextInputProps["textContentType"];
+  autoComplete?: RNTextInputProps["autoComplete"];
+  passwordRules?: string;
 }
 
 export interface TextInputProps extends RNTextInputProps {

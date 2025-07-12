@@ -13,5 +13,6 @@ export { default as PropertyDescription } from "./PropertyDescription";
 export { default as PropertyHeader } from "./PropertyHeader";
 export { default as PropertyImageCarousel } from "./PropertyImageCarousel";
 export { default as PropertyImageContainer } from "./PropertyImageContainer";
+export { default as PropertyMap } from "./PropertyMap";
 export { default as PropertyTab } from "./PropertyTab";
 export { default as SectionDivider } from "./SectionDivider";

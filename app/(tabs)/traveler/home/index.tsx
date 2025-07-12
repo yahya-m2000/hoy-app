@@ -6,15 +6,15 @@
 
 // React Native core
 import React from "react";
-import { ScrollView, Image, TouchableOpacity } from "react-native";
+import { ScrollView, Image, TouchableOpacity, Platform } from "react-native";
 
 // Expo and third-party libraries
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 
 // App context and hooks
-import { useTheme } from "src/core/hooks";
-import { useAuth } from "src/core/context";
+import { useAuth, useToast, useLocation } from "src/core/context";
+import { useTheme } from "src/core/hooks/useTheme";
 import { useCurrentUser } from "src/features/user/hooks";
 
 // Base components
@@ -31,10 +31,212 @@ import { spacing, radius } from "@core/design";
 import { Skeleton } from "@rneui/base/dist";
 import { t } from "i18next";
 
+const DebugLocation = () => {
+  const { theme } = useTheme();
+
+  const { showToast, skipToNextToast } = useToast();
+  const {
+    permissionStatus,
+    latitude,
+    longitude,
+    address,
+    isLoading,
+    locationServicesEnabled,
+    manualOverride,
+    requestLocationPermission,
+    getCurrentLocation,
+    checkLocationServices,
+    setLocationServicesOverride,
+    resetLocationServicesOverride,
+  } = useLocation();
+  return (
+    <>
+      <Container flexDirection="row" alignItems="center" marginRight="sm">
+        <TouchableOpacity
+          onPress={() => setLocationServicesOverride(true)}
+          style={{
+            backgroundColor:
+              manualOverride === true
+                ? theme.colors.success
+                : theme.colors.gray[300],
+            paddingHorizontal: 8,
+            paddingVertical: 4,
+            borderRadius: 4,
+            marginRight: 4,
+          }}
+        >
+          <Text
+            size="xs"
+            color={manualOverride === true ? "white" : "black"}
+            weight="medium"
+          >
+            {t("location.enable")}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => setLocationServicesOverride(false)}
+          style={{
+            backgroundColor:
+              manualOverride === false
+                ? theme.colors.error
+                : theme.colors.gray[300],
+            paddingHorizontal: 8,
+            paddingVertical: 4,
+            borderRadius: 4,
+            marginRight: 4,
+          }}
+        >
+          <Text
+            size="xs"
+            color={manualOverride === false ? "white" : "black"}
+            weight="medium"
+          >
+            {t("location.disable")}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => resetLocationServicesOverride()}
+          style={{
+            backgroundColor:
+              manualOverride === null
+                ? theme.colors.primary
+                : theme.colors.gray[300],
+            paddingHorizontal: 8,
+            paddingVertical: 4,
+            borderRadius: 4,
+            marginRight: 4,
+          }}
+        >
+          <Text
+            size="xs"
+            color={manualOverride === null ? "white" : "black"}
+            weight="medium"
+          >
+            {t("location.auto")}
+          </Text>
+        </TouchableOpacity>
+
+        {/* <TouchableOpacity
+      onPress={() => {
+        console.log("🧪 Generating test toasts...");
+        showToast({
+          message: "Test Toast 1 - This is the first test message",
+          type: "success",
+        });
+        setTimeout(() => {
+          showToast({
+            message:
+              "Test Toast 2 - This is the second test message",
+            type: "warning",
+          });
+        }, 500);
+        setTimeout(() => {
+          showToast({
+            message:
+              "Test Toast 3 - This is the third test message",
+            type: "error",
+          });
+        }, 1000);
+      }}
+      style={{
+        backgroundColor: theme.colors.warning,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 4,
+        marginRight: 4,
+      }}
+    >
+      <Text size="xs" color="white" weight="medium">
+        Test Toasts
+      </Text>
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      onPress={() => {
+        console.log("🧪 Manually triggering skipToNextToast...");
+        skipToNextToast();
+      }}
+      style={{
+        backgroundColor: theme.colors.error,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 4,
+        marginRight: 4,
+      }}
+    >
+      <Text size="xs" color="white" weight="medium">
+        Skip Toast
+      </Text>
+    </TouchableOpacity> */}
+      </Container>
+
+      <TouchableOpacity
+        onPress={async () => {
+          console.log("Location debug button pressed");
+          console.log("Current permission status:", permissionStatus);
+          console.log("Location services enabled:", locationServicesEnabled);
+          console.log("Manual override:", manualOverride);
+
+          const servicesEnabled = await checkLocationServices();
+          console.log("Location services check result:", servicesEnabled);
+
+          if (permissionStatus !== "granted") {
+            console.log("Requesting location permission...");
+            const granted = await requestLocationPermission();
+            console.log("Permission granted:", granted);
+            if (granted) {
+              await getCurrentLocation();
+            }
+          } else {
+            console.log("Permission already granted, getting location...");
+            await getCurrentLocation();
+          }
+        }}
+        style={{
+          backgroundColor:
+            locationServicesEnabled === false
+              ? theme.colors.error
+              : theme.primary,
+          paddingHorizontal: 12,
+          paddingVertical: 6,
+          borderRadius: 6,
+        }}
+        disabled={isLoading}
+      >
+        <Text size="sm" color="white" weight="medium">
+          {isLoading
+            ? "..."
+            : locationServicesEnabled === false
+            ? "Location Disabled"
+            : t("location.locationDebug")}
+        </Text>
+      </TouchableOpacity>
+    </>
+  );
+};
+
 export default function HomeScreen() {
   const { theme, isDark } = useTheme();
   const { isAuthenticated } = useAuth();
   const { data: user } = useCurrentUser();
+  const { showToast, skipToNextToast } = useToast();
+  const {
+    permissionStatus,
+    latitude,
+    longitude,
+    address,
+    isLoading,
+    locationServicesEnabled,
+    manualOverride,
+    requestLocationPermission,
+    getCurrentLocation,
+    checkLocationServices,
+    setLocationServicesOverride,
+    resetLocationServicesOverride,
+  } = useLocation();
+
   const router = useRouter();
 
   // Track status of each carousel
@@ -109,7 +311,10 @@ export default function HomeScreen() {
         <StatusBar style={isDark ? "light" : "dark"} />
 
         {/* Logo Section */}
-        <Container alignItems="center" marginTop="md">
+        <Container
+          alignItems="center"
+          marginTop={Platform.OS === "android" ? "xxl" : "md"}
+        >
           <Image
             source={require("../../../../assets/image.png")}
             style={styles.logo}
@@ -125,7 +330,6 @@ export default function HomeScreen() {
             alignItems="center"
             paddingHorizontal="md"
             paddingVertical="md"
-            marginBottom="lg"
           >
             <Skeleton
               height={28}
@@ -148,27 +352,54 @@ export default function HomeScreen() {
           </Container>
         ) : (
           <Container
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="center"
-            paddingHorizontal="md"
-            paddingVertical="md"
             marginBottom="lg"
+            style={{
+              borderRadius: radius.lg,
+              paddingVertical: spacing.md,
+              marginHorizontal: spacing.md,
+            }}
           >
-            <Container flexDirection="row" alignItems="center">
-              <Text size="lg" weight="medium">
-                {t("home.hello")},&nbsp;
-                {userUtils.getGreeting(isAuthenticated, user)}
-              </Text>
-            </Container>
-
-            {!isAuthenticated && (
-              <TouchableOpacity onPress={handleSignInPress}>
-                <Text size="lg" weight="medium">
-                  {t("home.signIn")}
+            <Container
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Container>
+                <Text
+                  variant="h6"
+                  weight="bold"
+                  color={theme.text.primary}
+                  style={{ marginBottom: 2 }}
+                >
+                  {t("home.hello")},{" "}
+                  {userUtils.getGreeting(isAuthenticated, user)}
                 </Text>
-              </TouchableOpacity>
-            )}
+                <Text
+                  variant="caption"
+                  color={theme.text.secondary}
+                  weight="medium"
+                >
+                  {t("home.discoverAmazingPlaces")}
+                </Text>
+              </Container>
+
+              {!isAuthenticated && (
+                <Button
+                  title={t("home.signIn")}
+                  onPress={handleSignInPress}
+                  variant="outline"
+                  size="small"
+                  style={{
+                    backgroundColor: isDark
+                      ? theme.colors.gray[800]
+                      : theme.colors.gray[100],
+                    borderColor: isDark
+                      ? theme.colors.gray[600]
+                      : theme.colors.gray[300],
+                  }}
+                />
+              )}
+            </Container>
           </Container>
         )}
 

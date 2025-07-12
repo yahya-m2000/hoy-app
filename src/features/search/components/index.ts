@@ -3,15 +3,23 @@
  * Centralized exports for all search-related components
  */
 
-import { LoadingState } from "src/features/host";
-
-// Components
-export { SearchEmptyState } from "./SearchEmptyState";
-export { FiltersBar, type FilterOption, type SortOrder } from "./FiltersBar";
-export { LoadingState } from "src/features/host";
-export { PropertyList } from "src/features/properties/components/details/Property/PropertyList";
-export { RecentSearches } from "./RecentSearches";
+// Atomic UI elements
 export { default as SearchBar } from "./SearchBar";
-export { SearchForm } from "./SearchForm";
-export { SearchResultsHeader } from "./SearchResultsHeader";
-export { SearchSummary } from "./SearchSummary";
+export { FiltersBar } from "./FiltersBar";
+
+// Form
+export { SearchForm } from "../form/SearchForm";
+
+// Results
+export { SearchResultsHeader } from "../results/SearchResultsHeader";
+export { SearchSummary } from "../results/SearchSummary";
+
+// Recent
+export { RecentSearches } from "../recent/RecentSearches";
+export { RecentSearchManager } from "../recent/RecentSearchManager";
+
+// Modals
+export { default as UnifiedSearchModal } from "../modals/UnifiedSearchModal";
+
+// Empty state (uncomment if/when file exists)
+// export { SearchEmptyState } from "../empty/SearchEmptyState";

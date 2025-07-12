@@ -46,7 +46,7 @@ interface SettingConfig {
   description: string;
   infoTitle: string;
   infoDescription: string;
-  type: "modal" | "form" | "info" | "theme";
+  type: "modal" | "form" | "info" | "theme" | "debug";
   modalType?: "currency" | "language";
 }
 
@@ -102,6 +102,13 @@ const settingConfigs: Record<string, SettingConfig> = {
     infoDescription: "profile.themeInfo.description",
     type: "theme",
   },
+  debug: {
+    title: "Debug",
+    description: "Debug settings and font testing",
+    infoTitle: "Debug Info",
+    infoDescription: "Debug information and font testing",
+    type: "debug",
+  },
 };
 
 // Modular Components
@@ -151,6 +158,7 @@ interface CurrencyDisplayProps {
 
 const CurrencyDisplay: React.FC<CurrencyDisplayProps> = ({ currencyInfo }) => {
   const { t } = useTranslation();
+  const { theme, isDark } = useTheme();
 
   return (
     <Container marginBottom="lg">
@@ -160,20 +168,18 @@ const CurrencyDisplay: React.FC<CurrencyDisplayProps> = ({ currencyInfo }) => {
       <Container
         flexDirection="row"
         alignItems="center"
-        padding="md"
-        backgroundColor="surface"
-        borderRadius="md"
+        paddingVertical="md"
         marginBottom="md"
       >
-        <Text variant="h5" marginRight="md">
+        <Text variant="h4" color="primary" weight="bold" marginRight="md">
           {currencyInfo.symbol}
         </Text>
-        <Container>
-          <Text variant="h6" marginBottom="sm">
+        <Container flex={1}>
+          <Text variant="h6" marginBottom="sm" weight="semibold">
             {currencyInfo.name}
           </Text>
           <Text variant="body2" color="secondary">
-            {currencyInfo.code}
+            {currencyInfo.code.toUpperCase()}
           </Text>
         </Container>
       </Container>
@@ -397,6 +403,17 @@ export function DynamicSettingsScreen({
   // Handle currency selection
   const handleCurrencySelected = (selectedCurrency: string) => {
     console.log("Currency selected:", selectedCurrency);
+    // Close the modal
+    setShowCurrencyModal(false);
+    // Show success toast
+    showToast({
+      type: "success",
+      message: t("profile.currencyChanged", { currency: selectedCurrency }),
+    });
+    // Force a re-render to update the UI with new currency
+    setTimeout(() => {
+      // This will trigger a re-render
+    }, 100);
   };
 
   // Handle language selection
@@ -496,12 +513,30 @@ export function DynamicSettingsScreen({
           {/* Currency Setting */}
           {config.type === "modal" && config.modalType === "currency" && (
             <Container marginBottom="xl">
+              <Container marginBottom="lg">
+                <Text variant="h6" marginBottom="sm">
+                  {t(config.title)}
+                </Text>
+                <Text variant="body2" color="secondary" marginBottom="lg">
+                  {t(config.description)}
+                </Text>
+              </Container>
+
               <CurrencyDisplay currencyInfo={getCurrentCurrencyInfo()} />
 
               <Button
                 title={t("profile.changeCurrency")}
                 onPress={() => setShowCurrencyModal(true)}
-                variant="primary"
+                variant="outline"
+                size="large"
+                style={{
+                  backgroundColor: isDark
+                    ? theme.colors.gray[800]
+                    : theme.colors.gray[100],
+                  borderColor: isDark
+                    ? theme.colors.gray[600]
+                    : theme.colors.gray[300],
+                }}
               />
 
               <Container marginTop="xl">
@@ -621,6 +656,107 @@ export function DynamicSettingsScreen({
                 />
               </Container>
             </SettingsSection>
+          )}
+
+          {/* Debug settings */}
+          {config.type === "debug" && (
+            <Container>
+              <Container marginBottom="lg">
+                <Text variant="h4" marginBottom="sm">
+                  Font Test
+                </Text>
+                <Text variant="body2" color="secondary" marginBottom="lg">
+                  Test different Satoshi font weights and styles
+                </Text>
+              </Container>
+
+              <Text variant="h1" weight="bold">
+                Satoshi Bold - Heading 1
+              </Text>
+              <Text variant="h2" weight="bold">
+                Satoshi Bold - Heading 2
+              </Text>
+              <Text variant="h3" weight="semibold">
+                Satoshi SemiBold - Heading 3
+              </Text>
+              <Text variant="h4" weight="medium">
+                Satoshi Medium - Heading 4
+              </Text>
+              <Text variant="h5" weight="normal">
+                Satoshi Regular - Heading 5
+              </Text>
+              <Text variant="h6" weight="normal">
+                Satoshi Regular - Heading 6
+              </Text>
+
+              <Text variant="subtitle" weight="medium">
+                Satoshi Medium - Subtitle
+              </Text>
+              <Text variant="body" weight="normal">
+                Satoshi Regular - Body
+              </Text>
+              <Text variant="body2" weight="normal">
+                Satoshi Regular - Body 2
+              </Text>
+              <Text variant="caption" weight="normal">
+                Satoshi Regular - Caption
+              </Text>
+
+              <Text variant="button" weight="semibold">
+                Satoshi SemiBold - Button
+              </Text>
+              <Text variant="buttonSmall" weight="medium">
+                Satoshi Medium - Small Button
+              </Text>
+
+              <Text
+                variant="body"
+                weight="normal"
+                style={{ fontStyle: "italic" }}
+              >
+                Satoshi Italic - Regular Italic
+              </Text>
+              <Text
+                variant="body"
+                weight="bold"
+                style={{ fontStyle: "italic" }}
+              >
+                Satoshi Bold Italic - Bold Italic
+              </Text>
+
+              <Text variant="body" weight="bold">
+                Satoshi Bold - Bold Weight
+              </Text>
+              <Text variant="body" weight="semibold">
+                Satoshi SemiBold - SemiBold Weight
+              </Text>
+
+              <Text variant="body" style={{ fontFamily: "Satoshi-Regular" }}>
+                Direct font family: Satoshi-Regular
+              </Text>
+              <Text variant="body" style={{ fontFamily: "Satoshi-Bold" }}>
+                Direct font family: Satoshi-Bold
+              </Text>
+
+              <Text variant="body" marginTop="lg">
+                Font Family Debug Info:
+              </Text>
+              <Text variant="caption" style={{ fontFamily: "Satoshi-Regular" }}>
+                Regular: Satoshi-Regular
+              </Text>
+              <Text variant="caption" style={{ fontFamily: "Satoshi-Medium" }}>
+                Medium: Satoshi-Medium
+              </Text>
+              <Text variant="caption" style={{ fontFamily: "Satoshi-Bold" }}>
+                Bold: Satoshi-Bold
+              </Text>
+              <Text variant="caption" style={{ fontFamily: "Satoshi-Light" }}>
+                Light: Satoshi-Light
+              </Text>
+              <Text variant="caption" style={{ fontFamily: "Satoshi-Black" }}>
+                Black: Satoshi-Black
+              </Text>
+            </Container>
           )}
 
           {/* Info-only settings */}

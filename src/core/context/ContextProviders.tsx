@@ -28,6 +28,13 @@ import { NetworkProvider } from "./NetworkContext";
 import { ThemeProvider } from "./ThemeContext";
 import { CurrencyProvider } from "./CurrencyContext";
 import { ToastProvider } from "./ToastContext";
+import { LocationProvider } from "./LocationContext";
+import {
+  Auth0Provider,
+  LocalAuthenticationOptions,
+  LocalAuthenticationStrategy,
+  LocalAuthenticationLevel,
+} from "react-native-auth0";
 import { UserRoleProvider } from "./UserRoleContext";
 
 // Error Boundaries
@@ -40,7 +47,9 @@ import {
 // API Initialization
 import { setupApiInterceptors } from "../api/interceptors";
 import { initializeAuthManager } from "../api/auth-manager";
+import { initializeSecureTokenStorage } from "../auth/secure-token-storage";
 import { logger } from "../utils/sys/log/logger";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 
 // ========================================
 // QUERY CLIENT SETUP
@@ -93,12 +102,18 @@ const CoreProviders: React.FC<{ children: ReactNode }> = ({ children }) => {
   React.useEffect(() => {
     const initializeAuth = async () => {
       try {
+        logger.info("[ContextProviders] Initializing secure token storage...");
+        await initializeSecureTokenStorage();
+        logger.info(
+          "[ContextProviders] Secure token storage initialized successfully"
+        );
+
         logger.info("[ContextProviders] Initializing auth manager...");
         await initializeAuthManager();
         logger.info("[ContextProviders] Auth manager initialized successfully");
       } catch (error) {
         logger.error(
-          "[ContextProviders] Failed to initialize auth manager",
+          "[ContextProviders] Failed to initialize auth systems",
           error
         );
       }
@@ -109,21 +124,33 @@ const CoreProviders: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   return (
     <SafeAreaProvider>
-      <GenericContextErrorBoundary contextName="QueryClient" critical={true}>
-        <QueryClientProvider client={queryClient}>
-          <ThemeProvider>
-            <NetworkProvider>
-              <AuthProvider>
-                <UserRoleProvider>
-                  <CurrencyProvider>
-                    <ToastProvider>{children}</ToastProvider>
-                  </CurrencyProvider>
-                </UserRoleProvider>
-              </AuthProvider>
-            </NetworkProvider>
-          </ThemeProvider>
-        </QueryClientProvider>
-      </GenericContextErrorBoundary>
+      <KeyboardProvider>
+        <Auth0Provider
+          domain={"dev-12t76epiidwfskdk.uk.auth0.com"}
+          clientId={"XdHmY0ud5HVHiztgOcbe7MxR7XrBViuZ"}
+        >
+          <GenericContextErrorBoundary
+            contextName="QueryClient"
+            critical={true}
+          >
+            <QueryClientProvider client={queryClient}>
+              <ThemeProvider>
+                <NetworkProvider>
+                  <AuthProvider>
+                    <UserRoleProvider>
+                      <CurrencyProvider>
+                        <ToastProvider>
+                          <LocationProvider>{children}</LocationProvider>
+                        </ToastProvider>
+                      </CurrencyProvider>
+                    </UserRoleProvider>
+                  </AuthProvider>
+                </NetworkProvider>
+              </ThemeProvider>
+            </QueryClientProvider>
+          </GenericContextErrorBoundary>
+        </Auth0Provider>
+      </KeyboardProvider>
     </SafeAreaProvider>
   );
 };

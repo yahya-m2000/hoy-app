@@ -56,6 +56,36 @@ export const BookingStatusBadge: React.FC<BookingStatusBadgeProps> = ({
     }
   };
 
+  // Get status display text
+  const getStatusText = (status: BookingStatus | PaymentStatus) => {
+    switch (status) {
+      case "in_progress":
+        return "In Progress";
+      case "pending":
+        return "Pending";
+      case "confirmed":
+        return "Confirmed";
+      case "cancelled":
+        return "Cancelled";
+      case "completed":
+        return "Completed";
+      case "refunded":
+        return "Refunded";
+      case "disputed":
+        return "Disputed";
+      case "paid":
+        return "Paid";
+      case "partial":
+        return "Partial";
+      case "failed":
+        return "Failed";
+      default:
+        return String(status)
+          .replace("_", " ")
+          .replace(/\b\w/g, (l: string) => l.toUpperCase());
+    }
+  };
+
   const getSizeStyles = () => {
     switch (size) {
       case "small":
@@ -92,6 +122,7 @@ export const BookingStatusBadge: React.FC<BookingStatusBadgeProps> = ({
 
   const statusColor = getStatusColor(status, type);
   const sizeStyles = getSizeStyles();
+  const statusText = getStatusText(status);
 
   return (
     <View
@@ -108,7 +139,7 @@ export const BookingStatusBadge: React.FC<BookingStatusBadgeProps> = ({
         color={statusColor}
         style={{ textTransform: "capitalize" }}
       >
-        {/* {status.replace("-", " ")} */}
+        {statusText}
       </Text>
     </View>
   );

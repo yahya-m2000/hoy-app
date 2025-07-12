@@ -4,8 +4,10 @@
  */
 
 import React, { useState, useEffect, useCallback } from "react";
-import { FlatList, RefreshControl, View } from "react-native";
+import { RefreshControl, ScrollView, FlatList, Dimensions } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 // Context
 import { useTheme } from "@core/hooks";
@@ -30,16 +32,27 @@ import {
   WishlistCollection,
 } from "@core/api/services/wishlist";
 
+// Constants
+import { spacing, radius } from "@core/design";
+
+const { width: screenWidth } = Dimensions.get("window");
+
 export default function WishlistIndex() {
-  const { theme } = useTheme();
+  const { theme, isDark } = useTheme();
   const { isAuthenticated } = useAuth();
   const router = useRouter();
+  const { t } = useTranslation();
 
   const [collections, setCollections] = useState<WishlistCollection[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showCollectionsModal, setShowCollectionsModal] = useState(false);
+
+  // Calculate card dimensions for responsive grid (same as BookingsSection)
+  const cardMargin = spacing.md;
+  const containerPadding = spacing.md * 2; // padding on both sides
+  const cardWidth = (screenWidth - containerPadding - cardMargin) / 2; // 2 columns
 
   const loadCollections = useCallback(async () => {
     if (!isAuthenticated) {
@@ -85,11 +98,30 @@ export default function WishlistIndex() {
     loadCollections();
   };
 
+  // Render individual collection card (exactly like BookingsSection)
+  const renderCollectionCard = ({ item }: { item: WishlistCollection }) => (
+    <Container
+      style={{
+        width: cardWidth,
+        marginRight: spacing.md,
+        marginBottom: spacing.lg,
+      }}
+    >
+      <CollectionCard
+        id={item._id}
+        name={item.name}
+        description={item.description}
+        propertyCount={item.properties?.length || 0}
+        onPress={(id) => handleCollectionPress(item)}
+      />
+    </Container>
+  );
+
   // Show loading state
   if (isLoading && !isRefreshing) {
     return (
       <Container flex={1} backgroundColor="background">
-        <Header title="Wishlist" />
+        <Header title={t("wishlist.title")} />
         <Container flex={1} justifyContent="center" alignItems="center">
           <LoadingSpinner size="large" />
           <Container marginTop="md">
@@ -98,7 +130,7 @@ export default function WishlistIndex() {
               color="secondary"
               style={{ textAlign: "center" }}
             >
-              Loading your collections...
+              {t("wishlist.loadingCollections")}
             </Text>
           </Container>
         </Container>
@@ -110,14 +142,14 @@ export default function WishlistIndex() {
   if (!isAuthenticated) {
     return (
       <Container flex={1} backgroundColor="background">
-        <Header title="Wishlist" />
+        <Header title={t("wishlist.title")} />
         <Container flex={1} justifyContent="center" alignItems="center">
           <EmptyState
             icon="heart-outline"
-            title="Log in to view your wishlist"
-            message="Save your favorite properties to view them later"
+            title={t("wishlist.signInToViewWishlist")}
+            message={t("wishlist.signInToViewWishlistMessage")}
             action={{
-              label: "Log In",
+              label: t("auth.signIn"),
               onPress: () => router.push("/auth/login"),
             }}
           />
@@ -130,14 +162,14 @@ export default function WishlistIndex() {
   if (!isLoading && collections.length === 0) {
     return (
       <Container flex={1} backgroundColor="background">
-        <Header title="Wishlist" />
+        <Header title={t("wishlist.title")} />
         <Container flex={1} justifyContent="center" alignItems="center">
           <EmptyState
             icon="heart-outline"
-            title="Create your first wishlist"
-            message="As you search, tap the heart icon to save your favorite places to a wishlist"
+            title={t("wishlist.createFirstWishlist")}
+            message={t("wishlist.createFirstWishlistMessage")}
             action={{
-              label: "Create Wishlist",
+              label: t("wishlist.createWishlist"),
               onPress: handleCreateCollection,
             }}
           />
@@ -152,69 +184,111 @@ export default function WishlistIndex() {
   }
 
   return (
-    <Container flex={1} backgroundColor="background">
-      <Header title="Wishlist" />
+    <Container flex={1} backgroundColor={theme.background}>
+      <Header title={t("wishlist.title")} />
+      <StatusBar style={isDark ? "light" : "dark"} />
 
       {/* Error Banner */}
       {error && (
-        <View
-          style={{
-            marginHorizontal: 16,
-            marginTop: 16,
-            padding: 16,
-            backgroundColor: `${theme.colors.error}20`,
-            borderRadius: 8,
-          }}
+        <Container
+          marginHorizontal="md"
+          marginTop="md"
+          padding="md"
+          backgroundColor="error"
+          borderRadius="md"
+          style={{ opacity: 0.1 }}
         >
           <Container
             flexDirection="row"
             justifyContent="space-between"
             alignItems="center"
           >
-            <View style={{ flex: 1 }}>
+            <Container flex={1}>
               <Text variant="body" color="error">
                 {error}
               </Text>
-            </View>
+            </Container>
             <Button
-              title="Retry"
+              title={t("wishlist.retry")}
               variant="ghost"
               size="small"
               onPress={loadCollections}
             />
           </Container>
-        </View>
+        </Container>
       )}
 
-      {/* Collections Grid */}
-      <Container flex={1} paddingHorizontal="md">
-        <FlatList
-          data={collections}
-          renderItem={({ item }) => (
-            <Container width="48%" marginBottom="md">
-              <CollectionCard
-                id={item._id}
-                name={item.name}
-                description={item.description}
-                propertyCount={item.properties?.length || 0}
-                onPress={(id) => handleCollectionPress(item)}
-              />
-            </Container>
-          )}
-          keyExtractor={(item) => item._id}
-          numColumns={2}
-          columnWrapperStyle={{ justifyContent: "space-between" }}
+      {/* Collections Content */}
+      <Container flex={1}>
+        <ScrollView
           refreshControl={
             <RefreshControl
               refreshing={isRefreshing}
               onRefresh={handleRefresh}
               colors={[theme.colors.primary]}
-              tintColor={theme.colors.primary}
+              tintColor={isDark ? theme.white : theme.colors.primary}
             />
           }
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingTop: 16, paddingBottom: 24 }}
-        />
+          contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 100 }}
+        >
+          {/* Collections Section Header */}
+          <Container
+            marginBottom="lg"
+            style={{
+              borderRadius: radius.lg,
+              paddingVertical: spacing.md,
+            }}
+          >
+            <Container
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Container>
+                <Text
+                  variant="h6"
+                  weight="bold"
+                  color={theme.text.primary}
+                  style={{ marginBottom: 2 }}
+                >
+                  {t("wishlist.collections")}
+                </Text>
+                <Text
+                  variant="caption"
+                  color={theme.text.secondary}
+                  weight="medium"
+                >
+                  {collections.length}{" "}
+                  {collections.length === 1 ? "collection" : "collections"}
+                </Text>
+              </Container>
+            </Container>
+          </Container>
+
+          {/* Collections Grid */}
+          <Container>
+            <FlatList
+              data={collections}
+              renderItem={renderCollectionCard}
+              keyExtractor={(item) => item._id}
+              numColumns={2}
+              columnWrapperStyle={{
+                justifyContent: "space-between",
+              }}
+              showsVerticalScrollIndicator={false}
+              scrollEnabled={false} // Disable scroll since this is inside a ScrollView
+              ItemSeparatorComponent={() => (
+                <Container height={spacing.sm}>
+                  <></>
+                </Container>
+              )}
+              contentContainerStyle={{
+                paddingBottom: spacing.md,
+              }}
+            />
+          </Container>
+        </ScrollView>
       </Container>
 
       {/* Collections Modal */}

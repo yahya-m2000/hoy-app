@@ -32,6 +32,11 @@
       }
     },
     "android": {
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyD_kqnTi5wG1xSRJicvybovbQMf0oYMO9s"
+        }
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/icons/adaptive-icon.png",
         "monochromeImage": "./assets/icons/adaptive-icon.png",
@@ -40,9 +45,13 @@
       "package": "com.ym2000.hoy"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "server"
     },
-    "assetBundlePatterns": ["assets/fonts/*"],
+    "assetBundlePatterns": [
+      "assets/fonts/*"
+    ],
     "extra": {
       "environment": "development",
       "minApiCallInterval": 10000,
@@ -52,6 +61,29 @@
       }
     },
     "plugins": [
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Satoshi-Regular.ttf",
+            "./assets/fonts/Satoshi-Bold.ttf",
+            "./assets/fonts/Satoshi-Medium.ttf",
+            "./assets/fonts/Satoshi-Light.ttf",
+            "./assets/fonts/Satoshi-Black.ttf",
+            "./assets/fonts/Satoshi-Italic.ttf",
+            "./assets/fonts/Satoshi-BoldItalic.ttf",
+            "./assets/fonts/Satoshi-MediumItalic.ttf",
+            "./assets/fonts/Satoshi-LightItalic.ttf",
+            "./assets/fonts/Satoshi-BlackItalic.ttf"
+          ]
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow Hoybnb to use your location."
+        }
+      ],
       "expo-secure-store",
       [
         "expo-splash-screen",
@@ -68,9 +100,36 @@
           }
         }
       ],
-      "expo-maps",
+      [
+        "react-native-fbsdk-next",
+        {
+          "appID": "EXPO_PUBLIC_FACEBOOK_APP_ID",
+          "clientToken": "EXPO_PUBLIC_FACEBOOK_CLIENT_TOKEN",
+          "displayName": "Hoy",
+          "scheme": "hoy",
+          "advertiserIDCollectionEnabled": false,
+          "autoLogAppEventsEnabled": false,
+          "isAutoInitEnabled": true,
+          "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+        }
+      ],
+      [
+        "react-native-auth0",
+        {
+          "domain": "dev-12t76epiidwfskdk.uk.auth0.com",
+          "clientId": "ZGorVSTEgxrSRhLF1j0Hm37U7bxvJkNW"
+        }
+      ],
+      [
+        "expo-maps",
+        {
+          "requestLocationPermission": true,
+          "locationPermission": "Allow Hoybnb to use your location"
+        }
+      ],
       "expo-localization",
       "expo-web-browser",
+      "expo-router"
     ],
     "owner": "y-m2000"
   }

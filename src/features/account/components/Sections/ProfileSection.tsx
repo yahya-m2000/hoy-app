@@ -178,6 +178,18 @@ export default function ProfileSection({
             : "/(tabs)/traveler/profile/theme"
         ),
     },
+    {
+      id: "debug",
+      icon: "bug-outline",
+      title: "Debug",
+      subtitle: "Font testing and debug settings",
+      action: () =>
+        router.push(
+          isHost
+            ? "/(tabs)/host/profile/debug"
+            : "/(tabs)/traveler/profile/debug"
+        ),
+    },
     // Only show host mode toggle for authenticated users
     ...(isAuthenticated
       ? [

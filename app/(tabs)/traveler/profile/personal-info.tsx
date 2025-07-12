@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import { useTranslation } from "react-i18next";
 import { StatusBar } from "expo-status-bar";
 import { router } from "expo-router";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 import { useTheme } from "@core/hooks/useTheme";
-import { useToast, useAuth } from "@core/context";
+import { useAuth, useToast } from "@core/context";
 import { useCurrentUser, useUpdateProfile } from "@features/user/hooks";
 
 import {
@@ -15,6 +15,9 @@ import {
   Button,
   Input,
   LoadingSkeleton,
+  PhoneInput,
+  CountrySelector,
+  CitySelector,
 } from "@shared/components";
 import AvatarPicker from "@shared/components/form/AvatarPicker";
 
@@ -81,84 +84,145 @@ const PersonalInfoScreen: React.FC = () => {
   return (
     <Container flex={1} backgroundColor={theme.background}>
       <Header
-        title={t("account.personalInfo")}
+        title={t("profile.personalInfo")}
         left={{ icon: "arrow-back", onPress: () => router.back() }}
       />
       <StatusBar style={isDark ? "light" : "dark"} />
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}
+      <KeyboardAwareScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingHorizontal: 16,
+          paddingBottom: 120,
+        }}
+        keyboardShouldPersistTaps="handled"
+        enabled={true}
+        keyboardDismissMode="interactive"
+        bottomOffset={100}
       >
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flexGrow: 1, padding: 16 }}
-        >
-          {/* Avatar */}
-          <Container marginBottom="xl">
-            <Text
-              variant="h6"
-              color="primary"
-              align="center"
-              style={{ marginBottom: 8 }}
-            >
+        {/* Profile Picture Section */}
+        <Container marginBottom="xl" marginTop="md">
+          <Container marginBottom="md">
+            <Text variant="h6" color="primary">
               {t("auth.profilePicture")}
             </Text>
-            <AvatarPicker value={avatar} onChange={setAvatar} />
           </Container>
+          <Container style={{ alignSelf: "center", marginBottom: 8 }}>
+            <AvatarPicker
+              value={avatar}
+              onChange={setAvatar}
+              size={100}
+              uploadToStorage={true}
+              userId={authUser?.id}
+            />
+          </Container>
+          <Text variant="caption" color="secondary" align="center">
+            {t("auth.profilePictureHelper")}
+          </Text>
+        </Container>
 
-          {/* Name */}
-          <Container marginBottom="lg">
+        {/* Legal Name Section */}
+        <Container marginBottom="xl">
+          <Container marginBottom="md">
+            <Text variant="h6" color="primary">
+              {t("auth.legalName")}
+            </Text>
+          </Container>
+          <Container marginBottom="md">
             <Input
               label={t("auth.firstName")}
               value={firstName}
               onChangeText={setFirstName}
+              placeholder={t("auth.firstName")}
               autoCapitalize="words"
+              style={{ marginBottom: 8 }}
             />
-            <Container marginTop="sm">
-              <Input
-                label={t("auth.lastName")}
-                value={lastName}
-                onChangeText={setLastName}
-                autoCapitalize="words"
-              />
-            </Container>
+            <Text variant="caption" color="secondary">
+              {t("auth.firstNameHelper")}
+            </Text>
           </Container>
-
-          {/* Contact */}
-          <Container marginBottom="lg">
+          <Container marginBottom="md">
             <Input
+              label={t("auth.lastName")}
+              value={lastName}
+              onChangeText={setLastName}
+              placeholder={t("auth.lastName")}
+              autoCapitalize="words"
+              style={{ marginBottom: 8 }}
+            />
+            <Text variant="caption" color="secondary">
+              {t("auth.lastNameHelper")}
+            </Text>
+          </Container>
+        </Container>
+
+        {/* Contact Details Section */}
+        <Container marginBottom="xl">
+          <Container marginBottom="md">
+            <Text variant="h6" color="primary">
+              {t("auth.contactDetails")}
+            </Text>
+          </Container>
+          <Container marginBottom="md">
+            <PhoneInput
               label={t("auth.phoneNumber")}
               value={phoneNumber}
               onChangeText={setPhoneNumber}
-              keyboardType="phone-pad"
+              placeholder={t("auth.phoneNumber")}
+              style={{ marginBottom: 8 }}
             />
+            <Text variant="caption" color="secondary">
+              {t("auth.phoneNumberHelper")}
+            </Text>
           </Container>
+        </Container>
 
-          {/* Address */}
-          <Container marginBottom="lg">
-            <Input
+        {/* Address Section */}
+        <Container marginBottom="xl">
+          <Container marginBottom="md">
+            <Text variant="h6" color="primary">
+              {t("auth.address")}
+            </Text>
+          </Container>
+          <Container marginBottom="md">
+            <CountrySelector
               label={t("auth.country")}
               value={country}
               onChangeText={setCountry}
+              placeholder={t("auth.selectCountry")}
+              style={{ marginBottom: 8 }}
             />
-            <Container marginTop="sm">
-              <Input
-                label={t("auth.city")}
-                value={city}
-                onChangeText={setCity}
-              />
-            </Container>
+            <Text variant="caption" color="secondary">
+              {t("auth.countryHelper")}
+            </Text>
           </Container>
+          <Container marginBottom="md">
+            <CitySelector
+              label={t("auth.city")}
+              value={city}
+              onChangeText={setCity}
+              country={country}
+              placeholder={t("auth.selectCity")}
+              style={{ marginBottom: 8 }}
+            />
+            <Text variant="caption" color="secondary">
+              {t("auth.cityHelper")}
+            </Text>
+          </Container>
+        </Container>
 
+        {/* Save Button Section */}
+        <Container marginBottom="xl">
           <Button
             title={t("common.save")}
             onPress={handleSave}
             loading={(updateProfileMutation as any).isPending}
             variant="primary"
+            size="large"
           />
-        </ScrollView>
-      </KeyboardAvoidingView>
+        </Container>
+      </KeyboardAwareScrollView>
     </Container>
   );
 };

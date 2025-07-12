@@ -1,6 +1,6 @@
 /**
  * Modern Toast Component
- * A sleek notification component with slide-up animation, drop shadow, and modern styling
+ * A sleek notification component optimized for layered toast systems
  */
 
 import React from "react";
@@ -39,6 +39,8 @@ export interface ToastProps {
     onPress: () => void;
   };
   showCloseButton?: boolean;
+  disableInternalAnimation?: boolean; // New prop for layered systems
+  fade?: boolean; // New prop for fade transitions
 }
 
 const Toast: React.FC<ToastProps> = ({
@@ -49,6 +51,8 @@ const Toast: React.FC<ToastProps> = ({
   onHide,
   action,
   showCloseButton = true,
+  disableInternalAnimation = false, // Default to false for backward compatibility
+  fade = false, // Default to false for backward compatibility
 }) => {
   // We must always call hooks unconditionally
   const themeResult = useTheme();
@@ -78,14 +82,17 @@ const Toast: React.FC<ToastProps> = ({
     if (visible) {
       setShouldRender(true);
       setIsExiting(false);
-    } else if (shouldRender) {
-      // Start exit animation
+    } else if (shouldRender && !disableInternalAnimation) {
+      // Only use internal animation if not disabled
       setIsExiting(true);
-      // Remove from DOM after animation completes
       exitTimer = setTimeout(() => {
         setShouldRender(false);
         setIsExiting(false);
-      }, 350); // Match animation duration
+      }, 350);
+    } else if (shouldRender && disableInternalAnimation) {
+      // For layered systems, immediately hide without animation
+      setShouldRender(false);
+      setIsExiting(false);
     }
 
     return () => {
@@ -93,13 +100,13 @@ const Toast: React.FC<ToastProps> = ({
         clearTimeout(exitTimer);
       }
     };
-  }, [visible, shouldRender]);
+  }, [visible, shouldRender, disableInternalAnimation]);
 
   // Auto-hide timer with proper cleanup
   React.useEffect(() => {
     let autoHideTimer: NodeJS.Timeout | null = null;
 
-    if (visible && onHide) {
+    if (visible && onHide && !disableInternalAnimation) {
       autoHideTimer = setTimeout(() => {
         onHide();
       }, 4000); // Default 4 seconds
@@ -110,7 +117,7 @@ const Toast: React.FC<ToastProps> = ({
         clearTimeout(autoHideTimer);
       }
     };
-  }, [visible, onHide]);
+  }, [visible, onHide, disableInternalAnimation]);
 
   // Get colors based on toast type - only used for default message display
   const getColors = () => {
@@ -146,18 +153,29 @@ const Toast: React.FC<ToastProps> = ({
 
   if (!shouldRender) return null;
 
+  // Use AnimatedContainer only if internal animation is not disabled
+  const ToastContainer = disableInternalAnimation
+    ? Container
+    : AnimatedContainer;
+  const containerProps = disableInternalAnimation
+    ? {}
+    : {
+        animationType: "slideUp" as const,
+        animationDuration: 350,
+        slideDistance: 60,
+        isExiting,
+      };
+
   return (
-    <AnimatedContainer
-      animationType="slideUp"
-      animationDuration={350}
-      slideDistance={60}
-      isExiting={isExiting}
+    <ToastContainer
+      {...containerProps}
       style={[
         styles.container,
         {
           ...shadows.medium,
           shadowColor: isDark ? "rgba(0, 0, 0, 0.6)" : "rgba(0, 0, 0, 0.15)",
           zIndex: 9999, // Ensure high z-index
+          opacity: fade ? 0.5 : 1, // Apply fade effect
         },
       ]}
     >
@@ -237,7 +255,7 @@ const Toast: React.FC<ToastProps> = ({
           </TouchableOpacity>
         )}
       </Container>
-    </AnimatedContainer>
+    </ToastContainer>
   );
 };
 

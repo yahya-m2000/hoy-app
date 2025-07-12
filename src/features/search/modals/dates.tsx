@@ -135,7 +135,7 @@ export default function SearchDateModal({
     >
       <Container flex={1} backgroundColor="background">
         <Header
-          title={t("search.selectDates")}
+          title={t("search.selectDates") || "Select dates"}
           left={{
             icon: "close",
             onPress: onClose,
@@ -151,68 +151,42 @@ export default function SearchDateModal({
             marginTop="lg"
             marginBottom="lg"
           >
-            <Container
-              flex={1}
-              padding="md"
-              borderRadius="md"
-              alignItems="center"
-              borderWidth={1}
-              borderColor={
-                isDark ? theme.colors.gray[700] : theme.colors.gray[300]
-              }
-            >
-              <Text
-                variant="caption"
-                color={isDark ? "secondary" : "subtitle"}
-                style={{ marginBottom: 4 }}
-              >
-                Check In
+            <Container flex={1} alignItems="center">
+              <Text variant="caption" style={{ marginBottom: 4 }}>
+                {t("search.checkIn") || "Check In"}
               </Text>
-              <Text
-                variant="body"
-                weight="semibold"
-                color={isDark ? "primary" : "primary"}
-              >
-                {format(new Date(startDate), "E, MMM d")}
+              <Text variant="body" weight="semibold">
+                {startDate && !isNaN(new Date(startDate).getTime())
+                  ? format(new Date(startDate), "E, MMM d")
+                  : t("common.notSelected") || "--"}
               </Text>
             </Container>
             <Container marginHorizontal="sm">
-              <Icon name="arrow-forward" size={iconSize.sm} />
+              <Icon name="chevron-forward" size={iconSize.xs} />
             </Container>
-            <Container
-              flex={1}
-              padding="md"
-              borderRadius="md"
-              alignItems="center"
-              borderWidth={1}
-              borderColor={
-                isDark ? theme.colors.gray[700] : theme.colors.gray[300]
-              }
-            >
-              <Text
-                variant="caption"
-                color={isDark ? "secondary" : "subtitle"}
-                style={{ marginBottom: 4 }}
-              >
-                Check Out
+            <Container flex={1} alignItems="center">
+              <Text variant="caption" style={{ marginBottom: 4 }}>
+                {t("search.checkOut") || "Check Out"}
               </Text>
               <Text
                 variant="body"
                 weight="semibold"
                 color={isDark ? "primary" : "primary"}
               >
-                {/* When the end date hasn't been selected yet render a placeholder */}
                 {endDate && !isNaN(new Date(endDate).getTime())
                   ? format(new Date(endDate), "E, MMM d")
-                  : "--"}
+                  : t("common.notSelected") || "--"}
               </Text>
             </Container>
           </Container>
 
           {/* Nights count */}
           <Container alignItems="center" marginBottom="lg">
-            <Text variant="body" color={isDark ? "secondary" : "subtitle"}>
-              {nights} {nights === 1 ? "night" : "nights"}
+            <Text variant="body">
+              {nights}{" "}
+              {nights === 1
+                ? t("search.night") || "night"
+                : t("search.nights") || "nights"}
             </Text>
           </Container>
 
@@ -245,7 +219,7 @@ export default function SearchDateModal({
         >
           <Button
             onPress={handleApply}
-            title="Apply"
+            title={t("search.apply") || "Apply"}
             variant="primary"
             disabled={!startDate || !endDate}
           />

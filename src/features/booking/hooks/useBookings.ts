@@ -16,53 +16,22 @@ export const useUserBookings = (status?: string) => {
     queryFn: async () => {
       try {
         console.log("🔍 Fetching user bookings with status:", status);
-        const result = await withTokenRefresh(() =>
+        const response = await withTokenRefresh(() =>
           bookingService.getUserBookings(status ? { status } : undefined)
         );
-        console.log(
-          "✅ Bookings service returned. Type:",
-          typeof result,
-          "IsArray:",
-          Array.isArray(result),
-          "Length:",
-          Array.isArray(result) ? result.length : "N/A"
-        );
-        return result;
+        console.log("✅ User bookings fetched successfully");
+        return response;
       } catch (error) {
-        console.error("❌ Bookings fetch failed:", error);
+        console.error("❌ Error fetching user bookings:", error);
         throw error;
       }
     },
-    enabled: isAuthChecked && isAuthenticated, // Only run when authenticated
-    retry: false, // Don't retry on auth failures
+    enabled: isAuthenticated && isAuthChecked,
+    staleTime: 5 * 60 * 1000, // 5 minutes
     select: (data) => {
-      console.log(
-        "📊 React Query select function received. Type:",
-        typeof data,
-        "IsArray:",
-        Array.isArray(data),
-        "Length:",
-        Array.isArray(data) ? data.length : "N/A",
-        "Value:",
-        data
-      );
-
-      // At this point, data should be the bookings array directly
-      if (Array.isArray(data)) {
-        console.log(
-          "✅ Select returning bookings array with",
-          data.length,
-          "items"
-        );
-        return data;
-      }
-
-      console.log(
-        "⚠️ Select received non-array, returning empty array. Received:",
-        typeof data,
-        data
-      );
-      return [];
+      // Only log the count, not the full data
+      console.log("✅ Select returning bookings array with", data?.length || 0, "items");
+      return data;
     },
   });
 };
@@ -82,17 +51,27 @@ export const useAllUserBookings = () => {
   });
 };
 
-export const useBookingDetails = (bookingId: string) => {
+export const useBookingDetails = (id: string) => {
   const { withTokenRefresh } = useTokenRefresh();
   const { isAuthenticated, isAuthChecked } = useAuth();
 
   return useQuery({
-    queryKey: ["booking", bookingId],
+    queryKey: ["booking", id],
     queryFn: async () => {
-      return withTokenRefresh(() => bookingService.getBookingById(bookingId));
+      try {
+        console.log("🔍 Fetching booking details for ID:", id);
+        const response = await withTokenRefresh(() =>
+          bookingService.getBookingById(id)
+        );
+        console.log("✅ Booking details fetched successfully");
+        return response;
+      } catch (error) {
+        console.error("❌ Error fetching booking details:", error);
+        throw error;
+      }
     },
-    enabled: !!bookingId && isAuthChecked && isAuthenticated,
-    retry: false,
+    enabled: isAuthenticated && isAuthChecked && !!id,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };
 

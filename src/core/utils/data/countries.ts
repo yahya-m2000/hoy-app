@@ -519,18 +519,27 @@ export const validateCountryCityState = (
   
   // Validate country
   const country = getCountryByCode(countryCode);
+  
   if (!country) {
     errors.push('Invalid country');
   }
   
   // Validate city belongs to country
-  if (country && !country.cities.some(city => city.toLowerCase() === cityName.toLowerCase())) {
-    errors.push('City does not belong to selected country');
+  if (country) {
+    const cityMatch = country.cities.some(city => city.toLowerCase() === cityName.toLowerCase());
+    
+    if (!cityMatch) {
+      errors.push('City does not belong to selected country');
+    }
   }
   
   // Validate state belongs to country
-  if (country && !country.states.some(state => state.toLowerCase() === stateName.toLowerCase())) {
-    errors.push('State does not belong to selected country');
+  if (country && stateName) {
+    const stateMatch = country.states.some(state => state.toLowerCase() === stateName.toLowerCase());
+    
+    if (!stateMatch) {
+      errors.push('State does not belong to selected country');
+    }
   }
   
   return {

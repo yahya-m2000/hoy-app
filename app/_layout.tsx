@@ -28,7 +28,7 @@ import { useFonts } from "@core/hooks";
 
 // App context providers - Use the fixed ContextProviders wrapper
 import { ContextProviders } from "@core/context/ContextProviders";
-import { RoleChangeLoadingOverlay } from "@shared/components";
+import RoleChangeLoadingOverlay from "@shared/components/feedback/Loading/RoleChangeLoadingOverlay";
 
 // Error boundary system
 import { AppErrorBoundary } from "@core/error/GlobalErrorBoundary";
@@ -140,21 +140,24 @@ const ApiInterceptorTest = () => {
 
         // Test if interceptors are set up
         const {
-          testAuthTokenInterceptor,
+          testAuthTokenInterceptorComprehensive,
         } = require("@core/api/auth-token-interceptor");
-        const interceptorWorking = await testAuthTokenInterceptor();
+        const testResult = await testAuthTokenInterceptorComprehensive();
 
         logger.info(
-          `[ApiInterceptorTest] Interceptor test result: ${
-            interceptorWorking ? "✅ WORKING" : "❌ FAILED"
-          }`,
-          undefined,
+          `[ApiInterceptorTest] Comprehensive test result:`,
+          {
+            interceptorWorking: testResult.interceptorWorking,
+            tokenFound: testResult.tokenFound,
+            storageAccessible: testResult.storageAccessible,
+            error: testResult.error,
+          },
           {
             module: "ApiInterceptorTest",
           }
         );
 
-        if (interceptorWorking) {
+        if (testResult.interceptorWorking) {
           logger.info(
             "[ApiInterceptorTest] ✅ API interceptors are properly initialized",
             undefined,
@@ -164,7 +167,9 @@ const ApiInterceptorTest = () => {
           );
         } else {
           logger.error(
-            "[ApiInterceptorTest] ❌ API interceptors are not working",
+            `[ApiInterceptorTest] ❌ API interceptors are not working: ${
+              testResult.error || "Unknown error"
+            }`,
             undefined,
             {
               module: "ApiInterceptorTest",

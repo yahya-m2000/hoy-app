@@ -14,7 +14,7 @@ export default function WishlistLayout() {
         }}
       />
       <Stack.Screen
-        name="[id]"
+        name="[id]/index"
         options={{
           headerShown: false,
         }}

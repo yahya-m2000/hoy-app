@@ -20,6 +20,7 @@
 
 import { logger } from '@core/utils/sys/log';
 import { getTokenFromStorage } from '@core/auth/storage';
+import { getEnv, isProduction } from '@core/config/environment';
 
 // Use React Native compatible crypto libraries
 import * as Crypto from 'expo-crypto';
@@ -47,7 +48,7 @@ export interface RequestSigningConfig {
  * Default configuration
  */
 const DEFAULT_CONFIG: RequestSigningConfig = {
-  enabled: true,
+  enabled: isProduction(), // Only enable in production
   algorithm: 'HMAC-SHA256',
   timestampWindow: 5 * 60 * 1000,  // 5 minutes
   nonceExpiry: 10 * 60 * 1000,     // 10 minutes
@@ -89,32 +90,58 @@ class SecretManager {
   }
 
   /**
-   * Initialize with default secret
+   * Initialize with environment secrets
    */
   private initializeSecrets(): void {
-    const defaultSecret = this.generateSecret();
-    this.secrets.set(defaultSecret.id, defaultSecret);
-    this.activeSecretId = defaultSecret.id;
-    this.lastRotation = Date.now();
-  }
+    // Attempt to load secrets from environment (works for all environments)
+    const envSecret = getEnv('REQUEST_SIGNING_SECRET');
+    const envSecretId = getEnv('REQUEST_SIGNING_SECRET_ID');
 
-  /**
-   * Generate a new secret
-   */
-  private generateSecret(): SigningSecret {
-    const id = Array.from(Crypto.getRandomBytes(16))
-      .map(b => b.toString(16).padStart(2, '0'))
-      .join('');
-    const key = Array.from(Crypto.getRandomBytes(32))
-      .map(b => b.toString(16).padStart(2, '0'))
-      .join('');
-    
-    return {
-      id,
-      key,
-      createdAt: Date.now(),
-      isActive: true,
-    };
+    if (envSecret && envSecretId) {
+      const signingSecret: SigningSecret = {
+        id: envSecretId,
+        key: envSecret,
+        createdAt: Date.now(),
+        isActive: true,
+      };
+
+      this.secrets.set(envSecretId, signingSecret);
+      this.activeSecretId = envSecretId;
+
+      logger.info('Request signing secrets loaded from environment', {
+        secretId: envSecretId,
+        environment: __DEV__ ? 'development' : (isProduction() ? 'production' : 'staging'),
+      }, {
+        module: 'RequestSigning'
+      });
+    } else {
+      // Fallback for local development – generate a deterministic secret so that
+      // the client and server can share the same value when env vars are absent.
+      if (!isProduction()) {
+        const devSecretId = 'dev-secret-id';
+        const devSecretKey = 'dev-secret-key';
+
+        const signingSecret: SigningSecret = {
+          id: envSecretId || devSecretId,
+          key: envSecret || devSecretKey,
+          createdAt: Date.now(),
+          isActive: true,
+        };
+
+        this.secrets.set(devSecretId, signingSecret);
+        this.activeSecretId = devSecretId;
+
+        logger.warn('Using default development signing secret – DO NOT USE IN PRODUCTION', {
+          secretId: devSecretId,
+        }, {
+          module: 'RequestSigning'
+        });
+      } else {
+        logger.error('Request signing secrets are not configured in production!', undefined, {
+          module: 'RequestSigning'
+        });
+      }
+    }
   }
 
   /**
@@ -133,54 +160,10 @@ class SecretManager {
   }
 
   /**
-   * Rotate secrets if needed
-   */
-  public rotateSecretsIfNeeded(): void {
-    const now = Date.now();
-    if (now - this.lastRotation > signingConfig.secretRotationInterval) {
-      this.rotateSecrets();
-    }
-  }
-
-  /**
-   * Force secret rotation
-   */
-  public rotateSecrets(): void {
-    logger.info('Rotating request signing secrets', undefined, {
-      module: 'RequestSigning'
-    });
-
-    // Mark current secret as inactive
-    if (this.activeSecretId) {
-      const currentSecret = this.secrets.get(this.activeSecretId);
-      if (currentSecret) {
-        currentSecret.isActive = false;
-      }
-    }
-
-    // Generate new secret
-    const newSecret = this.generateSecret();
-    this.secrets.set(newSecret.id, newSecret);
-    this.activeSecretId = newSecret.id;
-    this.lastRotation = Date.now();
-
-    // Clean up old secrets (keep last 3 for verification)
-    const sortedSecrets = Array.from(this.secrets.values())
-      .sort((a, b) => b.createdAt - a.createdAt);
-    
-    if (sortedSecrets.length > 3) {
-      const secretsToRemove = sortedSecrets.slice(3);
-      secretsToRemove.forEach(secret => {
-        this.secrets.delete(secret.id);
-      });
-    }
-  }
-
-  /**
    * Get all valid secrets for verification
    */
   public getValidSecrets(): SigningSecret[] {
-    return Array.from(this.secrets.values());
+    return Array.from(this.secrets.values()).filter(secret => secret.isActive);
   }
 }
 
@@ -315,9 +298,6 @@ export function generateRequestSignature(
   if (!signingConfig.enabled) {
     throw new Error('Request signing is disabled');
   }
-
-  // Rotate secrets if needed
-  secretManager.rotateSecretsIfNeeded();
 
   // Get active secret
   const secret = secretManager.getActiveSecret();
@@ -542,13 +522,6 @@ export function setSigningEnabled(enabled: boolean): void {
   logger.info(`Request signing ${enabled ? 'enabled' : 'disabled'}`, undefined, {
     module: 'RequestSigning'
   });
-}
-
-/**
- * Force secret rotation (for testing/security incidents)
- */
-export function forceSecretRotation(): void {
-  secretManager.rotateSecrets();
 }
 
 /**

@@ -154,6 +154,8 @@ export const PropertyInformationForm: React.FC<
               placeholder={t("host.policies.property.wifi.passwordPlaceholder")}
               error={errors.wifiPassword}
               secureTextEntry
+              textContentType="password"
+              autoComplete="password"
             />
           </View>
 

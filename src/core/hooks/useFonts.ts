@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { fontUtils } from '@shared/utils';
+import { fontUtils } from '@core/utils';
 
 export const useFonts = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false);

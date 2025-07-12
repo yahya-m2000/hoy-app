@@ -55,6 +55,7 @@ export interface RegisterCredentials {
     state?: string;
     postalCode?: string;
     country?: string;
+    countryCode?: string;
   };
 }
 
@@ -203,6 +204,78 @@ export interface EmailVerificationResponse {
 // ========================================
 
 /**
+ * Registration form state interface
+ */
+export interface RegistrationFormState {
+  /** Form values */
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  phoneNumber: string;
+  country: string;
+  city: string;
+  state: string;
+  avatar: string | null;
+  agreeToTerms: boolean;
+  /** Selected country data */
+  selectedCountry: {
+    name: string;
+    code: string;
+    flag: string;
+  };
+  /** Modal visibility states */
+  countryModalVisible: boolean;
+  cityModalVisible: boolean;
+  /** Search states */
+  countrySearch: string;
+  citySearch: string;
+  /** SSO data if signing up via SSO */
+  ssoData: SSOSignupData | null;
+}
+
+/**
+ * Registration form errors interface
+ */
+export interface RegistrationFormErrors {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+  phoneNumber?: string;
+  country?: string;
+  city?: string;
+}
+
+/**
+ * SSO signup data interface
+ */
+export interface SSOSignupData {
+  provider: string;
+  ssoId: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  profilePicture?: string;
+}
+
+/**
+ * Registration state management interface
+ */
+export interface RegistrationState {
+  /** Current form state */
+  formState: RegistrationFormState;
+  /** Form validation errors */
+  errors: RegistrationFormErrors;
+  /** Loading state */
+  loading: boolean;
+  /** Whether form is valid */
+  isValid: boolean;
+}
+
+/**
  * Authentication context interface
  */
 export interface AuthContextType {
@@ -228,6 +301,29 @@ export interface AuthContextType {
   requestPasswordReset: (email: string) => Promise<void>;
   /** Reset password with token */
   resetPassword: (credentials: PasswordResetCredentials) => Promise<void>;
+  /** Test authentication flow */
+  testAuthenticationFlow: () => Promise<void>;
+  
+  // Registration state management
+  /** Registration form state */
+  registrationState: RegistrationState;
+  /** Update registration form field */
+  updateRegistrationField: <K extends keyof RegistrationFormState>(
+    field: K,
+    value: RegistrationFormState[K]
+  ) => void;
+  /** Update multiple registration form fields */
+  updateRegistrationFields: (fields: Partial<RegistrationFormState>) => void;
+  /** Validate registration form */
+  validateRegistrationForm: () => RegistrationFormErrors;
+  /** Clear registration form errors */
+  clearRegistrationErrors: () => void;
+  /** Reset registration form to initial state */
+  resetRegistrationForm: () => void;
+  /** Set SSO signup data */
+  setSSOSignupData: (data: SSOSignupData | null) => void;
+  /** Handle registration submission */
+  handleRegistration: () => Promise<void>;
 }
 
 /**

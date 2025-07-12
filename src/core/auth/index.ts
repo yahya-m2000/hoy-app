@@ -70,6 +70,7 @@ export {
   getTokenStorageStats,
   updateSecureStorageConfig,
   getRecentStorageOperations,
+  initializeSecureTokenStorage,
 } from './secure-token-storage';
 
 export type {

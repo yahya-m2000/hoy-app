@@ -22,7 +22,14 @@ import { useTheme } from "@core/hooks/useTheme";
 import { useSearchForm } from "@features/search/hooks";
 
 // Components
-import { Button, Container, Header, Text, Icon } from "@shared/components";
+import {
+  Button,
+  Container,
+  Header,
+  Text,
+  Icon,
+  Input,
+} from "@shared/components";
 
 // Constants
 import { iconSize, spacing } from "@core/design";
@@ -43,7 +50,7 @@ const searchLocations = async (query: string): Promise<LocationResult[]> => {
 
   const results: LocationResult[] = [];
 
-  // 1. City matches
+  // Only city matches
   COUNTRIES.forEach((c) => {
     c.cities.forEach((city) => {
       if (city.toLowerCase().includes(lower)) {
@@ -56,30 +63,6 @@ const searchLocations = async (query: string): Promise<LocationResult[]> => {
     });
   });
 
-  // 2. State matches
-  COUNTRIES.forEach((c) => {
-    c.states.forEach((state) => {
-      if (state.toLowerCase().includes(lower)) {
-        results.push({
-          city: state, // reuse city field for display
-          country: c.name,
-          fullName: `${state}, ${c.name}`,
-        });
-      }
-    });
-  });
-
-  // 3. Country matches
-  COUNTRIES.forEach((c) => {
-    if (c.name.toLowerCase().includes(lower)) {
-      results.push({
-        city: c.name, // show the country name in primary text
-        country: "", // secondary text empty for countries
-        fullName: c.name,
-      });
-    }
-  });
-
   // Remove duplicates (by fullName)
   const unique = Array.from(
     new Map(results.map((r) => [r.fullName, r])).values()
@@ -89,17 +72,20 @@ const searchLocations = async (query: string): Promise<LocationResult[]> => {
   return unique.slice(0, 20);
 };
 
-// Basic popular destinations list (static)
+// Popular destinations: pick the first city from the top N countries for variety
 const getPopularDestinations = (): LocationResult[] => {
-  return [
-    { city: "Paris", country: "France", fullName: "Paris, France" },
-    {
-      city: "New York",
-      country: "United States",
-      fullName: "New York, United States",
-    },
-    { city: "Tokyo", country: "Japan", fullName: "Tokyo, Japan" },
-  ];
+  const topCountries = COUNTRIES.slice(0, 10); // Adjust as needed
+  const cities: LocationResult[] = [];
+  topCountries.forEach((country) => {
+    country.cities.slice(0, 2).forEach((city) => {
+      cities.push({
+        city,
+        country: country.name,
+        fullName: `${city}, ${country.name}`,
+      });
+    });
+  });
+  return cities;
 };
 
 interface SearchLocationModalProps {
@@ -117,7 +103,7 @@ export default function SearchLocationModal({
   onLocationSelected,
 }: SearchLocationModalProps) {
   const { theme, isDark } = useTheme();
-  const { updateSearchState } = useSearchForm();
+  const { updateSearchState, searchState } = useSearchForm();
   const insets = useSafeAreaInsets();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -214,41 +200,60 @@ export default function SearchLocationModal({
     onClose();
   };
 
-  const renderLocationItem = ({ item }: { item: LocationResult }) => (
-    <TouchableOpacity
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        paddingHorizontal: spacing.lg,
-        paddingVertical: spacing.md,
-        borderBottomWidth: 1,
-        borderBottomColor: isDark
-          ? theme.colors.gray[700]
-          : theme.colors.gray[200],
-        backgroundColor: "transparent",
-      }}
-      onPress={() => handleLocationSelect(item)}
-    >
-      <Container marginRight="md">
-        <Icon name="location-outline" size={24} color={theme.colors.primary} />
-      </Container>
-      <Container flex={1}>
-        <Text
-          weight="medium"
-          color={isDark ? theme.colors.gray[100] : theme.colors.gray[900]}
-          style={{ marginBottom: spacing.xs }}
-        >
-          {item.city}
-        </Text>
-        <Text
-          size="sm"
-          color={isDark ? theme.colors.gray[400] : theme.colors.gray[600]}
-        >
-          {item.country}
-        </Text>
-      </Container>
-    </TouchableOpacity>
-  );
+  // Highlight selected location
+  const selectedLocation = searchState?.location;
+
+  const renderLocationItem = ({ item }: { item: LocationResult }) => {
+    const locationString = item.fullName || `${item.city}, ${item.country}`;
+    const isSelected = selectedLocation === locationString;
+    return (
+      <TouchableOpacity
+        accessibilityLabel={locationString}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          paddingHorizontal: spacing.lg,
+          paddingVertical: spacing.md,
+          borderBottomWidth: 1,
+          borderBottomColor: isDark
+            ? theme.colors.gray[700]
+            : theme.colors.gray[200],
+          backgroundColor: "transparent",
+        }}
+        onPress={() => handleLocationSelect(item)}
+      >
+        <Container marginRight="md">
+          <Icon
+            name="location-outline"
+            size={24}
+            color={theme.colors.primary}
+          />
+        </Container>
+        <Container flex={1}>
+          <Text
+            weight="medium"
+            color={isDark ? theme.colors.gray[100] : theme.colors.gray[900]}
+            style={{ marginBottom: spacing.xs }}
+          >
+            {item.city}
+          </Text>
+          <Text
+            size="sm"
+            color={isDark ? theme.colors.gray[400] : theme.colors.gray[600]}
+          >
+            {item.country}
+          </Text>
+        </Container>
+        {isSelected && (
+          <Icon
+            name="checkmark-circle"
+            size={20}
+            color={theme.colors.primary}
+          />
+        )}
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <Modal
@@ -268,45 +273,14 @@ export default function SearchLocationModal({
 
         <Container flex={1}>
           {/* Search Input */}
-          <Container
-            flexDirection="row"
-            alignItems="center"
-            marginHorizontal="lg"
-            marginVertical="md"
-            paddingHorizontal="md"
-            borderRadius="md"
-            borderWidth={1}
-            backgroundColor={
-              isDark ? theme.colors.gray[700] : theme.colors.gray[200]
-            }
-            borderColor={
-              isDark ? theme.colors.gray[600] : theme.colors.gray[300]
-            }
-            style={{ height: 48 }}
-          >
-            <Icon
-              name="search"
-              size={20}
-              color={isDark ? theme.colors.gray[400] : theme.colors.gray[500]}
-              style={{ marginRight: spacing.sm }}
-            />
-            <TextInput
-              style={{
-                flex: 1,
-                fontSize: 16,
-                paddingVertical: spacing.sm,
-                color: isDark ? theme.colors.gray[100] : theme.colors.gray[900],
-              }}
+          <Container marginHorizontal="lg" marginVertical="md">
+            <Input
+              value={searchQuery}
+              onChangeText={setSearchQuery}
               placeholder={
                 t("search.searchDestinations") || "Search destinations..."
               }
-              placeholderTextColor={
-                isDark ? theme.colors.gray[400] : theme.colors.gray[500]
-              }
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-              autoFocus={false}
-              clearButtonMode="while-editing"
+              style={{ fontSize: 16 }}
             />
           </Container>
 
@@ -356,6 +330,13 @@ export default function SearchLocationModal({
             style={{ flex: 1 }}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: insets.bottom + 16 }}
+            ListEmptyComponent={
+              <Container alignItems="center" paddingVertical="xl">
+                <Text variant="body" color="secondary">
+                  {t("search.noResultsFound") || "No results found"}
+                </Text>
+              </Container>
+            }
           />
         </Container>
       </Container>

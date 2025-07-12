@@ -6,17 +6,24 @@
  */
 
 // React and React Native
-import React, { useState, useCallback, useEffect, useRef } from "react";
-import { FlatList } from "react-native";
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  useMemo,
+} from "react";
+import { FlatList, Dimensions } from "react-native";
 import { Container, PropertyCardSkeleton, Text } from "@shared/components";
 
 // Third-party libraries
 import { useRouter } from "expo-router";
 import { Skeleton } from "@rneui/base/dist";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 // Shared utilities and hooks
 import { useTheme } from "@core/hooks";
+import { spacing } from "@core/design";
 
 // Local components
 import { PropertyCard } from "../cards/PropertyCard";
@@ -31,15 +38,6 @@ interface HorizontalListingsCarouselProps {
   disableAnimations?: boolean;
 }
 
-// Constants
-const CATEGORIES = [
-  { id: "popular", label: "Popular" },
-  { id: "available", label: "Available" },
-  { id: "topRated", label: "Top Rated" },
-  { id: "new", label: "New" },
-  { id: "featured", label: "Featured" },
-];
-
 // Main Component
 export const HorizontalListingsCarousel: React.FC<
   HorizontalListingsCarouselProps
@@ -47,6 +45,26 @@ export const HorizontalListingsCarousel: React.FC<
   // Hooks
   const { theme, isDark } = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
+
+  // Get screen width for responsive sizing
+  const screenWidth = Dimensions.get("window").width;
+  const cardMargin = spacing.md;
+  const containerPadding = spacing.md * 2; // padding on both sides
+  const cardWidth = (screenWidth - containerPadding - cardMargin) / 2; // Same calculation as wishlist
+  const snapToInterval = cardWidth + cardMargin; // card width + margin for smooth snapping
+
+  // Categories - moved inside component to be reactive to language changes
+  const CATEGORIES = useMemo(
+    () => [
+      { id: "popular", label: t("home.categories.popular") },
+      { id: "available", label: t("home.categories.available") },
+      { id: "topRated", label: t("home.categories.topRated") },
+      { id: "new", label: t("home.categories.new") },
+      { id: "featured", label: t("home.categories.featured") },
+    ],
+    [t]
+  );
 
   // State - Pick a random category on component mount and keep it fixed
   const [currentCategoryIndex] = useState(() =>
@@ -183,7 +201,12 @@ export const HorizontalListingsCarousel: React.FC<
 
   // Render functions
   const renderProperty = ({ item }: { item: PropertyType }) => (
-    <Container paddingHorizontal="md">
+    <Container
+      style={{
+        width: cardWidth,
+        marginRight: spacing.md,
+      }}
+    >
       <PropertyCard
         _id={item._id}
         name={item.name}
@@ -197,14 +220,21 @@ export const HorizontalListingsCarousel: React.FC<
         reviewCount={item.reviewCount}
         propertyType={item.propertyType}
         onPress={() => handlePropertyPress(item)}
-        variant="large"
+        variant="collection"
         animateOnMount={!disableAnimations}
         fadeInDuration={600}
       />
     </Container>
   );
+
   const renderSkeletonItem = () => (
-    <Container paddingHorizontal="md">
+    <Container
+      style={{
+        width: cardWidth,
+        marginRight: spacing.md,
+        marginBottom: spacing.lg,
+      }}
+    >
       <PropertyCardSkeleton variant="large" />
     </Container>
   );
@@ -220,7 +250,8 @@ export const HorizontalListingsCarousel: React.FC<
         showsHorizontalScrollIndicator={false}
         snapToAlignment="start"
         decelerationRate="fast"
-        snapToInterval={216} // Adjusted for spacing
+        snapToInterval={snapToInterval}
+        contentContainerStyle={{ paddingHorizontal: spacing.md }}
       />
     </Container>
   );
@@ -232,7 +263,7 @@ export const HorizontalListingsCarousel: React.FC<
         color={isDark ? theme.colors.gray[400] : theme.colors.gray[500]}
         variant="body"
       >
-        {t("home.noPropertiesAvailable")}
+        {t("home.noPropertiesInCategory")}
       </Text>
     </Container>
   );
@@ -295,13 +326,13 @@ export const HorizontalListingsCarousel: React.FC<
         keyExtractor={(item) => item._id}
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 8 }}
         snapToAlignment="start"
         decelerationRate="fast"
-        snapToInterval={216} // Adjusted for spacing
+        snapToInterval={snapToInterval}
         initialNumToRender={3}
         maxToRenderPerBatch={4}
         windowSize={5}
+        contentContainerStyle={{ paddingHorizontal: spacing.md }}
       />
     </>
   );

@@ -14,7 +14,6 @@ import { useTheme } from "@core/hooks";
 import { fontSize, fontWeight, spacing, iconSize, radius } from "@core/design";
 
 // Features
-import { PropertyCard } from "src/features/properties/trash/Cards";
 import { PropertyImageContainer } from "@features/properties/components/details";
 import {
   useProperties,
@@ -145,20 +144,12 @@ export default function SearchResultsScreen() {
 
     return (
       <Container
-        backgroundColor={isDark ? theme.colors.gray[800] : theme.white}
+        backgroundColor={theme.surface}
         paddingHorizontal="lg"
         paddingVertical="md"
-        marginHorizontal="md"
         marginTop="sm"
         borderRadius="xl"
         marginBottom="md"
-        style={{
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: isDark ? 0.3 : 0.1,
-          shadowRadius: 8,
-          elevation: 4,
-        }}
       >
         <Container
           flexDirection="row"
@@ -194,13 +185,6 @@ export default function SearchResultsScreen() {
 
           <TouchableOpacity
             onPress={() => router.back()}
-            style={{
-              padding: spacing.sm,
-              borderRadius: radius.md,
-              backgroundColor: isDark
-                ? theme.colors.gray[700]
-                : theme.colors.gray[100],
-            }}
             hitSlop={{
               top: spacing.sm,
               bottom: spacing.sm,
@@ -224,7 +208,7 @@ export default function SearchResultsScreen() {
     if (loading) return null;
 
     return (
-      <Container paddingHorizontal="md" paddingBottom="sm">
+      <Container paddingBottom="sm">
         <Text
           variant="h6"
           weight="semibold"
@@ -269,7 +253,7 @@ export default function SearchResultsScreen() {
       typeof property.price === "object" ? property.price.currency : "USD";
 
     return (
-      <Container padding="md">
+      <Container paddingVertical="md">
         <Container flexDirection="row">
           {/* Property Image */}
           <Container width={80} height={80} marginRight="md">
@@ -372,84 +356,65 @@ export default function SearchResultsScreen() {
       title={t("search.results") || "Search Results"}
       showFilter={true}
       onFilter={handleFiltersPress}
-      padding="none"
       scrollable={false}
-      style={{
-        backgroundColor: isDark
-          ? theme.colors.gray[900]
-          : theme.colors.gray[50],
-      }}
+      showDivider={false}
     >
-      <StatusBar style={isDark ? "light" : "dark"} />
+      <Container paddingHorizontal="md">
+        <StatusBar style={isDark ? "light" : "dark"} />
 
-      <FlatList
-        data={properties}
-        keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={{
-              backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
-              marginHorizontal: spacing.md,
-              marginBottom: spacing.sm,
-              borderRadius: radius.lg,
-              overflow: "hidden",
-              elevation: 2,
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.1,
-              shadowRadius: 2,
-            }}
-            onPress={() => handlePropertyPress(item)}
-            activeOpacity={0.7}
-          >
-            <PropertyCard property={item} />
-          </TouchableOpacity>
-        )}
-        ListHeaderComponent={
-          <Container>
-            {renderSearchSummary()}
-            {renderResultsCount()}
-          </Container>
-        }
-        ListEmptyComponent={!loading ? renderEmptyState : null}
-        contentContainerStyle={
-          properties.length === 0
-            ? {
-                flex: 1,
-                justifyContent: "center",
-                backgroundColor: isDark
-                  ? theme.colors.gray[900]
-                  : theme.colors.gray[50],
+        <FlatList
+          data={properties}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={{
+                marginBottom: spacing.sm,
+                borderRadius: radius.lg,
+                overflow: "hidden",
+              }}
+              onPress={() => handlePropertyPress(item)}
+              activeOpacity={0.7}
+            >
+              <PropertyCard property={item} />
+            </TouchableOpacity>
+          )}
+          ListHeaderComponent={
+            <Container>
+              {renderSearchSummary()}
+              {renderResultsCount()}
+            </Container>
+          }
+          ListEmptyComponent={!loading ? renderEmptyState : null}
+          contentContainerStyle={
+            properties.length === 0
+              ? {
+                  flex: 1,
+                  justifyContent: "center",
+                }
+              : {}
+          }
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={loading}
+              onRefresh={handleRefresh}
+              tintColor={theme.colors.primary}
+              colors={[theme.colors.primary]}
+              progressBackgroundColor={
+                isDark ? theme.colors.gray[800] : theme.white
               }
-            : {
-                paddingBottom: spacing.xxl,
-                marginTop: spacing.sm,
-                backgroundColor: isDark
-                  ? theme.colors.gray[900]
-                  : theme.colors.gray[50],
-              }
-        }
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={loading}
-            onRefresh={handleRefresh}
-            tintColor={theme.colors.primary}
-            colors={[theme.colors.primary]}
-            progressBackgroundColor={
-              isDark ? theme.colors.gray[800] : theme.white
-            }
-          />
-        }
-        ItemSeparatorComponent={() => (
-          <Container height={spacing.sm}>
-            <></>
-          </Container>
-        )}
-        initialNumToRender={5}
-        maxToRenderPerBatch={10}
-        windowSize={10}
-      />
+            />
+          }
+          ItemSeparatorComponent={() => (
+            <Container height={spacing.sm}>
+              <></>
+            </Container>
+          )}
+          initialNumToRender={5}
+          maxToRenderPerBatch={10}
+          windowSize={10}
+        />
+      </Container>
     </ListScreen>
   );
 }

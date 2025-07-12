@@ -1,4 +1,9 @@
-import React, { useState } from "react";
+/**
+ * Sign Up Screen for the Hoy application
+ * Provides user registration functionality with comprehensive form validation
+ */
+
+import React, { useState, useEffect } from "react";
 import {
   ScrollView,
   KeyboardAvoidingView,
@@ -10,22 +15,39 @@ import {
 } from "react-native";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import * as ImagePicker from "expo-image-picker";
 import { useTranslation } from "react-i18next";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from "expo-image-picker";
 
-import { useAuth, useToast } from "@core/context";
+// Context and hooks
+import { useAuth, useToast, useLocation } from "@core/context";
 import { useTheme } from "@core/hooks/useTheme";
-import { getAuthDebugInfo } from "@core/auth";
 import {
-  validatePhoneNumber,
+  KeyboardAwareScrollView,
+  KeyboardToolbar,
+} from "react-native-keyboard-controller";
+
+// Base Components
+import { Text, Button, Input, PhoneInput } from "src/shared/components/base";
+import { Container, Header, Screen } from "src/shared";
+import { PasswordStrengthIndicator } from "src/shared/components";
+import AvatarPicker from "src/shared/components/form/AvatarPicker";
+
+// Auth Components
+import { AuthToggle, SocialLogin } from "src/features/auth";
+
+// Country and city data
+import {
   COUNTRIES,
+  getCitiesByCountryCode,
   searchCountries,
+  searchCities,
 } from "@core/utils/data/countries";
 
-import { Text, Button, Input } from "src/shared/components/base";
-import { Container, Header } from "src/shared";
-import { SocialLogin } from "src/features/auth";
+// Password utilities
+import { generatePasswordSuggestions } from "@core/utils/security";
 
+// Types
 interface FormErrors {
   firstName?: string;
   lastName?: string;
@@ -37,146 +59,162 @@ interface FormErrors {
   city?: string;
 }
 
+interface SSOSignupData {
+  provider: string;
+  ssoId: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  profilePicture?: string;
+}
+
 export default function SignUpScreen() {
   const { t } = useTranslation();
-  const { register: authRegister } = useAuth();
+  const {
+    registrationState,
+    updateRegistrationField,
+    updateRegistrationFields,
+    clearRegistrationErrors,
+    resetRegistrationForm,
+    setSSOSignupData,
+    handleRegistration,
+  } = useAuth();
   const { showToast } = useToast();
   const { theme, isDark } = useTheme();
+  const { address, getCurrentLocation, requestLocationPermission } =
+    useLocation();
 
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<FormErrors>({});
-
-  // Form fields
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  // Local state for UI interactions
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [avatar, setAvatar] = useState<string | null>(null);
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [country, setCountry] = useState("");
-  const [city, setCity] = useState("");
-  const [agreeToTerms, setAgreeToTerms] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
-  const [countryModalVisible, setCountryModalVisible] = useState(false);
-  const [countrySearch, setCountrySearch] = useState("");
 
-  const filteredCountries = searchCountries(countrySearch);
+  const { formState, errors, loading } = registrationState;
 
-  const validateForm = (): FormErrors => {
-    const newErrors: FormErrors = {};
+  // Computed values
+  const filteredCountries = searchCountries(formState.countrySearch);
+  const availableCities = getCitiesByCountryCode(
+    formState.selectedCountry.code
+  );
+  const filteredCities = formState.citySearch.trim()
+    ? searchCities(formState.citySearch, formState.selectedCountry.code)
+    : availableCities;
 
-    if (!firstName.trim()) {
-      newErrors.firstName = t("auth.validation.firstNameRequired");
+  // Check for SSO signup data on mount
+  useEffect(() => {
+    const checkSSOData = async () => {
+      try {
+        console.log("Checking for SSO data in AsyncStorage...");
+        const storedData = await AsyncStorage.getItem("ssoSignupData");
+        console.log("Stored SSO data:", storedData);
+
+        if (storedData) {
+          const data: SSOSignupData = JSON.parse(storedData);
+          console.log("Parsed SSO data:", data);
+          setSSOSignupData(data);
+
+          // Clear the stored data
+          await AsyncStorage.removeItem("ssoSignupData");
+
+          showToast({
+            type: "info",
+            message: t("auth.ssoSignupInfo", {
+              provider: data.provider,
+            }),
+          });
+        } else {
+          console.log("No SSO data found in AsyncStorage");
+        }
+      } catch (error) {
+        console.error("Error loading SSO data:", error);
+      }
+    };
+
+    checkSSOData();
+  }, []);
+
+  // Auto-fill location data when available
+  useEffect(() => {
+    if (address && !formState.country) {
+      // Find matching country by name or code
+      const matchingCountry = COUNTRIES.find(
+        (c) =>
+          c.name.toLowerCase() === address.country.toLowerCase() ||
+          c.code.toLowerCase() === address.countryCode.toLowerCase()
+      );
+
+      if (matchingCountry) {
+        updateRegistrationFields({
+          selectedCountry: matchingCountry,
+          country: matchingCountry.name,
+          city: address.city || "",
+        });
+
+        showToast({
+          type: "info",
+          message: t("location.addressAutoFilled"),
+        });
+      }
     }
+  }, [address, formState.country]);
 
-    if (!lastName.trim()) {
-      newErrors.lastName = t("auth.validation.lastNameRequired");
-    }
-
-    if (!email.trim()) {
-      newErrors.email = t("auth.validation.emailInvalid");
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = t("auth.validation.emailInvalid");
-    }
-
-    if (!password) {
-      newErrors.password = t("auth.validation.passwordTooShort");
-    } else if (password.length < 8) {
-      newErrors.password = t("auth.validation.passwordTooShort");
-    } else if (
-      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-        password
-      )
-    ) {
-      newErrors.password = t("auth.validation.passwordComplexity");
-    }
-
-    if (password !== confirmPassword) {
-      newErrors.confirmPassword = t("auth.validation.passwordsDoNotMatch");
-    }
-
-    if (!phoneNumber.trim()) {
-      newErrors.phoneNumber = t("auth.validation.phoneRequired");
-    }
-
-    if (!country.trim()) {
-      newErrors.country = t("auth.validation.countryRequired");
-    }
-
-    if (!city.trim()) {
-      newErrors.city = t("auth.validation.cityRequired");
-    }
-
-    return newErrors;
+  // Handle country selection
+  const handleCountrySelect = (selectedCountryData: (typeof COUNTRIES)[0]) => {
+    updateRegistrationFields({
+      selectedCountry: selectedCountryData,
+      country: selectedCountryData.name,
+      countryModalVisible: false,
+      countrySearch: "",
+      // Clear city when country changes
+      city: "",
+    });
   };
 
+  // Handle city selection
+  const handleCitySelect = (selectedCity: string) => {
+    updateRegistrationFields({
+      city: selectedCity,
+      cityModalVisible: false,
+      citySearch: "",
+    });
+  };
+
+  // Handle registration submission
   const handleRegister = async () => {
-    const formErrors = validateForm();
-    if (Object.keys(formErrors).length > 0) {
-      setErrors(formErrors);
-      return;
-    }
-
-    if (!agreeToTerms) {
-      showToast({
-        type: "error",
-        message: "Please agree to the terms and conditions",
-      });
-      return;
-    }
-
-    setLoading(true);
-    setErrors({});
     try {
-      await authRegister({
-        email,
-        password,
-        firstName,
-        lastName,
-        phoneNumber,
-        profilePicture: avatar,
-        address: { city, country },
-      } as any);
-      await getAuthDebugInfo();
-      showToast({ type: "success", message: "Account created successfully!" });
+      console.log("Starting registration with form state:", {
+        hasSSOData: !!formState.ssoData,
+        ssoData: formState.ssoData,
+        email: formState.email,
+        firstName: formState.firstName,
+        lastName: formState.lastName,
+        hasPassword: !!formState.password,
+        agreeToTerms: formState.agreeToTerms,
+      });
+
+      await handleRegistration();
+
+      showToast({
+        type: "success",
+        message: t("auth.registrationSuccess"),
+      });
+
       router.back();
-    } catch (err) {
-      console.error("Registration error:", err);
+    } catch (error) {
+      console.error("Registration error:", error);
       showToast({
         type: "error",
         message:
-          err instanceof Error
-            ? err.message
-            : "Registration failed. Please try again.",
+          error instanceof Error ? error.message : t("auth.registrationFailed"),
       });
-    } finally {
-      setLoading(false);
     }
   };
 
-  const pickAvatar = async () => {
-    const permission = await ImagePicker.requestCameraPermissionsAsync();
-    if (permission.status !== "granted") {
-      showToast({
-        type: "error",
-        message: t("auth.avatar.cameraPermissionDenied"),
-      });
-      return;
-    }
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.7,
-    });
-    if (!result.canceled && result.assets && result.assets.length > 0) {
-      setAvatar(result.assets[0].uri);
-    }
+  // Handle avatar picker
+  const handleAvatarChange = (avatarUri: string | null) => {
+    updateRegistrationField("avatar", avatarUri);
   };
 
+  // Handle terms and privacy links
   const openTerms = () => {
     Linking.openURL("https://example.com/terms");
   };
@@ -186,22 +224,44 @@ export default function SignUpScreen() {
   };
 
   return (
-    <Container flex={1}>
-      <Header
-        title={t("auth.createAccount")}
-        left={{ icon: "arrow-back", onPress: () => router.back() }}
-      />
-      <StatusBar style={isDark ? "light" : "dark"} />
-
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}
+    <>
+      <KeyboardAwareScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flexGrow: 1, marginBottom: 60 }}
+        bottomOffset={60}
       >
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flexGrow: 1 }}
-        >
+        <Container flex={1}>
+          <Header
+            title={t("auth.createAccount")}
+            left={{
+              icon: "arrow-back",
+              onPress: () => router.back(),
+            }}
+          />
+          <StatusBar style={isDark ? "light" : "dark"} />
+
           <Container flex={1} padding="lg">
+            {/* Error Messages */}
+            {Object.keys(errors).length > 0 && (
+              <Container
+                marginBottom="lg"
+                padding="md"
+                backgroundColor="error"
+                borderRadius="md"
+              >
+                {Object.entries(errors).map(([field, error]) => (
+                  <Text
+                    key={field}
+                    variant="body"
+                    color="white"
+                    style={{ textAlign: "center", marginBottom: 4 }}
+                  >
+                    {error}
+                  </Text>
+                ))}
+              </Container>
+            )}
+
             {/* Profile Picture Section */}
             <Container marginBottom="xl">
               <Container marginBottom="md">
@@ -209,35 +269,14 @@ export default function SignUpScreen() {
                   {t("auth.profilePicture")}
                 </Text>
               </Container>
-              <TouchableOpacity
-                onPress={pickAvatar}
-                style={{ alignSelf: "center", marginBottom: 8 }}
-              >
-                {avatar ? (
-                  <Image
-                    source={{ uri: avatar }}
-                    style={{ width: 100, height: 100, borderRadius: 50 }}
-                  />
-                ) : (
-                  <Container
-                    style={{
-                      width: 100,
-                      height: 100,
-                      borderRadius: 50,
-                      backgroundColor: theme.colors.gray?.[200] || "#f0f0f0",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderWidth: 2,
-                      borderColor: theme.colors.gray?.[300] || "#ccc",
-                      borderStyle: "dashed",
-                    }}
-                  >
-                    <Text color="secondary" variant="caption">
-                      {t("auth.avatar.selectPhoto")}
-                    </Text>
-                  </Container>
-                )}
-              </TouchableOpacity>
+              <Container style={{ alignSelf: "center", marginBottom: 8 }}>
+                <AvatarPicker
+                  value={formState.avatar}
+                  onChange={handleAvatarChange}
+                  size={100}
+                  uploadToStorage={false}
+                />
+              </Container>
               <Text variant="caption" color="secondary" align="center">
                 {t("auth.profilePictureHelper")}
               </Text>
@@ -253,11 +292,13 @@ export default function SignUpScreen() {
               <Container marginBottom="md">
                 <Input
                   label={t("auth.firstName")}
-                  value={firstName}
-                  onChangeText={setFirstName}
+                  value={formState.firstName}
+                  onChangeText={(value) =>
+                    updateRegistrationField("firstName", value)
+                  }
                   placeholder={t("auth.firstName")}
                   autoCapitalize="words"
-                  error={errors.firstName}
+                  style={{ marginBottom: 8 }}
                 />
                 <Text variant="caption" color="secondary">
                   {t("auth.firstNameHelper")}
@@ -266,11 +307,13 @@ export default function SignUpScreen() {
               <Container marginBottom="md">
                 <Input
                   label={t("auth.lastName")}
-                  value={lastName}
-                  onChangeText={setLastName}
+                  value={formState.lastName}
+                  onChangeText={(value) =>
+                    updateRegistrationField("lastName", value)
+                  }
                   placeholder={t("auth.lastName")}
                   autoCapitalize="words"
-                  error={errors.lastName}
+                  style={{ marginBottom: 8 }}
                 />
                 <Text variant="caption" color="secondary">
                   {t("auth.lastNameHelper")}
@@ -288,49 +331,32 @@ export default function SignUpScreen() {
               <Container marginBottom="md">
                 <Input
                   label={t("auth.email")}
-                  value={email}
-                  onChangeText={setEmail}
+                  value={formState.email}
+                  onChangeText={(value) =>
+                    updateRegistrationField("email", value)
+                  }
                   placeholder={t("auth.email")}
                   keyboardType="email-address"
                   autoCapitalize="none"
-                  error={errors.email}
+                  style={{ marginBottom: 8 }}
                 />
                 <Text variant="caption" color="secondary">
                   {t("auth.emailHelper")}
                 </Text>
               </Container>
               <Container marginBottom="md">
-                <Container flexDirection="row" alignItems="center">
-                  <TouchableOpacity
-                    onPress={() => setCountryModalVisible(true)}
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      paddingHorizontal: 8,
-                      paddingVertical: 14,
-                      borderWidth: 1,
-                      borderColor: theme.text.primary || "#ccc",
-                      borderRadius: 8,
-                      marginRight: 8,
-                    }}
-                  >
-                    <Text>{selectedCountry.phoneCode}</Text>
-                  </TouchableOpacity>
-                  <Input
-                    style={{ flex: 1 }}
-                    label={t("auth.phoneNumber")}
-                    value={phoneNumber}
-                    onChangeText={setPhoneNumber}
-                    placeholder={t("auth.phoneNumber")}
-                    keyboardType="phone-pad"
-                    error={errors.phoneNumber}
-                  />
-                </Container>
-                <Container marginTop="xs">
-                  <Text variant="caption" color="secondary">
-                    {t("auth.phoneHelper")}
-                  </Text>
-                </Container>
+                <PhoneInput
+                  label={t("auth.phoneNumber")}
+                  value={formState.phoneNumber}
+                  onChangeText={(value) =>
+                    updateRegistrationField("phoneNumber", value)
+                  }
+                  placeholder={t("auth.phoneNumber")}
+                  style={{ marginBottom: 8 }}
+                />
+                <Text variant="caption" color="secondary">
+                  {t("auth.phoneNumberHelper")}
+                </Text>
               </Container>
             </Container>
 
@@ -342,27 +368,153 @@ export default function SignUpScreen() {
                 </Text>
               </Container>
               <Container marginBottom="md">
-                <Input
-                  label={t("auth.country")}
-                  value={country}
-                  onChangeText={setCountry}
-                  placeholder={t("auth.country")}
-                  error={errors.country}
-                />
-                <Text variant="caption" color="secondary">
+                <TouchableOpacity
+                  onPress={() =>
+                    updateRegistrationField("countryModalVisible", true)
+                  }
+                  style={{
+                    borderWidth: 1,
+                    borderColor: errors.country
+                      ? theme.error
+                      : theme.text?.secondary || theme.secondary,
+                    borderRadius: 8,
+                    paddingHorizontal: 16,
+                    paddingVertical: 16,
+                    backgroundColor: theme.background,
+                    minHeight: 56,
+                  }}
+                >
+                  <Text
+                    variant="caption"
+                    color="secondary"
+                    style={{
+                      marginBottom: 4,
+                      fontSize: 12,
+                      color: theme.text?.secondary || theme.secondary,
+                    }}
+                  >
+                    {t("auth.country")}
+                  </Text>
+                  <Text
+                    variant="body"
+                    style={{
+                      color: formState.country
+                        ? theme.text?.primary || theme.primary
+                        : theme.text?.secondary || theme.secondary,
+                      fontSize: 16,
+                      fontWeight: formState.country ? "400" : "300",
+                    }}
+                  >
+                    {formState.country || t("auth.selectCountry")}
+                  </Text>
+                </TouchableOpacity>
+                {errors.country && (
+                  <Text
+                    variant="caption"
+                    color="error"
+                    style={{
+                      marginTop: 4,
+                      marginLeft: 4,
+                      fontSize: 12,
+                      color: theme.error,
+                    }}
+                  >
+                    {errors.country}
+                  </Text>
+                )}
+                <Text
+                  variant="caption"
+                  color="secondary"
+                  style={{
+                    marginTop: 4,
+                    marginLeft: 4,
+                    fontSize: 12,
+                    color: theme.text?.secondary || theme.secondary,
+                  }}
+                >
                   {t("auth.countryHelper")}
                 </Text>
               </Container>
               <Container marginBottom="md">
-                <Input
-                  label={t("auth.city")}
-                  value={city}
-                  onChangeText={setCity}
-                  placeholder={t("auth.city")}
-                  error={errors.city}
-                />
-                <Text variant="caption" color="secondary">
-                  {t("auth.cityHelper")}
+                <TouchableOpacity
+                  onPress={() => {
+                    if (!formState.country) {
+                      showToast({
+                        type: "error",
+                        message: "Please select a country first",
+                      });
+                      return;
+                    }
+                    updateRegistrationField("cityModalVisible", true);
+                  }}
+                  style={{
+                    borderWidth: 1,
+                    borderColor: errors.city
+                      ? theme.error
+                      : theme.text?.secondary || theme.secondary,
+                    borderRadius: 8,
+                    paddingHorizontal: 16,
+                    paddingVertical: 16,
+                    backgroundColor: theme.background,
+                    minHeight: 56,
+                    opacity: formState.country ? 1 : 0.6,
+                  }}
+                  disabled={!formState.country}
+                >
+                  <Text
+                    variant="caption"
+                    color="secondary"
+                    style={{
+                      marginBottom: 4,
+                      fontSize: 12,
+                      color: theme.text?.secondary || theme.secondary,
+                    }}
+                  >
+                    {t("auth.city")}
+                  </Text>
+                  <Text
+                    variant="body"
+                    style={{
+                      color: formState.city
+                        ? theme.text?.primary || theme.primary
+                        : theme.text?.secondary || theme.secondary,
+                      fontSize: 16,
+                      fontWeight: formState.city ? "400" : "300",
+                    }}
+                  >
+                    {formState.city ||
+                      (formState.country
+                        ? t("auth.selectCity")
+                        : "Select country first")}
+                  </Text>
+                </TouchableOpacity>
+                {errors.city && (
+                  <Text
+                    variant="caption"
+                    color="error"
+                    style={{
+                      marginTop: 4,
+                      marginLeft: 4,
+                      fontSize: 12,
+                      color: theme.error,
+                    }}
+                  >
+                    {errors.city}
+                  </Text>
+                )}
+                <Text
+                  variant="caption"
+                  color="secondary"
+                  style={{
+                    marginTop: 4,
+                    marginLeft: 4,
+                    fontSize: 12,
+                    color: theme.text?.secondary || theme.secondary,
+                  }}
+                >
+                  {formState.country
+                    ? `${availableCities.length} cities available in ${formState.country}`
+                    : t("auth.cityHelper")}
                 </Text>
               </Container>
             </Container>
@@ -373,36 +525,94 @@ export default function SignUpScreen() {
                 <Text variant="h6" color="primary">
                   {t("auth.password")}
                 </Text>
+                {formState.ssoData && (
+                  <Text
+                    variant="caption"
+                    color="secondary"
+                    style={{ marginTop: 4 }}
+                  >
+                    {t("auth.passwordOptional")}
+                  </Text>
+                )}
               </Container>
               <Container marginBottom="md">
                 <Input
                   label={t("auth.password")}
-                  value={password}
-                  onChangeText={setPassword}
-                  placeholder={t("auth.password")}
+                  value={formState.password}
+                  onChangeText={(value) =>
+                    updateRegistrationField("password", value)
+                  }
+                  placeholder={
+                    formState.ssoData
+                      ? t("auth.passwordOptional")
+                      : t("auth.password")
+                  }
                   secureTextEntry={!showPassword}
                   autoCapitalize="none"
-                  error={errors.password}
                   rightIcon={showPassword ? "eye-off" : "eye"}
                   onRightIconPress={() => setShowPassword(!showPassword)}
+                  style={{ marginBottom: 8 }}
+                  textContentType="newPassword"
+                  autoComplete="new-password"
+                  passwordRules="minlength: 8; required: lower; required: upper; required: digit; required: [-];"
                 />
                 <Text variant="caption" color="secondary">
                   {t("auth.passwordHelper")}
                 </Text>
+                <PasswordStrengthIndicator
+                  password={formState.password}
+                  showSuggestions={true}
+                />
+
+                {/* Password Suggestion Button */}
+                {/* <TouchableOpacity
+                  onPress={() => {
+                    const suggestions = generatePasswordSuggestions(1);
+                    if (suggestions.length > 0) {
+                      updateRegistrationField("password", suggestions[0]);
+                      updateRegistrationField(
+                        "confirmPassword",
+                        suggestions[0]
+                      );
+                      showToast({
+                        type: "info",
+                        message:
+                          "Strong password generated! Please review and confirm.",
+                      });
+                    }
+                  }}
+                  style={{
+                    backgroundColor: theme.primary,
+                    paddingHorizontal: 12,
+                    paddingVertical: 8,
+                    borderRadius: 6,
+                    alignSelf: "flex-start",
+                    marginTop: 8,
+                  }}
+                >
+                  <Text size="sm" color="white" weight="medium">
+                    🔐 Generate Strong Password
+                  </Text>
+                </TouchableOpacity> */}
               </Container>
               <Container marginBottom="md">
                 <Input
                   label={t("auth.confirmPassword")}
-                  value={confirmPassword}
-                  onChangeText={setConfirmPassword}
+                  value={formState.confirmPassword}
+                  onChangeText={(value) =>
+                    updateRegistrationField("confirmPassword", value)
+                  }
                   placeholder={t("auth.confirmPassword")}
                   secureTextEntry={!showConfirmPassword}
                   autoCapitalize="none"
-                  error={errors.confirmPassword}
                   rightIcon={showConfirmPassword ? "eye-off" : "eye"}
                   onRightIconPress={() =>
                     setShowConfirmPassword(!showConfirmPassword)
                   }
+                  style={{ marginBottom: 8 }}
+                  textContentType="newPassword"
+                  autoComplete="new-password"
+                  passwordRules="minlength: 8; required: lower; required: upper; required: digit; required: [-];"
                 />
                 <Text variant="caption" color="secondary">
                   {t("auth.confirmPasswordHelper")}
@@ -418,7 +628,12 @@ export default function SignUpScreen() {
                   alignItems: "flex-start",
                   marginBottom: 16,
                 }}
-                onPress={() => setAgreeToTerms(!agreeToTerms)}
+                onPress={() =>
+                  updateRegistrationField(
+                    "agreeToTerms",
+                    !formState.agreeToTerms
+                  )
+                }
               >
                 <Container
                   style={{
@@ -427,7 +642,7 @@ export default function SignUpScreen() {
                     borderRadius: 4,
                     borderWidth: 2,
                     borderColor: theme.primary,
-                    backgroundColor: agreeToTerms
+                    backgroundColor: formState.agreeToTerms
                       ? theme.primary
                       : "transparent",
                     marginRight: 12,
@@ -436,7 +651,7 @@ export default function SignUpScreen() {
                     justifyContent: "center",
                   }}
                 >
-                  {agreeToTerms && (
+                  {formState.agreeToTerms && (
                     <Text color="white" variant="caption">
                       ✓
                     </Text>
@@ -480,7 +695,13 @@ export default function SignUpScreen() {
             <Container marginBottom="lg">
               <Button
                 title={t("auth.createAccount")}
-                onPress={handleRegister}
+                onPress={() => {
+                  console.log("Register button pressed");
+                  console.log("Current form state:", formState);
+                  console.log("Current errors:", errors);
+                  console.log("Loading state:", loading);
+                  handleRegister();
+                }}
                 loading={loading}
                 variant="primary"
                 style={{ marginBottom: 16 }}
@@ -489,56 +710,134 @@ export default function SignUpScreen() {
               <Button
                 title={t("auth.alreadyHaveAccount")}
                 variant="ghost"
-                onPress={() => router.back()}
+                onPress={() => router.push("/(auth)/sign-in")}
                 style={{ alignSelf: "center" }}
               />
             </Container>
           </Container>
-        </ScrollView>
-      </KeyboardAvoidingView>
 
-      <Modal
-        visible={countryModalVisible}
-        animationType="slide"
-        onRequestClose={() => setCountryModalVisible(false)}
-      >
-        <Header
-          title={t("auth.country")}
-          left={{
-            icon: "arrow-back",
-            onPress: () => setCountryModalVisible(false),
-          }}
-        />
-        <Container flex={1} paddingHorizontal="lg">
-          <Input
-            placeholder={t("common.search")}
-            value={countrySearch}
-            onChangeText={setCountrySearch}
-            autoCapitalize="none"
-            style={{ marginBottom: 16 }}
-          />
-          <ScrollView keyboardShouldPersistTaps="handled">
-            {filteredCountries.map((c) => (
-              <TouchableOpacity
-                key={c.code}
+          {/* Country Selection Modal */}
+          <Modal
+            visible={formState.countryModalVisible}
+            animationType="slide"
+            onRequestClose={() =>
+              updateRegistrationField("countryModalVisible", false)
+            }
+          >
+            <Container flex={1} backgroundColor="background">
+              <Container
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
+                  justifyContent: "space-between",
+                  paddingHorizontal: 16,
                   paddingVertical: 12,
                 }}
-                onPress={() => {
-                  setSelectedCountry(c);
-                  setCountryModalVisible(false);
+              >
+                <Text variant="h6" color="primary">
+                  {t("auth.country")}
+                </Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    updateRegistrationField("countryModalVisible", false)
+                  }
+                >
+                  <Text variant="body" color="primary">
+                    {t("common.cancel")}
+                  </Text>
+                </TouchableOpacity>
+              </Container>
+
+              <ScrollView keyboardShouldPersistTaps="handled">
+                {filteredCountries.map((c) => (
+                  <TouchableOpacity
+                    key={c.code}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      paddingVertical: 16,
+                      marginHorizontal: 16,
+                      borderBottomWidth: 1,
+                      borderBottomColor: theme.border,
+                    }}
+                    onPress={() => {
+                      handleCountrySelect(c);
+                    }}
+                  >
+                    <Container style={{ flex: 1 }}>
+                      <Text weight="medium">{c.name}</Text>
+                      <Text variant="caption" color="secondary">
+                        {c.phoneCode}
+                      </Text>
+                    </Container>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </Container>
+          </Modal>
+
+          {/* City Selection Modal */}
+          <Modal
+            visible={formState.cityModalVisible}
+            animationType="slide"
+            onRequestClose={() =>
+              updateRegistrationField("cityModalVisible", false)
+            }
+          >
+            <Container flex={1} backgroundColor="background">
+              <Container
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  paddingHorizontal: 16,
+                  paddingVertical: 12,
                 }}
               >
-                <Text weight="medium">
-                  {c.name} ({c.phoneCode})
+                <Text variant="h6" color="primary">
+                  {t("auth.city")}
                 </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+                <TouchableOpacity
+                  onPress={() =>
+                    updateRegistrationField("cityModalVisible", false)
+                  }
+                >
+                  <Text variant="body" color="primary">
+                    {t("common.cancel")}
+                  </Text>
+                </TouchableOpacity>
+              </Container>
+
+              <ScrollView keyboardShouldPersistTaps="handled">
+                {filteredCities.map((c) => (
+                  <TouchableOpacity
+                    key={c}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      paddingVertical: 16,
+                      marginHorizontal: 16,
+                      borderBottomWidth: 1,
+                      borderBottomColor: theme.border,
+                    }}
+                    onPress={() => {
+                      handleCitySelect(c);
+                    }}
+                  >
+                    <Container style={{ flex: 1 }}>
+                      <Text weight="medium">{c}</Text>
+                      <Text variant="caption" color="secondary">
+                        {formState.selectedCountry.name}
+                      </Text>
+                    </Container>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </Container>
+          </Modal>
         </Container>
-      </Modal>
-    </Container>
+      </KeyboardAwareScrollView>
+      <KeyboardToolbar />
+    </>
   );
 }

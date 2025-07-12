@@ -10,13 +10,7 @@
 import { Platform } from "react-native";
 
 // Detect if we're in Expo Go (custom fonts won't work)
-const isExpoGo =
-  __DEV__ &&
-  !Platform.select({
-    ios: false, // In dev builds, this will be false
-    android: false, // In dev builds, this will be false
-    default: true, // Fallback assumes we might be in Expo Go
-  });
+const isExpoGo = false; // Disable Expo Go detection for now to use custom fonts
 
 // Custom font families
 export const fontFamily = {
@@ -41,7 +35,7 @@ export const getFontFamily = (
     normal: "Regular",
     regular: "Regular",
     medium: "Medium",
-    semibold: "SemiBold",
+    semibold: "Medium", // Map semibold to Medium since we don't have SemiBold
     bold: "Bold",
     heavy: "Black", // Using Black as heavy
     black: "Black",
@@ -52,11 +46,7 @@ export const getFontFamily = (
 
   // For static fonts with expo-font config plugin:
   return Platform.select({
-    ios: suffix
-      ? `Satoshi-${fontWeight}${suffix}`
-      : fontWeight === "Regular"
-      ? "Satoshi"
-      : `Satoshi-${fontWeight}`,
+    ios: `Satoshi-${fontWeight}${suffix}`,
     android: `Satoshi-${fontWeight}${suffix}`,
     default: `Satoshi-${fontWeight}${suffix}`,
   });
@@ -152,6 +142,36 @@ export const iconSize = {
 
 // Text styles - optimized hierarchy for mobile accessibility
 export const text = {
+  h1: {
+    fontFamily: getFontFamily("bold"),
+    fontSize: fontSize.giant, // 48px
+    lineHeight: 56, // 48px + 8px for breathing room
+  },
+  h2: {
+    fontFamily: getFontFamily("bold"),
+    fontSize: fontSize.huge, // 42px
+    lineHeight: 50, // 42px + 8px for breathing room
+  },
+  h3: {
+    fontFamily: getFontFamily("bold"),
+    fontSize: fontSize.large, // 36px
+    lineHeight: 44, // 36px + 8px for breathing room
+  },
+  h4: {
+    fontFamily: getFontFamily("semibold"),
+    fontSize: fontSize.display, // 32px
+    lineHeight: 40, // 32px + 8px for breathing room
+  },
+  h5: {
+    fontFamily: getFontFamily("semibold"),
+    fontSize: fontSize.xxxl, // 28px
+    lineHeight: 36, // 28px + 8px for breathing room
+  },
+  h6: {
+    fontFamily: getFontFamily("semibold"),
+    fontSize: fontSize.xl, // 24px
+    lineHeight: 32, // 24px + 8px for breathing room
+  },
   heading1: {
     fontFamily: getFontFamily("bold"),
     fontSize: fontSize.giant, // 48px
@@ -186,6 +206,11 @@ export const text = {
     fontFamily: getFontFamily("medium"),
     fontSize: fontSize.lg, // 18px
     lineHeight: 24, // 18px + 6px for comfortable reading
+  },
+  body: {
+    fontFamily: getFontFamily("normal"),
+    fontSize: fontSize.md, // 16px
+    lineHeight: 24, // 16px + 8px for comfortable reading spacing
   },
   body1: {
     fontFamily: getFontFamily("normal"),

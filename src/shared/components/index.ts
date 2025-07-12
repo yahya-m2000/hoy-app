@@ -30,3 +30,6 @@ export * from './debug';
 
 export { default as AvatarPicker } from "./form/AvatarPicker";
 export { default as AutocompleteInput } from "./AutocompleteInput";
+export { default as PasswordStrengthIndicator } from "./PasswordStrengthIndicator";
+export { default as CountrySelector } from "./form/CountrySelector";
+export { default as CitySelector } from "./form/CitySelector";

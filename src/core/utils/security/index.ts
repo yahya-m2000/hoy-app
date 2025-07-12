@@ -32,10 +32,26 @@ export type {
 } from './input-sanitizer';
 
 // ========================================
+// PASSWORD UTILITIES
+// ========================================
+
+export {
+  generateStrongPassword,
+  validatePassword,
+  generatePasswordSuggestions,
+  meetsPasswordRequirements,
+  getPasswordStrengthColor,
+  getPasswordStrengthText,
+  PasswordStrength,
+  PASSWORD_REQUIREMENTS,
+} from './password-utils';
+
+// ========================================
 // CONVENIENCE EXPORTS
 // ========================================
 
 import InputSanitizer from './input-sanitizer';
+import PasswordUtils from './password-utils';
 
-export { InputSanitizer };
+export { InputSanitizer, PasswordUtils };
 export default InputSanitizer; 

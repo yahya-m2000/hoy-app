@@ -4,22 +4,25 @@
  */
 
 import React from "react";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
-import { Text } from "@shared/components";
+import { TouchableOpacity, View } from "react-native";
+import { Text, Button, Container } from "src/shared/components";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "@core/hooks";
 import { fontSize, spacing, radius } from "@core/design";
+import { gray } from "@core/design/colors";
 
 interface SocialLoginProps {
   loading?: boolean;
   onGooglePress?: () => void;
+  onFacebookPress?: () => void;
   onApplePress?: () => void;
 }
 
 export default function SocialLogin({
   loading = false,
   onGooglePress,
+  onFacebookPress,
   onApplePress,
 }: SocialLoginProps) {
   const { t } = useTranslation();
@@ -28,136 +31,94 @@ export default function SocialLogin({
   return (
     <>
       {/* Divider */}
-      <View style={styles.dividerContainer}>
+      <Container flexDirection="row" alignItems="center" marginVertical="md">
         <View
-          style={[
-            styles.divider,
-            {
-              backgroundColor: isDark
-                ? theme.colors.gray[700]
-                : theme.colors.gray[300],
-            },
-          ]}
+          style={{
+            flex: 1,
+            height: 1,
+            backgroundColor: isDark ? gray[700] : gray[300],
+          }}
         />
         <Text
-          style={[
-            styles.dividerText,
-            {
-              color: isDark ? theme.colors.gray[400] : theme.colors.gray[600],
-              backgroundColor: isDark
-                ? theme.colors.gray[900]
-                : theme.colors.gray[50],
-            },
-          ]}
+          variant="caption"
+          style={{
+            paddingHorizontal: spacing.md,
+          }}
         >
           {t("auth.orContinueWith")}
         </Text>
         <View
-          style={[
-            styles.divider,
-            {
-              backgroundColor: isDark
-                ? theme.colors.gray[700]
-                : theme.colors.gray[300],
-            },
-          ]}
+          style={{
+            flex: 1,
+            height: 1,
+            backgroundColor: isDark ? gray[700] : gray[300],
+          }}
         />
-      </View>
+      </Container>
 
       {/* Social Buttons */}
-      <View style={styles.socialButtonsContainer}>
-        <TouchableOpacity
-          style={[
-            styles.socialButton,
-            {
-              backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
-              borderColor: isDark
-                ? theme.colors.gray[700]
-                : theme.colors.gray[300],
-            },
-          ]}
+      <Container flexDirection="column" marginVertical="md">
+        <Button
+          title="Continue with Google"
+          onPress={onGooglePress || (() => {})}
           disabled={loading}
-          onPress={onGooglePress}
-        >
-          <Ionicons name="logo-google" size={20} color="#DB4437" />
-          <Text
-            style={[
-              styles.socialButtonText,
-              {
-                color: isDark ? theme.colors.gray[300] : theme.colors.gray[700],
-              },
-            ]}
-          >
-            Google
-          </Text>
-        </TouchableOpacity>
+          variant="outline"
+          icon={<Ionicons name="logo-google" size={24} color="#DB4437" />}
+          iconPosition="left"
+          style={{
+            marginBottom: spacing.sm,
+            height: 52,
+            shadowColor: isDark ? gray[900] : gray[400],
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            elevation: 3,
+            backgroundColor: theme.background,
+            borderColor: theme.border,
+          }}
+        />
 
-        <TouchableOpacity
-          style={[
-            styles.socialButton,
-            {
-              backgroundColor: isDark ? theme.colors.gray[800] : theme.white,
-              borderColor: isDark
-                ? theme.colors.gray[700]
-                : theme.colors.gray[300],
-            },
-          ]}
+        <Button
+          title="Continue with Facebook"
+          onPress={onFacebookPress || (() => {})}
           disabled={loading}
-          onPress={onApplePress}
-        >
-          <Ionicons
-            name="logo-apple"
-            size={20}
-            color={isDark ? theme.white : "#000000"}
-          />
-          <Text
-            style={[
-              styles.socialButtonText,
-              {
-                color: isDark ? theme.colors.gray[300] : theme.colors.gray[700],
-              },
-            ]}
-          >
-            Apple
-          </Text>
-        </TouchableOpacity>
-      </View>
+          variant="outline"
+          icon={<Ionicons name="logo-facebook" size={24} color="#1877F2" />}
+          iconPosition="left"
+          style={{
+            marginBottom: spacing.sm,
+            height: 52,
+            shadowColor: isDark ? gray[900] : gray[400],
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            elevation: 3,
+            backgroundColor: theme.background,
+            borderColor: theme.border,
+          }}
+        />
+
+        {/* Apple Sign In (commented out for future use) */}
+        {/*
+        <Button
+          title="Continue with Apple"
+          onPress={onApplePress || (() => {})}
+          disabled={loading}
+          variant="outline"
+          icon={<Ionicons name="logo-apple" size={24} color={isDark ? gray[100] : gray[900]} />}
+          iconPosition="left"
+          style={{ 
+            marginBottom: spacing.sm,
+            height: 52,
+            shadowColor: isDark ? gray[900] : gray[400],
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            elevation: 3,
+          }}
+        />
+        */}
+      </Container>
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  dividerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: spacing.md,
-  },
-  divider: {
-    flex: 1,
-    height: 1,
-  },
-  dividerText: {
-    paddingHorizontal: spacing.md,
-    fontSize: fontSize.sm,
-  },
-  socialButtonsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: spacing.md,
-  },
-  socialButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    height: 48,
-    borderWidth: 1,
-    borderRadius: radius.md,
-    flex: 1,
-    marginHorizontal: spacing.xs,
-  },
-  socialButtonText: {
-    marginLeft: spacing.xs,
-    fontSize: fontSize.md,
-    fontWeight: "500",
-  },
-});

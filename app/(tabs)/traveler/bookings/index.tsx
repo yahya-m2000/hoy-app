@@ -73,6 +73,7 @@ const BookingsScreen = () => {
         guestCount: booking.guestCount,
         guests: booking.guests || { adults: 1 },
         totalAmount: booking.totalAmount,
+        totalPrice: booking.totalPrice || booking.totalAmount,
         specialRequests: booking.specialRequests,
         status: booking.status,
         paymentStatus: booking.paymentStatus,
@@ -119,7 +120,7 @@ const BookingsScreen = () => {
   if (isLoading) {
     return (
       <Container flex={1} backgroundColor="background">
-        <Header title="Bookings" />
+        <Header title={t("bookings.title")} />
         <Container flex={1} justifyContent="center" alignItems="center">
           <LoadingSpinner size="large" />
           <Container marginTop="md">
@@ -128,7 +129,7 @@ const BookingsScreen = () => {
               color="secondary"
               style={{ textAlign: "center" }}
             >
-              Loading your bookings...
+              {t("bookings.loadingBookings")}
             </Text>
           </Container>
         </Container>
@@ -140,14 +141,14 @@ const BookingsScreen = () => {
   if (!isAuthenticated) {
     return (
       <Container flex={1} backgroundColor="background">
-        <Header title="Bookings" />
+        <Header title={t("bookings.title")} />
         <Container flex={1} justifyContent="center" alignItems="center">
           <EmptyState
             icon="calendar-outline"
-            title="Log in to view your bookings"
-            message="Sign in to see your upcoming and past trips"
+            title={t("bookings.signInToViewBookings")}
+            message={t("bookings.signInToViewBookings")}
             action={{
-              label: "Log In",
+              label: t("auth.signIn"),
               onPress: () => router.push("/auth/login"),
             }}
           />
@@ -160,12 +161,12 @@ const BookingsScreen = () => {
   if (!isLoading && data?.length === 0) {
     return (
       <Container flex={1} backgroundColor="background">
-        <Header title="Bookings" />
+        <Header title={t("bookings.title")} />
         <Container flex={1} justifyContent="center" alignItems="center">
           <EmptyState
             icon="heart-outline"
-            title="No bookings found"
-            message="Start exploring to find and save properties to your bookings"
+            title={t("bookings.noBookingsFound")}
+            message={t("bookings.noBookingsMessage")}
           />
         </Container>
       </Container>
@@ -174,7 +175,7 @@ const BookingsScreen = () => {
 
   return (
     <Container flex={1} backgroundColor={theme.background}>
-      <Header title="Bookings" />
+      <Header title={t("bookings.title")} />
       <StatusBar style={isDark ? "light" : "dark"} />
 
       {/* Error Banner */}
@@ -198,7 +199,7 @@ const BookingsScreen = () => {
               </Text>
             </Container>
             <Button
-              title="Retry"
+              title={t("bookings.retry")}
               variant="ghost"
               size="small"
               onPress={onRefresh}
@@ -223,7 +224,7 @@ const BookingsScreen = () => {
         >
           {/* Upcoming Bookings Section */}
           <BookingsSection
-            title={t("booking.upcoming")}
+            title={t("bookings.upcoming")}
             bookings={upcomingBookings}
             isUpcoming={true}
             isLoading={isLoading}
@@ -233,7 +234,9 @@ const BookingsScreen = () => {
           {pastBookings.length > 3 && (
             <Container marginHorizontal="md" marginVertical="md">
               <Button
-                title={`View All Past Bookings (${pastBookings.length})`}
+                title={`${t("bookings.viewAllPastBookings")} (${
+                  pastBookings.length
+                })`}
                 onPress={() => router.push("/(tabs)/traveler/bookings/past")}
                 variant="outline"
                 size="medium"
@@ -252,7 +255,7 @@ const BookingsScreen = () => {
                   color="secondary"
                   style={{ textAlign: "center" }}
                 >
-                  See your complete booking history
+                  {t("bookings.seeCompleteHistory")}
                 </Text>
               </Container>
             </Container>
@@ -260,7 +263,7 @@ const BookingsScreen = () => {
 
           {/* Past Bookings Section (Limited) */}
           <BookingsSection
-            title={t("booking.past")}
+            title={t("bookings.past")}
             bookings={pastBookings.slice(0, 3)} // Show only first 3 past bookings
             isUpcoming={false}
             isLoading={isLoading}

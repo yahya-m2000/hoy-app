@@ -122,6 +122,8 @@ export class SecureTokenStorageService {
   private stats: TokenStorageStats;
   private operationHistory: TokenStorageOperation[] = [];
   private migrationCompleted: boolean = false;
+  private isInitialized: boolean = false;
+  private initializationPromise: Promise<void> | null = null;
 
   constructor(config: Partial<SecureTokenStorageConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
@@ -138,8 +140,24 @@ export class SecureTokenStorageService {
       averageStorageTime: 0,
     };
 
-    // Initialize service
-    this.initialize();
+    // Start initialization immediately
+    this.initializationPromise = this.initialize();
+  }
+
+  /**
+   * Wait for initialization to complete
+   */
+  public async waitForInitialization(): Promise<void> {
+    if (this.initializationPromise) {
+      await this.initializationPromise;
+    }
+  }
+
+  /**
+   * Check if the service is initialized
+   */
+  public isReady(): boolean {
+    return this.isInitialized;
   }
 
   /**
@@ -165,6 +183,8 @@ export class SecureTokenStorageService {
         await this.migrateToSecureStorage();
       }
 
+      this.isInitialized = true;
+
       logger.info('[SecureTokenStorage] Service initialized successfully', {
         migrationCompleted: this.migrationCompleted,
         encryptionActive: this.stats.encryptionActive,
@@ -184,6 +204,9 @@ export class SecureTokenStorageService {
           module: 'SecureTokenStorage'
         });
       }
+
+      // Mark as initialized even if there was an error (fallback mode)
+      this.isInitialized = true;
     }
   }
 
@@ -338,6 +361,9 @@ export class SecureTokenStorageService {
     const startTime = Date.now();
     
     try {
+      // Wait for initialization to complete
+      await this.waitForInitialization();
+      
       let token: string | null = null;
 
       if (this.config.encryptionEnabled) {
@@ -408,6 +434,9 @@ export class SecureTokenStorageService {
     const startTime = Date.now();
     
     try {
+      // Wait for initialization to complete
+      await this.waitForInitialization();
+      
       let token: string | null = null;
 
       if (this.config.encryptionEnabled) {
@@ -923,14 +952,28 @@ export const saveRefreshTokenToStorage = async (token: string): Promise<void> =>
  * Get access token from secure storage
  */
 export const getTokenFromStorage = async (): Promise<string | null> => {
-  return await secureTokenStorage.getAccessToken();
+  try {
+    return await secureTokenStorage.getAccessToken();
+  } catch (error) {
+    logger.error('[SecureTokenStorage] Error getting token from storage:', error, {
+      module: 'SecureTokenStorage'
+    });
+    return null;
+  }
 };
 
 /**
  * Get refresh token from secure storage
  */
 export const getRefreshTokenFromStorage = async (): Promise<string | null> => {
-  return await secureTokenStorage.getRefreshToken();
+  try {
+    return await secureTokenStorage.getRefreshToken();
+  } catch (error) {
+    logger.error('[SecureTokenStorage] Error getting refresh token from storage:', error, {
+      module: 'SecureTokenStorage'
+    });
+    return null;
+  }
 };
 
 /**
@@ -992,4 +1035,25 @@ export const updateSecureStorageConfig = (config: Partial<SecureTokenStorageConf
  */
 export const getRecentStorageOperations = (): TokenStorageOperation[] => {
   return secureTokenStorage.getRecentOperations();
+};
+
+/**
+ * Initialize secure token storage (call during app startup)
+ */
+export const initializeSecureTokenStorage = async (): Promise<void> => {
+  try {
+    logger.info('[SecureTokenStorage] Initializing secure token storage...', undefined, {
+      module: 'SecureTokenStorage'
+    });
+    
+    await secureTokenStorage.waitForInitialization();
+    
+    logger.info('[SecureTokenStorage] Secure token storage initialized successfully', undefined, {
+      module: 'SecureTokenStorage'
+    });
+  } catch (error) {
+    logger.error('[SecureTokenStorage] Failed to initialize secure token storage:', error, {
+      module: 'SecureTokenStorage'
+    });
+  }
 };

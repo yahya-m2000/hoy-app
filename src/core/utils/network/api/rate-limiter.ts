@@ -20,6 +20,11 @@ import Constants from "expo-constants";
 export const RATE_LIMITS = {
   "/chat": 15000, // 15 seconds for conversations
   "/chat/unread/count": 30000, // 30 seconds for unread count
+  "/auth/sso": 2000, // 2 seconds for SSO (more lenient for user experience)
+  "/auth/sso/signup": 2000, // 2 seconds for SSO signup
+  "/auth/sso/link": 2000, // 2 seconds for SSO account linking
+  "/auth/login": 3000, // 3 seconds for traditional login
+  "/auth/register": 5000, // 5 seconds for registration
   default: 5000, // 5 seconds default for other endpoints
 } as Record<string, number>;
 

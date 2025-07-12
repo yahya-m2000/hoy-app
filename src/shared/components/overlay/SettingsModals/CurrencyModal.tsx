@@ -5,21 +5,20 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { Modal, View, FlatList, TouchableOpacity, Alert } from "react-native";
+import { Modal, FlatList, TouchableOpacity, Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 
 // Context and hooks
 import { useTheme } from "@core/hooks/useTheme";
 import { useCurrency } from "@core/context/CurrencyContext";
 
 // Components
-import { Container } from "../../layout";
-import { Button } from "../../base/Button";
-import { Text } from "../../base/Text";
+import { Container, Text, Button, Icon, Header } from "@shared/components";
 import { Ionicons } from "@expo/vector-icons";
 
 // Constants
-import { fontSize, spacing } from "@core/design";
+import { fontSize, spacing, iconSize } from "@core/design";
 
 interface CurrencyModalProps {
   visible: boolean;
@@ -39,6 +38,7 @@ export default function CurrencyModal({
   onCurrencySelected,
 }: CurrencyModalProps) {
   const { theme, isDark } = useTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const { currentCurrency, changeCurrency, supportedCurrencies } =
     useCurrency();
@@ -64,7 +64,12 @@ export default function CurrencyModal({
       onClose();
     } catch (error) {
       console.error("Failed to change currency:", error);
-      Alert.alert("Error", "Failed to change currency. Please try again.");
+      Alert.alert(
+        t("common.error"),
+        t("profile.currencyChangeError", {
+          defaultValue: "Failed to change currency. Please try again.",
+        })
+      );
       setSelectedCurrency(currentCurrency); // Reset selection
     } finally {
       setIsLoading(false);
@@ -89,31 +94,38 @@ export default function CurrencyModal({
               ? theme.colors.gray[800]
               : theme.colors.gray[100]
             : "transparent",
+          borderBottomWidth: 1,
+          borderBottomColor: isDark
+            ? theme.colors.gray[700]
+            : theme.colors.gray[200],
         }}
+        activeOpacity={0.7}
       >
-        <View style={{ flex: 1 }}>
-          <Text
-            style={{
-              fontSize: fontSize.md,
-              fontWeight: isSelected ? "600" : "400",
-              color: isDark ? theme.colors.gray[100] : theme.colors.gray[900],
-              marginBottom: 2,
-            }}
-          >
-            {item.name}
+        <Container flexDirection="row" alignItems="center" flex={1}>
+          <Text variant="h6" color="primary" weight="bold" marginRight="md">
+            {item.symbol}
           </Text>
-          <Text
-            style={{
-              fontSize: fontSize.sm,
-              color: isDark ? theme.colors.gray[400] : theme.colors.gray[600],
-            }}
-          >
-            {item.code} • {item.symbol}
-          </Text>
-        </View>
+          <Container flex={1}>
+            <Text
+              size="md"
+              weight={isSelected ? "semibold" : "normal"}
+              color="primary"
+              style={{ marginBottom: 2 }}
+            >
+              {item.name}
+            </Text>
+            <Text size="sm" weight="normal" color="secondary">
+              {item.code.toUpperCase()}
+            </Text>
+          </Container>
+        </Container>
 
         {isSelected && (
-          <Ionicons name="checkmark" size={20} color={theme.colors.primary} />
+          <Icon
+            name="checkmark"
+            size={iconSize.sm}
+            color={theme.colors.primary}
+          />
         )}
       </TouchableOpacity>
     );
@@ -133,27 +145,20 @@ export default function CurrencyModal({
           : theme.colors.gray[200],
       }}
     >
-      <View style={{ width: 40 }} />
-      <Text
-        style={{
-          fontSize: fontSize.lg,
-          fontWeight: "600",
-          color: isDark ? theme.colors.gray[100] : theme.colors.gray[900],
-        }}
-      >
-        Currency
+      <Container style={{ width: 40 }}>
+        <></>
+      </Container>
+      <Text variant="h6" weight="semibold" color="primary">
+        {t("profile.selectCurrency")}
       </Text>
       <Button
         onPress={onClose}
         variant="ghost"
+        size="small"
         title=""
         style={{ width: 40, height: 40 }}
         icon={
-          <Ionicons
-            name="close"
-            size={24}
-            color={isDark ? theme.colors.gray[300] : theme.colors.gray[700]}
-          />
+          <Ionicons name="close" size={24} color={theme.colors.gray[400]} />
         }
       />
     </Container>
@@ -167,7 +172,13 @@ export default function CurrencyModal({
       onRequestClose={onClose}
     >
       <Container flex={1} backgroundColor="background">
-        <ModalHeader />
+        <Header
+          title={t("profile.selectCurrency")}
+          left={{
+            icon: "close",
+            onPress: onClose,
+          }}
+        />
 
         <Container flex={1} style={{ paddingBottom: insets.bottom }}>
           <FlatList

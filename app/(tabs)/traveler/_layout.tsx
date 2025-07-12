@@ -162,6 +162,7 @@ const TravelerLayout = () => {
           tabBarLabelStyle: {
             fontSize: 12,
             fontWeight: "500",
+            fontFamily: "Satoshi-Medium",
           },
           tabBarHideOnKeyboard: true,
           headerStyle: {

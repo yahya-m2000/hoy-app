@@ -18,9 +18,18 @@ export default function BookingsLayout() {
       />
 
       <Stack.Screen
-        name="[id]"
+        name="past/index"
         options={{
-          headerShown: false, // Remove native header since we use base Header component
+          headerShown: false,
+          presentation: "fullScreenModal",
+        }}
+      />
+
+      <Stack.Screen
+        name="[id]/index"
+        options={{
+          headerShown: false,
+          presentation: "fullScreenModal",
         }}
       />
       <Stack.Screen

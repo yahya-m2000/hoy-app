@@ -4,15 +4,8 @@ import { useThemedScreenOptions } from "@core/navigation";
 import { t } from "i18next";
 
 export default function SettingsLayout() {
-  const themedOptions = useThemedScreenOptions();
-
   return (
-    <Stack
-      screenOptions={{
-        ...themedOptions,
-        animation: "slide_from_right",
-      }}
-    >
+    <Stack screenOptions={{}}>
       <Stack.Screen
         name="index"
         options={{

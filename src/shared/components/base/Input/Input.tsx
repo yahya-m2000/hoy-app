@@ -48,6 +48,9 @@ export const Input: React.FC<BaseInputProps> = ({
   keyboardType = "default",
   autoCapitalize = "sentences",
   autoCorrect = true,
+  textContentType,
+  autoComplete,
+  passwordRules,
   ...props
 }) => {
   const { theme } = useTheme();
@@ -131,6 +134,9 @@ export const Input: React.FC<BaseInputProps> = ({
         keyboardType={keyboardType}
         autoCapitalize={autoCapitalize}
         autoCorrect={autoCorrect}
+        textContentType={textContentType}
+        autoComplete={autoComplete}
+        passwordRules={passwordRules}
         mode="outlined"
         // Custom styling
         style={{

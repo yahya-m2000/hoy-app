@@ -12,12 +12,15 @@ import * as ImagePicker from "expo-image-picker";
 import { PropertyFormData } from "@core/types";
 import { spacing, iconSize, radius } from "@core/design";
 import { useTheme } from "@core/hooks";
+import { UploadService } from "@core/api/services";
 import StepHeader from "../StepHeader";
 import InfoBox from "../InfoBox";
 
 interface ImagesStepProps {
   formData: PropertyFormData;
   updateFormData: (field: keyof PropertyFormData, value: any) => void;
+  /** Property ID for organizing uploads (optional, for existing properties) */
+  propertyId?: string;
 }
 
 // Image Item Component
@@ -26,11 +29,13 @@ const ImageItem = ({
   index,
   isMain,
   onRemove,
+  uploading = false,
 }: {
   imageUri: string;
   index: number;
   isMain: boolean;
   onRemove: () => void;
+  uploading?: boolean;
 }) => {
   const { theme } = useTheme();
 
@@ -47,8 +52,27 @@ const ImageItem = ({
         resizeMode="cover"
       />
 
+      {/* Upload overlay */}
+      {uploading && (
+        <Container
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            borderRadius: radius.md,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <ActivityIndicator size="small" color="#fff" />
+        </Container>
+      )}
+
       {/* Main photo badge */}
-      {isMain && (
+      {isMain && !uploading && (
         <Container
           style={{
             position: "absolute",
@@ -67,19 +91,21 @@ const ImageItem = ({
       )}
 
       {/* Remove button */}
-      <TouchableOpacity
-        onPress={onRemove}
-        style={{
-          position: "absolute",
-          top: spacing.xs,
-          right: spacing.xs,
-          backgroundColor: theme.background,
-          borderRadius: radius.circle,
-          padding: spacing.xs,
-        }}
-      >
-        <Icon name="close-circle" size={iconSize.md} color={theme.error} />
-      </TouchableOpacity>
+      {!uploading && (
+        <TouchableOpacity
+          onPress={onRemove}
+          style={{
+            position: "absolute",
+            top: spacing.xs,
+            right: spacing.xs,
+            backgroundColor: theme.background,
+            borderRadius: radius.circle,
+            padding: spacing.xs,
+          }}
+        >
+          <Icon name="close-circle" size={iconSize.md} color={theme.error} />
+        </TouchableOpacity>
+      )}
     </Container>
   );
 };
@@ -148,9 +174,13 @@ const UploadButton = ({
 export default function ImagesStep({
   formData,
   updateFormData,
+  propertyId,
 }: ImagesStepProps) {
   const { t } = useTranslation();
   const [uploading, setUploading] = useState(false);
+  const [uploadingImages, setUploadingImages] = useState<Set<number>>(
+    new Set()
+  );
 
   const requestPermissions = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -163,6 +193,35 @@ export default function ImagesStep({
       return false;
     }
     return true;
+  };
+
+  const uploadImagesToB2 = async (imageUris: string[]): Promise<string[]> => {
+    if (!propertyId) {
+      // For new properties, use local URIs until property is created
+      return imageUris;
+    }
+
+    try {
+      const images = imageUris.map((uri, index) => ({
+        uri,
+        type: "image/jpeg",
+        name: `property_${propertyId}_${index + 1}.jpg`,
+      }));
+
+      const uploadResult = await UploadService.uploadPropertyImages(
+        propertyId,
+        images,
+        (progress) => {
+          // Progress tracking could be implemented here
+          console.log(`Upload progress: ${progress}%`);
+        }
+      );
+
+      return uploadResult.data.images.map((img) => img.imageUrl);
+    } catch (error) {
+      console.error("Property image upload error", error);
+      throw new Error(t("property.images.uploadError"));
+    }
   };
 
   const pickImages = async () => {
@@ -180,9 +239,25 @@ export default function ImagesStep({
 
       if (!result.canceled && result.assets) {
         setUploading(true);
-        const newImages = result.assets.map((asset) => asset.uri);
-        const updatedImages = [...(formData.images || []), ...newImages];
+        const newImageUris = result.assets.map((asset) => asset.uri);
+        const currentImages = formData.images || [];
+
+        // Add new images to the list first (as local URIs)
+        const updatedImages = [...currentImages, ...newImageUris];
         updateFormData("images", updatedImages);
+
+        // Upload to B2 if property exists
+        if (propertyId) {
+          try {
+            const uploadedUrls = await uploadImagesToB2(newImageUris);
+            const finalImages = [...currentImages, ...uploadedUrls];
+            updateFormData("images", finalImages);
+          } catch (uploadError) {
+            // Keep local URIs if upload fails
+            console.error("Upload failed, keeping local URIs", uploadError);
+          }
+        }
+
         setUploading(false);
       }
     } catch {
@@ -215,9 +290,23 @@ export default function ImagesStep({
 
       if (!result.canceled && result.assets?.[0]) {
         setUploading(true);
-        const newImage = result.assets[0].uri;
-        const updatedImages = [...(formData.images || []), newImage];
+        const newImageUri = result.assets[0].uri;
+        const currentImages = formData.images || [];
+        const updatedImages = [...currentImages, newImageUri];
         updateFormData("images", updatedImages);
+
+        // Upload to B2 if property exists
+        if (propertyId) {
+          try {
+            const uploadedUrls = await uploadImagesToB2([newImageUri]);
+            const finalImages = [...currentImages, ...uploadedUrls];
+            updateFormData("images", finalImages);
+          } catch (uploadError) {
+            // Keep local URI if upload fails
+            console.error("Upload failed, keeping local URI", uploadError);
+          }
+        }
+
         setUploading(false);
       }
     } catch {
@@ -290,6 +379,7 @@ export default function ImagesStep({
                       index={index}
                       isMain={index === 0}
                       onRemove={() => removeImage(index)}
+                      uploading={uploadingImages.has(index)}
                     />
                   ))}
                   {imagePair.length === 1 && (

@@ -30,6 +30,12 @@ export interface EnvironmentConfig {
   MAPBOX_API_KEY: string;
   ANALYTICS_API_KEY: string;
   
+  // SSO Configuration
+  GOOGLE_CLIENT_ID: string;
+  GOOGLE_CLIENT_SECRET: string;
+  FACEBOOK_APP_ID: string;
+  FACEBOOK_CLIENT_TOKEN: string;
+  
   // Feature Flags
   ENABLE_DEBUG_COMPONENTS: boolean;
   ENABLE_VERBOSE_LOGGING: boolean;
@@ -42,6 +48,10 @@ export interface EnvironmentConfig {
   ENABLE_SESSION_MANAGEMENT: boolean;
   ENABLE_API_KEY_ROTATION: boolean;
   ENABLE_TOKEN_ENCRYPTION: boolean;
+  
+  // Request Signing Configuration
+  REQUEST_SIGNING_SECRET: string;
+  REQUEST_SIGNING_SECRET_ID: string;
   
   // Performance Configuration
   CACHE_TTL: number;
@@ -133,10 +143,15 @@ class EnvironmentManager {
       API_TIMEOUT: parseInt(process.env.EXPO_PUBLIC_API_TIMEOUT || '') || defaults.API_TIMEOUT!,
       
       // External API Keys
-      EXCHANGE_RATE_API_KEY: process.env.EXPO_PUBLIC_EXCHANGE_RATE_API_KEY || '',
-      CURRENCY_API_KEY: process.env.EXPO_PUBLIC_CURRENCY_API_KEY || '',
-      MAPBOX_API_KEY: process.env.EXPO_PUBLIC_MAPBOX_API_KEY || '',
-      ANALYTICS_API_KEY: process.env.EXPO_PUBLIC_ANALYTICS_API_KEY || '',
+        EXCHANGE_RATE_API_KEY: process.env.EXPO_PUBLIC_EXCHANGE_RATE_API_KEY || '',
+  CURRENCY_API_KEY: process.env.EXPO_PUBLIC_CURRENCY_API_KEY || '',
+  MAPBOX_API_KEY: process.env.EXPO_PUBLIC_MAPBOX_API_KEY || '',
+  ANALYTICS_API_KEY: process.env.EXPO_PUBLIC_ANALYTICS_API_KEY || '',
+  // SSO Configuration
+  GOOGLE_CLIENT_ID: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID || '',
+  GOOGLE_CLIENT_SECRET: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_SECRET || '',
+  FACEBOOK_APP_ID: process.env.EXPO_PUBLIC_FACEBOOK_APP_ID || '',
+  FACEBOOK_CLIENT_TOKEN: process.env.EXPO_PUBLIC_FACEBOOK_CLIENT_TOKEN || '',
       
       // Feature Flags
       ENABLE_DEBUG_COMPONENTS: process.env.EXPO_PUBLIC_ENABLE_DEBUG_COMPONENTS === 'true' || defaults.ENABLE_DEBUG_COMPONENTS!,
@@ -150,6 +165,10 @@ class EnvironmentManager {
       ENABLE_SESSION_MANAGEMENT: process.env.EXPO_PUBLIC_ENABLE_SESSION_MANAGEMENT !== 'false' && defaults.ENABLE_SESSION_MANAGEMENT!,
       ENABLE_API_KEY_ROTATION: process.env.EXPO_PUBLIC_ENABLE_API_KEY_ROTATION === 'true' || defaults.ENABLE_API_KEY_ROTATION!,
       ENABLE_TOKEN_ENCRYPTION: process.env.EXPO_PUBLIC_ENABLE_TOKEN_ENCRYPTION !== 'false' && defaults.ENABLE_TOKEN_ENCRYPTION!,
+      
+      // Request Signing Configuration
+      REQUEST_SIGNING_SECRET: process.env.EXPO_PUBLIC_REQUEST_SIGNING_SECRET || '',
+      REQUEST_SIGNING_SECRET_ID: process.env.EXPO_PUBLIC_REQUEST_SIGNING_SECRET_ID || '',
       
       // Performance Configuration
       CACHE_TTL: parseInt(process.env.EXPO_PUBLIC_CACHE_TTL || '') || defaults.CACHE_TTL!,

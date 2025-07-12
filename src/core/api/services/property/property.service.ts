@@ -712,12 +712,13 @@ export class PropertyManagementService {
   }
 
   /**
-   * Upload property images
+   * Upload property images (deprecated - use UploadService.uploadPropertyImages instead)
    * 
    * @param propertyId - Property ID
    * @param images - Form data containing images
    * @returns Promise<string[]> - Array of uploaded image URLs
    * @throws Will throw error if upload fails
+   * @deprecated Use UploadService.uploadPropertyImages for better file organization
    */
   static async uploadPropertyImages(
     propertyId: string,

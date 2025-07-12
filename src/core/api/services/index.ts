@@ -24,6 +24,7 @@ export * as review from './review';
 export * as search from './search';
 export * as wishlist from './wishlist';
 export * as account from './account';
+export * as upload from './upload/upload.service';
 
 // ========================================
 // SERVICE CLASS EXPORTS
@@ -76,6 +77,15 @@ export type {
   UserPreferences, 
   PaymentMethod 
 } from './user';
+
+// Upload Services
+export { UploadService } from './upload/upload.service';
+export type { 
+  UploadResponse, 
+  MultipleUploadResponse, 
+  ImageValidationOptions, 
+  UploadProgressCallback 
+} from './upload/upload.service';
 
 // Review Services
 export { ReviewService } from './review';

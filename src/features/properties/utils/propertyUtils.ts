@@ -1,4 +1,6 @@
 import type { PropertyType } from "@core/types";
+import { Platform } from "react-native";
+import * as LinkingExpo from "expo-linking";
 
 // Safe validation utility function to validate MongoDB ObjectId format
 export const validatePropertyId = (
@@ -199,4 +201,33 @@ export const formatDateRange = (
     "en-US",
     formatOptions
   )} - ${endDate.toLocaleDateString("en-US", formatOptions)}`;
+};
+
+/**
+ * Handle getting directions to property
+ */
+export const handleGetDirectionsToProperty = (
+  coordinates: { latitude: number; longitude: number },
+  showToast: (params: { message: string; type: "success" | "error" }) => void,
+  t: (key: string) => string
+) => {
+  if (!coordinates?.latitude || !coordinates?.longitude) {
+    showToast({ message: t("property.locationError"), type: "error" });
+    return;
+  }
+  
+  const { latitude, longitude } = coordinates;
+  let url = "";
+  
+  if (Platform.OS === "ios") {
+    // Apple Maps
+    url = `http://maps.apple.com/?daddr=${latitude},${longitude}`;
+  } else {
+    // Google Maps
+    url = `https://maps.google.com/maps?daddr=${latitude},${longitude}`;
+  }
+  
+  LinkingExpo.openURL(url).catch(() => {
+    showToast({ message: t("property.mapsError"), type: "error" });
+  });
 };

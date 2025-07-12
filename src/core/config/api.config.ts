@@ -6,6 +6,7 @@
 import Constants from "expo-constants";
 import { logger } from "../utils/sys/log";
 import { getEnv } from "@core/config/environment";
+import { setSigningEnabled, updateSigningConfig } from '@core/api/request-signing';
 
 // ========================================
 // URL VALIDATION & FORMATTING
@@ -87,7 +88,7 @@ const getValidatedApiUrl = (): string => {
 // ========================================
 
 export const API_CONFIG = {
-  baseURL: getValidatedApiUrl(),
+  baseURL: /* getValidatedApiUrl(), */'https://cfb68c78775b.ngrok-free.app/api/v1',
   timeout: 15000,
   maxRetries: 3,
   initialRetryDelay: 1000,
@@ -97,8 +98,31 @@ export const API_CONFIG = {
     Pragma: "no-cache",
     Expires: "0",
     "ngrok-skip-browser-warning": "true",
+  },
+  requestSigning: {
+    enabled: true,
+    secret: getEnv('REQUEST_SIGNING_SECRET'),
+    secretId: getEnv('REQUEST_SIGNING_SECRET_ID'),
+    // Uncomment this when we have a production environment
+    // enabled: isProduction(),
+    // secret: isProduction() ? getEnv('REQUEST_SIGNING_SECRET') : '',
+    // secretId: isProduction() ? getEnv('REQUEST_SIGNING_SECRET_ID') : '',
   }
 } as const;
+
+// ---------------------------------------------------------------------------------
+// Synchronize the request-signing utility with the runtime configuration
+// ---------------------------------------------------------------------------------
+
+// Ensure the signing utility respects the setting from API_CONFIG
+setSigningEnabled(API_CONFIG.requestSigning.enabled);
+
+// If secrets are supplied via API_CONFIG, propagate them to the utility so it can
+// use them even in non-production builds. This allows mobile and server to share
+// a single source of truth for signing credentials during development.
+if (API_CONFIG.requestSigning.secret && API_CONFIG.requestSigning.secretId) {
+  updateSigningConfig({ enabled: API_CONFIG.requestSigning.enabled });
+}
 
 // ========================================
 // CURRENCY API CONFIGURATION

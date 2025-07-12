@@ -17,7 +17,7 @@ import {
   PropertyImage,
   Toast,
 } from "@shared/components";
-import type { PropertyType, ICheckInExperience } from "@core/types";
+import type { PropertyType } from "@core/types";
 import { useCalendarDateSelection } from "@features/calendar/context/CalendarContext";
 import { getPropertyById } from "@core/api/services/property";
 import { useAuth } from "@core/context/AuthContext";
@@ -40,6 +40,7 @@ import {
   HouseRulesSection,
   PropertyImageCarousel,
   HostInfoSection,
+  PropertyMap,
 } from "../components/details";
 
 // Import modal components
@@ -57,7 +58,7 @@ import CollectionsModal from "@features/properties/modals/collections/Collection
 // Import reservation components
 import ReservationModal from "@features/properties/components/reservation/modals/ReservationModal";
 import { useReservationModal } from "@features/properties/hooks/useReservationModal";
-import { showAuthPrompt } from "src/core/auth/utils";
+import { showAuthPrompt } from "@core/auth/utils";
 
 /**
  * PropertyDetailsScreen - Displays detailed property information
@@ -117,14 +118,6 @@ const PropertyDetailsScreen = () => {
   // Use property's embedded check-in experiences
   const checkInExperiences = property?.checkInExperiences || [];
 
-  // For debugging purposes
-  React.useEffect(() => {
-    if (checkInExperiences) {
-      console.log("Fetched checkInExperiences:", checkInExperiences);
-      console.log("Property checkInExperiences:", property?.checkInExperiences);
-    }
-  }, [checkInExperiences, property?.checkInExperiences]);
-
   // Focus effect - refetch when returning from review screen
   useFocusEffect(
     useCallback(() => {
@@ -135,7 +128,9 @@ const PropertyDetailsScreen = () => {
         refetchProperty();
       }
     }, [property?._id, refetchProperty, segments])
-  ); // Custom hooks
+  );
+
+  // Custom hooks
   const propertyDetailsResult = usePropertyDetails(property);
   const propertyActionsResult = usePropertyActions(property);
 
@@ -176,17 +171,22 @@ const PropertyDetailsScreen = () => {
 
     // Find the collection name
     const collection = collections.find((c: any) => c._id === collectionId);
-    const collectionName = collection?.name || "collection";
+    const collectionName = collection?.name || t("common.collection");
 
     if (isAdded) {
-      showToast("Added to collection", "success", collectionName, "added");
+      showToast(
+        t("common.addedToCollection"),
+        "success",
+        collectionName,
+        "added"
+      );
       // Close collections modal after adding
       setTimeout(() => {
         handleCloseCollections();
       }, 500);
     } else {
       showToast(
-        "Removed from collection",
+        t("common.removedFromCollection"),
         "success",
         collectionName,
         "removed"
@@ -216,6 +216,14 @@ const PropertyDetailsScreen = () => {
     setToastVisible(true);
   };
 
+  // Wrapper function for PropertyMap toast
+  const showMapToast = (params: {
+    message: string;
+    type: "success" | "error";
+  }) => {
+    showToast(params.message, params.type);
+  };
+
   // Hide toast
   const hideToast = () => {
     setToastVisible(false);
@@ -239,23 +247,25 @@ const PropertyDetailsScreen = () => {
         await removeFromWishlist.mutateAsync(property._id);
         showToast(
           t("common.removedFromWishlist"),
-          t("common.success") as "success",
+          "success",
           t("common.favorites"),
-          t("common.removed") as "removed"
+          "removed"
         );
       } catch {
         showToast(
           t("common.failedToRemoveFromWishlist"),
-          t("common.error") as "error",
+          "error",
           t("common.favorites"),
-          t("common.removed") as "removed"
+          "removed"
         );
       }
     } else {
       // Property is not wishlisted - show collections modal
       handleShowCollections();
     }
-  }; // Data extraction - safely destructure with fallbacks
+  };
+
+  // Data extraction - safely destructure with fallbacks
   const {
     host = null,
     selectedDates = null,
@@ -289,22 +299,20 @@ const PropertyDetailsScreen = () => {
   // Helper function to convert old amenities format to new format
   const transformAmenities = (amenities: any[]) => {
     return amenities.map((amenity) => ({
-      name: typeof amenity === "string" ? amenity : amenity.name || "Unknown",
+      name:
+        typeof amenity === "string"
+          ? amenity
+          : amenity.name || t("common.unknown"),
       icon: typeof amenity === "object" ? amenity.icon : undefined,
       available:
         typeof amenity === "object" ? amenity.available !== false : true,
     }));
   };
 
-  // Updated code
-  // Process check-in experiences:
-  // 1. Use data from dedicated API endpoint if available
-  // 2. Fall back to property.checkInExperiences if API data is not available
-  // 3. Ensure default empty array if both sources are missing
+  // Process check-in experiences
   const experiences = useMemo(() => {
     // First try to use the dedicated API response
     if (Array.isArray(checkInExperiences) && checkInExperiences.length > 0) {
-      console.log("Using checkInExperiences from API response");
       return checkInExperiences;
     }
 
@@ -313,12 +321,10 @@ const PropertyDetailsScreen = () => {
       Array.isArray(property?.checkInExperiences) &&
       property.checkInExperiences.length > 0
     ) {
-      console.log("Using checkInExperiences from property object");
       return property.checkInExperiences;
     }
 
     // Return empty array as last resort
-    console.log("No check-in experiences found, using empty array");
     return [];
   }, [checkInExperiences, property?.checkInExperiences]);
 
@@ -346,7 +352,7 @@ const PropertyDetailsScreen = () => {
       name:
         `${property.host.firstName || ""} ${
           property.host.lastName || ""
-        }`.trim() || "Host",
+        }`.trim() || t("common.host"),
       avatar: property.host.profileImage,
       totalReviews: property.host.totalReviews || 0,
       averageRating: property.host.rating || 0,
@@ -359,7 +365,7 @@ const PropertyDetailsScreen = () => {
       phoneNumber: phoneNumber,
       whatsappNumber: phoneNumber,
     };
-  }, [property?.host, property?.address, property?.phone]);
+  }, [property?.host, property?.address, property?.phone, t]);
 
   // Event handlers
   const handleShowReviews = () => {
@@ -392,7 +398,9 @@ const PropertyDetailsScreen = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Text color="primary">Loading property details...</Text>
+        <Text variant="body" color="primary">
+          {t("common.loading")}
+        </Text>
       </Container>
     );
   }
@@ -406,7 +414,9 @@ const PropertyDetailsScreen = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Text color="primary">{t("property.propertyNotFound")}</Text>
+        <Text variant="body" color="primary">
+          {t("property.propertyNotFound")}
+        </Text>
       </Container>
     );
   }
@@ -430,19 +440,19 @@ const PropertyDetailsScreen = () => {
           <PropertyImageCarousel property={property} />
         </Container>
         <Container
-          paddingHorizontal="lg"
+          paddingHorizontal="md"
           backgroundColor="background"
           borderTopLeftRadius="xl"
           borderTopRightRadius="xl"
         >
           <PropertyHeader
-            title={property?.name || "Property"}
+            title={property?.name || t("common.property")}
             host={
               host
                 ? {
                     name:
                       `${host.firstName || ""} ${host.lastName || ""}`.trim() ||
-                      "Host",
+                      t("common.host"),
                     avatar: host.profileImage || host.avatarUrl,
                   }
                 : undefined
@@ -475,7 +485,9 @@ const PropertyDetailsScreen = () => {
           </Container>
           <SectionDivider />
           <PropertyDescription
-            description={property?.description || "No description available."}
+            description={
+              property?.description || t("property.noDescriptionAvailable")
+            }
           />
           <SectionDivider />
           <AmenitiesGrid
@@ -483,8 +495,15 @@ const PropertyDetailsScreen = () => {
           />
           <SectionDivider />
           <HostInfoSection host={hostInfo} />
-          {/* <SectionDivider />
-          <HouseRulesSection rules={houseRules} /> */}
+          <SectionDivider />
+          {property?.coordinates && (
+            <PropertyMap
+              coordinates={property.coordinates}
+              propertyName={property?.name || t("common.property")}
+              address={property?.address}
+              showToast={showMapToast}
+            />
+          )}
           <SectionDivider />
           <Container>
             <PolicyNavigationItem
@@ -521,19 +540,18 @@ const PropertyDetailsScreen = () => {
       <View
         style={{
           position: "absolute",
-          bottom: 100, // Position above the PropertyTab (80px + 20px margin)
+          bottom: 100,
           left: 0,
           right: 0,
-          zIndex: 9999, // Higher z-index to ensure it appears above everything
+          zIndex: 9999,
         }}
-        pointerEvents="none" // Allow touches to pass through when toast is not visible
+        pointerEvents="none"
       >
         <Toast
           visible={toastVisible}
           onHide={hideToast}
           showCloseButton={false}
         >
-          {/* Custom toast content with property image and collection info */}
           <Container flexDirection="row" alignItems="center">
             {/* Property Image */}
             <Container marginRight="md">
@@ -548,11 +566,15 @@ const PropertyDetailsScreen = () => {
             <Container flex={1}>
               <Text variant="body" weight="medium" color="primary">
                 {toastAction === "added"
-                  ? `Added to ${toastCollectionName}`
-                  : `Removed from ${toastCollectionName}`}
+                  ? t("common.addedToCollectionWithName", {
+                      name: toastCollectionName,
+                    })
+                  : t("common.removedFromCollectionWithName", {
+                      name: toastCollectionName,
+                    })}
               </Text>
               <Text variant="caption" color="secondary" numberOfLines={1}>
-                {property?.name || property?.title || "Property"}
+                {property?.name || property?.title || t("common.property")}
               </Text>
             </Container>
 
@@ -571,26 +593,30 @@ const PropertyDetailsScreen = () => {
       </View>
 
       {/* Fixed bottom tab */}
-      <Container
-        backgroundColor="surface"
+      <View
         style={{
           position: "absolute",
           bottom: 0,
           left: 0,
           right: 0,
         }}
-        borderTopLeftRadius="lg"
-        borderTopRightRadius="lg"
       >
-        <PropertyTab
-          price={getPropertyPrice()}
-          totalPrice={nights > 0 ? getPropertyPrice() * nights : undefined}
-          selectedDates={safeSelectedDates}
-          propertyId={property?._id}
-          onReserve={() => handleReserve(propertyDates, openReservationModal)}
-          onDateSelectionPress={() => openModal("dateSelection")}
-        />
-      </Container>
+        <Container
+          backgroundColor="surface"
+          borderTopLeftRadius="lg"
+          borderTopRightRadius="lg"
+        >
+          <PropertyTab
+            price={getPropertyPrice()}
+            totalPrice={nights > 0 ? getPropertyPrice() * nights : undefined}
+            selectedDates={safeSelectedDates}
+            propertyId={property?._id}
+            onReserve={() => handleReserve(propertyDates, openReservationModal)}
+            onDateSelectionPress={() => openModal("dateSelection")}
+          />
+        </Container>
+      </View>
+
       {/* Modal Presentations */}
       <Modal
         visible={activeModal === "availability"}

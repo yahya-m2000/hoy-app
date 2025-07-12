@@ -7,11 +7,13 @@ import React, { useState } from "react";
 import { ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useTranslation } from "react-i18next";
 
 // Context and hooks
 import { useAuth, useToast } from "@core/context";
 import { useTheme } from "@core/hooks/useTheme";
 import { getAuthDebugInfo } from "@core/auth";
+import { useAuth0Integration } from "@core/hooks/useAuth0Integration";
 
 // Base Components
 import { Text, Button, Input } from "src/shared/components/base";
@@ -21,9 +23,11 @@ import { Container, Header, Screen } from "src/shared";
 import { AuthToggle, SocialLogin } from "src/features/auth";
 
 export default function SignInScreen() {
+  const { t } = useTranslation();
   const { login: authLogin } = useAuth();
   const { showToast } = useToast();
   const { theme, isDark } = useTheme();
+  const { authenticateWithAuth0, isAuth0Loading } = useAuth0Integration();
 
   // State
   const [loading, setLoading] = useState(false);
@@ -38,9 +42,52 @@ export default function SignInScreen() {
 
   // Form validation for login form
   const validateLoginForm = () => {
-    if (!email.trim()) return "Email is required";
-    if (!password) return "Password is required";
+    if (!email.trim())
+      return t("validation.required", { field: t("auth.email") });
+    if (!password)
+      return t("validation.required", { field: t("auth.password") });
     return "";
+  };
+
+  // Handle Auth0 login
+  const handleAuth0Login = async (
+    connection?: "google-oauth2" | "facebook"
+  ) => {
+    setLoading(true);
+    setError("");
+
+    try {
+      await authenticateWithAuth0(connection);
+
+      showToast({
+        type: "success",
+        message: t("auth.auth0LoginSuccess"),
+      });
+
+      router.back();
+    } catch (err) {
+      // Check if user needs to sign up (not an error, expected flow)
+      if (err instanceof Error && err.message === "USER_NEEDS_SIGNUP") {
+        // Navigate to signup page (maintains back stack)
+        router.push("/(auth)/sign-up");
+        return; // Don't set error state for expected flow
+      } else if (
+        err instanceof Error &&
+        err.message === "ACCOUNT_LINKING_REQUIRED"
+      ) {
+        // Navigate to account linking page (maintains back stack)
+        router.push("/(auth)/account-linking");
+        return; // Don't set error state for expected flow
+      } else {
+        // Only log and set error for actual errors
+        console.error("Auth0 login error:", err);
+        setError(
+          err instanceof Error ? err.message : t("auth.auth0LoginFailed")
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Handle login submission
@@ -63,15 +110,13 @@ export default function SignInScreen() {
 
       showToast({
         type: "success",
-        message: "Login successful",
+        message: t("common.success"),
       });
       router.back();
     } catch (err) {
       console.error("Login error:", err);
       setError(
-        err instanceof Error
-          ? err.message
-          : "Invalid email or password. Please try again."
+        err instanceof Error ? err.message : t("auth.validation.emailInvalid")
       );
     } finally {
       setLoading(false);
@@ -81,7 +126,7 @@ export default function SignInScreen() {
   return (
     <Container flex={1}>
       <Header
-        title="Sign In"
+        title={t("auth.signIn")}
         left={{
           icon: "arrow-back",
           onPress: () => router.back(),
@@ -98,10 +143,25 @@ export default function SignInScreen() {
           contentContainerStyle={{ flexGrow: 1 }}
         >
           <Container flex={1} padding="lg">
+            {/* Welcome Section */}
+            <Container marginBottom="xl">
+              <Text
+                variant="h4"
+                color="primary"
+                align="center"
+                style={{ marginBottom: 8 }}
+              >
+                Welcome Back!
+              </Text>
+              <Text variant="body" color="secondary" align="center">
+                Sign in to your account to continue
+              </Text>
+            </Container>
+
             {/* Error Message */}
             {error ? (
               <Container
-                marginBottom="md"
+                marginBottom="lg"
                 padding="md"
                 backgroundColor="error"
                 borderRadius="md"
@@ -116,32 +176,50 @@ export default function SignInScreen() {
               </Container>
             ) : null}
 
-            {/* Auth Form */}
-            <Container marginBottom="lg">
-              <Input
-                label="Email"
-                value={email}
-                onChangeText={setEmail}
-                placeholder="Enter your email"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                style={{ marginBottom: 16 }}
-              />
+            {/* Traditional Login Section */}
+            <Container marginBottom="xl">
+              <Container marginBottom="md">
+                <Text variant="h6" color="primary">
+                  Sign In with Email
+                </Text>
+              </Container>
 
-              <Input
-                label="Password"
-                value={password}
-                onChangeText={setPassword}
-                placeholder="Enter your password"
-                secureTextEntry={!showPassword}
-                autoCapitalize="none"
-                rightIcon={showPassword ? "eye-off" : "eye"}
-                onRightIconPress={() => setShowPassword(!showPassword)}
-                style={{ marginBottom: 24 }}
-              />
+              <Container marginBottom="md">
+                <Input
+                  label={t("auth.email")}
+                  value={email}
+                  onChangeText={setEmail}
+                  placeholder={t("auth.email")}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  style={{ marginBottom: 8 }}
+                />
+                <Text variant="caption" color="secondary">
+                  {t("auth.emailHelper")}
+                </Text>
+              </Container>
+
+              <Container marginBottom="lg">
+                <Input
+                  label={t("auth.password")}
+                  value={password}
+                  onChangeText={setPassword}
+                  placeholder={t("auth.password")}
+                  secureTextEntry={!showPassword}
+                  autoCapitalize="none"
+                  rightIcon={showPassword ? "eye-off" : "eye"}
+                  onRightIconPress={() => setShowPassword(!showPassword)}
+                  style={{ marginBottom: 8 }}
+                  textContentType="password"
+                  autoComplete="password"
+                />
+                <Text variant="caption" color="secondary">
+                  {t("auth.passwordHelper")}
+                </Text>
+              </Container>
 
               <Button
-                title="Sign In"
+                title={t("auth.signIn")}
                 onPress={handleLogin}
                 loading={loading}
                 variant="primary"
@@ -149,15 +227,20 @@ export default function SignInScreen() {
               />
 
               <Button
-                title="Create Account"
+                title={t("auth.createAccount")}
                 variant="ghost"
                 onPress={() => router.push("/(auth)/sign-up")}
                 style={{ alignSelf: "center" }}
               />
             </Container>
-
-            {/* Social Login Options */}
-            <SocialLogin loading={loading} />
+            {/* Social Login Section */}
+            <Container>
+              <SocialLogin
+                loading={loading || isAuth0Loading}
+                onGooglePress={() => handleAuth0Login("google-oauth2")}
+                onFacebookPress={() => handleAuth0Login("facebook")}
+              />
+            </Container>
           </Container>
         </ScrollView>
       </KeyboardAvoidingView>

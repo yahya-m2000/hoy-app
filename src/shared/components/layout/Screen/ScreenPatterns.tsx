@@ -85,6 +85,7 @@ interface ListScreenProps extends Omit<ScreenProps, "header"> {
   onFilter?: () => void;
   showSearch?: boolean;
   showFilter?: boolean;
+  showDivider?: boolean;
 }
 
 export const ListScreen: React.FC<ListScreenProps> = ({
@@ -94,6 +95,7 @@ export const ListScreen: React.FC<ListScreenProps> = ({
   showSearch = false,
   showFilter = false,
   children,
+  showDivider = true,
   ...props
 }) => {
   const router = useRouter();
@@ -121,6 +123,7 @@ export const ListScreen: React.FC<ListScreenProps> = ({
                 onPress: onFilter,
               }
             : undefined,
+        showDivider,
       }}
       {...props}
     >

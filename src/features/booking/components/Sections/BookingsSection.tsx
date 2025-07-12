@@ -67,12 +67,6 @@ export const BookingsSection: React.FC<BookingsSectionProps> = ({
       style={{
         borderRadius: radius.lg,
         paddingVertical: spacing.md,
-        marginHorizontal: spacing.xs,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: isDark ? 0.3 : 0.05,
-        shadowRadius: 8,
-        elevation: 2,
       }}
     >
       <Container
@@ -105,11 +99,6 @@ export const BookingsSection: React.FC<BookingsSectionProps> = ({
       style={{
         borderRadius: radius.xl,
         marginTop: spacing.md,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: isDark ? 0.3 : 0.08,
-        shadowRadius: 12,
-        elevation: 6,
       }}
     >
       {isLoading ? (

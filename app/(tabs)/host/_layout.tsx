@@ -185,6 +185,7 @@ const HostLayout = () => {
             tabBarLabelStyle: {
               fontSize: 12,
               fontWeight: "500",
+              fontFamily: "Satoshi-Medium",
             },
             headerStyle: {
               backgroundColor: isDark ? theme.colors.gray[900] : theme.white,

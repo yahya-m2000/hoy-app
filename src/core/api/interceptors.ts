@@ -9,7 +9,7 @@ import { isNetworkError, addToRetryQueue } from "@core/utils/network";
 import { isPublicEndpoint } from './endpoints';
 import { clearAuthenticationData, refreshAccessToken } from './auth-manager';
 import { saveTokenToStorage, saveRefreshTokenToStorage } from '@core/auth/storage';
-import { classifyError } from '../config/api.config';
+import { classifyError, API_CONFIG } from '../config/api.config';
 import { 
   shouldAllowRequest, 
   recordSuccess, 
@@ -44,10 +44,17 @@ const setupRequestInterceptor = () => {
     (config) => {
       // Check circuit breaker before allowing request
       const url = config.url || '';
-      const fullUrl = config.baseURL ? `${config.baseURL}${url}` : url;
+      // Build path-only URL (server uses req.originalUrl which excludes domain)
+      let fullRequestUrl: string;
+      if (config.baseURL) {
+        const pathPart = config.baseURL.replace(/^https?:\/\/[^/]+/, ''); // strip protocol and domain
+        fullRequestUrl = `${pathPart}${url}`;
+      } else {
+        fullRequestUrl = url;
+      }
       
-      if (!shouldAllowRequest(fullUrl)) {
-        const state = getCircuitBreakerState(fullUrl);
+      if (!shouldAllowRequest(fullRequestUrl)) {
+        const state = getCircuitBreakerState(fullRequestUrl);
         const error = new Error(`Circuit breaker ${state}: Request blocked for ${url}`);
         error.name = 'CircuitBreakerError';
         (error as any).circuitBreakerState = state;
@@ -64,30 +71,31 @@ const setupRequestInterceptor = () => {
       }
 
       // Add HMAC request signing (synchronous version)
-      try {
-        // Call synchronous version of addSignatureHeaders
-        const method = config.method || 'GET';
-        const fullRequestUrl = config.baseURL ? `${config.baseURL}${url}` : url;
-        const headers = config.headers || {};
-        const body = config.data;
+      if (API_CONFIG.requestSigning.enabled) {
+        try {
+          // Call synchronous version of addSignatureHeaders
+          const method = config.method || 'GET';
+          const headers = config.headers || {};
+          const body = config.data;
 
-        // Import and use synchronous signature generation
-        const { generateRequestSignature } = require('./request-signing');
-        const signatureData = generateRequestSignature(method, fullRequestUrl, headers, body);
-        
-        // Add signature headers
-        config.headers = {
-          ...headers,
-          'X-Request-Signature': signatureData.signature,
-          'X-Request-Timestamp': signatureData.timestamp,
-          'X-Request-Nonce': signatureData.nonce,
-          'X-Secret-Id': signatureData.secretId,
-        };
-      } catch (signingError) {
-        logger.error("Failed to add request signature:", signingError, {
-          module: 'RequestSigning'
-        });
-        // Continue without signature in case of error (fallback)
+          // Import and use synchronous signature generation
+          const { generateRequestSignature } = require('./request-signing');
+          const signatureData = generateRequestSignature(method, fullRequestUrl, headers, body);
+          
+          // Add signature headers
+          config.headers = {
+            ...headers,
+            'X-Request-Signature': signatureData.signature,
+            'X-Request-Timestamp': signatureData.timestamp,
+            'X-Request-Nonce': signatureData.nonce,
+            'X-Secret-Id': signatureData.secretId,
+          };
+        } catch (signingError) {
+          logger.error("Failed to add request signature:", signingError, {
+            module: 'RequestSigning'
+          });
+          // Continue without signature in case of error (fallback)
+        }
       }
 
       // Add request timestamp for metrics
@@ -150,7 +158,9 @@ const setupResponseInterceptor = () => {
           // Don't record auth failures (401/403) as circuit breaker failures
           !(error.response?.status === 401 || error.response?.status === 403) &&
           // Don't record rate limit (429) as circuit breaker failures
-          error.response?.status !== 429;
+          error.response?.status !== 429 &&
+          // Don't record 404 for SSO endpoints as failures (404 means user needs signup)
+          !(error.response?.status === 404 && originalRequestWithMetadata.metadata?.endpoint?.includes('/auth/sso'));
           
         if (shouldRecordFailure) {
           recordFailure(fullUrl);

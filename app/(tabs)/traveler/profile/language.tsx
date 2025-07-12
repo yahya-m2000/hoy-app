@@ -6,15 +6,13 @@
 import React from "react";
 import { FlatList, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 
 import { useTheme } from "@core/hooks/useTheme";
 import { useLanguage } from "@core/locales/i18n";
-import { Container, Header } from "@shared/components/layout";
-import { Text } from "@shared/components/base/Text";
-import { fontSize, spacing } from "@core/design";
+import { Container, Header, Text } from "@shared/components";
+import { radius, fontSize, spacing } from "@core/design";
 
 interface LanguageOption {
   code: string;
@@ -25,7 +23,6 @@ interface LanguageOption {
 
 export default function LanguageScreen() {
   const { theme, isDark } = useTheme();
-  const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const { currentLanguage, changeLanguage, supportedLanguages } = useLanguage();
 
@@ -55,39 +52,28 @@ export default function LanguageScreen() {
           borderBottomColor: isDark
             ? theme.colors.gray[700]
             : theme.colors.gray[200],
+          backgroundColor: "transparent",
         }}
+        activeOpacity={0.7}
       >
         <Container>
           <Text
+            size="md"
+            weight={isSelected ? "semibold" : "normal"}
+            color={isSelected ? "primary" : "primary"}
             style={{
-              fontSize: fontSize.md,
-              fontWeight: isSelected ? "600" : "400",
-              color: isSelected
-                ? theme.colors.primary
-                : isDark
-                ? theme.colors.white
-                : theme.colors.black,
+              marginBottom: 2,
             }}
           >
             {item.nativeName}
           </Text>
-          <Text
-            style={{
-              fontSize: fontSize.sm,
-              color: isDark ? theme.colors.gray[300] : theme.colors.gray[600],
-              marginTop: 2,
-            }}
-          >
+          <Text size="sm" weight="normal" color="secondary">
             {item.name}
           </Text>
         </Container>
 
         {isSelected && (
-          <Ionicons
-            name="checkmark"
-            size={24}
-            color={theme.colors.primary[600]}
-          />
+          <Ionicons name="checkmark" size={24} color={theme.colors.primary} />
         )}
       </TouchableOpacity>
     );
@@ -95,18 +81,23 @@ export default function LanguageScreen() {
 
   return (
     <Container flex={1} backgroundColor="background">
-      <Header title={t("settings.language")} />
+      <Header
+        title={t("profile.language")}
+        left={{ icon: "arrow-back", onPress: () => router.back() }}
+      />
 
       {/* Language List */}
-      <FlatList
-        data={supportedLanguages}
-        keyExtractor={(item) => item.code}
-        renderItem={renderLanguageItem}
-        showsVerticalScrollIndicator={false}
-        style={{
-          flex: 1,
-        }}
-      />
+      <Container flex={1} marginTop="md">
+        <FlatList
+          data={supportedLanguages}
+          keyExtractor={(item) => item.code}
+          renderItem={renderLanguageItem}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: spacing.xl,
+          }}
+        />
+      </Container>
     </Container>
   );
 }

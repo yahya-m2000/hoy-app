@@ -7,6 +7,7 @@ import { Platform } from "react-native";
 import { setupApiInterceptors } from "./interceptors";
 import { initializeAuthManager } from "./auth-manager";
 import { initializeGlobalNetworkMonitoring } from "../utils/network/retry-handler";
+import { initializeSecureTokenStorage } from "../auth/secure-token-storage";
 import { logger } from "../utils/sys/log/logger";
 
 /**
@@ -16,6 +17,10 @@ const initializeAPI = async () => {
   try {
     // Add a logger message showing the platform info
     logger.log(`[API INIT] Initializing API for platform: ${Platform.OS}`);
+
+    // Initialize secure token storage first
+    await initializeSecureTokenStorage();
+    logger.log("[API INIT] Secure token storage initialized");
 
     // Set up API interceptors for token refresh and error handling (SYNCHRONOUS)
     setupApiInterceptors();

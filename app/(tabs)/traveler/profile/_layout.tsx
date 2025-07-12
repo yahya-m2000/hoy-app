@@ -4,14 +4,50 @@
  */
 
 import { Stack } from "expo-router";
-import { useThemedScreenOptions } from "@core/navigation";
+import { t } from "i18next";
 
 export default function AccountLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="language" options={{ headerShown: false }} />
-      <Stack.Screen name="personal-info" options={{ headerShown: false }} />
+    <Stack screenOptions={{}}>
+      <Stack.Screen
+        name="index"
+        options={{
+          title: "Settings",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="qr-code"
+        options={{
+          title: t("account.qrCode"),
+          headerShown: false,
+          presentation: "fullScreenModal",
+          animation: "fade",
+        }}
+      />
+      <Stack.Screen
+        name="currency"
+        options={{
+          title: t("profile.currency"),
+          headerShown: false,
+          presentation: "fullScreenModal",
+          animation: "fade",
+        }}
+      />
+      <Stack.Screen
+        name="personal-info"
+        options={{
+          headerShown: false,
+          presentation: "fullScreenModal",
+        }}
+      />
+      <Stack.Screen
+        name="language"
+        options={{
+          headerShown: false,
+          presentation: "fullScreenModal",
+        }}
+      />
       <Stack.Screen
         name="[setting]"
         options={{

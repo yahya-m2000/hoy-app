@@ -1,23 +1,24 @@
 /**
  * PropertyCard component
- * Unified property card with size variants (small, medium, large)
- * All variants use column layout: image on top, content below
+ * Displays property as a card with image on top and content below
+ * Styled to match BookingCard design with responsive sizing
  */
 
 import React, { useState, useCallback } from "react";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 
-// Shared components
-import {
-  BookingStatusBadge,
-  BaseCard,
-  Container,
-  Text,
-} from "@shared/components";
-
-// Hooks and utilities
+// Shared Context and Hooks
 import { useTheme } from "@core/hooks";
 import { useCalendarDateSelection } from "@features/calendar/context/CalendarContext";
-import { spacing, fontSize, radius } from "@core/design";
+
+// Shared Components
+import { Text, BookingStatusBadge } from "@shared/components";
+import { PropertyImageContainer } from "../details";
+import RatingDisplay from "../shared/RatingDisplay";
+import WishlistButton from "../shared/WishlistButton";
+
+// Shared Constants
+import { radius, fontSize, spacing } from "@core/design";
 import {
   formatPrice,
   calculateStayDetails,
@@ -28,9 +29,6 @@ import {
 // Types
 import { PropertyCardProps } from "@core/types";
 import CollectionsModal from "src/features/properties/modals/collections/CollectionsModal";
-import WishlistButton from "../shared/WishlistButton";
-import { PropertyImageContainer } from "../details";
-import RatingDisplay from "../shared/RatingDisplay";
 import { t } from "i18next";
 
 export const PropertyCard: React.FC<PropertyCardProps> = ({
@@ -63,7 +61,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   city,
   country,
 }) => {
-  const { theme } = useTheme();
+  const { theme, isDark } = useTheme();
   const { searchDates } = useCalendarDateSelection();
 
   // Collections modal state
@@ -141,254 +139,158 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
     []
   );
 
-  // Variant configuration - all styling properties defined in one place
-  const variantConfig = {
-    small: {
-      // Container
-      width: 120,
-      marginBottom: undefined,
-
-      // Image
-      imageHeight: 120,
-      aspectRatio: 1,
-      imageVariant: "small" as const,
-
-      // Content
-      contentPaddingTop: "xs" as const,
-      contentPaddingHorizontal: undefined,
-
-      // Text styling
-      propertyTypeVariant: "caption" as const,
-      propertyTypeSize: undefined,
-      hostTypeSize: "xs" as const,
-      priceVariant: "caption" as const,
-      priceSize: undefined,
-
-      // Rating
-      ratingVariant: "small" as const,
-      ratingIconSize: 10,
-      ratingFontSize: fontSize.xs,
-
-      // Wishlist button
-      wishlistVariant: "small" as const,
-    },
-
-    large: {
-      // Container
-      width: 200,
-      marginBottom: undefined,
-
-      // Image
-      imageHeight: 200,
-      aspectRatio: 1,
-      imageVariant: "large" as const,
-
-      // Content
-      contentPaddingTop: "xs" as const,
-      contentPaddingHorizontal: undefined,
-
-      // Text styling
-      propertyTypeVariant: "body" as const,
-      propertyTypeSize: "sm" as const,
-      hostTypeSize: "xs" as const,
-      priceVariant: "body2" as const,
-      priceSize: undefined,
-
-      // Rating
-      ratingVariant: "large" as const,
-      ratingIconSize: 12,
-      ratingFontSize: fontSize.xs,
-
-      // Wishlist button
-      wishlistVariant: "large" as const,
-    },
-
-    collection: {
-      // Container
-      width: 180,
-      marginBottom: undefined,
-
-      // Image
-      imageHeight: 180,
-      aspectRatio: 1,
-      imageVariant: "small" as const,
-
-      // Content
-      contentPaddingTop: "xs" as const,
-      contentPaddingHorizontal: undefined,
-
-      // Text styling
-      propertyTypeVariant: "caption" as const,
-      propertyTypeSize: undefined,
-      hostTypeSize: "xs" as const,
-      priceVariant: "caption" as const,
-      priceSize: undefined,
-
-      // Rating
-      ratingVariant: "small" as const,
-      ratingIconSize: 10,
-      ratingFontSize: fontSize.xs,
-
-      // Wishlist button
-      wishlistVariant: "small" as const,
-    },
-
-    fullWidth: {
-      // Container
-      width: undefined, // Let it fill parent width
-      marginBottom: "xl" as const,
-
-      // Image
-      imageHeight: 240,
-      aspectRatio: 16 / 9,
-      imageVariant: "large" as const,
-
-      // Text styling
-      propertyTypeVariant: "body" as const,
-      propertyTypeSize: "md" as const,
-      hostTypeSize: "sm" as const,
-      priceVariant: "body2" as const,
-      priceSize: "xl" as const,
-
-      // Rating
-      ratingVariant: "large" as const,
-      ratingIconSize: 16,
-      ratingFontSize: fontSize.sm,
-
-      // Wishlist button
-      wishlistVariant: "large" as const,
-    },
-  };
-
-  // Get current variant config
-  const config = variantConfig[variant];
-
-  // Column layout for all variants
   return (
-    <Container marginBottom={config.marginBottom}>
-      <BaseCard
-        variant="vertical"
-        style={{
-          ...(config.width && { width: config.width }),
-          ...style,
-        }}
-        onPress={onPress}
-        isLoading={isLoading}
-        animateOnMount={animateOnMount}
-        fadeInDuration={fadeInDuration}
-        accessibilityRole="button"
-        accessibilityLabel={`Property: ${
-          name || title
-        }, ${getPropertyTypeDisplay()}, ${formatPrice(
-          price,
-          currency
-        )} per night`}
-      >
-        {/* Image Container */}
-        <Container
-          style={{ position: "relative" }}
-          borderRadius="lg"
-          height={config.imageHeight}
+    <TouchableOpacity
+      style={[styles.container, style]}
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={`Property: ${
+        name || title
+      }, ${getPropertyTypeDisplay()}, ${formatPrice(
+        price,
+        currency
+      )} per night`}
+    >
+      {/* Image Container */}
+      <View style={styles.imageContainer}>
+        <PropertyImageContainer
+          imageUrl={imageUrl}
+          images={displayData.propertyData?.images || images}
+          containerStyle={styles.image}
+          variant="small"
         >
-          <PropertyImageContainer
-            imageUrl={imageUrl}
-            images={displayData.propertyData?.images || images}
-            variant={config.imageVariant}
-            containerStyle={{
-              borderRadius: radius.lg,
-              aspectRatio: config.aspectRatio,
-            }}
-            resizeMode="cover"
-          >
-            {displayData.isBookingMode && displayData.status && (
-              <BookingStatusBadge
-                status={displayData.status}
-                type="booking"
-                size="small"
-              />
-            )}
-            {!displayData.isBookingMode && (
-              <WishlistButton
-                propertyId={_id}
-                variant={config.wishlistVariant}
-                onShowCollections={handleShowCollections}
-                onCollectionToggle={handleCollectionToggle}
-              />
-            )}
-          </PropertyImageContainer>
-        </Container>
-
-        {/* Content Container */}
-        <Container
-          paddingTop={config.contentPaddingTop}
-          paddingHorizontal={config.contentPaddingHorizontal}
-        >
-          {/* Property Type and Location */}
-          <Container>
-            <Text
-              variant={config.propertyTypeVariant}
-              weight="medium"
-              size={config.propertyTypeSize}
-              color={theme.text.primary}
-            >
-              {getPropertyTypeDisplay()}
-            </Text>
-          </Container>
-
-          {/* Host Type */}
-          {getHostTypeDisplay() && (
-            <Container marginBottom="xs">
-              <Text
-                variant="caption"
-                weight="normal"
-                size={config.hostTypeSize}
-                color={theme.text.secondary}
-                numberOfLines={1}
-              >
-                {getHostTypeDisplay()}
-              </Text>
-            </Container>
-          )}
-
-          {/* Price and Rating Row */}
-          <Container
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="baseline"
-          >
-            <Text
-              variant={config.priceVariant}
-              weight="semibold"
-              size={config.priceSize}
-              color={theme.text.primary}
-            >
-              {`${formatPrice(price, currency)} ${t("home.perNight")}`}
-            </Text>
-            <RatingDisplay
-              rating={rating || 0}
-              reviewCount={reviewCount || 0}
-              variant={config.ratingVariant}
-              iconSize={config.ratingIconSize}
-              ratingStyle={{
-                fontSize: config.ratingFontSize,
-                color: theme.text.primary,
-              }}
-              reviewCountStyle={{
-                fontSize: config.ratingFontSize,
-                color: theme.text.secondary,
-              }}
+          {displayData.isBookingMode && displayData.status && (
+            <BookingStatusBadge
+              status={displayData.status}
+              type="booking"
+              size="small"
             />
-          </Container>
-        </Container>
-      </BaseCard>
+          )}
+          {!displayData.isBookingMode && (
+            <WishlistButton
+              propertyId={_id}
+              variant="small"
+              onShowCollections={handleShowCollections}
+              onCollectionToggle={handleCollectionToggle}
+            />
+          )}
+        </PropertyImageContainer>
+      </View>
+
+      {/* Property Details */}
+      <View style={styles.detailsContainer}>
+        {/* Property Type and Location */}
+        <Text
+          size="sm"
+          weight="semibold"
+          color={isDark ? theme.colors.gray[50] : theme.colors.gray[900]}
+          style={styles.propertyType}
+        >
+          {getPropertyTypeDisplay()}
+        </Text>
+
+        {/* Host Type */}
+        {getHostTypeDisplay() && (
+          <Text
+            size="xs"
+            weight="normal"
+            color={isDark ? theme.colors.gray[300] : theme.colors.gray[600]}
+            style={styles.hostType}
+          >
+            {getHostTypeDisplay()}
+          </Text>
+        )}
+
+        {/* Price and Rating Row */}
+        <View style={styles.priceRatingRow}>
+          <Text
+            style={[
+              styles.price,
+              {
+                color: isDark ? theme.colors.gray[50] : theme.colors.gray[900],
+              },
+            ]}
+          >
+            {`${formatPrice(price, currency)} ${t("home.perNight")}`}
+          </Text>
+          <RatingDisplay
+            rating={rating || 0}
+            reviewCount={reviewCount || 0}
+            variant="small"
+            iconSize={10}
+            ratingStyle={{
+              fontSize: fontSize.sm,
+              color: isDark ? theme.colors.gray[50] : theme.colors.gray[900],
+            }}
+            reviewCountStyle={{
+              fontSize: fontSize.sm,
+              color: isDark ? theme.colors.gray[300] : theme.colors.gray[600],
+            }}
+          />
+        </View>
+      </View>
+
       <CollectionsModal
         visible={showCollectionsModal}
         onClose={handleCloseCollections}
         propertyId={_id}
         onCollectionToggle={handleCollectionToggle}
       />
-    </Container>
+    </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  // ===== MAIN CONTAINER =====
+  container: {
+    paddingBottom: spacing.lg,
+    backgroundColor: "transparent",
+  },
+
+  // ===== IMAGE SECTION =====
+  imageContainer: {
+    position: "relative",
+    width: "100%",
+    aspectRatio: 1, // 1:1 ratio for square image like BookingCard
+    borderRadius: radius.lg,
+    overflow: "hidden",
+    marginBottom: spacing.sm,
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+    borderRadius: radius.lg,
+  },
+
+  // ===== CONTENT SECTION =====
+  detailsContainer: {
+    // Match BookingCard structure
+  },
+
+  // ===== PROPERTY TYPE =====
+  propertyType: {
+    fontSize: fontSize.sm,
+    fontWeight: "600", // semibold equivalent
+    marginBottom: spacing.xs,
+  },
+
+  // ===== HOST TYPE =====
+  hostType: {
+    fontSize: fontSize.xs,
+    fontWeight: "400", // normal
+    marginBottom: spacing.xs,
+  },
+
+  // ===== PRICE AND RATING SECTION =====
+  priceRatingRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "baseline",
+  },
+  price: {
+    fontSize: fontSize.sm,
+    fontWeight: "600", // semibold equivalent
+  },
+});
 
 export default PropertyCard;
