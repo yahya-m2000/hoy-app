@@ -42,7 +42,7 @@ const AMENITY_ICONS: Record<string, string> = {
  * Matches the design pattern of HouseRulesSection
  */
 const AmenitiesGrid: React.FC<AmenitiesGridProps> = ({
-  title = t("property.whatThisPlaceOffers"),
+  title = t("home.whatThisPlaceOffers"),
   amenities,
   maxVisible = 6,
 }) => {

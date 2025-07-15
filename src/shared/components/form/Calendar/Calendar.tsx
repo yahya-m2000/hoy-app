@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useRef,
+  useCallback,
+} from "react";
 import { Dimensions, TouchableOpacity, View, StyleSheet } from "react-native";
 import { Container } from "../../layout";
 import { Icon } from "../../base/Icon";
@@ -24,13 +30,73 @@ const Calendar: React.FC<CalendarProps> = ({
   showLegend = true,
 }) => {
   const {
-    selectedDates,
+    selectedDates: globalSelectedDates,
     bookedDates,
     blockDates,
     currentPropertyId,
-    setSelectedDates,
+    setSelectedDates: setGlobalSelectedDates,
     setPropertyId,
+    propertyDates,
+    selectDatesForProperty,
   } = useCalendar();
+
+  // Use property-specific dates if propertyId is provided, otherwise use global dates
+  const selectedDates = useMemo(() => {
+    if (propertyId) {
+      const propertyDateData = propertyDates.get(propertyId);
+      if (
+        propertyDateData?.selectedDates.startDate &&
+        propertyDateData?.selectedDates.endDate
+      ) {
+        return [
+          propertyDateData.selectedDates.startDate,
+          propertyDateData.selectedDates.endDate,
+        ];
+      } else if (propertyDateData?.selectedDates.startDate) {
+        return [propertyDateData.selectedDates.startDate];
+      }
+      return [];
+    }
+    return globalSelectedDates;
+  }, [propertyId, propertyDates, globalSelectedDates]);
+
+  // Local state to ensure immediate feedback before context re-render
+  const [localSelectedDates, setLocalSelectedDates] =
+    useState<Date[]>(selectedDates);
+
+  // Sync local state when context-selected dates change (e.g., external updates)
+  useEffect(() => {
+    setLocalSelectedDates(selectedDates);
+  }, [selectedDates]);
+
+  // Set selected dates function that updates the appropriate state
+  const setSelectedDates = useCallback(
+    (dates: Date[]) => {
+      if (propertyId) {
+        // Update property-specific dates
+        if (dates.length === 1) {
+          selectDatesForProperty(propertyId, {
+            startDate: dates[0],
+            endDate: null,
+          });
+        } else if (dates.length === 2) {
+          selectDatesForProperty(propertyId, {
+            startDate: dates[0],
+            endDate: dates[1],
+          });
+        } else {
+          selectDatesForProperty(propertyId, {
+            startDate: null,
+            endDate: null,
+          });
+        }
+      } else {
+        // Update global dates
+        setGlobalSelectedDates(dates);
+      }
+    },
+    [propertyId, setGlobalSelectedDates, selectDatesForProperty]
+  );
 
   // Create clearSelection function
   const clearSelection = () => setSelectedDates([]);
@@ -112,7 +178,36 @@ const Calendar: React.FC<CalendarProps> = ({
 
   // Separate booked dates for display purposes
   const allBookedDates = useMemo(() => {
-    return bookedDates.map((dateStr: string) => new Date(dateStr));
+    return bookedDates
+      .filter((dateStr: string) => {
+        if (!dateStr || typeof dateStr !== "string") {
+          console.warn("Calendar: Invalid booked date string:", dateStr);
+          return false;
+        }
+        try {
+          const date = new Date(dateStr);
+          return !isNaN(date.getTime());
+        } catch (error) {
+          console.error(
+            "Calendar: Error validating booked date:",
+            dateStr,
+            error
+          );
+          return false;
+        }
+      })
+      .map((dateStr: string) => {
+        try {
+          return new Date(dateStr);
+        } catch (error) {
+          console.error(
+            "Calendar: Error creating date from string:",
+            dateStr,
+            error
+          );
+          return new Date(); // Fallback to current date
+        }
+      });
   }, [bookedDates]);
 
   const allBookingRanges = useMemo(() => {
@@ -169,6 +264,13 @@ const Calendar: React.FC<CalendarProps> = ({
 
     const isCurrentDay = selectedDate.getTime() === today.getTime();
 
+    console.log("Calendar - Date pressed:", {
+      date: selectedDate.toISOString(),
+      isCurrentDay,
+      enableRangeSelection,
+      currentSelectedDates: selectedDates.map((d) => d.toISOString()),
+    });
+
     // Check if date is blocked or booked (but allow current day even if blocked/booked)
     if ((isDateBlocked(date) || isDateBooked(date)) && !isCurrentDay) {
       // Show warning message instead of silently ignoring
@@ -206,24 +308,40 @@ const Calendar: React.FC<CalendarProps> = ({
     }
 
     if (enableRangeSelection) {
-      const start = selectedDates[0];
-      const end = selectedDates[1];
+      const start = localSelectedDates[0];
+      const end = localSelectedDates[1];
+
+      console.log("Calendar - Range selection logic:", {
+        hasStart: !!start,
+        hasEnd: !!end,
+        startDate: start?.toISOString(),
+        endDate: end?.toISOString(),
+        selectedDate: selectedDate.toISOString(),
+      });
 
       if (!start || (start && end)) {
         // Start new selection
+        console.log("Calendar - Starting new selection");
         setSelectedDates([date]);
+        setLocalSelectedDates([date]);
         // Trigger callback for start date
         if (onDateSelect) {
           onDateSelect(date, undefined);
         }
       } else if (start && !end) {
         // Complete the range
+        console.log("Calendar - Completing range selection");
         if (date >= start) {
           // Check for overlaps in the selected range
           const { hasOverlap, overlappedDates } = hasDateRangeOverlap(
             start,
             date
           );
+
+          console.log("Calendar - Range overlap check:", {
+            hasOverlap,
+            overlappedDatesCount: overlappedDates.length,
+          });
 
           if (hasOverlap) {
             const bookedCount = overlappedDates.filter((d) =>
@@ -251,14 +369,24 @@ const Calendar: React.FC<CalendarProps> = ({
             return;
           }
 
+          console.log("Calendar - Setting final range:", {
+            startDate: start.toISOString(),
+            endDate: date.toISOString(),
+          });
+
           setSelectedDates([start, date]);
+          setLocalSelectedDates([start, date]);
           // Trigger callback when range is complete
           if (onDateSelect) {
             onDateSelect(start, date);
           }
         } else {
           // If selected date is before start, make it the new start
+          console.log(
+            "Calendar - New date is before start, making it new start"
+          );
           setSelectedDates([date]);
+          setLocalSelectedDates([date]);
           // Trigger callback for new start date
           if (onDateSelect) {
             onDateSelect(date, undefined);
@@ -266,7 +394,9 @@ const Calendar: React.FC<CalendarProps> = ({
         }
       }
     } else {
+      console.log("Calendar - Single date selection");
       setSelectedDates([date]);
+      setLocalSelectedDates([date]);
       // Trigger callback for single selection
       if (onDateSelect) {
         onDateSelect(date, undefined);
@@ -308,8 +438,8 @@ const Calendar: React.FC<CalendarProps> = ({
   };
 
   const isDateSelected = (date: Date): boolean => {
-    const start = selectedDates[0];
-    const end = selectedDates[1];
+    const start = localSelectedDates[0];
+    const end = localSelectedDates[1];
     if (!start) return false;
 
     if (!enableRangeSelection) {
@@ -324,8 +454,8 @@ const Calendar: React.FC<CalendarProps> = ({
   };
 
   const isDateInRange = (date: Date): boolean => {
-    const start = selectedDates[0];
-    const end = selectedDates[1];
+    const start = localSelectedDates[0];
+    const end = localSelectedDates[1];
     if (!enableRangeSelection || !start || !end) {
       return false;
     }

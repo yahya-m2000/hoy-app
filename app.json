@@ -28,10 +28,12 @@
         "NSLocationWhenInUseUsageDescription": "This app uses your location to show nearby properties and improve your search experience.",
         "NSCameraUsageDescription": "This app needs access to your camera to let you take photos for your profile and property listings.",
         "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to let you upload images for your profile and property listings.",
-        "NSUserNotificationUsageDescription": "This app would like to send you notifications about bookings, messages, and important updates."
+        "NSUserNotificationUsageDescription": "This app would like to send you notifications about bookings, messages, and important updates.",
+        "NSFaceIDUsageDescription": "This app uses Face ID to securely autofill your login credentials."
       }
     },
     "android": {
+      "versionCode": 1,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyD_kqnTi5wG1xSRJicvybovbQMf0oYMO9s"
@@ -42,7 +44,11 @@
         "monochromeImage": "./assets/icons/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.ym2000.hoy"
+      "package": "com.ym2000.hoy",
+      "permissions": [
+        "USE_BIOMETRIC",
+        "USE_FINGERPRINT"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png",

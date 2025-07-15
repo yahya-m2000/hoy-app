@@ -51,6 +51,9 @@ export * from './reservation.types';
 // Export review types (now includes simple review types from features/properties)
 export * from './review.types';
 
+// Export feedback types for user feedback and support
+export * from './feedback.types';
+
 // ========================================
 // BUSINESS DOMAIN TYPES CONTINUED
 // ========================================

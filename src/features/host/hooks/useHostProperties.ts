@@ -14,19 +14,34 @@ export const useHostProperties = (filters?: HostPropertyFilters) => {
   ); // Fetch properties query
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["hostProperties", localFilters],
-    queryFn: () => {
+    queryFn: async () => {
       console.log(
         "useHostProperties - calling fetchHostProperties with filters:",
         localFilters
       );
-      // Convert PropertyFilters to HostPropertyFilters format
-      const hostFilters = {
-        ...localFilters,
-        propertyType: Array.isArray(localFilters.propertyType) 
-          ? localFilters.propertyType[0] 
-          : localFilters.propertyType
-      };
-      return host.HostPropertyService.getProperties(hostFilters);
+      try {
+        // Convert PropertyFilters to HostPropertyFilters format
+        const hostFilters = {
+          ...localFilters,
+          propertyType: Array.isArray(localFilters.propertyType) 
+            ? localFilters.propertyType[0] 
+            : localFilters.propertyType
+        };
+        return await host.HostPropertyService.getProperties(hostFilters);
+      } catch (error: any) {
+        // Handle 403 errors gracefully - user doesn't have host permissions yet
+        if (error?.response?.status === 403) {
+          console.log("🔐 [useHostProperties] User doesn't have host permissions yet - returning empty properties");
+          return {
+            properties: [],
+            total: 0,
+            page: 1,
+            totalPages: 1,
+          };
+        }
+        // Re-throw other errors
+        throw error;
+      }
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: (failureCount, error: any) => {
@@ -36,6 +51,10 @@ export const useHostProperties = (filters?: HostPropertyFilters) => {
         "error:",
         error
       );
+      // Don't retry on 403 errors (user needs to complete setup)
+      if (error?.response?.status === 403) {
+        return false;
+      }
       // Don't retry on auth errors (401)
       if (error?.response?.status === 401) {
         return false;
@@ -85,7 +104,7 @@ export const useHostProperties = (filters?: HostPropertyFilters) => {
       status,
     }: {
       propertyId: string;
-      status: string;
+      status: "active" | "inactive";
     }) => host.HostPropertyService.updateStatus(propertyId, status),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["hostProperties"] });

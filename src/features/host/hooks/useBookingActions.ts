@@ -15,6 +15,7 @@ import {
   handleContactGuest,
   canUpdateBooking,
 } from "../utils/bookingUtils";
+import { updateBookingStatus } from "@core/api/services/host/booking.service";
 
 export const useBookingActions = () => {
   const { t } = useTranslation();
@@ -58,39 +59,45 @@ export const useBookingActions = () => {
   /**
    * Handle update booking status
    */
-  const handleUpdateStatus = (booking: any, newStatus: string) => {
-    if (!canUpdateBooking(booking)) return;
+  const handleUpdateStatus = async (booking: any, newStatus: string) => {
+    console.log("handleUpdateStatus called", booking, newStatus);
+    // if (!canUpdateBooking(booking)) return; // TEMP: removed for debugging
 
-    Alert.alert(
-      "Update Booking Status",
-      `Are you sure you want to change the status to "${newStatus}"?`,
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-        {
-          text: "Update",
-          onPress: async () => {
-            setIsUpdatingStatus(true);
-            try {
-              // TODO: Implement actual status update API call
-              showToast({
-                message: "Status update feature coming soon",
-                type: "info",
-              });
-            } catch (error) {
-              showToast({
-                message: "Failed to update status",
-                type: "error",
-              });
-            } finally {
-              setIsUpdatingStatus(false);
-            }
+    return new Promise((resolve) => {
+      Alert.alert(
+        t("host.today.reservations.updateStatusTitle"),
+        t("host.today.reservations.updateStatusMessage", { status: newStatus }),
+        [
+          {
+            text: t("common.cancel"),
+            style: "cancel",
+            onPress: () => resolve(undefined),
           },
-        },
-      ]
-    );
+          {
+            text: t("host.today.reservations.confirm"),
+            onPress: async () => {
+              setIsUpdatingStatus(true);
+              try {
+                const updated = await updateBookingStatus(booking._id, newStatus);
+                showToast({
+                  message: t("host.today.reservations.statusUpdated", { status: newStatus }),
+                  type: "success",
+                });
+                resolve(updated);
+              } catch (error) {
+                showToast({
+                  message: t("host.today.reservations.statusUpdateFailed"),
+                  type: "error",
+                });
+                resolve(undefined);
+              } finally {
+                setIsUpdatingStatus(false);
+              }
+            },
+          },
+        ]
+      );
+    });
   };
 
   /**

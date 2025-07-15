@@ -20,7 +20,10 @@ import "../api/init"; // Ensure API interceptors & auth manager are initialized
 // React
 import React, { ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import {
+  SafeAreaProvider,
+  initialWindowMetrics,
+} from "react-native-safe-area-context";
 
 // Core Context Providers
 import { AuthProvider } from "./AuthContext";
@@ -123,7 +126,7 @@ const CoreProviders: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <KeyboardProvider>
         <Auth0Provider
           domain={"dev-12t76epiidwfskdk.uk.auth0.com"}
@@ -169,6 +172,7 @@ export const FeatureProviders: React.FC<{
     calendar?: boolean;
     host?: boolean;
     chat?: boolean;
+    properties?: boolean;
   };
 }> = ({ children, features = {} }) => {
   let wrappedChildren = children;
@@ -206,6 +210,18 @@ export const FeatureProviders: React.FC<{
     );
   }
 
+  if (features.properties) {
+    const {
+      PropertyProviderWithErrorBoundary,
+    } = require("../../features/properties/context/PropertyContext");
+
+    wrappedChildren = (
+      <PropertyProviderWithErrorBoundary>
+        {wrappedChildren}
+      </PropertyProviderWithErrorBoundary>
+    );
+  }
+
   return <>{wrappedChildren}</>;
 };
 
@@ -223,6 +239,7 @@ export const ContextProviders: React.FC<{
     calendar?: boolean;
     host?: boolean;
     chat?: boolean;
+    properties?: boolean;
   };
 }> = ({ children, features }) => (
   <AppErrorBoundary>
@@ -243,7 +260,9 @@ export const ContextProviders: React.FC<{
 export const AppProviders: React.FC<{ children: ReactNode }> = ({
   children,
 }) => (
-  <ContextProviders features={{ calendar: true, host: true, chat: true }}>
+  <ContextProviders
+    features={{ calendar: true, host: true, chat: true, properties: true }}
+  >
     {children}
   </ContextProviders>
 );
@@ -268,6 +287,7 @@ export const ScreenProviders: React.FC<{
     calendar: ["main", "host", "traveler"].includes(screenType),
     host: ["main", "host"].includes(screenType),
     chat: ["main", "host", "traveler"].includes(screenType),
+    properties: ["main", "host", "traveler"].includes(screenType),
   };
 
   return <ContextProviders features={features}>{children}</ContextProviders>;

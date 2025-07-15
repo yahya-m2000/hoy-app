@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { Container, Text } from "@shared/components";
 import { useTranslation } from "react-i18next";
 import { DayCell } from "./DayCell";
 import { BookingOverlay } from "./BookingOverlay";
@@ -8,6 +8,7 @@ import { formatMonthName } from "../utils/dateUtils";
 import { fontSize, fontWeight } from "@core/design";
 import { useTheme } from "@core/hooks";
 import { CalendarBookingData } from "@core/types";
+import { useProperty } from "@features/calendar/hooks/useProperty";
 
 interface MemoizedMonthProps {
   monthData: MonthViewData;
@@ -17,64 +18,8 @@ interface MemoizedMonthProps {
   calendarWidth: number;
   monthSpacing: number;
   onBookingPress: (booking: CalendarBookingData) => void;
+  property?: any;
 }
-
-// Global style cache to prevent recreation
-const styleCache = new Map<string, any>();
-
-// Create styles once and cache them globally
-const createMonthStyles = (
-  theme: any,
-  dayWidth: number,
-  dayHeight: number,
-  calendarWidth: number
-) => {
-  const cacheKey = `${
-    theme.text?.primary || "#000"
-  }_${dayWidth}_${dayHeight}_${calendarWidth}`;
-
-  if (styleCache.has(cacheKey)) {
-    return styleCache.get(cacheKey);
-  }
-
-  const styles = StyleSheet.create({
-    monthContainer: {
-      alignItems: "center",
-      justifyContent: "flex-start",
-      width: "100%",
-    },
-    monthTitleContainer: {
-      width: "100%",
-      paddingVertical: 12,
-      alignItems: "flex-start",
-      justifyContent: "flex-start",
-      paddingHorizontal: 0,
-    },
-    monthTitleText: {
-      fontSize: fontSize.sm,
-      fontWeight: fontWeight.bold,
-      color: theme.colors?.gray?.[400] || "#666",
-    },
-    calendarGrid: {
-      position: "relative",
-      paddingBottom: 10,
-      alignSelf: "center",
-      width: calendarWidth,
-    },
-    weekRow: {
-      flexDirection: "row",
-      justifyContent: "flex-start", // Keep cells aligned with columns instead of centering
-    },
-    emptyDayCell: {
-      width: dayWidth - 2,
-      height: dayHeight,
-      // Keep the same dimensions to maintain column alignment
-    },
-  });
-
-  styleCache.set(cacheKey, styles);
-  return styles;
-};
 
 // Custom comparison function for better memoization
 const arePropsEqual = (
@@ -134,6 +79,7 @@ const MemoizedMonthComponent = React.memo<MemoizedMonthProps>(
     calendarWidth,
     monthSpacing,
     onBookingPress,
+    property,
   }) => {
     const { t } = useTranslation();
     const { matrix, bookings } = monthData;
@@ -162,20 +108,12 @@ const MemoizedMonthComponent = React.memo<MemoizedMonthProps>(
     });
 
     const themeResult = useTheme();
-
     // Create a fallback theme to prevent undefined access errors
     const fallbackTheme = {
       text: { primary: "#000", secondary: "#666" },
       colors: { gray: { 400: "#9CA3AF" }, primary: "#007AFF" },
     };
-
     const theme = themeResult?.theme || fallbackTheme;
-
-    // Use cached styles
-    const styles = React.useMemo(
-      () => createMonthStyles(theme, dayWidth, dayHeight, calendarWidth),
-      [theme, dayWidth, dayHeight, calendarWidth]
-    );
 
     // Memoized booking press handler
     const handleBookingPress = React.useCallback(
@@ -231,6 +169,8 @@ const MemoizedMonthComponent = React.memo<MemoizedMonthProps>(
       return filtered;
     }, [bookings, monthData.month, getTranslatedMonthName]);
 
+    const { selectedProperty } = useProperty();
+
     // Filter bookings that have days in this month (memoized to prevent recalculation)
     const weekRows = React.useMemo(() => {
       return matrix.map((week: any[], weekIndex: number) => {
@@ -246,7 +186,11 @@ const MemoizedMonthComponent = React.memo<MemoizedMonthProps>(
           // Always render a cell to maintain column alignment
           if (!day.isCurrentMonth) {
             // Render an invisible placeholder to maintain column positioning
-            return <View key={dayKey} style={styles.emptyDayCell} />;
+            return (
+              <Container key={dayKey} width={dayWidth - 2} height={dayHeight}>
+                {null}
+              </Container>
+            );
           }
           return (
             <DayCell
@@ -259,42 +203,60 @@ const MemoizedMonthComponent = React.memo<MemoizedMonthProps>(
               isInRange={false} // No range state
               isRangeStart={false} // No range state
               isRangeEnd={false} // No range state
+              property={selectedProperty}
             />
           );
         });
 
         // Apply different justification for first/last rows if needed
-        const weekRowStyle = [
-          styles.weekRow,
-          isFirstWeek && { justifyContent: "flex-end" },
-          isLastWeek && { justifyContent: "flex-start" },
-        ];
+        let justifyContent: "flex-start" | "flex-end" | undefined = undefined;
+        if (isFirstWeek) justifyContent = "flex-end";
+        if (isLastWeek) justifyContent = "flex-start";
 
         return (
-          <View key={weekKey} style={weekRowStyle}>
+          <Container
+            key={weekKey}
+            flexDirection="row"
+            justifyContent={justifyContent || "flex-start"}
+          >
             {dayElements}
-          </View>
+          </Container>
         );
       });
-    }, [matrix, monthIndex, dayWidth, styles, bookings]);
+    }, [matrix, monthIndex, dayWidth, dayHeight, bookings]);
 
     return (
-      <View
-        style={[
-          styles.monthContainer,
-          {
-            height: totalHeight,
-            marginBottom: monthSpacing,
-          },
-        ]}
+      <Container
+        alignItems="center"
+        justifyContent="flex-start"
+        width="100%"
+        style={{ height: totalHeight, marginBottom: monthSpacing }}
       >
         {/* Month Title */}
-        <View style={styles.monthTitleContainer}>
-          <Text style={styles.monthTitleText}>{monthTitle}</Text>
-        </View>
+        <Container
+          width="100%"
+          paddingVertical="md"
+          alignItems="flex-start"
+          justifyContent="flex-start"
+        >
+          <Text
+            variant="body2"
+            weight="bold"
+            color={theme.colors?.gray?.[400] || "#666"}
+          >
+            {monthTitle}
+          </Text>
+        </Container>
 
         {/* Month Grid */}
-        <View style={styles.calendarGrid}>
+        <Container
+          style={{
+            position: "relative",
+            paddingBottom: 10,
+            alignSelf: "center",
+            width: calendarWidth,
+          }}
+        >
           {weekRows}
 
           {/* Booking Overlays - only render filtered bookings */}
@@ -308,8 +270,8 @@ const MemoizedMonthComponent = React.memo<MemoizedMonthProps>(
               onBookingPress={handleBookingPress}
             />
           ))}
-        </View>
-      </View>
+        </Container>
+      </Container>
     );
   },
   arePropsEqual // Use custom comparison function

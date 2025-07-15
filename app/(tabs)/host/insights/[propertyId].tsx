@@ -209,7 +209,7 @@
 //           onPress={() => router.back()}
 //           style={styles.backButton}
 //         >
-//           <Ionicons name="arrow-back" size={24} color={theme.text.primary} />
+//           <Ionicons name="chevron-back-outline" size={24} color={theme.text.primary} />
 //         </TouchableOpacity>
 //         <Text style={[styles.title, { color: theme.text.primary }]}>Homes</Text>
 //         <View style={styles.placeholder} />

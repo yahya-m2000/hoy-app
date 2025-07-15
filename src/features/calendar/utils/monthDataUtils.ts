@@ -1,7 +1,7 @@
 import { generateCleanMonthMatrix } from "./dateUtils";
+import type { Property as CalendarProperty } from "@features/calendar/hooks/useProperty";
 import { CalendarBookingData } from "@core/types/booking.types";
 import { getBookingsForPropertyMonth } from "./realBookingData";
-import { getBookingsForMonth } from "./mockData";
 
 export interface MonthViewData {
   month: Date;
@@ -49,12 +49,11 @@ export const generateStableMonthsArray = (): Date[] => {
  */
 export const generateMonthsData = async (
   months: Date[],
-  propertyId?: string
+  property?: CalendarProperty
 ): Promise<MonthViewData[]> => {
+  const propertyId = property?.id;
   const monthDataPromises = months.map(async (month) => {
-    const key = `month-${month.getFullYear()}-${month.getMonth()}-${
-      propertyId || "all"
-    }`;
+    const key = `month-${month.getFullYear()}-${month.getMonth()}-${propertyId || "all"}`;
 
     // Return cached data if available
     if (monthDataCache.has(key)) {
@@ -62,10 +61,10 @@ export const generateMonthsData = async (
     }
 
     // Generate new data
-    const matrix = generateCleanMonthMatrix(month);
+    const matrix = generateCleanMonthMatrix(month, property);
     const bookings = propertyId
       ? await getBookingsForPropertyMonth(month, propertyId)
-      : getBookingsForMonth(month);
+      : [];
 
     const monthData: MonthViewData = {
       month,

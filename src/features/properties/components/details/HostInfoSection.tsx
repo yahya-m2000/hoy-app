@@ -59,7 +59,7 @@ const HostInfoSection: React.FC<HostInfoSectionProps> = ({ host }) => {
       {/* Section Header */}
       <Container marginVertical="md">
         <Text variant="h6" weight="semibold">
-          {t("property.meetYourHost")}
+          {t("property.details.meetYourHost")}
         </Text>
       </Container>
 
@@ -110,7 +110,7 @@ const HostInfoSection: React.FC<HostInfoSectionProps> = ({ host }) => {
               <Container marginBottom="xs">
                 <Text variant="body" color={theme.text.secondary}>
                   {host.yearsHosting === 0
-                    ? t("property.newHost")
+                    ? t("property.common.newHost")
                     : `${host.yearsHosting} ${t("property.year", {
                         count: host.yearsHosting,
                       })} ${t("property.hosting")}`}
@@ -122,7 +122,7 @@ const HostInfoSection: React.FC<HostInfoSectionProps> = ({ host }) => {
             {host.location && (
               <Container flexDirection="row" alignItems="center">
                 <Text variant="body" color={theme.text.secondary}>
-                  {t("property.livesIn", { location: host.location })}
+                  {t("property.common.livesIn", { location: host.location })}
                 </Text>
               </Container>
             )}

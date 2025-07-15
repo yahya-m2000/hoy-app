@@ -8,13 +8,16 @@ import {
   Container,
   Header,
   LoadingSpinner,
+  EmptyState,
 } from "@shared/components";
 import { spacing } from "@core/design";
 import { useHostBookings } from "@features/host/hooks/useHostBookings";
 import { useBookingActions } from "@features/host/hooks";
-import { FilterType } from "@features/host/components/today/FilterTabs";
 import ReservationList from "@features/host/components/today/ReservationList";
-import ReservationFilterSection from "@features/host/components/today/ReservationFilterSection";
+import ReservationsSection, {
+  FilterType,
+  ReservationFilterSection,
+} from "@features/host/components/today/ReservationsSection";
 import { Reservation } from "@features/host/components/today/ReservationCard";
 import { transformBookingToReservation } from "@features/host/utils";
 
@@ -84,7 +87,7 @@ export default function AllReservationsPage() {
           title: t("host.reservations.allReservations"),
           showDivider: false,
           left: {
-            icon: "arrow-back",
+            icon: "chevron-back-outline",
             onPress: handleBackNavigation,
           },
         }}
@@ -96,34 +99,12 @@ export default function AllReservationsPage() {
           onFilterChange={handleFilterChange}
           noPaddingHorizontal={true}
         />
-        <Container
-          flex={1}
-          justifyContent="center"
-          alignItems="center"
-          margin="md"
-          padding="lg"
-          borderRadius="md"
-          backgroundColor="surface"
-          borderWidth={1}
-          borderColor="rgba(0,0,0,0.1)"
-        >
-          <Text
-            variant="h4"
-            weight="semibold"
-            align="center"
-            style={{ marginBottom: spacing.sm }}
-          >
-            {t("host.reservations.noReservations")}
-          </Text>
-          <Text
-            variant="body2"
-            color="secondary"
-            align="center"
-            style={{ lineHeight: 24 }}
-          >
-            {t("host.reservations.noReservationsSubtitle")}
-          </Text>
-        </Container>
+
+        <ReservationList
+          reservations={[]}
+          activeFilter={activeFilter}
+          onFilterChange={handleFilterChange}
+        />
       </Screen>
     );
   }
@@ -134,7 +115,7 @@ export default function AllReservationsPage() {
         title: t("host.reservations.allReservations"),
         showDivider: false,
         left: {
-          icon: "arrow-back",
+          icon: "chevron-back-outline",
           onPress: handleBackNavigation,
         },
       }}

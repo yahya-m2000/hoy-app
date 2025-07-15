@@ -281,18 +281,6 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
   >([]);
   const isProcessingQueue = useRef<boolean>(false);
 
-  // Add safety check to prevent initialization errors
-  const [isInitialized, setIsInitialized] = React.useState(false);
-
-  React.useEffect(() => {
-    // Delay initialization to ensure all dependencies are ready
-    const timer = setTimeout(() => {
-      setIsInitialized(true);
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   // Query for booked dates when property ID changes
   const { data: bookedDatesData } = useQuery({
     queryKey: ["bookedDates", state.currentPropertyId],
@@ -300,7 +288,7 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
       state.currentPropertyId
         ? booking.getBookedDatesForProperty(state.currentPropertyId)
         : Promise.resolve([]),
-    enabled: !!state.currentPropertyId && isInitialized,
+    enabled: !!state.currentPropertyId,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
@@ -636,33 +624,7 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
 export function useCalendarState() {
   const context = useContext(CalendarContext);
   if (context === undefined) {
-    // Return a safe default instead of throwing during initialization
-    return {
-      state: initialState,
-      dispatch: () => {},
-      setSelectedProperty: () => {},
-      setProperties: () => {},
-      setViewMode: () => {},
-      setCurrentYear: () => {},
-      setCurrentMonth: () => {},
-      setSelectedDates: () => {},
-      setIsSelectingRange: () => {},
-      setSearchDates: () => {},
-      selectDatesForProperty: () => {},
-      clearPropertyDates: () => {},
-      clearAllDates: () => {},
-      getOptimalDatesForProperty: async () => null,
-      getDisplayDatesForProperty: () => "",
-      setPropertySelectorVisible: () => {},
-      setEditOverlayVisible: () => {},
-      setCurrentViewExiting: () => {},
-      setBookings: () => {},
-      setLoadingBookings: () => {},
-      setPropertyId: () => {},
-      checkDateAvailability: () => {},
-      resetAvailabilityCheck: () => {},
-      resetState: () => {},
-    };
+    throw new Error("useCalendarState must be used within a CalendarProvider");
   }
   return context;
 }

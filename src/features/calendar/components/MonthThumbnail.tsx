@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect, useRef } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
+import { Container, Text } from "@shared/components";
 import { useTranslation } from "react-i18next";
 import {
   MonthData,
@@ -228,28 +229,18 @@ const MonthThumbnailComponent: React.FC<MonthThumbnailProps> = ({
               zIndex: 10, // Ensure pills appear above dots
               width: `${widthPercentage}%`,
               height: 4,
-              borderRadius: 2,
+              borderRadius: "sm",
               top: "50%",
               marginTop: -2,
+              backgroundColor:
+                booking.status === "past" ? "#999999" : "#000000",
+              opacity: 1,
             };
 
-            // Use black for present/future, gray for past
-            if (booking.status === "past") {
-              pillStyle.backgroundColor = "#999999"; // Gray for past bookings
-            } else {
-              pillStyle.backgroundColor = "#000000"; // Black for present/future bookings
-            }
-
-            // For June debugging, remove red border now that pills are visible
-            if (
-              monthData.month.getMonth() === 5 &&
-              monthData.month.getFullYear() === 2025
-            ) {
-              pillStyle.opacity = 1; // Ensure full opacity
-            }
-
             pills.push(
-              <View key={`${booking.id}-${rowIndex}`} style={pillStyle} />
+              <Container key={`${booking.id}-${rowIndex}`} style={pillStyle}>
+                {null}
+              </Container>
             );
           }
         }
@@ -259,19 +250,25 @@ const MonthThumbnailComponent: React.FC<MonthThumbnailProps> = ({
     };
 
     return (
-      <View style={styles.dotMatrix}>
+      <Container flexDirection="column" flex={1} justifyContent="space-between">
         {cells.map((row, rowIndex) => (
-          <View
+          <Container
             key={rowIndex}
-            style={[
-              styles.dotRow,
-              rowIndex === cells.length - 1 && styles.lastRow,
-            ]}
+            flexDirection="row"
+            justifyContent="space-between"
+            style={{
+              position: "relative",
+              marginBottom: rowIndex === cells.length - 1 ? 0 : 4,
+            }}
           >
             {/* Render dots */}
             {row.map((cell, colIndex) => {
               if (!cell.isValidDay) {
-                return <View key={colIndex} style={styles.emptyDot} />;
+                return (
+                  <Container key={colIndex} width={4} height={4}>
+                    {null}
+                  </Container>
+                );
               }
 
               const today = new Date();
@@ -295,7 +292,7 @@ const MonthThumbnailComponent: React.FC<MonthThumbnailProps> = ({
 
               // Check if this booking should be rendered as a colored dot (single day in this row)
               let shouldRenderBookingAsDot = false;
-              let bookingStyle = null;
+              let bookingStyle = {};
 
               if (bookingState.isBooked) {
                 const booking = bookingState.booking!;
@@ -319,56 +316,62 @@ const MonthThumbnailComponent: React.FC<MonthThumbnailProps> = ({
                 // If only one day in this row, render as colored dot
                 if (consecutiveDays === 1) {
                   shouldRenderBookingAsDot = true;
-                  if (booking.status === "past") {
-                    bookingStyle = styles.bookingPast;
-                  } else {
-                    // Use black for present/future (active and upcoming)
-                    bookingStyle = styles.bookingPresentFuture;
-                  }
+                  bookingStyle = {
+                    backgroundColor:
+                      booking.status === "past" ? "#999999" : "#000000",
+                  };
                 }
               }
 
+              let dotBg = "#F0F0F0";
+              if (isInPast && !bookingState.isBooked) {
+                dotBg = theme.colors.gray[300];
+              } else if (isInFuture && !bookingState.isBooked) {
+                dotBg = theme.colors.gray[400];
+              } else if (
+                !isInPast &&
+                !isInFuture &&
+                !cell.isToday &&
+                !bookingState.isBooked
+              ) {
+                dotBg = theme.colors.gray[400];
+              }
+              if (bookingState.isBooked && !shouldRenderBookingAsDot) {
+                dotBg = "transparent";
+              }
+              if (cell.isToday) {
+                dotBg = theme.background;
+              }
+
               return (
-                <View
+                <Container
                   key={colIndex}
-                  style={[
-                    styles.dot,
-                    isInPast &&
-                      !bookingState.isBooked && {
-                        backgroundColor: theme.colors.gray[300],
-                      },
-                    isInFuture &&
-                      !bookingState.isBooked && {
-                        backgroundColor: theme.colors.gray[400],
-                      },
-                    !isInPast &&
-                      !isInFuture &&
-                      !cell.isToday &&
-                      !bookingState.isBooked && {
-                        backgroundColor: theme.colors.gray[400],
-                      },
-                    // For multi-day bookings, hide the dot (will be covered by pill)
-                    bookingState.isBooked &&
-                      !shouldRenderBookingAsDot &&
-                      styles.dotTransparent,
-                    // For single-day bookings, color the dot with booking color
-                    shouldRenderBookingAsDot && bookingStyle,
-                    cell.isToday && {
-                      backgroundColor: theme.background,
-                      outlineColor: theme.colors.primary,
-                      outlineOffset: 0,
-                      outlineWidth: 2,
-                    },
-                  ]}
-                />
+                  width={4}
+                  height={4}
+                  borderRadius="sm"
+                  backgroundColor={dotBg}
+                  style={{
+                    position: "relative",
+                    ...(cell.isToday
+                      ? {
+                          outlineColor: theme.colors.primary,
+                          outlineOffset: 0,
+                          outlineWidth: 2,
+                        }
+                      : {}),
+                    ...bookingStyle,
+                  }}
+                >
+                  {null}
+                </Container>
               );
             })}
 
             {/* Render booking pills on top */}
             {getBookingPillsForRow(row, rowIndex)}
-          </View>
+          </Container>
         ))}
-      </View>
+      </Container>
     );
   }, [cells, getBookingState, theme, monthData?.month]);
 
@@ -383,122 +386,32 @@ const MonthThumbnailComponent: React.FC<MonthThumbnailProps> = ({
 
   return (
     <TouchableOpacity
-      style={styles.thumbnail}
+      style={{
+        borderRadius: radius.md,
+        paddingHorizontal: spacing.lg,
+        minHeight: 140,
+      }}
       onPress={handlePress}
       activeOpacity={0.8}
       disabled={true} // Disabled for now
     >
-      <View style={styles.header}>
-        <Text style={[styles.monthName, { color: theme.text.primary }]}>
+      <Container marginBottom="sm">
+        <Text
+          variant="h6"
+          weight="medium"
+          color={theme.text.primary}
+          marginBottom="sm"
+        >
           {getTranslatedMonthName(monthData.month, true)}
         </Text>
-        <Text style={[styles.earnings, { color: theme.colors.gray[400] }]}>
+        <Text variant="body" weight="medium" color={theme.colors.gray[400]}>
           ${earnings.toLocaleString()}
         </Text>
-      </View>
-
-      <View style={styles.matrixContainer}>{dotMatrix}</View>
+      </Container>
+      <Container flex={1}>{dotMatrix}</Container>
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  thumbnail: {
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.lg,
-    minHeight: 140,
-  },
-  header: {
-    marginBottom: 8,
-  },
-  monthName: {
-    fontSize: fontSize.xl,
-    fontWeight: fontWeight.medium,
-    marginBottom: 4,
-  },
-  earnings: {
-    fontSize: fontSize.lg,
-    fontWeight: fontWeight.medium,
-  },
-  matrixContainer: {
-    flex: 1,
-  },
-  dotMatrix: {
-    flexDirection: "column",
-    flex: 1,
-    justifyContent: "space-between",
-  },
-  dotRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 4,
-    position: "relative", // Allow absolute positioning of pills
-  },
-  lastRow: {
-    marginBottom: 0,
-  },
-  dot: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: "#F0F0F0", // Default fallback, will be overridden by theme colors
-    position: "relative", // Allow absolute positioning of pills
-  },
-  dotPast: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    position: "relative",
-  },
-  dotFuture: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    position: "relative",
-  },
-  dotToday: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    position: "relative",
-    outlineOffset: 0,
-    outlineWidth: 2,
-  },
-  dotTransparent: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: "transparent",
-    position: "relative",
-  },
-  bookingPast: {
-    backgroundColor: "#999999",
-  },
-  bookingPresentFuture: {
-    backgroundColor: "#000000",
-  },
-  bookingActive: {
-    backgroundColor: "#000000", // Changed to black
-  },
-  bookingUpcoming: {
-    backgroundColor: "#000000", // Changed to black
-  },
-  emptyDot: {
-    width: 4,
-    height: 4,
-  },
-  pastText: {
-    color: "#999999",
-  },
-  footer: {
-    marginTop: 16,
-  },
-  densityText: {
-    fontSize: 12,
-    color: "#666",
-    textAlign: "center",
-  },
-});
 
 // Export memoized component with display name and custom comparison
 MonthThumbnailComponent.displayName = "MonthThumbnail";

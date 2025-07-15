@@ -47,22 +47,31 @@ const GuestRow: React.FC<GuestRowProps> = ({
   disabled = false,
   minValue = 0,
 }) => {
-  const { theme } = useTheme();
+  const { theme, isDark } = useTheme();
 
   return (
     <Container
       flexDirection="row"
       alignItems="center"
       justifyContent="space-between"
-      paddingVertical="md"
+      paddingVertical="lg"
       borderBottomWidth={1}
-      borderColor={theme.colors.gray[200]}
+      borderColor={isDark ? theme.colors.gray[700] : theme.colors.gray[200]}
     >
       <Container flex={1}>
         <Container marginBottom="xs">
-          <Text variant="body">{title}</Text>
+          <Text
+            variant="body"
+            weight="semibold"
+            color={isDark ? theme.colors.gray[100] : theme.colors.gray[900]}
+          >
+            {title}
+          </Text>
         </Container>
-        <Text variant="caption" color="secondary">
+        <Text
+          variant="caption"
+          color={isDark ? theme.colors.gray[400] : theme.colors.gray[600]}
+        >
           {description}
         </Text>
       </Container>
@@ -72,14 +81,17 @@ const GuestRow: React.FC<GuestRowProps> = ({
           onPress={onDecrease}
           disabled={disabled || value <= minValue}
           style={{
-            width: 36,
-            height: 36,
-            borderRadius: 18,
+            width: 40,
+            height: 40,
+            borderRadius: 20,
             borderWidth: 1,
             borderColor:
               disabled || value <= minValue
-                ? theme.colors.gray[300]
+                ? isDark
+                  ? theme.colors.gray[600]
+                  : theme.colors.gray[300]
                 : theme.colors.primary,
+
             alignItems: "center",
             justifyContent: "center",
             marginRight: 16,
@@ -90,27 +102,44 @@ const GuestRow: React.FC<GuestRowProps> = ({
             size={20}
             color={
               disabled || value <= minValue
-                ? theme.colors.gray[400]
+                ? isDark
+                  ? theme.colors.gray[500]
+                  : theme.colors.gray[400]
                 : theme.colors.primary
             }
           />
         </TouchableOpacity>
 
-        <Container width={40} alignItems="center">
-          <Text variant="body">{value}</Text>
+        <Container
+          width={48}
+          alignItems="center"
+          paddingVertical="sm"
+          paddingHorizontal="md"
+          borderRadius="md"
+        >
+          <Text
+            variant="body"
+            weight="bold"
+            color={isDark ? theme.colors.gray[100] : theme.colors.gray[900]}
+          >
+            {value}
+          </Text>
         </Container>
 
         <TouchableOpacity
           onPress={onIncrease}
           disabled={disabled}
           style={{
-            width: 36,
-            height: 36,
-            borderRadius: 18,
+            width: 40,
+            height: 40,
+            borderRadius: 20,
             borderWidth: 1,
             borderColor: disabled
-              ? theme.colors.gray[300]
+              ? isDark
+                ? theme.colors.gray[600]
+                : theme.colors.gray[300]
               : theme.colors.primary,
+
             alignItems: "center",
             justifyContent: "center",
             marginLeft: 16,
@@ -119,7 +148,13 @@ const GuestRow: React.FC<GuestRowProps> = ({
           <Ionicons
             name="add"
             size={20}
-            color={disabled ? theme.colors.gray[400] : theme.colors.primary}
+            color={
+              disabled
+                ? isDark
+                  ? theme.colors.gray[500]
+                  : theme.colors.gray[400]
+                : theme.colors.primary
+            }
           />
         </TouchableOpacity>
       </Container>
@@ -141,18 +176,13 @@ export const GuestSelector: React.FC<GuestSelectorProps> = ({
   maxPets = 3,
 }) => {
   const { t } = useTranslation();
+  const { theme, isDark } = useTheme();
 
   const totalGuests = adults + childrenCount;
   const isAtMaxGuests = totalGuests >= maxGuests;
 
   return (
     <Container>
-      <Container marginBottom="md">
-        <Text variant="h6">
-          {t("reservation.guestInformation", "Guest Information")}
-        </Text>
-      </Container>
-
       <Container>
         <GuestRow
           title={t("reservation.adults", "Adults")}
@@ -196,8 +226,19 @@ export const GuestSelector: React.FC<GuestSelectorProps> = ({
       </Container>
 
       {isAtMaxGuests && (
-        <Container marginTop="sm">
-          <Text variant="caption" color="error">
+        <Container
+          marginTop="md"
+          padding="md"
+          borderRadius="lg"
+          backgroundColor={
+            isDark ? theme.colors.error + "20" : theme.colors.error + "10"
+          }
+          borderWidth={1}
+          borderColor={
+            isDark ? theme.colors.error + "30" : theme.colors.error + "20"
+          }
+        >
+          <Text variant="caption" color="error" weight="semibold">
             {t(
               "reservation.maxGuestsReached",
               `Maximum ${maxGuests} guests allowed`

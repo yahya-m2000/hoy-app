@@ -377,7 +377,7 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
               },
             ]}
           >
-            {t("reservation.total")}
+            {t("reservations.total")}
           </Text>
           <Text
             style={[
@@ -415,7 +415,7 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
             },
           ]}
         >
-          {t("reservation.paymentMethod")}
+          {t("reservations.paymentMethod")}
         </Text>
 
         <View
@@ -475,7 +475,7 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
         {onBack && (
           <TouchableOpacity style={styles.backButton} onPress={onBack}>
             <Ionicons
-              name="arrow-back"
+              name="chevron-back-outline"
               size={20}
               color={theme.colors.gray[700]}
             />
@@ -500,7 +500,7 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
           ) : (
             <>
               <Text style={styles.reserveButtonText}>
-                {t("reservation.confirmAndPay")}
+                {t("reservations.confirmAndPay")}
               </Text>
               <Ionicons name="checkmark" size={20} color={theme.white} />
             </>

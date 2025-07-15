@@ -25,15 +25,7 @@ export default function AccountLayout() {
           animation: "fade",
         }}
       />
-      <Stack.Screen
-        name="currency"
-        options={{
-          title: t("profile.currency"),
-          headerShown: false,
-          presentation: "fullScreenModal",
-          animation: "fade",
-        }}
-      />
+
       <Stack.Screen
         name="personal-info"
         options={{
@@ -41,19 +33,25 @@ export default function AccountLayout() {
           presentation: "fullScreenModal",
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="language"
+        options={{
+          headerShown: false,
+          presentation: "fullScreenModal",
+        }}
+      /> */}
+      <Stack.Screen
+        name="[setting]"
         options={{
           headerShown: false,
           presentation: "fullScreenModal",
         }}
       />
       <Stack.Screen
-        name="[setting]"
+        name="feedback"
         options={{
           headerShown: false,
           presentation: "fullScreenModal",
-          animation: "fade",
         }}
       />
     </Stack>

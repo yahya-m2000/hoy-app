@@ -16,8 +16,37 @@ export const useHostBookings = (filters?: HostBookingFilters) => {
   // Fetch bookings query
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["hostBookings", localFilters],
-    queryFn: () => host.fetchHostBookings(localFilters),
+    queryFn: async () => {
+      try {
+        return await host.fetchHostBookings(localFilters);
+      } catch (error: any) {
+        // Handle 403 errors gracefully - user doesn't have host permissions yet
+        if (error?.response?.status === 403) {
+          console.log("🔐 [useHostBookings] User doesn't have host permissions yet - returning empty bookings");
+          return {
+            bookings: [],
+            total: 0,
+            page: 1,
+            totalPages: 1,
+          };
+        }
+        // Re-throw other errors
+        throw error;
+      }
+    },
     staleTime: 2 * 60 * 1000, // 2 minutes
+    retry: (failureCount, error: any) => {
+      // Don't retry on 403 errors (user needs to complete setup)
+      if (error?.response?.status === 403) {
+        return false;
+      }
+      // Don't retry on auth errors (401)
+      if (error?.response?.status === 401) {
+        return false;
+      }
+      // Retry up to 3 times for other errors
+      return failureCount < 3;
+    },
   });
 
   // Update booking status mutation
@@ -117,9 +146,41 @@ export const useDashboardStats = () => {
     refetch,
   } = useQuery({
     queryKey: ["dashboardStats"],
-    queryFn: host.fetchBookingDashboardStats,
+    queryFn: async () => {
+      try {
+        return await host.fetchBookingDashboardStats();
+      } catch (error: any) {
+        // Handle 403 errors gracefully - user doesn't have host permissions yet
+        if (error?.response?.status === 403) {
+          console.log("🔐 [useDashboardStats] User doesn't have host permissions yet - returning empty stats");
+          return {
+            totalBookings: 0,
+            pendingBookings: 0,
+            confirmedBookings: 0,
+            completedBookings: 0,
+            cancelledBookings: 0,
+            totalRevenue: 0,
+            averageRating: 0,
+          };
+        }
+        // Re-throw other errors
+        throw error;
+      }
+    },
     staleTime: 5 * 60 * 1000, // 5 minutes
     refetchInterval: 10 * 60 * 1000, // Refetch every 10 minutes
+    retry: (failureCount, error: any) => {
+      // Don't retry on 403 errors (user needs to complete setup)
+      if (error?.response?.status === 403) {
+        return false;
+      }
+      // Don't retry on auth errors (401)
+      if (error?.response?.status === 401) {
+        return false;
+      }
+      // Retry up to 3 times for other errors
+      return failureCount < 3;
+    },
   });
 
   return {

@@ -1,0 +1,20 @@
+{
+  "title": "Property Details",
+  "propertyDetails": "Property Details",
+  "description": "Tell us about the specifics of your property",
+  "propertyType": "Property Type",
+  "guestAccess": "Guest Access",
+  "hostType": "Host Type",
+  "whatThisPlaceOffers": "What this place offers",
+  "meetYourHost": "Meet Your Host",
+  "safetyAndProperty": "Safety & Property",
+  "safetyInformation": "Safety information",
+  "safetyInfo": "Safety Information",
+  "safetyInfoDescription": "Standard safety features included",
+  "safetyDisclosures": "Safety Disclosures",
+  "weaponsOnProperty": "Are there any weapons on the property?",
+  "securityCameras": "Are there security cameras on the property?",
+  "minLengthWarning": "At least {{min}} characters required",
+  "tipTitle": "Pricing Tips",
+  "tipContent": "Research similar properties in your area to set competitive pricing. You can always adjust your rates later based on demand."
+}

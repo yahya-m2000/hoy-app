@@ -10,7 +10,7 @@
  * @version 1.0.0
  */
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { 
   useCalendarState,
   useSelectedProperty,
@@ -25,6 +25,17 @@ import {
 } from '../context/CalendarContext';
 import * as dateUtils from '@core/utils/date';
 import * as calendarUtils from '../utils/calendarUtils';
+import { Platform } from 'react-native';
+
+// Add debug logging utility
+const debugLog = (context: string, message: string, data?: any) => {
+  console.log(`🔍 [Calendar Hook Debug] ${context}: ${message}`, {
+    data,
+    platform: Platform.OS,
+    timestamp: new Date().toISOString(),
+    stack: new Error().stack?.split('\n').slice(1, 4).join('\n') // First 3 stack frames
+  });
+};
 
 /**
  * Main calendar hook that provides all calendar functionality
@@ -99,126 +110,177 @@ import * as calendarUtils from '../utils/calendarUtils';
  * }
  */
 export function useCalendar() {
-  const { state, dispatch } = useCalendarState();
-  const { selectedProperty, setSelectedProperty } = useSelectedProperty();
-  const { viewMode, setViewMode } = useViewMode();
-  const { currentMonth, setCurrentMonth } = useCurrentMonth();
-  const { selectedDates, setSelectedDates, isSelectingRange, setIsSelectingRange } = useSelectedDates();
-  const { 
-    isPropertySelectorVisible, 
-    isEditOverlayVisible, 
-    isCurrentViewExiting,
-    setPropertySelectorVisible, 
-    setEditOverlayVisible, 
-    setCurrentViewExiting 
-  } = useCalendarUI();
-  const { bookings, isLoadingBookings, setBookings, setLoadingBookings } = useCalendarBookings();
-  const { 
-    isCheckingAvailability,
-    isAvailable,
-    bookedDates,
-    blockDates,
-    availabilityError,
-    currentPropertyId,
-    setPropertyId,
-    checkDateAvailability,
-    resetAvailabilityCheck
-  } = useCalendarAvailability();
-  const { 
-    searchDates,
-    propertyDates,
-    setSearchDates,
-    selectDatesForProperty,
-    clearPropertyDates,
-    clearAllDates,
-    getOptimalDatesForProperty,
-    getDisplayDatesForProperty
-  } = useCalendarDateSelection();
+  debugLog("useCalendar", "useCalendar hook called");
+  
+  try {
+    debugLog("useCalendar", "About to call useCalendarState");
+    const { state, dispatch } = useCalendarState();
+    debugLog("useCalendar", "useCalendarState completed", { stateKeys: Object.keys(state) });
+    
+    debugLog("useCalendar", "About to call useSelectedProperty");
+    const { selectedProperty, setSelectedProperty } = useSelectedProperty();
+    debugLog("useCalendar", "useSelectedProperty completed");
+    
+    debugLog("useCalendar", "About to call useViewMode");
+    const { viewMode, setViewMode } = useViewMode();
+    debugLog("useCalendar", "useViewMode completed");
+    
+    debugLog("useCalendar", "About to call useCurrentMonth");
+    const { currentMonth, setCurrentMonth } = useCurrentMonth();
+    debugLog("useCalendar", "useCurrentMonth completed");
+    
+    debugLog("useCalendar", "About to call useSelectedDates");
+    const { selectedDates, setSelectedDates, isSelectingRange, setIsSelectingRange } = useSelectedDates();
+    debugLog("useCalendar", "useSelectedDates completed");
+    
+    debugLog("useCalendar", "About to call useCalendarUI");
+    const { 
+      isPropertySelectorVisible, 
+      isEditOverlayVisible, 
+      isCurrentViewExiting,
+      setPropertySelectorVisible, 
+      setEditOverlayVisible, 
+      setCurrentViewExiting 
+    } = useCalendarUI();
+    debugLog("useCalendar", "useCalendarUI completed");
+    
+    debugLog("useCalendar", "About to call useCalendarBookings");
+    const { bookings, isLoadingBookings, setBookings, setLoadingBookings } = useCalendarBookings();
+    debugLog("useCalendar", "useCalendarBookings completed");
+    
+    debugLog("useCalendar", "About to call useCalendarAvailability");
+    const { 
+      isCheckingAvailability,
+      isAvailable,
+      bookedDates,
+      blockDates,
+      availabilityError,
+      currentPropertyId,
+      setPropertyId,
+      checkDateAvailability,
+      resetAvailabilityCheck
+    } = useCalendarAvailability();
+    debugLog("useCalendar", "useCalendarAvailability completed", { 
+      bookedDatesType: typeof bookedDates,
+      isBookedDatesArray: Array.isArray(bookedDates),
+      bookedDatesLength: Array.isArray(bookedDates) ? bookedDates.length : 'N/A'
+    });
+    
+    debugLog("useCalendar", "About to call useCalendarDateSelection");
+    const { 
+      searchDates,
+      propertyDates,
+      setSearchDates,
+      selectDatesForProperty,
+      clearPropertyDates,
+      clearAllDates,
+      getOptimalDatesForProperty,
+      getDisplayDatesForProperty
+    } = useCalendarDateSelection();
+    debugLog("useCalendar", "useCalendarDateSelection completed");
 
-  // Enhanced date utilities
-  const getCurrentYear = useCallback(() => state.currentYear, [state.currentYear]);
-  const setCurrentYear = useCallback((year: number) => {
-    dispatch({ type: 'SET_CURRENT_YEAR', payload: year });
-  }, [dispatch]);
+    // Enhanced date utilities
+    debugLog("useCalendar", "Creating enhanced date utilities");
+    const getCurrentYear = useCallback(() => state.currentYear, [state.currentYear]);
+    const setCurrentYear = useCallback((year: number) => {
+      dispatch({ type: 'SET_CURRENT_YEAR', payload: year });
+    }, [dispatch]);
 
-  // Enhanced property utilities
-  const setProperties = useCallback((properties: Property[]) => {
-    dispatch({ type: 'SET_PROPERTIES', payload: properties });
-  }, [dispatch]);
+    // Enhanced property utilities
+    const setProperties = useCallback((properties: Property[]) => {
+      dispatch({ type: 'SET_PROPERTIES', payload: properties });
+    }, [dispatch]);
 
-  // Enhanced reset functionality
-  const resetState = useCallback(() => {
-    dispatch({ type: 'RESET_STATE' });
-  }, [dispatch]);
+    // Enhanced reset functionality
+    const resetState = useCallback(() => {
+      dispatch({ type: 'RESET_STATE' });
+    }, [dispatch]);
 
-  return {
-    // State
-    ...state,
-    
-    // Property management
-    selectedProperty,
-    setSelectedProperty,
-    setProperties,
-    
-    // View management
-    viewMode,
-    currentYear: getCurrentYear(),
-    currentMonth,
-    setViewMode,
-    setCurrentYear,
-    setCurrentMonth,
-    
-    // Date selection
-    selectedDates,
-    isSelectingRange,
-    setSelectedDates,
-    setIsSelectingRange,
-    
-    // Search dates
-    searchDates,
-    setSearchDates,
-    
-    // Property dates
-    propertyDates,
-    selectDatesForProperty,
-    clearPropertyDates,
-    clearAllDates,
-    getOptimalDatesForProperty,
-    getDisplayDatesForProperty,
-    
-    // UI state
-    isPropertySelectorVisible,
-    isEditOverlayVisible,
-    isCurrentViewExiting,
-    setPropertySelectorVisible,
-    setEditOverlayVisible,
-    setCurrentViewExiting,
-    
-    // Bookings
-    bookings,
-    isLoadingBookings,
-    setBookings,
-    setLoadingBookings,
-    
-    // Availability
-    isCheckingAvailability,
-    isAvailable,
-    bookedDates,
-    blockDates,
-    availabilityError,
-    currentPropertyId,
-    setPropertyId,
-    checkDateAvailability,
-    resetAvailabilityCheck,
-    
-    // Utilities
-    resetState,
-    dispatch,
-    
-    // Utility functions (re-exported for convenience)
-    dateUtils,
-    calendarUtils,
-  };
+    // Ensure bookedDates is always an array for safety
+    debugLog("useCalendar", "Creating safeBookedDates memo");
+    const safeBookedDates = useMemo(() => {
+      debugLog("useCalendar", "safeBookedDates memo executing", { 
+        bookedDates,
+        type: typeof bookedDates,
+        isArray: Array.isArray(bookedDates)
+      });
+      
+      if (!Array.isArray(bookedDates)) {
+        debugLog("useCalendar", "bookedDates is not an array, returning empty array", { bookedDates });
+        return [];
+      }
+      
+      debugLog("useCalendar", "bookedDates is array, returning as-is", { length: bookedDates.length });
+      return bookedDates;
+    }, [bookedDates]);
+
+    debugLog("useCalendar", "About to return calendar object");
+    return {
+      // Property management
+      selectedProperty,
+      properties: state.properties,
+      setSelectedProperty,
+      setProperties,
+      
+      // View management
+      viewMode,
+      currentYear: state.currentYear,
+      currentMonth,
+      setViewMode,
+      setCurrentYear,
+      setCurrentMonth,
+      
+      // Date selection
+      selectedDates,
+      isSelectingRange,
+      setSelectedDates,
+      setIsSelectingRange,
+      
+      // Search dates
+      searchDates,
+      setSearchDates,
+      
+      // Property dates
+      propertyDates,
+      selectDatesForProperty,
+      clearPropertyDates,
+      clearAllDates,
+      getOptimalDatesForProperty,
+      getDisplayDatesForProperty,
+      
+      // UI state
+      isPropertySelectorVisible,
+      isEditOverlayVisible,
+      isCurrentViewExiting,
+      setPropertySelectorVisible,
+      setEditOverlayVisible,
+      setCurrentViewExiting,
+      
+      // Bookings
+      bookings,
+      isLoadingBookings,
+      setBookings,
+      setLoadingBookings,
+      
+      // Availability
+      isCheckingAvailability,
+      isAvailable,
+      bookedDates: safeBookedDates, // Use safe version
+      blockDates,
+      availabilityError,
+      currentPropertyId,
+      setPropertyId,
+      checkDateAvailability,
+      resetAvailabilityCheck,
+      
+      // Utilities
+      resetState,
+      dispatch
+    };
+  } catch (error) {
+    debugLog("useCalendar", "Error in useCalendar hook", { error });
+    throw error; // Re-throw to see the actual error
+  }
 }
 
 /**

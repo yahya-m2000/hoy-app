@@ -4,6 +4,8 @@ import { DayMeta } from "../utils/dateUtils";
 import { useTheme } from "@core/hooks";
 import { fontSize, fontWeight, radius, spacing } from "@core/design";
 import { CalendarBookingData } from "@core/types";
+import { useCurrency } from "@core/context";
+import { useCurrencyConversion } from "@core/hooks";
 
 interface DayCellProps {
   day: DayMeta;
@@ -16,6 +18,7 @@ interface DayCellProps {
   isRangeEnd?: boolean;
   onPress?: (date: Date) => void;
   onLongPress?: (date: Date) => void;
+  property?: any;
 }
 
 // Global style cache for DayCell to prevent recreation
@@ -148,6 +151,7 @@ const DayCellComponent: React.FC<DayCellProps> = React.memo(
     isRangeEnd = false,
     onPress,
     onLongPress,
+    property,
   }) => {
     const themeResult = useTheme();
 
@@ -197,21 +201,80 @@ const DayCellComponent: React.FC<DayCellProps> = React.memo(
     const dayNumber = useMemo(() => day?.date?.getDate() || 0, [day?.date]);
 
     // Memoized price to prevent formatting recalculation
+
+    // Determine the price for the day
+    let dayPrice = day?.price;
+    if (day?.isCurrentMonth) {
+      if (property) {
+        const dayOfWeek = day?.date?.getDay?.() ?? -1;
+        if (dayOfWeek === 0 || dayOfWeek === 6) {
+          dayPrice = property.weekendPrice ?? property.price ?? 0;
+        } else {
+          dayPrice = property.weekdayPrice ?? property.price ?? 0;
+        }
+      } else {
+        dayPrice = 0;
+      }
+    } else {
+      dayPrice = 0;
+    }
+
+    const { currency, supportedCurrencies } = useCurrency();
+    const { convertAmount } = useCurrencyConversion();
+    const [convertedPrice, setConvertedPrice] = React.useState<number | null>(
+      null
+    );
+    const [isConverting, setIsConverting] = React.useState(false);
+
+    React.useEffect(() => {
+      let isMounted = true;
+      const convert = async () => {
+        if (!day?.isCurrentMonth || !dayPrice) {
+          setConvertedPrice(null);
+          return;
+        }
+        setIsConverting(true);
+        const converted = await convertAmount(dayPrice, "USD");
+        if (isMounted) {
+          setConvertedPrice(converted);
+          setIsConverting(false);
+        }
+      };
+      convert();
+      return () => {
+        isMounted = false;
+      };
+    }, [day?.isCurrentMonth, dayPrice, currency, convertAmount]);
+
+    const currencySymbol = useMemo(() => {
+      const info = supportedCurrencies.find((c) => c.code === currency);
+      return info?.symbol || currency;
+    }, [currency, supportedCurrencies]);
+
     const formattedPrice = useMemo(() => {
-      if (!day?.isCurrentMonth || !day?.price) return null;
-      return `$${day.price}`;
-    }, [day?.isCurrentMonth, day?.price]);
+      if (!day?.isCurrentMonth) return null;
+      if (isConverting || convertedPrice == null) return "...";
+      return `${currencySymbol}${convertedPrice.toLocaleString()}`;
+    }, [
+      day?.isCurrentMonth,
+      dayPrice,
+      isConverting,
+      convertedPrice,
+      currencySymbol,
+    ]);
 
     // Memoized cell content to prevent recreation
     const cellContent = useMemo(
       () => (
         <>
           <Text style={styles.dayNumber}>{dayNumber}</Text>
-          {formattedPrice && <Text style={styles.price}>{formattedPrice}</Text>}
+          {day?.isCurrentMonth && (
+            <Text style={styles.price}>{formattedPrice}</Text>
+          )}
           {day?.isToday && <View style={styles.todayIndicator} />}
         </>
       ),
-      [styles, dayNumber, formattedPrice, day?.isToday]
+      [styles, dayNumber, formattedPrice, day?.isToday, day?.isCurrentMonth]
     );
 
     // Early return for invalid dates AFTER all hooks

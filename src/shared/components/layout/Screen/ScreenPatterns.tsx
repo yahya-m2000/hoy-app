@@ -47,7 +47,7 @@ export const DetailScreen: React.FC<DetailScreenProps> = ({
         variant: headerVariant,
         title,
         left: {
-          icon: "arrow-back",
+          icon: "chevron-back-outline",
           onPress: () => router.back(),
         },
         right: showEdit
@@ -108,7 +108,7 @@ export const ListScreen: React.FC<ListScreenProps> = ({
         variant: "solid",
         title,
         left: {
-          icon: "arrow-back",
+          icon: "chevron-back-outline",
           onPress: () => router.back(),
         },
         right:

@@ -5,3 +5,6 @@
 
 // Section components
 export * from "./Sections";
+
+// Settings components
+export * from "./settings";

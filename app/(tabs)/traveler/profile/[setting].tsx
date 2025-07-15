@@ -10,5 +10,7 @@ import { DynamicSettingsScreen } from "@features/account/components/DynamicSetti
 export default function TravelerSettingScreen() {
   const { setting } = useLocalSearchParams<{ setting: string }>();
 
+  console.log("Traveler [setting] route - setting parameter:", setting);
+
   return <DynamicSettingsScreen settingType={setting || ""} />;
 }

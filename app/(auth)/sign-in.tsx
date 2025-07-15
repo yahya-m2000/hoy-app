@@ -128,7 +128,7 @@ export default function SignInScreen() {
       <Header
         title={t("auth.signIn")}
         left={{
-          icon: "arrow-back",
+          icon: "chevron-back-outline",
           onPress: () => router.back(),
         }}
       />
@@ -160,20 +160,15 @@ export default function SignInScreen() {
 
             {/* Error Message */}
             {error ? (
-              <Container
-                marginBottom="lg"
-                padding="md"
-                backgroundColor="error"
-                borderRadius="md"
+              <Text
+                variant="body"
+                color="error"
+                weight="bold"
+                align="center"
+                style={{ marginBottom: 16 }}
               >
-                <Text
-                  variant="body"
-                  color="white"
-                  style={{ textAlign: "center" }}
-                >
-                  {error}
-                </Text>
-              </Container>
+                {error}
+              </Text>
             ) : null}
 
             {/* Traditional Login Section */}
@@ -192,6 +187,8 @@ export default function SignInScreen() {
                   placeholder={t("auth.email")}
                   keyboardType="email-address"
                   autoCapitalize="none"
+                  textContentType="emailAddress"
+                  autoComplete="email"
                   style={{ marginBottom: 8 }}
                 />
                 <Text variant="caption" color="secondary">
@@ -215,6 +212,13 @@ export default function SignInScreen() {
                 />
                 <Text variant="caption" color="secondary">
                   {t("auth.passwordHelper")}
+                </Text>
+                <Text
+                  variant="caption"
+                  color="secondary"
+                  style={{ marginTop: 4, fontStyle: "italic" }}
+                >
+                  {t("auth.passwordManager.autofillHint")}
                 </Text>
               </Container>
 

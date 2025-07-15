@@ -1,9 +1,10 @@
 import React from "react";
-import { View, StyleSheet, TextInput } from "react-native";
-import { Container, Text, Button } from "@shared/components";
+import { View, StyleSheet } from "react-native";
+import { Container, Text, Button, Input } from "@shared/components";
 import StepHeader from "../StepHeader";
 import { spacing } from "@core/design";
 import { formatCurrency } from "@core/utils/data/currency";
+import { useTranslation } from "react-i18next";
 
 interface PricingStepProps {
   formData: any;
@@ -18,6 +19,7 @@ export default function PricingStep({
   errors,
   isWeekend = false,
 }: PricingStepProps) {
+  const { t } = useTranslation();
   const priceKey = isWeekend ? "weekendPrice" : "weekdayPrice";
   const currentPrice = formData[priceKey] || 0;
   const error = errors[priceKey];
@@ -35,8 +37,14 @@ export default function PricingStep({
   return (
     <Container>
       <StepHeader
-        title={`Set your ${isWeekend ? "weekend" : "weekday"} price`}
-        description="Price competitively to attract more bookings"
+        title={t(`property.steps.pricing.title`, {
+          type: t(
+            isWeekend
+              ? "property.steps.pricing.weekend"
+              : "property.steps.pricing.weekday"
+          ),
+        })}
+        description={t("property.steps.pricing.description")}
       />
 
       <Container alignItems="center" marginVertical="xl">
@@ -49,13 +57,12 @@ export default function PricingStep({
           >
             $
           </Text>
-          <TextInput
+          <Input
             style={[styles.priceInput, error && styles.priceInputError]}
             value={currentPrice.toString()}
             onChangeText={handlePriceInput}
             keyboardType="numeric"
-            placeholder="0"
-            placeholderTextColor="#999"
+            placeholder={t("property.steps.pricing.pricePlaceholder")}
           />
         </View>
         <Text
@@ -63,7 +70,7 @@ export default function PricingStep({
           color="secondary"
           style={{ marginTop: spacing.xs }}
         >
-          per night
+          {t("property.steps.pricing.perNight")}
         </Text>
         {error && (
           <Text variant="caption" color="error" style={styles.errorText}>
@@ -72,32 +79,32 @@ export default function PricingStep({
         )}
         {currentPrice > 0 && currentPrice < 10 && !error && (
           <Text variant="caption" color="warning" style={styles.warningText}>
-            Consider setting a higher price to ensure quality guests
+            {t("property.steps.pricing.lowPriceWarning")}
           </Text>
         )}
       </Container>
 
       <View style={styles.priceControls}>
         <Button
-          title="-$10"
+          title={t("property.steps.pricing.minusTen")}
           variant="outline"
           onPress={() => adjustPrice(-10)}
           style={styles.priceButton}
         />
         <Button
-          title="-$5"
+          title={t("property.steps.pricing.minusFive")}
           variant="outline"
           onPress={() => adjustPrice(-5)}
           style={styles.priceButton}
         />
         <Button
-          title="+$5"
+          title={t("property.steps.pricing.plusFive")}
           variant="primary"
           onPress={() => adjustPrice(5)}
           style={styles.priceButton}
         />
         <Button
-          title="+$10"
+          title={t("property.steps.pricing.plusTen")}
           variant="primary"
           onPress={() => adjustPrice(10)}
           style={styles.priceButton}
@@ -111,8 +118,7 @@ export default function PricingStep({
         style={styles.tipContainer}
       >
         <Text variant="caption" color="onSurfaceVariant">
-          💡 Tip: Research similar properties in your area to set a competitive
-          price
+          {t("property.steps.pricing.tip")}
         </Text>
       </Container>
     </Container>

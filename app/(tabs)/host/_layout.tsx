@@ -22,6 +22,7 @@ import {
   useTabBarVisibility,
   isOnAddPropertyScreen,
 } from "@core/navigation/useTabBarVisibility";
+import { useHostSetupStatus } from "@features/host/hooks";
 
 // Global state for edit modal communication
 let globalAnimateTabBarFn: ((hide: boolean) => void) | null = null;
@@ -43,6 +44,16 @@ const HostLayout = () => {
   const insets = useSafeAreaInsets();
   const { tabBarTranslateY, tabIconOpacity, animateTabBar, tabBarHeight } =
     useTabBarVisibility();
+
+  // Check host setup status
+  const {
+    setupStatus,
+    isLoading: isSetupLoading,
+    setupModalVisible,
+    showSetupModal,
+    hideSetupModal,
+    handleSetupComplete,
+  } = useHostSetupStatus();
 
   // Set global function reference
   globalAnimateTabBarFn = animateTabBar;
@@ -154,6 +165,9 @@ const HostLayout = () => {
     return <Redirect href="/(tabs)/traveler" />;
   }
 
+  // Don't automatically show setup modal - let users navigate to today page
+  // which will show setup prompts when needed
+
   // Export the animateTabBar function to global scope for use by edit modal
   (global as any).hostTabBarAnimate = animateTabBar;
 
@@ -214,6 +228,13 @@ const HostLayout = () => {
           />
           {/* <Tabs.Screen
             name="insights"
+            options={{
+              href: null, // This completely hides the tab from the tab bar
+              headerShown: false,
+            }}
+          /> */}
+          {/* <Tabs.Screen
+            name="setup"
             options={{
               href: null, // This completely hides the tab from the tab bar
               headerShown: false,

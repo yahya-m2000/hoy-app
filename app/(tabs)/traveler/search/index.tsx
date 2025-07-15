@@ -293,16 +293,16 @@ export default function SearchScreen() {
     <Container flex={1} backgroundColor={theme.background}>
       <Header
         title={t("search.title") || "Search"}
-        right={{
-          children: (
-            <Icon
-              name="options-outline"
-              size={iconSize.sm}
-              color={theme.text.primary}
-            />
-          ),
-          onPress: handleFiltersPress,
-        }}
+        // right={{
+        //   children: (
+        //     <Icon
+        //       name="options-outline"
+        //       size={iconSize.sm}
+        //       color={theme.text.primary}
+        //     />
+        //   ),
+        //   onPress: handleFiltersPress,
+        // }}
       />
       <StatusBar style={isDark ? "light" : "dark"} />
       <Container padding="md">

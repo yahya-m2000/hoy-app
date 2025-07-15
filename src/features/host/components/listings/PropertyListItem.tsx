@@ -319,7 +319,7 @@ export default function PropertyListItem({
               </Text>
               <Container marginLeft="xs">
                 <Text variant="caption" color="secondary">
-                  {t("property.perNight")}
+                  {t("property.pricing.perNight")}
                 </Text>
               </Container>
             </Container>

@@ -10,8 +10,9 @@ import {
   Container,
   Header,
   LoadingSpinner,
+  EmptyState,
 } from "@shared/components";
-import { SetupModal } from "@features/host/modals";
+// import SetupScreen from "../setup";
 import { spacing } from "@core/design";
 import {
   useHostSetup,
@@ -23,13 +24,18 @@ import {
   EarningsModal,
   InsightsModal,
   MetricGrid,
+  ReservationList,
 } from "@features/host/components/today";
+import type { FilterType } from "@features/host/components/today/ReservationsSection";
+import { SetupPrompt } from "@features/host/components/setup";
 import type { MetricItem } from "@features/host/components/today/MetricGrid";
 import { useCurrentHostInsights } from "@features/host/hooks/useHostInsights";
+import { BETA_CONFIG } from "@core/config/beta";
+import { StatusBar } from "expo-status-bar";
 
 export default function HostTodayScreen() {
   const { t } = useTranslation();
-  const { theme } = useTheme();
+  const { theme, isDark } = useTheme();
   const { currency, supportedCurrencies } = useCurrency();
   const { convertAmount } = useCurrencyConversion();
   const { setupStatus, loading: setupLoading } = useHostSetup();
@@ -52,6 +58,7 @@ export default function HostTodayScreen() {
   const [convertedEarnings, setConvertedEarnings] = useState<number | null>(
     null
   );
+  const [activeFilter, setActiveFilter] = useState<FilterType>("all");
 
   // Get currency symbol
   const getCurrencySymbol = () => {
@@ -65,6 +72,12 @@ export default function HostTodayScreen() {
   useEffect(() => {
     const convertEarnings = async () => {
       if (dashboardData?.stats.totalEarnings) {
+        // No conversion needed if currency is USD
+        if (currency === "USD") {
+          setConvertedEarnings(dashboardData.stats.totalEarnings);
+          return;
+        }
+
         const converted = await convertAmount(
           dashboardData.stats.totalEarnings,
           "USD"
@@ -103,8 +116,9 @@ export default function HostTodayScreen() {
 
   if (setupLoading) {
     return (
-      <Screen backgroundColor="background">
+      <Container flex={1} backgroundColor={theme.background}>
         <Header title={t("host.dashboard.title")} />
+        <StatusBar style={isDark ? "light" : "dark"} />
         <Container flex={1} justifyContent="center" alignItems="center">
           <LoadingSpinner size="large" />
           <Text
@@ -115,67 +129,42 @@ export default function HostTodayScreen() {
             {t("host.common.loading")}
           </Text>
         </Container>
-      </Screen>
+      </Container>
     );
   }
 
-  if (!setupStatus?.isSetupComplete) {
+  // Bypass setup required in beta mode
+  if (!BETA_CONFIG.isBeta && !setupStatus?.isSetupComplete) {
     return (
-      <Screen backgroundColor="background">
-        <Header title={t("host.setup.title")} />
-        <Container flex={1} justifyContent="space-between" padding="lg">
-          <Container flex={1} justifyContent="center">
-            <Text
-              variant="h1"
-              align="center"
-              style={{ marginBottom: spacing.sm }}
-            >
-              {t("host.setup.welcome")}
-            </Text>
-            <Text
-              variant="body2"
-              color="secondary"
-              align="center"
-              style={{ marginBottom: spacing.xl }}
-            >
-              {t("host.setup.welcomeSubtitle")}
-            </Text>
-
-            <Container style={{ gap: spacing.lg }}>
-              <Container alignItems="center" paddingHorizontal="md">
-                <Text style={{ fontSize: 48, marginBottom: spacing.sm }}>
-                  {t("host.setup.calendarIcon")}
-                </Text>
-                <Text
-                  variant="h4"
-                  align="center"
-                  style={{ marginBottom: spacing.xs }}
-                >
-                  {t("host.policies.cancellation.title")}
-                </Text>
-                <Text variant="body2" color="secondary" align="center">
-                  {t("host.policies.cancellation.subtitle")}
-                </Text>
-              </Container>
-            </Container>
-          </Container>
-
-          <Container alignItems="center" style={{ gap: spacing.sm }}>
-            <Button
-              title={t("host.setup.getStarted")}
-              onPress={() => setShowHostSetup(true)}
-              style={{ width: "100%" }}
-            />
-          </Container>
+      <>
+        <Container flex={1} backgroundColor={theme.background}>
+          <Header title={t("host.dashboard.title")} />
+          <StatusBar style={isDark ? "light" : "dark"} />
+          <SetupPrompt
+            onStartSetup={() => setShowHostSetup(true)}
+            title={t("host.setup.todayPromptTitle")}
+            message={t("host.setup.todayPromptMessage")}
+            variant="default"
+          />
         </Container>
-      </Screen>
+        {/* <SetupScreen
+          visible={showHostSetup}
+          onClose={() => setShowHostSetup(false)}
+          onSetupComplete={() => {
+            setShowHostSetup(false);
+            handleRefresh();
+          }}
+        /> */}
+      </>
     );
   }
 
   return (
-    <Screen header={{ title: t("host.dashboard.title"), showDivider: false }}>
+    <Container flex={1} backgroundColor={theme.background}>
+      <Header title={t("host.dashboard.title")} />
+      <StatusBar style={isDark ? "light" : "dark"} />
       <ScrollView
-        style={{ flex: 1 }}
+        showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
             refreshing={isRefreshing}
@@ -184,26 +173,52 @@ export default function HostTodayScreen() {
             tintColor={theme.colors.primary}
           />
         }
+        contentContainerStyle={{
+          paddingBottom: 100,
+        }}
       >
-        <Container
-          padding="lg"
-          style={{ gap: spacing.xl }}
-          backgroundColor="background"
-        >
+        <Container backgroundColor="background">
           <ReservationsSection
             reservations={dashboardData?.recentReservations || []}
             onReservationPress={handleReservationPress}
             onViewAllPress={handleViewAllReservations}
+            activeFilter={activeFilter}
+            onFilterChange={setActiveFilter}
           />
-          <MetricGrid
-            title={t("host.dashboard.overview")}
-            items={metricItems}
-            columns={2}
-          />
+          {dashboardData?.recentReservations &&
+          dashboardData?.recentReservations.length > 0 ? (
+            <ReservationList
+              reservations={dashboardData?.recentReservations || []}
+              onReservationPress={handleReservationPress}
+              activeFilter={activeFilter}
+              onFilterChange={setActiveFilter}
+            />
+          ) : (
+            <Container
+              flex={1}
+              justifyContent="center"
+              alignItems="center"
+              padding="xl"
+            >
+              <EmptyState
+                icon="calendar-outline"
+                title={t("host.today.reservations.noReservations")}
+                message={t("host.today.reservations.noReservationsSubtitle")}
+              />
+            </Container>
+          )}
+          {/* <Container paddingHorizontal="lg">
+            <MetricGrid
+              title={t("host.dashboard.overview")}
+              items={metricItems}
+              columns={2}
+            />
+         
+          </Container> */}
         </Container>
       </ScrollView>
 
-      <EarningsModal
+      {/* <EarningsModal
         visible={showEarningsModal}
         onClose={() => setShowEarningsModal(false)}
         earningsData={
@@ -218,15 +233,15 @@ export default function HostTodayScreen() {
       <InsightsModal
         visible={showInsightsModal}
         onClose={() => setShowInsightsModal(false)}
-      />
-      <SetupModal
+      /> */}
+      {/* <SetupScreen
         visible={showHostSetup}
         onClose={() => setShowHostSetup(false)}
         onSetupComplete={() => {
           setShowHostSetup(false);
           handleRefresh();
         }}
-      />
-    </Screen>
+      /> */}
+    </Container>
   );
 }

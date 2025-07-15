@@ -159,7 +159,10 @@ export default function CollectionDetail() {
       <Screen
         header={{
           title: decodeURIComponent(name || ""),
-          left: { icon: "arrow-back-outline", onPress: () => router.back() },
+          left: {
+            icon: "chevron-back-outline",
+            onPress: () => router.back(),
+          },
         }}
       >
         <Container flex={1} justifyContent="center" alignItems="center">

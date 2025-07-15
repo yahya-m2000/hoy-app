@@ -22,9 +22,11 @@ import { MonthView } from "@features/calendar/components/MonthView";
 import { EditOverlay } from "@features/calendar/components/EditOverlay";
 import { PropertyHeader } from "@features/calendar/components/PropertyHeader";
 import { useProperty, Property } from "@features/calendar/hooks/useProperty";
+import { WithSetupCheck } from "@features/host/components/setup";
 
 // Shared
 import { Container, Text, Icon, Button } from "@shared/components";
+import { TouchableOpacity } from "react-native";
 import { Screen } from "@shared/components/layout/Screen";
 
 type ViewMode = "year" | "month";
@@ -177,70 +179,39 @@ function CalendarScreenInner() {
 
   // Create header configuration for Screen component
   const headerConfig = {
-    variant: "solid" as const,
     left: {
       children: (
-        <PropertyHeader
-          propertyName={selectedProperty?.name || t("calendar.selectProperty")}
-          propertyType={selectedProperty?.type || t("property.types.house")}
+        <TouchableOpacity
           onPress={handlePropertyHeaderPress}
-        />
+          activeOpacity={0.7}
+        >
+          <Container flexDirection="row" alignItems="center" style={{ gap: 6 }}>
+            <Icon name="home-outline" size={20} color={theme.text.primary} />
+            <Text
+              variant="body"
+              weight="medium"
+              numberOfLines={1}
+              style={{ maxWidth: 160, marginLeft: 4 }}
+            >
+              {selectedProperty?.name || t("calendar.selectProperty")}
+            </Text>
+            <Icon
+              name="chevron-down"
+              size="xs"
+              color={theme.text.secondary}
+              style={{ marginLeft: 2 }}
+            />
+          </Container>
+        </TouchableOpacity>
       ),
     },
     right: {
-      children: (
-        <Container
-          flexDirection="row"
-          alignItems="center"
-          justifyContent="flex-end"
-        >
-          {/* Edit and View toggle buttons */}
-          <Button
-            title=""
-            variant="ghost"
-            size="small"
-            onPress={handleEditPress}
-            style={{
-              borderRadius: radius.sm,
-              backgroundColor: "transparent",
-              minWidth: 44,
-              minHeight: 44,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            accessibilityLabel={t("calendar.editMode")}
-            icon={
-              <Icon
-                name="create-outline"
-                size={iconSize.md}
-                color={theme.colors.black}
-              />
-            }
-          />
-          <Button
-            title=""
-            variant="ghost"
-            size="small"
-            onPress={handleViewToggle}
-            style={{
-              borderRadius: radius.sm,
-              backgroundColor: "transparent",
-              minWidth: 44,
-              minHeight: 44,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            accessibilityLabel={t("calendar.viewModeToggle")}
-            icon={
-              <Icon
-                name={viewMode === "year" ? "calendar-outline" : "grid-outline"}
-                size={iconSize.md}
-                color={theme.colors.black}
-              />
-            }
-          />
-        </Container>
-      ),
+      icon: (viewMode === "year" ? "calendar-outline" : "grid-outline") as
+        | "calendar-outline"
+        | "grid-outline",
+      onPress: handleViewToggle,
+      accessibilityLabel: t("calendar.viewModeToggle"),
+      showDivider: false,
     },
     showDivider: true,
   };
@@ -248,7 +219,10 @@ function CalendarScreenInner() {
   return (
     <Screen
       backgroundColor={theme.background}
-      header={headerConfig}
+      header={{
+        ...headerConfig,
+        showDivider: false,
+      }}
       padding="none"
     >
       {/* Animated Title Section - Only show for year view */}
@@ -335,5 +309,15 @@ function CalendarScreenInner() {
 
 // Main component that provides property context
 export default function CalendarScreen() {
-  return <CalendarScreenInner />;
+  const { t } = useTranslation();
+
+  return (
+    <WithSetupCheck
+      promptVariant="default"
+      promptTitle={t("host.setup.calendarPromptTitle")}
+      promptMessage={t("host.setup.calendarPromptMessage")}
+    >
+      <CalendarScreenInner />
+    </WithSetupCheck>
+  );
 }

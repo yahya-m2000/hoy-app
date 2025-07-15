@@ -4,6 +4,7 @@ import { Container, Text, Input } from "@shared/components";
 import StepHeader from "../StepHeader";
 import InfoBox from "../InfoBox";
 import { spacing } from "@core/design";
+import { useTranslation } from "react-i18next";
 
 interface DescriptionStepProps {
   formData: any;
@@ -16,6 +17,7 @@ export default function DescriptionStep({
   updateFormData,
   errors,
 }: DescriptionStepProps) {
+  const { t } = useTranslation();
   const characterCount = formData.description?.length || 0;
   const maxLength = 3000;
   const minLength = 50;
@@ -33,14 +35,14 @@ export default function DescriptionStep({
       >
         <Container paddingBottom="xxl">
           <StepHeader
-            title="Describe your property"
-            description="Tell guests what makes your place special (minimum 50 characters)"
+            title={t("property.steps.description.title")}
+            description={t("property.steps.description.description")}
           />
 
           <Container marginBottom="lg">
             <Container marginBottom="sm">
               <Text variant="label" color="onBackground">
-                Description *
+                {t("property.steps.description.label")} *
               </Text>
             </Container>
             <Input
@@ -52,7 +54,7 @@ export default function DescriptionStep({
               multiline
               numberOfLines={8}
               maxLength={maxLength}
-              placeholder="Describe your property's unique features, nearby attractions, and what makes it special..."
+              placeholder={t("property.steps.description.placeholder")}
               style={{ minHeight: 120 }}
             />
             <Container
@@ -63,7 +65,10 @@ export default function DescriptionStep({
               <Container>
                 {characterCount > 0 && characterCount < minLength && (
                   <Text variant="caption" style={{ color: "#FFA500" }}>
-                    {minLength - characterCount} more characters needed
+                    {t("property.steps.description.minLengthWarning", {
+                      min: minLength,
+                      remaining: minLength - characterCount,
+                    })}
                   </Text>
                 )}
               </Container>
@@ -83,12 +88,8 @@ export default function DescriptionStep({
           </Container>
 
           <InfoBox
-            title="Writing Tips"
-            content="• Highlight unique features and amenities
-• Mention nearby attractions and transportation
-• Describe the neighborhood vibe and character
-• Set clear expectations about the space
-• Use descriptive but honest language"
+            title={t("property.steps.description.tipTitle")}
+            content={t("property.steps.description.tipContent")}
             icon="bulb"
             variant="tip"
           />

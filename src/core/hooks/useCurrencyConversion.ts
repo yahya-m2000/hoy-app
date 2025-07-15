@@ -3,7 +3,7 @@
  * Provides currency conversion functionality with caching and error handling
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useCurrency } from "@core/context";
 import { currencyService } from "@core/external/currency";
 import { logger } from "@core/utils/sys/log";
@@ -18,7 +18,7 @@ interface ConversionCache {
 
 export const useCurrencyConversion = () => {
   const { currency } = useCurrency();
-  const [conversionCache, setConversionCache] = useState<ConversionCache>({});
+  const conversionCacheRef = useRef<ConversionCache>({});
   const [isLoading, setIsLoading] = useState(false);
 
   // Cache duration: 5 minutes
@@ -36,7 +36,7 @@ export const useCurrencyConversion = () => {
 
     // Check cache first
     const cacheKey = `${amount}-${fromCurrency}-${currency}`;
-    const cached = conversionCache[cacheKey];
+    const cached = conversionCacheRef.current[cacheKey];
     
     if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
       return cached.convertedAmount;
@@ -51,14 +51,14 @@ export const useCurrencyConversion = () => {
       );
 
       // Cache the result
-      setConversionCache(prev => ({
-        ...prev,
+      conversionCacheRef.current = {
+        ...conversionCacheRef.current,
         [cacheKey]: {
           amount,
           convertedAmount,
           timestamp: Date.now()
         }
-      }));
+      };
 
 
 
@@ -70,7 +70,7 @@ export const useCurrencyConversion = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [currency, conversionCache]);
+  }, [currency]);
 
   // Convert multiple amounts at once
   const convertAmounts = useCallback(async (
@@ -86,24 +86,22 @@ export const useCurrencyConversion = () => {
 
   // Clear cache
   const clearCache = useCallback(() => {
-    setConversionCache({});
+    conversionCacheRef.current = {};
   }, []);
 
   // Clear expired cache entries
   useEffect(() => {
     const now = Date.now();
-    const expiredKeys = Object.keys(conversionCache).filter(
-      key => now - conversionCache[key].timestamp > CACHE_DURATION
+    const expiredKeys = Object.keys(conversionCacheRef.current).filter(
+      key => now - conversionCacheRef.current[key].timestamp > CACHE_DURATION
     );
 
     if (expiredKeys.length > 0) {
-      setConversionCache(prev => {
-        const newCache = { ...prev };
-        expiredKeys.forEach(key => delete newCache[key]);
-        return newCache;
-      });
+      const newCache = { ...conversionCacheRef.current };
+      expiredKeys.forEach(key => delete newCache[key]);
+      conversionCacheRef.current = newCache;
     }
-  }, [conversionCache]);
+  }, []);
 
   return {
     convertAmount,

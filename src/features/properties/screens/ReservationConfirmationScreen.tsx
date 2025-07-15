@@ -10,6 +10,7 @@ import { format } from "date-fns";
 
 // Context and hooks
 import { useTheme } from "@core/hooks";
+import { useTranslation } from "react-i18next";
 
 // Shared components
 import { Text, Container, Button, DetailScreen } from "@shared/components";
@@ -32,6 +33,7 @@ interface Booking {
 
 export default function ReservationConfirmationScreen() {
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const params = useLocalSearchParams();
   const segments = useSegments();
 
@@ -78,34 +80,36 @@ export default function ReservationConfirmationScreen() {
 
   // Navigation handlers
   const handleViewBooking = () => {
+    // Booking details route: /(tabs)/traveler/bookings/[id]/index
     router.push(`/(tabs)/traveler/bookings/${booking._id}`);
   };
 
   const handleBackToProperty = () => {
-    // Detect current tab context from URL segments
+    // Try to detect the originating tab (home, search, wishlist, properties)
+    const tabCandidates = ["home", "search", "wishlist", "properties"];
     const currentTab = segments.find((segment: string) =>
-      ["home", "search", "wishlist", "bookings", "properties"].includes(segment)
+      tabCandidates.includes(segment)
     );
 
     if (currentTab) {
       // Navigate back to property within the same tab context
       router.push(`/(tabs)/traveler/${currentTab}/property/${property?._id}`);
     } else {
-      // Fallback navigation
+      // Fallback to home property view
       router.push(`/(tabs)/traveler/home/property/${property?._id}`);
     }
   };
 
   const handleBackToHome = () => {
-    router.push("/(tabs)");
+    router.push("/(tabs)/traveler/home");
   };
 
   if (!booking || !property) {
     return (
       <DetailScreen
-        title="Error"
+        title={t("common.error")}
         headerVariant="solid"
-        error="Unable to display booking confirmation"
+        error={t("booking.notFoundMessage")}
       >
         <Container
           flex={1}
@@ -114,7 +118,7 @@ export default function ReservationConfirmationScreen() {
           paddingHorizontal="xl"
         >
           <Text variant="body" color="secondary">
-            Unable to display booking confirmation.
+            {t("booking.notFoundMessage")}
           </Text>
         </Container>
       </DetailScreen>
@@ -122,7 +126,10 @@ export default function ReservationConfirmationScreen() {
   }
 
   return (
-    <DetailScreen title="Booking Confirmed!" headerVariant="solid">
+    <DetailScreen
+      title={t("booking.bookingConfirmed") + "!"}
+      headerVariant="solid"
+    >
       <Container paddingHorizontal="lg" paddingTop="lg" style={styles.content}>
         {/* Success Icon */}
         <Container alignItems="center" marginBottom="xl">
@@ -139,12 +146,12 @@ export default function ReservationConfirmationScreen() {
           </Container>
           <Container alignItems="center">
             <Text variant="h5" weight="bold" color="primary">
-              Reservation Confirmed
+              {t("booking.bookingConfirmed")}
             </Text>
           </Container>
           <Container alignItems="center" marginTop="xs">
             <Text variant="body" color="secondary">
-              You&apos;ll receive a confirmation email shortly
+              {t("booking.confirmationMessage")}
             </Text>
           </Container>
         </Container>
@@ -158,7 +165,7 @@ export default function ReservationConfirmationScreen() {
         >
           <Container marginBottom="md">
             <Text variant="h6" weight="semibold" color="primary">
-              Booking Details
+              {t("booking.detailsTitle")}
             </Text>
           </Container>
 
@@ -166,7 +173,7 @@ export default function ReservationConfirmationScreen() {
           <Container marginBottom="md">
             <Container marginBottom="xs">
               <Text variant="caption" weight="medium" color="secondary">
-                PROPERTY
+                {t("booking.property")}
               </Text>
             </Container>
             <Text variant="body" weight="medium" color="primary">
@@ -175,7 +182,7 @@ export default function ReservationConfirmationScreen() {
             <Text variant="caption" color="secondary">
               {property.address?.street ||
                 property.address?.city ||
-                "Property Location"}
+                t("property.cityPlaceholder")}
             </Text>
           </Container>
 
@@ -188,7 +195,7 @@ export default function ReservationConfirmationScreen() {
             <Container flex={1}>
               <Container marginBottom="xs">
                 <Text variant="caption" weight="medium" color="secondary">
-                  CHECK-IN
+                  {t("booking.checkIn")}
                 </Text>
               </Container>
               <Text variant="body" weight="medium" color="primary">
@@ -198,7 +205,7 @@ export default function ReservationConfirmationScreen() {
             <Container flex={1}>
               <Container marginBottom="xs">
                 <Text variant="caption" weight="medium" color="secondary">
-                  CHECK-OUT
+                  {t("booking.checkOut")}
                 </Text>
               </Container>
               <Text variant="body" weight="medium" color="primary">
@@ -216,7 +223,7 @@ export default function ReservationConfirmationScreen() {
             <Container flex={1}>
               <Container marginBottom="xs">
                 <Text variant="caption" weight="medium" color="secondary">
-                  GUESTS
+                  {t("booking.guests")}
                 </Text>
               </Container>
               <Text variant="body" weight="medium" color="primary">
@@ -226,11 +233,12 @@ export default function ReservationConfirmationScreen() {
             <Container flex={1}>
               <Container marginBottom="xs">
                 <Text variant="caption" weight="medium" color="secondary">
-                  NIGHTS
+                  {t("booking.night")}
                 </Text>
               </Container>
               <Text variant="body" weight="medium" color="primary">
-                {nights} {nights === 1 ? "night" : "nights"}
+                {nights}{" "}
+                {nights === 1 ? t("booking.night") : t("booking.nights")}
               </Text>
             </Container>
           </Container>
@@ -239,7 +247,7 @@ export default function ReservationConfirmationScreen() {
           <Container>
             <Container marginBottom="xs">
               <Text variant="caption" weight="medium" color="secondary">
-                BOOKING ID
+                {t("booking.bookingId")}
               </Text>
             </Container>
             <Text variant="body" weight="medium" color="primary">
@@ -257,14 +265,14 @@ export default function ReservationConfirmationScreen() {
         >
           <Container marginBottom="md">
             <Text variant="h6" weight="semibold" color="primary">
-              Payment Details
+              {t("booking.paymentDetails")}
             </Text>
           </Container>
 
           {/* Price Breakdown Caption */}
           <Container marginBottom="sm">
             <Text variant="caption" weight="medium" color="secondary">
-              PRICE BREAKDOWN
+              {t("reservation.priceBreakdown")}
             </Text>
           </Container>
 
@@ -280,7 +288,8 @@ export default function ReservationConfirmationScreen() {
               {typeof property.price === "object"
                 ? property.price?.amount || 0
                 : property.price || 0}{" "}
-              × {nights} {nights === 1 ? "night" : "nights"}
+              × {nights}{" "}
+              {nights === 1 ? t("booking.night") : t("booking.nights")}
             </Text>
             <Text variant="body" weight="medium" color="primary">
               $
@@ -298,7 +307,7 @@ export default function ReservationConfirmationScreen() {
             marginBottom="sm"
           >
             <Text variant="body" color="secondary">
-              Cleaning fee
+              {t("reservation.cleaningFee")}
             </Text>
             <Text variant="body" weight="medium" color="primary">
               $25
@@ -313,7 +322,7 @@ export default function ReservationConfirmationScreen() {
             marginBottom="sm"
           >
             <Text variant="body" color="secondary">
-              Service fee
+              {t("reservation.serviceFee")}
             </Text>
             <Text variant="body" weight="medium" color="primary">
               $
@@ -335,7 +344,7 @@ export default function ReservationConfirmationScreen() {
             marginBottom="md"
           >
             <Text variant="body" color="secondary">
-              Taxes & fees
+              {t("reservation.taxes")}
             </Text>
             <Text variant="body" weight="medium" color="primary">
               $
@@ -362,7 +371,7 @@ export default function ReservationConfirmationScreen() {
             marginBottom="md"
           >
             <Text variant="body" weight="semibold" color="primary">
-              Total Paid
+              {t("reservation.total")}
             </Text>
             <Text variant="body" weight="bold" color="primary">
               ${booking.totalPrice}
@@ -373,12 +382,15 @@ export default function ReservationConfirmationScreen() {
           <Container marginTop="sm">
             <Container marginBottom="xs">
               <Text variant="caption" weight="medium" color="secondary">
-                PAYMENT METHOD
+                {t("reservation.paymentMethod")}
               </Text>
             </Container>
             <Text variant="body" weight="medium" color="primary">
               {paymentMethod?.type === "zaad"
-                ? `ZAAD (${paymentMethod.details?.phone || "Mobile Payment"})`
+                ? `ZAAD (${
+                    paymentMethod.details?.phone ||
+                    t("reservation.paymentMethodNotSelected")
+                  })`
                 : paymentMethod?.details?.name
                 ? paymentMethod.details.name
                 : booking.paymentId
@@ -391,21 +403,21 @@ export default function ReservationConfirmationScreen() {
         {/* Action Buttons */}
         <Container style={{ gap: 12 }} marginTop="lg">
           <Button
-            title="View Booking Details"
+            title={t("booking.viewBookingDetails")}
             onPress={handleViewBooking}
             variant="primary"
             size="small"
           />
 
           <Button
-            title="Back to Property"
+            title={t("property.view")}
             onPress={handleBackToProperty}
             variant="outline"
             size="small"
           />
 
           <Button
-            title="Back to Home"
+            title={t("navigation.home")}
             onPress={handleBackToHome}
             variant="ghost"
             size="small"

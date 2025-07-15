@@ -304,6 +304,19 @@ const ToastProviderInternal: React.FC<{ children: React.ReactNode }> = ({
 
   const showToast = useCallback(
     (toast: Omit<ToastProps, "id" | "timestamp">) => {
+      // Safety check: ensure message is valid
+      if (
+        !toast.message ||
+        typeof toast.message !== "string" ||
+        toast.message.trim() === ""
+      ) {
+        console.warn(
+          "Toast: Attempted to show toast with invalid message:",
+          toast
+        );
+        return;
+      }
+
       const id =
         Date.now().toString() + Math.random().toString(36).substr(2, 9);
       const newToast: ToastProps = {

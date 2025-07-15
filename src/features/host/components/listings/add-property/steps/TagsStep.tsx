@@ -4,6 +4,7 @@ import { Container, Button } from "@shared/components";
 import StepHeader from "../StepHeader";
 import { PROPERTY_TAGS } from "@core/types/listings.types";
 import { spacing } from "@core/design";
+import { useTranslation } from "react-i18next";
 
 interface TagsStepProps {
   formData: any;
@@ -11,6 +12,7 @@ interface TagsStepProps {
 }
 
 export default function TagsStep({ formData, updateFormData }: TagsStepProps) {
+  const { t } = useTranslation();
   const handleTagToggle = (tag: string) => {
     const current = formData.tags || [];
     if (current.includes(tag)) {
@@ -23,8 +25,8 @@ export default function TagsStep({ formData, updateFormData }: TagsStepProps) {
   return (
     <Container>
       <StepHeader
-        title="Choose tags that describe your place"
-        description="Help guests find your property"
+        title={t("property.steps.tags.title")}
+        description={t("property.steps.tags.description")}
       />
 
       <View style={styles.tagsGrid}>
@@ -33,7 +35,11 @@ export default function TagsStep({ formData, updateFormData }: TagsStepProps) {
           return (
             <Button
               key={tag}
-              title={tag}
+              title={t(
+                `property.tags.${tag
+                  .toLowerCase()
+                  .replace(/\s+([a-z])/g, (_, letter) => letter.toUpperCase())}`
+              )}
               variant={selected ? "primary" : "outline"}
               onPress={() => handleTagToggle(tag)}
               style={styles.tagButton}

@@ -24,6 +24,7 @@ export * as review from './review';
 export * as search from './search';
 export * as wishlist from './wishlist';
 export * as account from './account';
+export * as feedback from './feedback';
 export * as upload from './upload/upload.service';
 
 // ========================================
@@ -90,6 +91,9 @@ export type {
 // Review Services
 export { ReviewService } from './review';
 export type { Review, CreateReviewData, ReviewStats } from './review';
+
+// Feedback Services
+export { FeedbackService } from './feedback';
 
 // Search Services  
 export { SearchService } from './search';
@@ -177,3 +181,13 @@ export {
   getNearbySearch,
   getTrendingSearches,
 } from './search';
+
+// Feedback functions
+export {
+  createFeedback,
+  getUserFeedback,
+  getFeedbackById,
+  getFeedbackOptions,
+  validateFeedbackData,
+  getFeedbackStats
+} from './feedback';

@@ -57,6 +57,7 @@ export default function PastBookingsScreen() {
         totalPrice: booking.totalPrice || booking.totalAmount,
         specialRequests: booking.specialRequests,
         status: booking.status,
+        bookingStatus: booking.status, // <-- Add this line
         paymentStatus: booking.paymentStatus,
         paymentId: booking.paymentId,
         contactInfo: booking.contactInfo,
@@ -98,7 +99,7 @@ export default function PastBookingsScreen() {
         header={{
           title: t("bookings.pastBookings"),
           left: {
-            icon: "arrow-back",
+            icon: "chevron-back-outline",
             onPress: () => router.back(),
           },
           showDivider: false,
@@ -127,7 +128,7 @@ export default function PastBookingsScreen() {
         header={{
           title: t("bookings.pastBookings"),
           left: {
-            icon: "arrow-back",
+            icon: "chevron-back-outline",
             onPress: () => router.back(),
           },
           showDivider: false,
@@ -155,7 +156,7 @@ export default function PastBookingsScreen() {
         header={{
           title: t("bookings.pastBookings"),
           left: {
-            icon: "arrow-back",
+            icon: "chevron-back-outline",
             onPress: () => router.back(),
           },
           showDivider: false,
@@ -177,7 +178,7 @@ export default function PastBookingsScreen() {
       header={{
         title: t("bookings.pastBookings"),
         left: {
-          icon: "arrow-back",
+          icon: "chevron-back-outline",
           onPress: () => router.back(),
         },
         showDivider: false,

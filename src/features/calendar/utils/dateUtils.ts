@@ -13,12 +13,9 @@ import {
   isSameDay,
 } from "date-fns";
 import { useTranslation } from "react-i18next";
-import {
-  getMonthlyEarnings,
-  getMonthBookingDensity,
-  getBookingsForPropertyMonth,
-} from "./mockData";
+import { getBookingsForPropertyMonth } from "./realBookingData";
 import { adaptBookingData, adaptBookingsData } from "./adapters";
+import type { Property as CalendarProperty } from "@features/calendar/hooks/useProperty";
 
 export interface DayMeta {
   date: Date;
@@ -136,22 +133,22 @@ function generateCurrentMonthOnlyMatrixSafe(date: Date): DayMeta[][] {
  * Generate a 6x7 matrix for a month view
  * Includes days from previous/next month to fill the grid
  */
-export function generateMonthMatrix(date: Date): DayMeta[][] {
+export function generateMonthMatrix(date: Date, property?: CalendarProperty): DayMeta[][] {
   // Enhanced validation
   if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
     console.warn("generateMonthMatrix: Invalid date provided", date);
     // Return a valid matrix with current month as fallback
     const fallbackDate = new Date();
-    return generateMonthMatrixSafe(fallbackDate);
+    return generateMonthMatrixSafe(fallbackDate, property);
   }
 
-  return generateMonthMatrixSafe(date);
+  return generateMonthMatrixSafe(date, property);
 }
 
 /**
  * Safe internal function to generate month matrix
  */
-function generateMonthMatrixSafe(date: Date): DayMeta[][] {
+function generateMonthMatrixSafe(date: Date, property?: CalendarProperty): DayMeta[][] {
   try {
     const monthStart = startOfMonth(date);
     const monthEnd = endOfMonth(date);
@@ -194,12 +191,23 @@ function generateMonthMatrixSafe(date: Date): DayMeta[][] {
             price: 0,
           });
         } else {
+          const isCurrentMonth = isSameMonth(currentDate, date);
+          let price = 0;
+          if (isCurrentMonth && property) {
+            // Use weekday/weekend price if available
+            const dayOfWeek = currentDate.getDay();
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+              price = property.weekendPrice ?? property.price ?? 0;
+            } else {
+              price = property.weekdayPrice ?? property.price ?? 0;
+            }
+          }
           weekDays.push({
             date: currentDate,
-            isCurrentMonth: isSameMonth(currentDate, date),
+            isCurrentMonth,
             isToday: isToday(currentDate),
             isAvailable: true, // Default to available
-            price: 120, // Default price
+            price,
           });
         }
       }
@@ -230,17 +238,17 @@ function generateMonthMatrixSafe(date: Date): DayMeta[][] {
  * Generate a clean month matrix showing only current month days
  * Maintains proper week structure but filters out non-current month days
  */
-export function generateCleanMonthMatrix(date: Date): DayMeta[][] {
+export function generateCleanMonthMatrix(date: Date, property?: CalendarProperty): DayMeta[][] {
   if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
     console.warn("generateCleanMonthMatrix: Invalid date provided", date);
     const fallbackDate = new Date();
-    return generateCleanMonthMatrixSafe(fallbackDate);
+    return generateCleanMonthMatrixSafe(fallbackDate, property);
   }
 
-  return generateCleanMonthMatrixSafe(date);
+  return generateCleanMonthMatrixSafe(date, property);
 }
 
-function generateCleanMonthMatrixSafe(date: Date): DayMeta[][] {
+function generateCleanMonthMatrixSafe(date: Date, property?: CalendarProperty): DayMeta[][] {
   try {
     const monthStart = startOfMonth(date);
     const monthEnd = endOfMonth(date);
@@ -261,13 +269,21 @@ function generateCleanMonthMatrixSafe(date: Date): DayMeta[][] {
         if (dayIndex < days.length) {
           const currentDate = days[dayIndex];
           const isCurrentMonth = isSameMonth(currentDate, date);
-
+          let price = 0;
+          if (isCurrentMonth && property) {
+            const dayOfWeek = currentDate.getDay();
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+              price = property.weekendPrice ?? property.price ?? 0;
+            } else {
+              price = property.weekdayPrice ?? property.price ?? 0;
+            }
+          }
           weekDays.push({
             date: currentDate,
             isCurrentMonth,
             isToday: isToday(currentDate),
             isAvailable: isCurrentMonth, // Only current month days are available
-            price: isCurrentMonth ? 120 : 0,
+            price: isCurrentMonth ? price : 0,
           });
         }
       }
@@ -319,10 +335,10 @@ export function clearYearDataCache() {
 /**
  * Generate year view data with monthly summaries (cached)
  */
-export function generateYearData(
+export async function generateYearData(
   year: number,
   propertyId?: string
-): MonthData[] {
+): Promise<MonthData[]> {
   if (!year || isNaN(year) || year < 1900 || year > 2100) {
     console.warn("generateYearData: Invalid year provided", year);
     return []; // Return empty array for invalid year
@@ -345,7 +361,7 @@ export function generateYearData(
       end: yearEnd,
     });
 
-    const result = months.map((month) => {
+    const result = await Promise.all(months.map(async (month) => {
       // Ensure each month is a valid Date object
       if (!month || !(month instanceof Date) || isNaN(month.getTime())) {
         console.warn("Invalid month generated for year", year, month);
@@ -358,14 +374,23 @@ export function generateYearData(
         };
       }
       console.log("Calculating data for month:", month);
+      let hasBookings = false;
+      if (propertyId) {
+        try {
+          const bookings = await getBookingsForPropertyMonth(month, propertyId);
+          hasBookings = bookings.length > 0;
+        } catch {
+          hasBookings = false;
+        }
+      }
       return {
         month,
-        totalEarnings: getMonthlyEarnings(month, propertyId),
-        bookingDensity: getMonthBookingDensity(month, propertyId),
-        hasBookings: getBookingsForPropertyMonth(month, propertyId).length > 0,
+        totalEarnings: 0, // Placeholder, replace with actual data fetching
+        bookingDensity: 0, // Placeholder, replace with actual data fetching
+        hasBookings,
         isBlocked: false, // Could be enhanced with real blocked dates logic
       };
-    });
+    }));
     // Cache the result for future use
     yearDataCache.set(cacheKey, result);
     return result;

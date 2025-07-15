@@ -58,9 +58,55 @@ const mapBookingToReservation = (booking: any): Reservation => {
 export const useHostDashboard = () => {
   return useQuery<HostDashboard, Error, DashboardMetrics>({
     queryKey: ["hostDashboard"],
-    queryFn: HostDashboardService.getDashboardData,
+    queryFn: async () => {
+      try {
+        return await HostDashboardService.getDashboardData();
+      } catch (error: any) {
+        // Handle 403 errors gracefully - user doesn't have host permissions yet
+        if (error?.response?.status === 403) {
+          console.log("🔐 [useHostDashboard] User doesn't have host permissions yet - returning null for setup flow");
+          // Return null data instead of throwing error so UI can show setup flow
+          return null as any;
+        }
+        // Re-throw other errors
+        throw error;
+      }
+    },
     staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: (failureCount, error: any) => {
+      // Don't retry on 403 errors (user needs to complete setup)
+      if (error?.response?.status === 403) {
+        return false;
+      }
+      // Don't retry on auth errors (401)
+      if (error?.response?.status === 401) {
+        return false;
+      }
+      // Retry up to 3 times for other errors
+      return failureCount < 3;
+    },
     select: (data) => {
+      // If data is null (user doesn't have host permissions), return empty dashboard
+      if (!data) {
+        return {
+          earnings: {
+            thisMonth: 0,
+            lastMonth: 0,
+            thisYear: 0,
+            chartData: [],
+          },
+          stats: {
+            totalEarnings: 0,
+            monthlyEarnings: 0,
+            activeListings: 0,
+            occupancyRate: 0,
+            totalReservations: 0,
+            averageRating: 0,
+          },
+          recentReservations: [],
+        };
+      }
+
       /**
        * The server response does not always include a nested `stats` or `earnings` object.
        * Fall back to the root‐level fields (e.g. `totalEarnings`, `thisMonthEarnings`, etc.)

@@ -1,0 +1,18 @@
+{
+    "title": "Property Options",
+    "edit": "Edit",
+    "delete": "Delete",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "editProperty": "Edit Property",
+    "editDetails": "Edit Details",
+    "activateProperty": "Activate Property",
+    "deactivateProperty": "Deactivate Property",
+    "activateConfirm": "Are you sure you want to activate this property?",
+    "deactivateConfirm": "Are you sure you want to deactivate this property?",
+    "deleteConfirm": "Are you sure you want to delete this property? This action cannot be undone.",
+    "deactivateMessage": "Deactivating will hide this property from guests but preserve all your data.",
+    "statusUpdated": "Property {{action}} successfully",
+    "statusUpdateFailed": "Failed to {{action}} property. Please try again.",
+    "toggleStatus": "Toggle Status"
+  }

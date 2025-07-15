@@ -1,5 +1,6 @@
 import React, { useMemo, useCallback } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { TouchableOpacity, Image } from "react-native";
+import { Container, Text } from "@shared/components";
 import { DayMeta, calculateBookingPillLayout } from "../utils/dateUtils";
 import { CalendarBookingData } from "@core/types";
 import { radius } from "@core/design";
@@ -11,83 +12,6 @@ interface BookingOverlayProps {
   dayHeight: number;
   onBookingPress: (booking: CalendarBookingData) => void;
 }
-
-// Global style cache for BookingOverlay to prevent recreation
-const overlayStyleCache = new Map<string, any>();
-
-// Create cached styles for booking overlays
-const createOverlayStyles = (dayWidth: number, dayHeight: number) => {
-  const cacheKey = `${dayWidth}_${dayHeight}`;
-
-  if (overlayStyleCache.has(cacheKey)) {
-    return overlayStyleCache.get(cacheKey);
-  }
-
-  const styles = StyleSheet.create({
-    overlayContainer: {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-    },
-    bookingPill: {
-      position: "absolute",
-      flexDirection: "row",
-      alignItems: "center",
-      paddingHorizontal: 6,
-      paddingVertical: 2,
-      borderRadius: radius.circle,
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 1,
-      },
-      shadowOpacity: 0.1,
-      shadowRadius: 1,
-      elevation: 2,
-    },
-    guestAvatar: {
-      width: 20,
-      height: 20,
-      borderRadius: 10,
-      marginRight: 4,
-    },
-    avatarPlaceholder: {
-      width: 20,
-      height: 20,
-      borderRadius: 10,
-      backgroundColor: "#666",
-      marginRight: 4,
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    avatarText: {
-      color: "#fff",
-      fontSize: 10,
-      fontWeight: "bold",
-    },
-    guestName: {
-      fontSize: 11,
-      fontWeight: "500",
-      color: "#FFFFFF",
-      flex: 1,
-    },
-    pillContinuingFrom: {
-      borderRadius: radius.circle,
-
-      marginLeft: 0,
-    },
-    pillContinuingTo: {
-      borderRadius: radius.circle,
-
-      marginRight: 0,
-    },
-  });
-
-  overlayStyleCache.set(cacheKey, styles);
-  return styles;
-};
 
 // Custom comparison function for better memoization
 const areOverlayPropsEqual = (
@@ -130,12 +54,6 @@ const BookingOverlayComponent: React.FC<BookingOverlayProps> = React.memo(
       dayWidth,
       dayHeight,
     });
-
-    // Use cached styles
-    const styles = useMemo(
-      () => createOverlayStyles(dayWidth, dayHeight),
-      [dayWidth, dayHeight]
-    );
 
     // Memoize pill calculations to prevent recalculation on every render
     const pills = useMemo(() => {
@@ -194,36 +112,35 @@ const BookingOverlayComponent: React.FC<BookingOverlayProps> = React.memo(
     });
 
     return (
-      <View style={styles.overlayContainer} pointerEvents="box-none">
+      <Container
+        style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
+      >
         {pills.map((pill, index) => {
-          console.log("🔸 BookingOverlay: Rendering pill", {
-            bookingId: booking.id,
-            pillIndex: index,
-            pill: pill,
-          });
-
           // Pre-calculate pill style properties
           const pillStyleProps = {
-            // Position to cover the price area (bottom part of the cell)
-            top: pill.top + 45, // Position in the lower part of the 80px tall cell
-            left: pill.left + 4, // Small margin from edges
-            width: pill.width - 8, // Account for margins
-            height: 30, // Bigger height for avatar and text
+            flexDirection: "row" as const,
+            alignItems: "center" as const,
+            paddingHorizontal: 6,
+            paddingVertical: 2,
+            borderRadius: 9999,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.1,
+            shadowRadius: 1,
+            elevation: 2,
+            width: pill.width - 8,
+            height: 30,
             backgroundColor: bookingColor,
+            marginLeft: !pill.isFirstInMonth ? 0 : undefined,
+            marginRight: !pill.isLastInMonth ? 0 : undefined,
+            position: "absolute" as const,
+            top: pill.top + 45,
+            left: pill.left + 4,
           };
-
-          const pillStyle = [
-            styles.bookingPill,
-            pillStyleProps,
-            // Apply styling based on pill position flags
-            !pill.isFirstInMonth && styles.pillContinuingFrom,
-            !pill.isLastInMonth && styles.pillContinuingTo,
-          ];
-
           return (
             <TouchableOpacity
               key={`${booking.id}-pill-${index}`}
-              style={pillStyle}
+              style={pillStyleProps}
               onPress={handlePress}
               activeOpacity={0.7}
             >
@@ -231,21 +148,45 @@ const BookingOverlayComponent: React.FC<BookingOverlayProps> = React.memo(
               {avatarUrl ? (
                 <Image
                   source={{ uri: avatarUrl }}
-                  style={styles.guestAvatar}
+                  style={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: 10,
+                    marginRight: 4,
+                  }}
                   defaultSource={require("../../../../assets/icon.png")}
                 />
               ) : (
-                <View style={styles.avatarPlaceholder}>
-                  <Text style={styles.avatarText}>{avatarInitials}</Text>
-                </View>
+                <Container
+                  style={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: 10,
+                    backgroundColor: "#666",
+                    marginRight: 4,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Text
+                    color="#fff"
+                    style={{ fontSize: 10, fontWeight: "bold" }}
+                  >
+                    {avatarInitials}
+                  </Text>
+                </Container>
               )}
 
               {/* Guest Name - Only show on the first segment to avoid repetition */}
               {index === 0 && (
                 <Text
-                  style={styles.guestName}
+                  style={{
+                    fontSize: 11,
+                    fontWeight: "500",
+                    color: "#FFFFFF",
+                    flex: 1,
+                  }}
                   numberOfLines={1}
-                  ellipsizeMode="tail"
                 >
                   {guestName}
                 </Text>
@@ -253,7 +194,7 @@ const BookingOverlayComponent: React.FC<BookingOverlayProps> = React.memo(
             </TouchableOpacity>
           );
         })}
-      </View>
+      </Container>
     );
   },
   areOverlayPropsEqual

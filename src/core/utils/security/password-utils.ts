@@ -182,7 +182,22 @@ export function validatePassword(password: string): {
     score -= 5;
   }
   
-  if (/123|abc|qwe|password|admin/i.test(password)) {
+  // Check for common weak patterns (only exact matches or very obvious patterns)
+  const commonWeakPatterns = [
+    /^123456789?$/i,
+    /^password$/i,
+    /^admin$/i,
+    /^qwerty$/i,
+    /^abc123$/i,
+    /^letmein$/i,
+    /^welcome$/i,
+    /^monkey$/i,
+    /^dragon$/i,
+    /^master$/i,
+  ];
+  
+  const hasWeakPattern = commonWeakPatterns.some(pattern => pattern.test(password));
+  if (hasWeakPattern) {
     issues.push("Password should not contain common patterns");
     score -= 10;
   }

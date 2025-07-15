@@ -9,6 +9,7 @@ import { Text, Container, Icon, Calendar } from "@shared/components";
 import { useTheme } from "@core/hooks/useTheme";
 import { useCalendar } from "@features/calendar/hooks/useCalendar";
 import { PropertyDetailsService } from "@core/api/services";
+import { useTranslation } from "react-i18next";
 
 interface DateStepProps {
   startDate: Date | null;
@@ -39,6 +40,7 @@ export const DateStep: React.FC<DateStepProps> = ({
   onForceRefresh,
 }) => {
   const { theme, isDark } = useTheme();
+  const { t } = useTranslation();
   const calendarContext = useCalendar();
 
   // Validate propertyId before making API calls
@@ -206,19 +208,12 @@ export const DateStep: React.FC<DateStepProps> = ({
 
   return (
     <Container style={{ flex: 1 }}>
-      <Container
-        marginBottom="lg"
-        padding="md"
-        borderRadius="md"
-        backgroundColor="rgba(0, 0, 0, 0.05)"
-      >
-        <Text
-          variant="body"
-          color={isDark ? theme.white : theme.colors.gray[900]}
-        >
+      {/* Selected Dates Display */}
+      <Container marginBottom="lg">
+        <Text variant="body" weight="semibold">
           {startDate && endDate
             ? `${formatDate(startDate)} - ${formatDate(endDate)}`
-            : "No dates selected yet"}
+            : t("reservation.noDatesSelected", "No dates selected yet")}
         </Text>
       </Container>
 
@@ -232,12 +227,8 @@ export const DateStep: React.FC<DateStepProps> = ({
           marginBottom="lg"
         >
           <ActivityIndicator size="small" color={theme.colors.primary} />
-          <Text
-            variant="caption"
-            color={theme.colors.gray[600]}
-            style={{ marginLeft: 8 }}
-          >
-            Loading availability...
+          <Text variant="caption" style={{ marginLeft: 8 }}>
+            {t("reservation.loadingAvailability", "Loading availability...")}
           </Text>
         </Container>
       )}
@@ -267,12 +258,8 @@ export const DateStep: React.FC<DateStepProps> = ({
           paddingVertical="md"
         >
           <ActivityIndicator size="small" color={theme.colors.primary} />
-          <Text
-            variant="caption"
-            color={theme.colors.gray[600]}
-            style={{ marginLeft: 8 }}
-          >
-            Checking availability...
+          <Text variant="caption" style={{ marginLeft: 8 }}>
+            {t("reservation.checkingAvailability", "Checking availability...")}
           </Text>
         </Container>
       )}
@@ -284,26 +271,18 @@ export const DateStep: React.FC<DateStepProps> = ({
             alignItems="center"
             justifyContent="center"
             paddingVertical="md"
-            paddingHorizontal="lg"
-            borderRadius="md"
-            borderWidth={1}
             marginTop="md"
-            backgroundColor={
-              isDark ? theme.colors.error[900] : theme.colors.error[50]
-            }
-            borderColor={theme.colors.error[500]}
           >
-            <Icon
-              name="alert-circle-outline"
-              size={20}
-              color={theme.colors.error[500]}
-            />
+            <Icon name="alert-circle" size={20} color={theme.colors.error} />
             <Text
               variant="caption"
-              color={theme.colors.error[500]}
+              color={theme.colors.error}
               style={{ marginLeft: 8 }}
             >
-              Selected dates are not available
+              {t(
+                "reservation.datesNotAvailable",
+                "Selected dates are not available"
+              )}
             </Text>
           </Container>
         )}

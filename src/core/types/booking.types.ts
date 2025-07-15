@@ -348,8 +348,10 @@ export interface Booking {
   totalPrice: number;
   /** Currency */
   currency: string;
-  /** Booking status */
-  status: BookingStatus;
+  /** Booking status (use this, matches API) */
+  bookingStatus: BookingStatus;
+  /** @deprecated Use bookingStatus instead */
+  status?: BookingStatus;
   /** Payment status */
   paymentStatus: BookingPaymentStatus;
   /** Payment method used */

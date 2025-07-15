@@ -13,7 +13,13 @@
  * @version 1.0.0
  */
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -103,7 +109,8 @@ const AuthProviderInternal: React.FC<AuthProviderProps> = ({ children }) => {
   // Reset circuit breaker for user endpoints on mount to prevent blocking
   useEffect(() => {
     resetCircuitBreaker("/users/me");
-    logger.debug("Reset circuit breaker for /users/me endpoint", undefined, {
+    resetCircuitBreaker("/auth/register");
+    logger.debug("Reset circuit breakers for user endpoints", undefined, {
       module: "AuthContext",
     });
   }, []);
@@ -116,7 +123,7 @@ const AuthProviderInternal: React.FC<AuthProviderProps> = ({ children }) => {
    * Check current authentication state
    * Only checks token validity, doesn't load user data (that's handled by useCurrentUser hook)
    */
-  const checkAuthenticationState = async () => {
+  const checkAuthenticationState = useCallback(async () => {
     try {
       let authenticated = await hasValidAuthentication();
 
@@ -164,7 +171,7 @@ const AuthProviderInternal: React.FC<AuthProviderProps> = ({ children }) => {
       setIsAuthChecked(true);
       setCurrentUser(null);
     }
-  };
+  }, []);
 
   /**
    * Mark user as unauthenticated
@@ -309,6 +316,9 @@ const AuthProviderInternal: React.FC<AuthProviderProps> = ({ children }) => {
       logger.auth("Starting registration process", {
         email: credentials.email,
       });
+
+      // Reset circuit breaker for registration endpoint to ensure it's not blocked
+      resetCircuitBreaker("/auth/register");
 
       // Map our RegisterCredentials to the API's RegisterData format
       const registerData = {

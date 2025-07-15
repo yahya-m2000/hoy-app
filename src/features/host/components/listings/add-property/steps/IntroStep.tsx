@@ -22,23 +22,23 @@ export default function IntroStep({
   const benefits = [
     {
       icon: "globe" as const,
-      text: t("property.intro.benefit1"),
+      text: t("property.steps.intro.benefit1"),
     },
     {
       icon: "cash" as const,
-      text: t("property.intro.benefit2"),
+      text: t("property.steps.intro.benefit2"),
     },
     {
       icon: "shield-checkmark" as const,
-      text: t("property.intro.benefit3"),
+      text: t("property.steps.intro.benefit3"),
     },
   ];
 
   return (
     <Container paddingBottom="xxl">
       <StepHeader
-        title={t("property.intro.title")}
-        description={t("property.intro.description")}
+        title={t("property.steps.intro.title")}
+        description={t("property.steps.intro.description")}
       />
 
       <Container marginTop="xl">
@@ -66,8 +66,8 @@ export default function IntroStep({
 
       {/* Get Started Info */}
       <InfoBox
-        title={t("property.intro.infoTitle")}
-        content={t("property.intro.infoText")}
+        title={t("property.steps.intro.infoTitle")}
+        content={t("property.steps.intro.infoText")}
         icon="information-circle"
         variant="info"
       />

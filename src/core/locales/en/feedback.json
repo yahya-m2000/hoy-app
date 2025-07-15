@@ -1,0 +1,65 @@
+{ "feedback": {
+  "title": "Give Feedback",
+  "selectType": "What type of feedback would you like to share?",
+  "selectTypeDescription": "Choose the category that best describes your feedback",
+  "selectCategory": "Which area does this relate to?",
+  "selectCategoryDescription": "Select the specific area your feedback is about",
+  "details": "Tell us more",
+  "review": "Review your feedback",
+  "reviewDescription": "Please review your feedback before submitting",
+  "submit": "Submit Feedback",
+  "type": "Type",
+  "category": "Category",
+  "priority": "Priority",
+  "subject": "Subject",
+  "description": "Description",
+  "anonymous": "Anonymous",
+  "submitAnonymously": "Submit anonymously",
+  "submitAnonymouslyDescription": "Your name and account details won't be shared",
+  "email": "Email",
+  "emailPlaceholder": "Enter your email address",
+  "subjectPlaceholder": "Brief summary of your feedback",
+  "descriptionPlaceholder": "Describe your feedback in detail",
+  "stepsToReproduce": "Steps to reproduce",
+  "stepsToReproducePlaceholder": "How can we recreate this issue?",
+  "expectedBehavior": "Expected behavior",
+  "expectedBehaviorPlaceholder": "What should have happened?",
+  "actualBehavior": "Actual behavior",
+  "actualBehaviorPlaceholder": "What actually happened?",
+  "success": {
+    "title": "Feedback Submitted",
+    "message": "Thank you for your feedback! We'll review it and get back to you if needed."
+  },
+  "errors": {
+    "typeRequired": "Please select a feedback type",
+    "categoryRequired": "Please select a category",
+    "subjectRequired": "Subject is required",
+    "subjectTooShort": "Subject must be at least 5 characters",
+    "descriptionRequired": "Description is required",
+    "descriptionTooShort": "Description must be at least 10 characters",
+    "emailRequiredForAnonymous": "Email is required for anonymous feedback"
+  },
+  "types": {
+    "bugReport": "Bug Report",
+    "featureRequest": "Feature Request", 
+    "improvement": "Improvement",
+    "general": "General Feedback",
+    "complaint": "Complaint"
+  },
+  "categories": {
+    "appFunctionality": "App Functionality",
+    "uiUx": "UI/UX",
+    "performance": "Performance",
+    "payment": "Payment",
+    "booking": "Booking",
+    "property": "Property",
+    "account": "Account",
+    "other": "Other"
+  },
+  "priorities": {
+    "low": "Low",
+    "medium": "Medium", 
+    "high": "High",
+    "critical": "Critical"
+  }
+} }

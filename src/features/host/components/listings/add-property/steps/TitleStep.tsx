@@ -13,6 +13,7 @@ import { spacing } from "@core/design";
 import { useTheme } from "@core/hooks";
 import StepHeader from "../StepHeader";
 import InfoBox from "../InfoBox";
+import { useTranslation } from "react-i18next";
 
 interface TitleStepProps {
   formData: PropertyFormData;
@@ -26,6 +27,7 @@ export default function TitleStep({
   errors,
 }: TitleStepProps) {
   const { theme } = useTheme();
+  const { t } = useTranslation();
 
   const handleTextChange = (text: string) => {
     updateFormData("name", text);
@@ -47,21 +49,21 @@ export default function TitleStep({
       >
         <Container paddingBottom="xxl">
           <StepHeader
-            title="Property Title"
-            description="Catch guests' attention with a short, catchy title (max 32 characters)"
+            title={t("property.steps.title.title")}
+            description={t("property.steps.title.description")}
           />
 
           <Container marginBottom="lg">
             <Container marginBottom="sm">
               <Text variant="label" color="onBackground">
-                Title *
+                {t("property.steps.title.label")} *
               </Text>
             </Container>
             <Input
               value={formData.name}
               maxLength={maxLength}
               onChangeText={handleTextChange}
-              placeholder="Cozy Downtown Apartment"
+              placeholder={t("property.steps.title.placeholder")}
               error={errors.name}
               autoCapitalize="words"
             />
@@ -89,15 +91,15 @@ export default function TitleStep({
               !errors.name && (
                 <Container marginTop="xs">
                   <Text variant="caption" style={{ color: "#FFA500" }}>
-                    Title must be at least 3 characters
+                    {t("property.minLengthWarning", { min: 3 })}
                   </Text>
                 </Container>
               )}
           </Container>
 
           <InfoBox
-            title="Title Tips"
-            content="Make your title descriptive and appealing. Include key features like location, style, or unique amenities. Avoid using all caps or excessive punctuation."
+            title={t("property.steps.title.tipTitle")}
+            content={t("property.steps.title.tipContent")}
             icon="bulb"
             variant="tip"
           />

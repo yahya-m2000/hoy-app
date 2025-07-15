@@ -1,17 +1,12 @@
 import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { TouchableOpacity, ScrollView } from "react-native";
+import { Container, Text, EmptyState } from "@shared/components";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "@core/hooks";
 import { spacing } from "@core/design";
 import { Ionicons } from "@expo/vector-icons";
 import ReservationCard, { Reservation } from "./ReservationCard";
-import { FilterType } from "./FilterTabs";
+import { FilterType } from "./ReservationsSection";
 
 interface ReservationListProps {
   reservations: Reservation[];
@@ -61,11 +56,6 @@ const ReservationList: React.FC<ReservationListProps> = ({
       cancelled: [],
     };
 
-    console.log("🔄 Categorizing reservations:", {
-      total: reservations.length,
-      today: todayString,
-    });
-
     reservations.forEach((reservation) => {
       try {
         const checkIn = new Date(reservation.checkIn);
@@ -74,19 +64,11 @@ const ReservationList: React.FC<ReservationListProps> = ({
         checkOut.setHours(0, 0, 0, 0);
 
         if (isNaN(checkIn.getTime()) || isNaN(checkOut.getTime())) {
-          console.warn("❌ Invalid dates for reservation:", reservation);
           return;
         }
 
         const checkInString = checkIn.toISOString().split("T")[0];
         const checkOutString = checkOut.toISOString().split("T")[0];
-
-        console.log("📅 Processing reservation:", {
-          id: reservation.id,
-          status: reservation.status,
-          checkIn: checkInString,
-          checkOut: checkOutString,
-        });
 
         // Handle cancelled reservations first
         if (reservation.status === "cancelled") {
@@ -125,19 +107,8 @@ const ReservationList: React.FC<ReservationListProps> = ({
           categories.pendingReview.push(reservation);
         }
       } catch (error) {
-        console.error("❌ Error processing reservation:", error, reservation);
+        // Ignore invalid reservation
       }
-    });
-
-    // Log categorization results
-    console.log("✅ Categorization results:", {
-      checkingOut: categories.checkingOut.length,
-      currentlyHosting: categories.currentlyHosting.length,
-      arrivingSoon: categories.arrivingSoon.length,
-      upcoming: categories.upcoming.length,
-      pendingReview: categories.pendingReview.length,
-      pending: categories.pending.length,
-      cancelled: categories.cancelled.length,
     });
 
     return categories;
@@ -173,6 +144,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
           ...categorizedReservations.upcoming,
           ...categorizedReservations.pending,
           ...categorizedReservations.pendingReview,
+          ...categorizedReservations.cancelled,
         ];
     }
   };
@@ -208,121 +180,68 @@ const ReservationList: React.FC<ReservationListProps> = ({
   const hasMoreReservations =
     maxDisplayCount && filteredReservations.length > maxDisplayCount;
 
-  if (reservations.length === 0) {
+  if (filteredReservations.length === 0) {
     return (
-      <View>
-        <View
-          style={[
-            styles.emptyContainer,
-            { backgroundColor: theme.surface, borderColor: theme.border },
-          ]}
-        >
-          <Ionicons
-            name="calendar-outline"
-            size={48}
-            color={theme.text.secondary}
-          />
-          <Text style={[styles.emptyTitle, { color: theme.text.primary }]}>
-            {t("host.today.reservations.noReservations")}
-          </Text>
-          <Text style={[styles.emptySubtitle, { color: theme.text.secondary }]}>
-            {t("host.today.reservations.noReservationsSubtitle")}
-          </Text>
-        </View>
-      </View>
+      <EmptyState
+        title={t("host.today.reservations.noReservationsInCategory")}
+        message={t(
+          "host.today.reservations.noReservationsInCategoryMessage",
+          ""
+        )}
+        icon="calendar-outline"
+      />
     );
   }
 
   return (
-    <View>
-      {filteredReservations.length === 0 ? (
-        <View style={styles.emptyFilterContainer}>
-          <Text
-            style={[styles.emptyFilterText, { color: theme.text.secondary }]}
+    <Container paddingHorizontal="md">
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {displayReservations.map((reservation) => (
+          <ReservationCard
+            key={reservation.id}
+            reservation={reservation}
+            statusLabel={getReservationStatusLabel(reservation)}
+            isCurrentlyHosting={categorizedReservations.currentlyHosting.includes(
+              reservation
+            )}
+            onPress={onReservationPress}
+          />
+        ))}
+        {hasMoreReservations && onViewAllPress && (
+          <TouchableOpacity
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: spacing.md,
+              marginTop: spacing.sm,
+              borderRadius: 8,
+              borderWidth: 1,
+              borderColor: theme.border,
+              alignSelf: "center",
+            }}
+            onPress={onViewAllPress}
           >
-            {t("host.today.reservations.noReservationsInCategory")}
-          </Text>
-        </View>
-      ) : (
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {displayReservations.map((reservation) => (
-            <ReservationCard
-              key={reservation.id}
-              reservation={reservation}
-              statusLabel={getReservationStatusLabel(reservation)}
-              isCurrentlyHosting={categorizedReservations.currentlyHosting.includes(
-                reservation
-              )}
-              onPress={onReservationPress}
-            />
-          ))}
-          {hasMoreReservations && onViewAllPress && (
-            <TouchableOpacity
-              style={[styles.viewAllButton, { borderColor: theme.border }]}
-              onPress={onViewAllPress}
+            <Text
+              variant="body2"
+              color="primary"
+              weight="medium"
+              style={{ marginRight: spacing.xs }}
             >
-              <Text
-                style={[
-                  styles.viewAllButtonText,
-                  { color: theme.colors.primary },
-                ]}
-              >
-                {t("host.today.reservations.viewAllReservations", {
-                  count: filteredReservations.length,
-                })}
-              </Text>
-              <Ionicons
-                name="chevron-forward"
-                size={16}
-                color={theme.colors.primary}
-              />
-            </TouchableOpacity>
-          )}
-        </ScrollView>
-      )}
-    </View>
+              {t("host.today.reservations.viewAllReservations", {
+                count: filteredReservations.length,
+              })}
+            </Text>
+            <Ionicons
+              name="chevron-forward"
+              size={16}
+              color={theme.colors.primary}
+            />
+          </TouchableOpacity>
+        )}
+      </ScrollView>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  emptyContainer: {
-    padding: spacing.xl,
-    borderRadius: 12,
-    borderWidth: 1,
-    alignItems: "center",
-  },
-  emptyTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginTop: spacing.md,
-    marginBottom: spacing.xs,
-  },
-  emptySubtitle: {
-    fontSize: 14,
-    textAlign: "center",
-    lineHeight: 20,
-  },
-  emptyFilterContainer: {
-    padding: spacing.xl,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  emptyFilterText: {
-    fontSize: 16,
-  },
-  viewAllButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: spacing.md,
-    marginTop: spacing.sm,
-    borderRadius: 8,
-    borderWidth: 1,
-  },
-  viewAllButtonText: {
-    fontSize: 14,
-    fontWeight: "500",
-  },
-});
 
 export default ReservationList;

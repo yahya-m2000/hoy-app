@@ -124,6 +124,8 @@ const Text: React.FC<BaseTextProps> = ({
           return themeColors.disabled || "#cccccc";
         case "inverse":
           return themeColors.inverse || "#ffffff";
+        case "error":
+          return theme.error || "#ff0000";
         case "subtitle":
           return themeColors.subtitle || themeColors.secondary || "#666666";
         default:

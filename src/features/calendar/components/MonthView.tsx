@@ -5,14 +5,8 @@ import React, {
   useRef,
   useState,
 } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  Dimensions,
-  StyleSheet,
-} from "react-native";
+import { TouchableOpacity, ScrollView, Dimensions } from "react-native";
+import { Container, Text } from "@shared/components";
 import { useTranslation } from "react-i18next";
 import { MemoizedMonth } from "./MemoizedMonth";
 import { formatMonthName, getWeekdayHeaders } from "../utils/dateUtils";
@@ -26,6 +20,7 @@ import { useMonthNavigation } from "../hooks";
 import { useTheme } from "@core/hooks";
 import { fontSize } from "@core/design";
 import { CalendarBookingData } from "@core/types";
+import { useProperty } from "@features/calendar/hooks/useProperty";
 
 // Cache for expensive calculations - global cache across all instances
 const globalCache = {
@@ -52,7 +47,7 @@ const createGlobalStyles = (theme: any, screenWidth: number) => {
   const dayWidth = calendarWidth / 7;
   const weekdayHeaderHeight = 50;
 
-  globalCache.styles = StyleSheet.create({
+  globalCache.styles = {
     container: {
       flex: 1,
       backgroundColor: theme.background,
@@ -123,7 +118,7 @@ const createGlobalStyles = (theme: any, screenWidth: number) => {
       alignItems: "center",
       paddingBottom: 30,
     },
-  });
+  };
 
   globalCache.screenDimensions = { width: screenWidth, height: 0 };
   return globalCache.styles;
@@ -153,6 +148,7 @@ export const MonthView: React.FC<MonthViewProps> = ({
     useMonthNavigation(12);
   const scrollViewRef = useRef<ScrollView>(null);
   const { width: screenWidth } = Dimensions.get("window");
+  const { selectedProperty } = useProperty();
 
   // Add state for async month data
   const [months, setMonths] = useState<MonthViewData[]>([]);
@@ -177,7 +173,7 @@ export const MonthView: React.FC<MonthViewProps> = ({
   // Load month data asynchronously
   useEffect(() => {
     const loadMonthData = async () => {
-      const cacheKey = `months-${propertyId || "all"}`;
+      const cacheKey = `months-${selectedProperty?.id || "all"}`;
 
       console.log("📋 MonthView: Loading month data", {
         propertyId,
@@ -217,7 +213,10 @@ export const MonthView: React.FC<MonthViewProps> = ({
           lastMonth: monthsArray[monthsArray.length - 1]?.toISOString(),
         });
 
-        const monthData = await generateMonthsData(monthsArray, propertyId);
+        const monthData = await generateMonthsData(
+          monthsArray,
+          selectedProperty || undefined
+        );
         console.log("🎯 MonthView: Generated month data", {
           monthDataCount: monthData.length,
           sampleMonthBookings: monthData[0]?.bookings?.length || 0,
@@ -249,7 +248,7 @@ export const MonthView: React.FC<MonthViewProps> = ({
     };
 
     loadMonthData();
-  }, [propertyId]);
+  }, [selectedProperty]);
 
   // Cache weekday headers globally with translation
   const weekdayHeaders = useMemo(() => {
@@ -352,10 +351,11 @@ export const MonthView: React.FC<MonthViewProps> = ({
           calendarWidth={dimensions.calendarWidth}
           monthSpacing={dimensions.monthSpacing}
           onBookingPress={handleBookingPress}
+          property={selectedProperty}
         />
       );
     },
-    [dimensions, handleBookingPress]
+    [dimensions, handleBookingPress, selectedProperty]
   );
 
   // Safety checks AFTER all hooks are called
@@ -365,18 +365,18 @@ export const MonthView: React.FC<MonthViewProps> = ({
       themeResult
     );
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Container flex={1} justifyContent="center" alignItems="center">
         <Text>{t("calendar.loading.theme")}</Text>
-      </View>
+      </Container>
     );
   }
 
   // Show loading state
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Container flex={1} justifyContent="center" alignItems="center">
         <Text>{t("calendar.loading.calendar")}</Text>
-      </View>
+      </Container>
     );
   }
 
@@ -388,32 +388,39 @@ export const MonthView: React.FC<MonthViewProps> = ({
   ) {
     console.warn("MonthView: Invalid currentMonth provided", currentMonth);
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Container flex={1} justifyContent="center" alignItems="center">
         <Text>{t("calendar.loading.invalidDate")}</Text>
-      </View>
+      </Container>
     );
   }
 
   // Handle empty months array
   if (!months || months.length === 0) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Container flex={1} justifyContent="center" alignItems="center">
         <Text>{t("calendar.loading.noData")}</Text>
-      </View>
+      </Container>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <Container flex={1} backgroundColor={theme.background}>
       {/* Header - only shown if not using shared header */}
       {!hideHeader && (
-        <View style={styles.header}>
-          <TouchableOpacity onPress={onBackPress} style={styles.backButton}>
-            <Text style={styles.backButtonText}>
+        <Container
+          flexDirection="row"
+          alignItems="center"
+          justifyContent="space-between"
+          paddingHorizontal="md"
+          paddingVertical="sm"
+          backgroundColor={theme.background}
+        >
+          <TouchableOpacity onPress={onBackPress} style={{ padding: 8 }}>
+            <Text color={theme.colors?.primary ?? theme.primary}>
               {t("calendar.navigation.backToYearView")}
             </Text>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>
+          <Text variant="h6" weight="semibold">
             {(() => {
               const monthKey = formatMonthName(
                 months[currentHeaderMonthIndex]?.month || currentMonth
@@ -428,24 +435,45 @@ export const MonthView: React.FC<MonthViewProps> = ({
               return monthKey;
             })()}
           </Text>
-          <View />
-        </View>
+          <Container width={32}>{null}</Container>
+        </Container>
       )}
 
       {/* Fixed Weekday Headers */}
-      <View style={styles.weekdayHeaderFixed}>
+      <Container
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="center"
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          paddingVertical: 12,
+          backgroundColor: theme.background,
+          zIndex: 100,
+          height: 50,
+        }}
+      >
         {weekdayHeaders.map((day, index) => (
-          <View key={index} style={styles.weekdayCell}>
-            <Text style={styles.weekdayTextFixed}>{day}</Text>
-          </View>
+          <Container key={index} width={`${100 / 7}%`} alignItems="center">
+            <Text variant="body2" weight="semibold">
+              {day}
+            </Text>
+          </Container>
         ))}
-      </View>
+      </Container>
 
       {/* Scrollable Months - Completely free scroll with NO interruptions */}
       <ScrollView
         ref={scrollViewRef}
-        style={styles.scrollView}
-        contentContainerStyle={styles.monthsScrollContainer}
+        style={{ flex: 1 }}
+        contentContainerStyle={{
+          paddingTop: 50,
+          paddingHorizontal: 16,
+          alignItems: "center",
+          paddingBottom: 30,
+        }}
         showsVerticalScrollIndicator={false}
         decelerationRate="normal"
         scrollEventThrottle={16}
@@ -458,6 +486,6 @@ export const MonthView: React.FC<MonthViewProps> = ({
       >
         {months.map((monthData, index) => renderMonth(monthData, index))}
       </ScrollView>
-    </View>
+    </Container>
   );
 };

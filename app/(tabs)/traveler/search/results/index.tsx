@@ -94,7 +94,7 @@ export default function SearchResultsScreen() {
 
   // Show error toast if search fails
   useEffect(() => {
-    if (error) {
+    if (error && typeof error === "string" && error.trim() !== "") {
       showToast({
         message: error,
         type: "error",
@@ -137,10 +137,14 @@ export default function SearchResultsScreen() {
 
   // Render search summary
   const renderSearchSummary = () => {
-    const locationText = (params.location as string) || t("search.anyLocation");
-    const datesText = (params.displayDates as string) || t("search.anyDates");
+    const locationText =
+      (params.location as string) || t("search.anyLocation") || "Any location";
+    const datesText =
+      (params.displayDates as string) || t("search.anyDates") || "Any dates";
     const guestsText =
-      (params.displayTravelers as string) || t("search.anyGuests");
+      (params.displayTravelers as string) ||
+      t("search.anyGuests") ||
+      "Any guests";
 
     return (
       <Container
@@ -216,14 +220,15 @@ export default function SearchResultsScreen() {
           style={{ marginBottom: 4 }}
         >
           {properties.length === 0
-            ? t("search.noResults")
+            ? t("search.noResults") || "No results found"
             : `${properties.length} ${
                 properties.length === 1 ? "property" : "properties"
               } found`}
         </Text>
         {properties.length > 0 && (
           <Text variant="caption" color={theme.text.secondary}>
-            {t("search.resultsFound", { count: properties.length })}
+            {t("search.resultsFound") ||
+              `${properties.length} properties found`}
           </Text>
         )}
       </Container>
@@ -234,10 +239,12 @@ export default function SearchResultsScreen() {
   const renderEmptyState = () => (
     <EmptyState
       icon="search-outline"
-      title={t("search.noPropertiesFound")}
-      message={t("search.tryAdjustingFilters")}
+      title={t("search.noPropertiesFound") || "No properties found"}
+      message={
+        t("search.tryAdjustingFilters") || "Try adjusting your search filters"
+      }
       action={{
-        label: t("search.newSearch"),
+        label: t("search.newSearch") || "New Search",
         onPress: () => router.back(),
       }}
     />
@@ -354,7 +361,7 @@ export default function SearchResultsScreen() {
   return (
     <ListScreen
       title={t("search.results") || "Search Results"}
-      showFilter={true}
+      showFilter={false}
       onFilter={handleFiltersPress}
       scrollable={false}
       showDivider={false}

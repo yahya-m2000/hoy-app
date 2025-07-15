@@ -1,0 +1,32 @@
+{
+    "apartment": "Guri dabaq ah",
+    "house": "Guri",
+    "villa": "Villa",
+    "condo": "Kondo",
+    "townhouse": "Guri xaafadeed",
+    "bungalow": "Bangalow",
+    "cabin": "Kabin",
+    "chalet": "Shaleet",
+    "cottage": "Guri yar",
+    "loft": "Loof",
+    "penthouse": "Dabaq sare",
+    "studio": "Studio",
+    "other": "Kale",
+    "entire_place": "Guri dhan",
+    "entire_placeDescription": "Martidu waxay heli doonaan guriga oo dhan",
+    "private_room": "Qol gaar ah",
+    "private_roomDescription": "Martidu waxay heli doonaan qol gaar ah balse waxay la wadaagi doonaan meelaha guud",
+    "shared_space": "Meel la wadaago",
+    "shared_spaceDescription": "Martidu waxay la wadaagi doonaan meelaha dadka kale",
+  
+  "listing": {
+    "individual": "Hanti shaqsiyeed",
+    "shared": "Hanti la wadaago"
+  },
+  "status": {
+    "active": "Firfircoon",
+    "inactive": "Aan firfircoonayn",
+    "draft": "Qoraal qabyo ah",
+    "label": "Xaaladda:"
+  }
+} 

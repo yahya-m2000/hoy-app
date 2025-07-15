@@ -6,7 +6,7 @@ import "@core/api/services";
 
 // React imports
 import React from "react";
-import { View } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 
 // Third-party libraries
 import { Stack } from "expo-router";
@@ -29,6 +29,7 @@ import { useFonts } from "@core/hooks";
 // App context providers - Use the fixed ContextProviders wrapper
 import { ContextProviders } from "@core/context/ContextProviders";
 import RoleChangeLoadingOverlay from "@shared/components/feedback/Loading/RoleChangeLoadingOverlay";
+import LoadingSpinner from "@shared/components/feedback/Loading/LoadingSpinner";
 
 // Error boundary system
 import { AppErrorBoundary } from "@core/error/GlobalErrorBoundary";
@@ -64,10 +65,27 @@ const FontLoader = ({ children }: { children: React.ReactNode }) => {
 const AuthLoadingOverlayWrapper = () => {
   // Import useAuth here to avoid circular dependency
   const { useAuth } = require("@core/context/AuthContext");
-  const { isAuthChecked } = useAuth();
-  if (!isAuthChecked) {
-    return <View style={{ flex: 1, backgroundColor: "#fff" }} />;
-  }
+  const { isAuthChecked, checkAuthenticationState } = useAuth();
+  const [timedOut, setTimedOut] = React.useState(false);
+  const [retrying, setRetrying] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!isAuthChecked && !timedOut) {
+      const timeout = setTimeout(() => setTimedOut(true), 10000);
+      return () => clearTimeout(timeout);
+    }
+    if (isAuthChecked) {
+      setTimedOut(false);
+    }
+  }, [isAuthChecked, timedOut]);
+
+  const handleRetry = async () => {
+    setRetrying(true);
+    setTimedOut(false);
+    await checkAuthenticationState();
+    setRetrying(false);
+  };
+
   return null;
 };
 
@@ -112,101 +130,37 @@ const RoleChangeLoader = () => {
   const { useUserRole } = require("@core/context/UserRoleContext");
   const { isRoleLoading, userRole } = useUserRole();
   const prevLoading = React.useRef<boolean>(isRoleLoading);
+  const hasNavigated = React.useRef<boolean>(false);
 
   React.useEffect(() => {
-    if (prevLoading.current && !isRoleLoading) {
+    if (prevLoading.current && !isRoleLoading && !hasNavigated.current) {
       // role change just finished
+      hasNavigated.current = true;
       const target = userRole === "host" ? "/(tabs)/host" : "/(tabs)/traveler";
       router.replace(target);
     }
     prevLoading.current = isRoleLoading;
-  }, [isRoleLoading, userRole]);
+  }, [isRoleLoading]);
 
   return <RoleChangeLoadingOverlay visible={isRoleLoading} />;
 };
 
-// Test component to verify API interceptors
-const ApiInterceptorTest = () => {
-  React.useEffect(() => {
-    const testInterceptors = async () => {
-      try {
-        logger.info(
-          "[ApiInterceptorTest] 🔍 Testing API interceptors on app startup...",
-          undefined,
-          {
-            module: "ApiInterceptorTest",
-          }
-        );
-
-        // Test if interceptors are set up
-        const {
-          testAuthTokenInterceptorComprehensive,
-        } = require("@core/api/auth-token-interceptor");
-        const testResult = await testAuthTokenInterceptorComprehensive();
-
-        logger.info(
-          `[ApiInterceptorTest] Comprehensive test result:`,
-          {
-            interceptorWorking: testResult.interceptorWorking,
-            tokenFound: testResult.tokenFound,
-            storageAccessible: testResult.storageAccessible,
-            error: testResult.error,
-          },
-          {
-            module: "ApiInterceptorTest",
-          }
-        );
-
-        if (testResult.interceptorWorking) {
-          logger.info(
-            "[ApiInterceptorTest] ✅ API interceptors are properly initialized",
-            undefined,
-            {
-              module: "ApiInterceptorTest",
-            }
-          );
-        } else {
-          logger.error(
-            `[ApiInterceptorTest] ❌ API interceptors are not working: ${
-              testResult.error || "Unknown error"
-            }`,
-            undefined,
-            {
-              module: "ApiInterceptorTest",
-            }
-          );
-        }
-      } catch (error) {
-        logger.error("[ApiInterceptorTest] Test failed", error, {
-          module: "ApiInterceptorTest",
-        });
-      }
-    };
-
-    // Run test after a short delay to ensure everything is initialized
-    setTimeout(testInterceptors, 1000);
-  }, []);
-
-  return null; // This component doesn't render anything
-};
+// Removed ApiInterceptorTest component to prevent infinite loops
 
 // Root layout component
 export default function RootLayout() {
   return (
     <AppErrorBoundary>
-      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-        <GestureHandlerRootView style={{ flex: 1, backgroundColor: "#fff" }}>
-          <ContextProviders features={{ calendar: true }}>
-            <FontLoader>
-              <StatusBar style="auto" />
-              <ApiInterceptorTest />
-              <AuthLoadingOverlayWrapper />
-              <RoleChangeLoader />
-              <ThemedRootStack />
-            </FontLoader>
-          </ContextProviders>
-        </GestureHandlerRootView>
-      </SafeAreaProvider>
+      <GestureHandlerRootView style={{ flex: 1, backgroundColor: "#fff" }}>
+        <ContextProviders features={{ calendar: true, properties: true }}>
+          <FontLoader>
+            <StatusBar style="auto" />
+            <AuthLoadingOverlayWrapper />
+            <RoleChangeLoader />
+            <ThemedRootStack />
+          </FontLoader>
+        </ContextProviders>
+      </GestureHandlerRootView>
     </AppErrorBoundary>
   );
 }

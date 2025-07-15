@@ -27,10 +27,8 @@ import {
 import { CollectionsModal, CollectionCard } from "src/features/properties";
 
 // Services
-import {
-  wishlistCollectionsService,
-  WishlistCollection,
-} from "@core/api/services/wishlist";
+import { WishlistCollection } from "@core/api/services/wishlist";
+import { useWishlistState } from "@features/properties/context/PropertyContext";
 
 // Constants
 import { spacing, radius } from "@core/design";
@@ -42,45 +40,34 @@ export default function WishlistIndex() {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
   const { t } = useTranslation();
+  const {
+    collections,
+    isLoadingCollections: isLoading,
+    collectionsError: error,
+    loadCollections,
+    showCollectionsModalAction,
+    hideCollectionsModal,
+    showCollectionsModal: showCollectionsModalState,
+  } = useWishlistState();
 
-  const [collections, setCollections] = useState<WishlistCollection[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [showCollectionsModal, setShowCollectionsModal] = useState(false);
 
   // Calculate card dimensions for responsive grid (same as BookingsSection)
   const cardMargin = spacing.md;
   const containerPadding = spacing.md * 2; // padding on both sides
   const cardWidth = (screenWidth - containerPadding - cardMargin) / 2; // 2 columns
 
-  const loadCollections = useCallback(async () => {
-    if (!isAuthenticated) {
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      setError(null);
-      const response = await wishlistCollectionsService.getCollections();
-      setCollections(response || []);
-    } catch (err) {
-      console.error("Error loading collections:", err);
-      setError("Failed to load collections");
-    } finally {
-      setIsLoading(false);
-      setIsRefreshing(false);
-    }
-  }, [isAuthenticated]);
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    await loadCollections();
+    setIsRefreshing(false);
+  }, [loadCollections]);
 
   useEffect(() => {
-    loadCollections();
+    if (isAuthenticated) {
+      loadCollections();
+    }
   }, [isAuthenticated, loadCollections]);
-
-  const handleRefresh = () => {
-    setIsRefreshing(true);
-    loadCollections();
-  };
 
   const handleCollectionPress = (collection: WishlistCollection) => {
     router.push(
@@ -91,7 +78,7 @@ export default function WishlistIndex() {
   };
 
   const handleCreateCollection = () => {
-    setShowCollectionsModal(true);
+    showCollectionsModalAction(""); // Empty string for creating new collection
   };
 
   const onCollectionsUpdate = () => {
@@ -175,8 +162,8 @@ export default function WishlistIndex() {
           />
         </Container>
         <CollectionsModal
-          visible={showCollectionsModal}
-          onClose={() => setShowCollectionsModal(false)}
+          visible={showCollectionsModalState}
+          onClose={hideCollectionsModal}
           onCollectionToggle={onCollectionsUpdate}
         />
       </Container>
@@ -293,8 +280,8 @@ export default function WishlistIndex() {
 
       {/* Collections Modal */}
       <CollectionsModal
-        visible={showCollectionsModal}
-        onClose={() => setShowCollectionsModal(false)}
+        visible={showCollectionsModalState}
+        onClose={hideCollectionsModal}
         onCollectionToggle={onCollectionsUpdate}
       />
     </Container>

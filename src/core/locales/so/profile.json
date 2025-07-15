@@ -1,0 +1,96 @@
+{  "profile": {
+    "personalInfo": "Xogta Shakhsiyeed",
+    "becomeAHost": "Noqo Martigeliye",
+    "personalInfoDesc": "Cusboonaysii magacaaga, faahfaahinta xiriirka, iyo sawirka profile-ka",
+    "signOut": "Ka bax",
+    "language": "Luuqad",
+    "languageDesc": "Dooro luuqadda aad rabto in app-ku ku shaqeeyo",
+    "currency": "Lacag",
+    "currencyDesc": "Dooro lacagta aad rabto in qiimaha iyo bixinta lagu muujiyo",
+    "theme": "Mawduuc",
+    "themeDesc": "Dooro muuqaalka app-ka aad rabto",
+    "themeSystem": "Nidaamka",
+    "themeSystemDesc": "Raac dejinta nidaamkaaga",
+    "themeDark": "Madow",
+    "themeDarkDesc": "Isticmaal mawduuca madow si aad u aragto si fiican iftiin yar",
+    "themeLight": "Cad",
+    "themeLightDesc": "Isticmaal mawduuca cad si aad u aragto si fiican iftiin badan",
+    "currentCurrency": "Lacagta Hadda",
+    "changeCurrency": "Beddel Lacagta",
+    "currencyChanged": "Lacagta waa loo beddelay {{currency}}",
+    "currencyChangeError": "Waa lagu guuldareystay in la beddelo lacagta. Fadlan isku day mar kale.",
+    "selectCurrency": "Dooro Lacag",
+    "currencyInfo": {
+      "title": "Xogta Lacagta",
+      "description": "Lacagta aad dooratay ayaa lagu isticmaali doonaa app-ka oo dhan si loo muujiyo qiimaha iyo bixinta. Had iyo jeer waad beddeli kartaa."
+    },
+    "account": "Akoon",
+    "preferences": "Doorbidyo",
+    "support": "Taageero",
+    "hostMode": "Habka Martigeliyaha",
+    "switchToHost": "U beddel Martigeliye",
+    "switchToTraveler": "U beddel Socoto",
+    "hostModeDesc": "U beddel inta u dhaxaysa habka martigeliyaha iyo socotada",
+    "hostModeOn": "Furan",
+    "hostModeOff": "Damin",
+    "helpCenter": "Xarunta Caawinta",
+    "helpCenterDesc": "Hel caawimaad iyo jawaabo su'aalaha caadiga ah",
+    "giveFeedback": "Bixi Fikrad",
+    "giveFeedbackDesc": "La wadaag fikirkaaga iyo talooyinkaaga",
+    "resetApp": "Nadiifi Xogta App-ka",
+    "resetAppDesc": "Hagaaji dhibaatooyinka adigoo tirtiraya xogta kaydsan",
+    "termsOfService": "Shuruudaha Adeegga",
+    "termsOfServiceDesc": "Eeg shuruudaha iyo xaaladaha",
+    "notifications": "Ogeysiisyada",
+    "notificationsDesc": "Maamul doorbidyada ogeysiiskaaga",
+    "privacy": "Asturnaanta",
+    "privacyDesc": "Xakamee dejinta asturnaantaada",
+    "selectLanguage": "Dooro Luuqad",
+    "currentLanguage": "Luuqadda Hadda",
+    "languageInfo": {
+      "title": "Xogta Luuqadda",
+      "description": "Dooro luuqadda aad rabto in app-ku ku shaqeeyo. Tani waxay beddeli doontaa dhammaan qoraalka iyo fariimaha."
+    },
+    "themeInfo": {
+      "title": "Xogta Mawduuca",
+      "description": "Dooro sida app-ku u ekaan doono. Nidaamku wuxuu raaci doonaa dejinta qalabkaaga."
+    },
+    "personalInfoForm": {
+      "title": "Xogta Shakhsiyeed",
+      "description": "Cusboonaysii faahfaahintaada shakhsiyeed iyo xiriirka",
+      "firstName": "Magaca Hore",
+      "lastName": "Magaca Dambe",
+      "email": "Cinwaanka Emailka",
+      "phone": "Lambarka Telefoonka",
+      "city": "Magaalo",
+      "country": "Waddan",
+      "profilePicture": "Sawirka Profile-ka"
+    },
+    "helpCenterInfo": {
+      "title": "Xarunta Caawinta",
+      "description": "Hel jawaabo su'aalaha caadiga ah iyo taageero ku saabsan isticmaalka app-ka."
+    },
+    "feedbackInfo": {
+      "title": "Bixi Fikrad",
+      "description": "Waxaan jeclaan lahayn inaan kaa maqalno! La wadaag fikirkaaga, talooyinkaaga, ama soo sheeg dhibaatooyinka aad la kulantay."
+    },
+    "termsInfo": {
+      "title": "Shuruudaha Adeegga",
+      "description": "Akhri shuruudaha iyo xaaladaha xukuma isticmaalka app-ka."
+    }
+  },
+
+  "upload": {
+    "profileImageSuccess": "Sawirka profile-ka si guul leh ayaa loo soo geliyay",
+    "profileImageError": "Waa lagu guuldareystay in la soo geliyo sawirka profile-ka",
+    "propertyImageSuccess": "Sawirrada hantida si guul leh ayaa loo soo geliyay",
+    "propertyImageError": "Waa lagu guuldareystay in la soo geliyo sawirrada hantida",
+    "unitImageSuccess": "Sawirrada unugga si guul leh ayaa loo soo geliyay",
+    "unitImageError": "Waa lagu guuldareystay in la soo geliyo sawirrada unugga",
+    "uploadingImage": "Sawirka waa la soo gelinayaa...",
+    "uploadComplete": "Soo gelinta waa dhameystiran tahay",
+    "uploadFailed": "Soo gelintu waa fashilantay",
+    "imageTooLarge": "Cabbirka sawirku waa inuu ka yar yahay {{maxSize}}MB",
+    "unsupportedFormat": "Qaabka sawirka lama taageero. Fadlan isticmaal JPEG, PNG, ama WebP",
+    "networkError": "Khalad shabakad. Fadlan hubi xiriirkaaga oo isku day mar kale"
+  }}

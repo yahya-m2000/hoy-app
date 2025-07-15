@@ -1,0 +1,20 @@
+{"wishlist": {
+    "title": "Rabitaanka",
+    "collections": "Ururinta",
+    "properties": "Hanti",
+    "loadingCollections": "Ururintaada waa la rarayaa...",
+    "loadingCollection": "Ururinta waa la rarayaa...",
+    "signInToViewWishlist": "Soo gal si aad u aragto rabitaankaaga",
+    "signInToViewWishlistMessage": "Ku keydi hantida aad jeceshahay si aad mar dambe u aragto",
+    "createFirstWishlist": "Abuur rabitaankaaga ugu horreeya",
+    "createFirstWishlistMessage": "Markaad raadineyso, taabo astaanta wadnaha si aad ugu darto meelaha aad jeceshahay rabitaankaaga",
+    "createWishlist": "Abuur Rabitaan",
+    "retry": "Isku day mar kale",
+    "noCollectionsFound": "Ururin lama helin",
+    "noCollectionsMessage": "Bilow raadinta si aad u hesho oo u kaydiso hanti rabitaankaaga",
+    "errorLoadingCollections": "Khalad ayaa dhacay marka la rarayo ururinta",
+    "errorLoadingCollection": "Khalad ayaa dhacay marka la rarayo ururinta",
+    "noPropertiesSaved": "Hanti lama keydin",
+    "noPropertiesSavedMessage": "Bilow raadinta si aad u hesho oo u kaydiso hanti ururintan",
+    "startExploring": "Bilow sahamin"
+  }}

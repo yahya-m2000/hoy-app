@@ -19,9 +19,10 @@ import {
 } from "@shared/components";
 import type { PropertyType } from "@core/types";
 import { useCalendarDateSelection } from "@features/calendar/context/CalendarContext";
+import { useCalendar } from "@features/calendar/hooks/useCalendar";
 import { getPropertyById } from "@core/api/services/property";
 import { useAuth } from "@core/context/AuthContext";
-import { useWishlist } from "@features/wishlist/hooks/useWishlist";
+import { useWishlistState } from "@features/properties/context/PropertyContext";
 
 // Import hooks from local details module
 import { usePropertyDetails } from "@features/properties/hooks/usePropertyDetails";
@@ -71,6 +72,11 @@ const PropertyDetailsScreen = () => {
   const router = useRouter();
   const segments = useSegments();
   const { propertyDates } = useCalendarDateSelection();
+  // Global selected dates as fallback
+  const { selectedDates: globalSelectedDates } = useCalendar();
+
+  // State for forcing re-renders when dates change
+  const [dateSelectionKey, setDateSelectionKey] = useState(0);
 
   // Property data parsing
   const propertyParam = params.property as string;
@@ -115,6 +121,82 @@ const PropertyDetailsScreen = () => {
     gcTime: 1000 * 60 * 30, // 30 minutes
   });
 
+  // Get selected dates from calendar context for this specific property
+  const selectedDates = useMemo(() => {
+    if (!property?._id) {
+      console.log("PropertyDetailsScreen: No property ID available");
+      return { startDate: null, endDate: null };
+    }
+
+    console.log(
+      "PropertyDetailsScreen: Calculating selected dates for property:",
+      property._id
+    );
+    console.log(
+      "PropertyDetailsScreen: propertyDates Map size:",
+      propertyDates.size
+    );
+    console.log(
+      "PropertyDetailsScreen: All property dates keys:",
+      Array.from(propertyDates.keys())
+    );
+
+    const propDates = propertyDates.get(property._id)?.selectedDates;
+    console.log("PropertyDetailsScreen: Property-specific dates:", propDates);
+
+    if (propDates && (propDates.startDate || propDates.endDate)) {
+      console.log("PropertyDetailsScreen: Using property-specific dates:", {
+        startDate: propDates.startDate?.toISOString(),
+        endDate: propDates.endDate?.toISOString(),
+      });
+      return {
+        startDate: propDates.startDate || null,
+        endDate: propDates.endDate || null,
+      };
+    }
+
+    // Fallback to global selected dates if property-specific dates are missing
+    console.log(
+      "PropertyDetailsScreen: No property-specific dates, checking global dates"
+    );
+    console.log(
+      "PropertyDetailsScreen: Global selected dates:",
+      globalSelectedDates
+    );
+
+    if (globalSelectedDates && globalSelectedDates.length > 0) {
+      if (globalSelectedDates.length === 1) {
+        console.log(
+          "PropertyDetailsScreen: Using single global date:",
+          globalSelectedDates[0].toISOString()
+        );
+        return { startDate: globalSelectedDates[0], endDate: null };
+      }
+      if (globalSelectedDates.length === 2) {
+        console.log("PropertyDetailsScreen: Using global date range:", {
+          startDate: globalSelectedDates[0].toISOString(),
+          endDate: globalSelectedDates[1].toISOString(),
+        });
+        return {
+          startDate: globalSelectedDates[0],
+          endDate: globalSelectedDates[1],
+        };
+      }
+    }
+
+    console.log("PropertyDetailsScreen: No dates found, returning null");
+    return { startDate: null, endDate: null };
+  }, [property?._id, propertyDates, globalSelectedDates, dateSelectionKey]);
+
+  // Calculate nights from selected dates
+  const nights = useMemo(() => {
+    if (!selectedDates?.startDate || !selectedDates?.endDate) return 0;
+    const diffTime = Math.abs(
+      selectedDates.endDate.getTime() - selectedDates.startDate.getTime()
+    );
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  }, [selectedDates]);
+
   // Use property's embedded check-in experiences
   const checkInExperiences = property?.checkInExperiences || [];
 
@@ -146,7 +228,6 @@ const PropertyDetailsScreen = () => {
 
   // Modal state
   const [activeModal, setActiveModal] = useState<string | null>(null);
-  const [showCollectionsModal, setShowCollectionsModal] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
   const [toastType, setToastType] = useState<"success" | "error">("success");
   const [toastCollectionName, setToastCollectionName] = useState("");
@@ -157,8 +238,9 @@ const PropertyDetailsScreen = () => {
   const closeModal = () => setActiveModal(null);
 
   // Collections modal handlers
-  const handleShowCollections = () => setShowCollectionsModal(true);
-  const handleCloseCollections = () => setShowCollectionsModal(false);
+  const handleShowCollections = () =>
+    showCollectionsModalAction(property?._id || "");
+  const handleCloseCollections = () => hideCollectionsModal();
   const handleCollectionToggle = async (
     collectionId: string,
     isAdded: boolean
@@ -196,8 +278,14 @@ const PropertyDetailsScreen = () => {
 
   // Wishlist/Favorite handlers
   const { isAuthenticated } = useAuth();
-  const { isPropertyWishlisted, removeFromWishlist, collections } =
-    useWishlist();
+  const {
+    isPropertyWishlisted,
+    removeFromWishlist,
+    collections,
+    showCollectionsModalAction,
+    hideCollectionsModal,
+    showCollectionsModal: showCollectionsModalState,
+  } = useWishlistState();
 
   const isFavorited = property?._id
     ? isPropertyWishlisted(property._id)
@@ -229,9 +317,9 @@ const PropertyDetailsScreen = () => {
     setToastVisible(false);
   };
 
-  const handleFavorite = async (e: any) => {
+  const handleFavorite = async (e?: any) => {
     if (!property?._id) return;
-    e.stopPropagation();
+    if (e) e.stopPropagation();
     if (!isAuthenticated) {
       // Show authentication prompt
       showAuthPrompt({
@@ -244,7 +332,7 @@ const PropertyDetailsScreen = () => {
     if (isFavorited) {
       // Property is already wishlisted - remove it directly
       try {
-        await removeFromWishlist.mutateAsync(property._id);
+        await removeFromWishlist(property._id);
         showToast(
           t("common.removedFromWishlist"),
           "success",
@@ -266,11 +354,7 @@ const PropertyDetailsScreen = () => {
   };
 
   // Data extraction - safely destructure with fallbacks
-  const {
-    host = null,
-    selectedDates = null,
-    nights = 0,
-  } = propertyDetailsResult || {};
+  const { host = null } = propertyDetailsResult || {};
 
   const { handleReserve = () => {} } = propertyActionsResult || {};
 
@@ -415,7 +499,7 @@ const PropertyDetailsScreen = () => {
         alignItems="center"
       >
         <Text variant="body" color="primary">
-          {t("property.propertyNotFound")}
+          {t("property.errors.notFound")}
         </Text>
       </Container>
     );
@@ -431,7 +515,7 @@ const PropertyDetailsScreen = () => {
         loading={!isValidProperty && !!initialProperty}
         error={
           !isValidProperty && !initialProperty
-            ? t("property.propertyNotFound")
+            ? t("property.errors.notFound")
             : null
         }
         style={{ paddingBottom: 80 }}
@@ -508,26 +592,26 @@ const PropertyDetailsScreen = () => {
           <Container>
             <PolicyNavigationItem
               icon="calendar-outline"
-              title={t("property.availability")}
-              subtitle={t("property.checkAvailableDates")}
+              title={t("property.common.availability")}
+              subtitle={t("property.common.checkAvailableDates")}
               onPress={() => openModal("availability")}
             />
             <PolicyNavigationItem
               icon="close-circle-outline"
-              title={t("property.cancellationPolicy")}
-              subtitle={t("property.moderateCancellationPolicy")}
+              title={t("property.pricing.cancellationPolicy")}
+              subtitle={t("property.pricing.moderateCancellationPolicy")}
               onPress={() => openModal("cancellation")}
             />
             <PolicyNavigationItem
               icon="home-outline"
-              title={t("property.houseRules")}
-              subtitle={t("property.checkInAfter")}
+              title={t("property.pricing.houseRules")}
+              subtitle={t("property.common.checkinAfter")}
               onPress={() => openModal("houseRules")}
             />
             <PolicyNavigationItem
               icon="shield-outline"
-              title={t("property.safetyAndProperty")}
-              subtitle={t("property.safetyInformation")}
+              title={t("property.details.safetyAndProperty")}
+              subtitle={t("property.details.safetyInformation")}
               onPress={() => openModal("safety")}
             />
           </Container>
@@ -611,7 +695,34 @@ const PropertyDetailsScreen = () => {
             totalPrice={nights > 0 ? getPropertyPrice() * nights : undefined}
             selectedDates={safeSelectedDates}
             propertyId={property?._id}
-            onReserve={() => handleReserve(propertyDates, openReservationModal)}
+            onReserve={() => {
+              console.log("PropertyDetailsScreen: Reserve button pressed");
+              console.log(
+                "PropertyDetailsScreen: Current propertyDates:",
+                propertyDates
+              );
+              console.log(
+                "PropertyDetailsScreen: Current selectedDates:",
+                safeSelectedDates
+              );
+              console.log("PropertyDetailsScreen: Property ID:", property?._id);
+
+              // Debug: Test manual date storage
+              if (property?._id) {
+                const testDates = {
+                  startDate: new Date(Date.now() + 24 * 60 * 60 * 1000), // Tomorrow
+                  endDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days from now
+                };
+                console.log(
+                  "PropertyDetailsScreen: Testing manual date storage:",
+                  testDates
+                );
+                // This would be called by the calendar context
+                // selectDatesForProperty(property._id, testDates);
+              }
+
+              handleReserve(propertyDates, openReservationModal);
+            }}
             onDateSelectionPress={() => openModal("dateSelection")}
           />
         </Container>
@@ -667,7 +778,7 @@ const PropertyDetailsScreen = () => {
 
       {/* Collections Modal */}
       <CollectionsModal
-        visible={showCollectionsModal}
+        visible={showCollectionsModalState}
         propertyId={property?._id}
         onClose={handleCloseCollections}
         onCollectionToggle={handleCollectionToggle}

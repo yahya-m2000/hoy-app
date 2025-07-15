@@ -4,20 +4,11 @@
  */
 
 import React, { useState, useEffect } from "react";
-import {
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-  Image,
-  TouchableOpacity,
-  Linking,
-  Modal,
-} from "react-native";
+import { TouchableOpacity, Linking } from "react-native";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useTranslation } from "react-i18next";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as ImagePicker from "expo-image-picker";
 
 // Context and hooks
 import { useAuth, useToast, useLocation } from "@core/context";
@@ -34,7 +25,8 @@ import { PasswordStrengthIndicator } from "src/shared/components";
 import AvatarPicker from "src/shared/components/form/AvatarPicker";
 
 // Auth Components
-import { AuthToggle, SocialLogin } from "src/features/auth";
+import CountrySelectModal from "@features/auth/components/CountrySelectModal";
+import CitySelectModal from "@features/auth/components/CitySelectModal";
 
 // Country and city data
 import {
@@ -43,21 +35,6 @@ import {
   searchCountries,
   searchCities,
 } from "@core/utils/data/countries";
-
-// Password utilities
-import { generatePasswordSuggestions } from "@core/utils/security";
-
-// Types
-interface FormErrors {
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
-  phoneNumber?: string;
-  country?: string;
-  city?: string;
-}
 
 interface SSOSignupData {
   provider: string;
@@ -74,15 +51,12 @@ export default function SignUpScreen() {
     registrationState,
     updateRegistrationField,
     updateRegistrationFields,
-    clearRegistrationErrors,
-    resetRegistrationForm,
     setSSOSignupData,
     handleRegistration,
   } = useAuth();
   const { showToast } = useToast();
   const { theme, isDark } = useTheme();
-  const { address, getCurrentLocation, requestLocationPermission } =
-    useLocation();
+  const { address } = useLocation();
 
   // Local state for UI interactions
   const [showPassword, setShowPassword] = useState(false);
@@ -144,7 +118,11 @@ export default function SignUpScreen() {
 
       if (matchingCountry) {
         updateRegistrationFields({
-          selectedCountry: matchingCountry,
+          selectedCountry: {
+            name: matchingCountry.name,
+            code: matchingCountry.code,
+            flag: matchingCountry.flag || "",
+          },
           country: matchingCountry.name,
           city: address.city || "",
         });
@@ -160,7 +138,11 @@ export default function SignUpScreen() {
   // Handle country selection
   const handleCountrySelect = (selectedCountryData: (typeof COUNTRIES)[0]) => {
     updateRegistrationFields({
-      selectedCountry: selectedCountryData,
+      selectedCountry: {
+        name: selectedCountryData.name,
+        code: selectedCountryData.code,
+        flag: selectedCountryData.flag || "",
+      },
       country: selectedCountryData.name,
       countryModalVisible: false,
       countrySearch: "",
@@ -234,7 +216,7 @@ export default function SignUpScreen() {
           <Header
             title={t("auth.createAccount")}
             left={{
-              icon: "arrow-back",
+              icon: "chevron-back-outline",
               onPress: () => router.back(),
             }}
           />
@@ -243,18 +225,15 @@ export default function SignUpScreen() {
           <Container flex={1} padding="lg">
             {/* Error Messages */}
             {Object.keys(errors).length > 0 && (
-              <Container
-                marginBottom="lg"
-                padding="md"
-                backgroundColor="error"
-                borderRadius="md"
-              >
+              <Container marginBottom="lg">
                 {Object.entries(errors).map(([field, error]) => (
                   <Text
                     key={field}
                     variant="body"
-                    color="white"
-                    style={{ textAlign: "center", marginBottom: 4 }}
+                    color="error"
+                    weight="bold"
+                    align="center"
+                    style={{ marginBottom: 4 }}
                   >
                     {error}
                   </Text>
@@ -298,6 +277,8 @@ export default function SignUpScreen() {
                   }
                   placeholder={t("auth.firstName")}
                   autoCapitalize="words"
+                  textContentType="givenName"
+                  autoComplete="given-name"
                   style={{ marginBottom: 8 }}
                 />
                 <Text variant="caption" color="secondary">
@@ -313,6 +294,8 @@ export default function SignUpScreen() {
                   }
                   placeholder={t("auth.lastName")}
                   autoCapitalize="words"
+                  textContentType="familyName"
+                  autoComplete="family-name"
                   style={{ marginBottom: 8 }}
                 />
                 <Text variant="caption" color="secondary">
@@ -338,6 +321,8 @@ export default function SignUpScreen() {
                   placeholder={t("auth.email")}
                   keyboardType="email-address"
                   autoCapitalize="none"
+                  textContentType="emailAddress"
+                  autoComplete="email"
                   style={{ marginBottom: 8 }}
                 />
                 <Text variant="caption" color="secondary">
@@ -559,6 +544,13 @@ export default function SignUpScreen() {
                 <Text variant="caption" color="secondary">
                   {t("auth.passwordHelper")}
                 </Text>
+                <Text
+                  variant="caption"
+                  color="secondary"
+                  style={{ marginTop: 4, fontStyle: "italic" }}
+                >
+                  {t("auth.passwordManager.savePrompt")}
+                </Text>
                 <PasswordStrengthIndicator
                   password={formState.password}
                   showSuggestions={true}
@@ -717,124 +709,27 @@ export default function SignUpScreen() {
           </Container>
 
           {/* Country Selection Modal */}
-          <Modal
+          <CountrySelectModal
             visible={formState.countryModalVisible}
-            animationType="slide"
-            onRequestClose={() =>
+            onClose={() =>
               updateRegistrationField("countryModalVisible", false)
             }
-          >
-            <Container flex={1} backgroundColor="background">
-              <Container
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  paddingHorizontal: 16,
-                  paddingVertical: 12,
-                }}
-              >
-                <Text variant="h6" color="primary">
-                  {t("auth.country")}
-                </Text>
-                <TouchableOpacity
-                  onPress={() =>
-                    updateRegistrationField("countryModalVisible", false)
-                  }
-                >
-                  <Text variant="body" color="primary">
-                    {t("common.cancel")}
-                  </Text>
-                </TouchableOpacity>
-              </Container>
-
-              <ScrollView keyboardShouldPersistTaps="handled">
-                {filteredCountries.map((c) => (
-                  <TouchableOpacity
-                    key={c.code}
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      paddingVertical: 16,
-                      marginHorizontal: 16,
-                      borderBottomWidth: 1,
-                      borderBottomColor: theme.border,
-                    }}
-                    onPress={() => {
-                      handleCountrySelect(c);
-                    }}
-                  >
-                    <Container style={{ flex: 1 }}>
-                      <Text weight="medium">{c.name}</Text>
-                      <Text variant="caption" color="secondary">
-                        {c.phoneCode}
-                      </Text>
-                    </Container>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </Container>
-          </Modal>
+            countries={filteredCountries}
+            onSelect={handleCountrySelect}
+            theme={theme}
+            t={t}
+          />
 
           {/* City Selection Modal */}
-          <Modal
+          <CitySelectModal
             visible={formState.cityModalVisible}
-            animationType="slide"
-            onRequestClose={() =>
-              updateRegistrationField("cityModalVisible", false)
-            }
-          >
-            <Container flex={1} backgroundColor="background">
-              <Container
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  paddingHorizontal: 16,
-                  paddingVertical: 12,
-                }}
-              >
-                <Text variant="h6" color="primary">
-                  {t("auth.city")}
-                </Text>
-                <TouchableOpacity
-                  onPress={() =>
-                    updateRegistrationField("cityModalVisible", false)
-                  }
-                >
-                  <Text variant="body" color="primary">
-                    {t("common.cancel")}
-                  </Text>
-                </TouchableOpacity>
-              </Container>
-
-              <ScrollView keyboardShouldPersistTaps="handled">
-                {filteredCities.map((c) => (
-                  <TouchableOpacity
-                    key={c}
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      paddingVertical: 16,
-                      marginHorizontal: 16,
-                      borderBottomWidth: 1,
-                      borderBottomColor: theme.border,
-                    }}
-                    onPress={() => {
-                      handleCitySelect(c);
-                    }}
-                  >
-                    <Container style={{ flex: 1 }}>
-                      <Text weight="medium">{c}</Text>
-                      <Text variant="caption" color="secondary">
-                        {formState.selectedCountry.name}
-                      </Text>
-                    </Container>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </Container>
-          </Modal>
+            onClose={() => updateRegistrationField("cityModalVisible", false)}
+            cities={filteredCities}
+            onSelect={handleCitySelect}
+            selectedCountry={formState.selectedCountry}
+            theme={theme}
+            t={t}
+          />
         </Container>
       </KeyboardAwareScrollView>
       <KeyboardToolbar />

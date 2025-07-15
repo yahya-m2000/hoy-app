@@ -24,6 +24,8 @@ interface AuthInputProps {
   autoCapitalize?: "none" | "sentences" | "words" | "characters";
   editable?: boolean;
   style?: any;
+  textContentType?: "emailAddress" | "givenName" | "familyName";
+  autoComplete?: "email" | "given-name" | "family-name";
 }
 
 export default function AuthInput({
@@ -36,6 +38,8 @@ export default function AuthInput({
   autoCapitalize = "sentences",
   editable = true,
   style,
+  textContentType,
+  autoComplete,
 }: AuthInputProps) {
   const { theme, isDark } = useTheme();
 
@@ -72,6 +76,8 @@ export default function AuthInput({
         keyboardType={keyboardType}
         autoCapitalize={autoCapitalize}
         editable={editable}
+        textContentType={textContentType}
+        autoComplete={autoComplete}
       />
     </View>
   );

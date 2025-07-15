@@ -1,32 +1,43 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
   TouchableOpacity,
+  View,
+  Modal,
+  Platform,
+  InteractionManager,
 } from "react-native";
+import {
+  KeyboardAwareScrollView,
+  KeyboardToolbar,
+} from "react-native-keyboard-controller";
 import {
   Container,
   Text,
   Input,
   Icon,
   AutocompleteInput,
+  Screen,
+  Tab,
+  Button,
 } from "@shared/components";
 import { PropertyFormData } from "@core/types";
 import { spacing, iconSize } from "@core/design";
+import { ThemeContext } from "@core/context/ThemeContext";
+import { theme as appTheme } from "@core/design/colors";
+import { useToast } from "@core/context/ToastContext";
+import { AppleMaps, GoogleMaps } from "expo-maps";
+import * as Location from "expo-location";
 import StepHeader from "../StepHeader";
 import InfoBox from "../InfoBox";
 import {
-  searchCountriesForAutocomplete,
-  getCitiesByCountryForAutocomplete,
-  getStateByCity,
-  getCountryByCode,
-  validateCountryCityState,
   COUNTRIES,
-  isCountryValid,
-  isCityValidForCountry,
+  getCitiesByCountryCode,
+  searchCountries,
+  searchCities,
 } from "@core/utils/data/countries";
+import CountrySelectModal from "src/features/auth/components/CountrySelectModal";
+import CitySelectModal from "src/features/auth/components/CitySelectModal";
 
 interface LocationStepProps {
   formData: PropertyFormData;
@@ -112,35 +123,121 @@ export default function LocationStep({
   errors,
 }: LocationStepProps) {
   const { t } = useTranslation();
-  const [selectedCountryCode, setSelectedCountryCode] = useState<string>("");
-  const [countrySuggestions, setCountrySuggestions] = useState<string[]>([]);
-  const [citySuggestions, setCitySuggestions] = useState<string[]>([]);
-  const [latitudeStr, setLatitudeStr] = useState(
-    formData.coordinates?.latitude ? String(formData.coordinates.latitude) : ""
-  );
-  const [longitudeStr, setLongitudeStr] = useState(
-    formData.coordinates?.longitude
-      ? String(formData.coordinates.longitude)
-      : ""
-  );
+  const [countryModalVisible, setCountryModalVisible] = useState(false);
+  const [cityModalVisible, setCityModalVisible] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState<any>(null);
+  const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
+  const [countrySearch, setCountrySearch] = useState("");
+  const [citySearch, setCitySearch] = useState("");
+  const [mapVisible, setMapVisible] = useState(false);
+  const [mapPickerVisible, setMapPickerVisible] = useState(false);
+  const [mapRegion, setMapRegion] = useState({
+    latitude: formData.coordinates?.latitude || 37.78825,
+    longitude: formData.coordinates?.longitude || -122.4324,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
+  const [tempCoordinates, setTempCoordinates] = useState({
+    latitude: formData.coordinates?.latitude || mapRegion.latitude,
+    longitude: formData.coordinates?.longitude || mapRegion.longitude,
+  });
+  const [selectedCoordinates, setSelectedCoordinates] = useState({
+    latitude: formData.coordinates?.latitude || mapRegion.latitude,
+    longitude: formData.coordinates?.longitude || mapRegion.longitude,
+  });
+  const [mapHeight, setMapHeight] = useState(300);
+  const themeContext = useContext(ThemeContext);
+  const currentTheme = themeContext?.theme || appTheme.light;
+  const { showToast } = useToast();
+  const [openCityAfterCountry, setOpenCityAfterCountry] = useState(false);
 
-  useEffect(() => {
-    const newLat = formData.coordinates?.latitude;
-    if (newLat && newLat !== parseFloat(latitudeStr)) {
-      setLatitudeStr(String(newLat));
-    } else if (!newLat) {
-      setLatitudeStr("");
-    }
-  }, [formData.coordinates?.latitude]);
+  // Filtering logic (like sign-up)
+  const filteredCountries = searchCountries(countrySearch);
+  const availableCities = selectedCountry
+    ? getCitiesByCountryCode(selectedCountry.code)
+    : [];
+  const filteredCities = citySearch.trim()
+    ? searchCities(citySearch, selectedCountry?.code)
+    : availableCities;
 
-  useEffect(() => {
-    const newLon = formData.coordinates?.longitude;
-    if (newLon && newLon !== parseFloat(longitudeStr)) {
-      setLongitudeStr(String(newLon));
-    } else if (!newLon) {
-      setLongitudeStr("");
+  // When a country is selected
+  const handleCountrySelect = (country: {
+    name: string;
+    code: string;
+    [key: string]: any;
+  }) => {
+    setSelectedCountry(country);
+    setCountry(country.name);
+    setCountryModalVisible(false);
+    setCountrySearch("");
+    setCity("");
+    setOpenCityAfterCountry(true); // Set flag to open city modal after country modal closes
+    // Also update form data
+    updateNestedFormData("address", "country", country.name);
+    updateNestedFormData("address", "city", "");
+    updateNestedFormData("address", "state", "");
+  };
+
+  // When a city is selected
+  const handleCitySelect = (selectedCity: string) => {
+    setCity(selectedCity);
+    setCityModalVisible(false);
+    setCitySearch("");
+    // Also update form data
+    updateNestedFormData("address", "city", selectedCity);
+    // Center map on the selected city
+    centerMapOnCity(selectedCity, formData.address?.country || "");
+    if (selectedCountry) {
+      // Optionally set state if you have that logic
+      // const state = getStateByCity(selectedCountry.code, selectedCity);
+      // if (state) updateNestedFormData("address", "state", state);
     }
-  }, [formData.coordinates?.longitude]);
+  };
+
+  // Center map on selected city
+  const centerMapOnCity = async (cityName: string, countryName: string) => {
+    try {
+      // Create a search query that includes both city and country for better accuracy
+      let searchQuery = cityName;
+      if (countryName) {
+        // Handle special cases for country names
+        let geocodingCountry = countryName;
+        if (countryName === "Somaliland") {
+          geocodingCountry = "Somalia";
+        }
+        searchQuery = `${cityName}, ${geocodingCountry}`;
+      }
+
+      console.log(`Geocoding city: ${searchQuery}`);
+      const geocodeResult = await Location.geocodeAsync(searchQuery);
+
+      if (geocodeResult.length > 0) {
+        const { latitude, longitude } = geocodeResult[0];
+        console.log(`Geocoded city ${cityName} to:`, { latitude, longitude });
+
+        // Update map region to center on the city with closer zoom
+        const newRegion = {
+          latitude,
+          longitude,
+          latitudeDelta: 0.1, // Closer zoom for city view
+          longitudeDelta: 0.1,
+        };
+        setMapRegion(newRegion);
+
+        // Update selected coordinates to the city location
+        const newCoordinates = { latitude, longitude };
+        setSelectedCoordinates(newCoordinates);
+        setTempCoordinates(newCoordinates);
+        updateNestedFormData("coordinates", "latitude", latitude);
+        updateNestedFormData("coordinates", "longitude", longitude);
+      } else {
+        console.log(`No geocoding results found for city: ${searchQuery}`);
+      }
+    } catch (error) {
+      console.log(`Could not geocode city ${cityName}:`, error);
+    }
+  };
 
   const handleFieldChange = (
     field: string,
@@ -154,76 +251,113 @@ export default function LocationStep({
     field: "latitude" | "longitude",
     value: string
   ) => {
-    const setter = field === "latitude" ? setLatitudeStr : setLongitudeStr;
-
-    if (value === "" || value === "-" || /^-?\d*\.?\d*$/.test(value)) {
-      setter(value);
-      const parsedValue = parseFloat(value);
-      if (!isNaN(parsedValue)) {
-        updateNestedFormData("coordinates", field, parsedValue);
-      } else if (value === "" || value === "-") {
-        updateNestedFormData("coordinates", field, 0);
-      }
+    const parsedValue = parseFloat(value);
+    if (!isNaN(parsedValue)) {
+      updateNestedFormData("coordinates", field, parsedValue);
+    } else if (value === "" || value === "-") {
+      updateNestedFormData("coordinates", field, 0);
     }
   };
 
   // Handle country selection
   const handleCountryChange = (value: string) => {
-    const suggestions = searchCountriesForAutocomplete(value).map(
-      (c) => c.name
-    );
-    setCountrySuggestions(suggestions);
+    const suggestions = searchCountries(value).map((c) => c.name);
+    // setCountrySuggestions(suggestions); // This line was removed
   };
 
-  const handleCountrySelect = (countryName: string) => {
-    const countryData = searchCountriesForAutocomplete(countryName)[0];
-    if (countryData) {
-      handleFieldChange("address", "country", countryData.name);
-      setSelectedCountryCode(countryData.code);
-      handleFieldChange("address", "city", "");
-      handleFieldChange("address", "state", "");
-    }
+  // Handle map marker selection
+  const handleMapMarkerSelect = (coordinate: {
+    latitude: number;
+    longitude: number;
+  }) => {
+    console.log("handleMapMarkerSelect called with:", coordinate);
+    setSelectedCoordinates(coordinate);
+    console.log("selectedCoordinates updated to:", coordinate);
+    updateNestedFormData("coordinates", "latitude", coordinate.latitude);
+    updateNestedFormData("coordinates", "longitude", coordinate.longitude);
+    console.log("Form data coordinates updated");
   };
 
-  // Handle city selection
-  const handleCityChange = (value: string) => {
-    if (selectedCountryCode) {
-      const suggestions = getCitiesByCountryForAutocomplete(
-        selectedCountryCode,
-        value
-      );
-      setCitySuggestions(suggestions);
-    }
+  // Handle map region change
+  const handleMapRegionChange = (region: any) => {
+    setMapRegion(region);
   };
 
-  const handleCitySelect = (cityName: string) => {
-    handleFieldChange("address", "city", cityName);
-    if (selectedCountryCode) {
-      const state = getStateByCity(selectedCountryCode, cityName);
-      if (state) {
-        handleFieldChange("address", "state", state);
+  // Open map picker modal
+  const openMapPicker = () => {
+    setTempCoordinates(selectedCoordinates);
+    setMapPickerVisible(true);
+  };
+
+  // Close map picker modal
+  const closeMapPicker = () => {
+    setMapPickerVisible(false);
+  };
+
+  // Confirm coordinates from map picker
+  const confirmCoordinates = () => {
+    setSelectedCoordinates(tempCoordinates);
+    updateNestedFormData("coordinates", "latitude", tempCoordinates.latitude);
+    updateNestedFormData("coordinates", "longitude", tempCoordinates.longitude);
+    setMapPickerVisible(false);
+  };
+
+  // Handle map click in picker modal
+  const handleMapPickerClick = (coordinate: {
+    latitude: number;
+    longitude: number;
+  }) => {
+    setTempCoordinates(coordinate);
+  };
+
+  // Center map on selected country
+  const centerMapOnCountry = async (countryName: string) => {
+    try {
+      // Handle special cases where the display name differs from the geocoding name
+      let geocodingName = countryName;
+      if (countryName === "Somaliland") {
+        geocodingName = "Somalia";
       }
+
+      const geocodeResult = await Location.geocodeAsync(geocodingName);
+      if (geocodeResult.length > 0) {
+        const { latitude, longitude } = geocodeResult[0];
+        console.log(`Geocoded ${countryName} (using ${geocodingName}) to:`, {
+          latitude,
+          longitude,
+        });
+        const newRegion = {
+          latitude,
+          longitude,
+          latitudeDelta: 10, // Zoom out to show more of the country
+          longitudeDelta: 10,
+        };
+        setMapRegion(newRegion);
+        // Also update selected coordinates to the center of the country
+        const newCoordinates = { latitude, longitude };
+        setSelectedCoordinates(newCoordinates);
+        setTempCoordinates(newCoordinates);
+        updateNestedFormData("coordinates", "latitude", latitude);
+        updateNestedFormData("coordinates", "longitude", longitude);
+      }
+    } catch (error) {
+      console.log(`Could not geocode country ${countryName}:`, error);
     }
   };
 
-  // Pre-load all country suggestions on mount
+  // Update map when country changes
   useEffect(() => {
-    const suggestions = searchCountriesForAutocomplete("").map((c) => c.name);
-    setCountrySuggestions(suggestions);
-  }, []);
-
-  // Clear city suggestions when country changes
-  useEffect(() => {
-    if (selectedCountryCode) {
-      const suggestions = getCitiesByCountryForAutocomplete(
-        selectedCountryCode,
-        formData.address?.city || ""
-      );
-      setCitySuggestions(suggestions);
-    } else {
-      setCitySuggestions([]);
+    if (formData.address?.country) {
+      centerMapOnCountry(formData.address.country);
     }
-  }, [selectedCountryCode, formData.address?.city]);
+  }, [formData.address?.country]);
+
+  // Debug: Log current selectedCoordinates state
+  console.log("Current selectedCoordinates:", selectedCoordinates);
+  console.log(
+    "Should show marker:",
+    selectedCoordinates.latitude !== 0 && selectedCoordinates.longitude !== 0
+  );
 
   // Custom render functions for suggestions
   const renderCountrySuggestion = (country: any, onPress: () => void) => (
@@ -264,59 +398,171 @@ export default function LocationStep({
   );
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
-    >
-      <ScrollView
-        showsVerticalScrollIndicator={false}
+    <Container>
+      <KeyboardAwareScrollView
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flexGrow: 1, marginBottom: 60 }}
+        bottomOffset={60}
       >
         <Container paddingBottom="xxl">
           <StepHeader
-            title={t("property.location.title")}
-            description={t("property.location.description")}
+            title={t("property.steps.location.title")}
+            description={t("property.steps.location.description")}
           />
 
           {/* Country */}
           <Container marginBottom="xl" style={{ zIndex: 3 }}>
-            <Container marginBottom="sm">
-              <Text variant="label" color="onBackground">
+            <TouchableOpacity
+              onPress={() => setCountryModalVisible(true)}
+              style={{
+                borderWidth: 1,
+                borderColor: errors["address.country"]
+                  ? currentTheme.error
+                  : currentTheme.text?.secondary || currentTheme.secondary,
+                borderRadius: 8,
+                paddingHorizontal: 16,
+                paddingVertical: 16,
+                backgroundColor: currentTheme.background,
+                minHeight: 56,
+              }}
+            >
+              <Text
+                variant="caption"
+                color="secondary"
+                style={{
+                  marginBottom: 4,
+                  fontSize: 12,
+                  color: currentTheme.text?.secondary || currentTheme.secondary,
+                }}
+              >
                 {t("property.location.country")} *
               </Text>
-            </Container>
-            <AutocompleteInput
-              value={formData.address?.country || ""}
-              onSearchTextChange={handleCountryChange}
+              <Text
+                variant="body"
+                style={{
+                  color: formData.address?.country
+                    ? currentTheme.text?.primary || currentTheme.primary
+                    : currentTheme.text?.secondary || currentTheme.secondary,
+                  fontSize: 16,
+                  fontWeight: formData.address?.country ? "400" : "300",
+                }}
+              >
+                {formData.address?.country ||
+                  t("property.location.countryPlaceholder")}
+              </Text>
+            </TouchableOpacity>
+            {errors["address.country"] && (
+              <Text
+                variant="caption"
+                color="error"
+                style={{
+                  marginTop: 4,
+                  marginLeft: 4,
+                  fontSize: 12,
+                  color: currentTheme.error,
+                }}
+              >
+                {errors["address.country"]}
+              </Text>
+            )}
+
+            <CountrySelectModal
+              visible={countryModalVisible}
+              onClose={() => {
+                setCountryModalVisible(false);
+                if (openCityAfterCountry) {
+                  setOpenCityAfterCountry(false);
+                  InteractionManager.runAfterInteractions(() => {
+                    setCityModalVisible(true);
+                  });
+                }
+              }}
+              countries={filteredCountries}
               onSelect={handleCountrySelect}
-              placeholder={t("property.location.countryPlaceholder")}
-              suggestions={countrySuggestions}
-              error={errors["address.country"]}
-              label={t("property.location.country")}
-              modalTitle={t("property.location.selectCountry")}
+              theme={{ border: "#F0F0F0" }}
+              t={t}
             />
           </Container>
 
           {/* City */}
           <Container marginBottom="lg" style={{ zIndex: 2 }}>
-            <Container marginBottom="sm">
-              <Text variant="label" color="onBackground">
+            <TouchableOpacity
+              onPress={() => {
+                if (!formData.address?.country) {
+                  showToast({
+                    type: "error",
+                    message: "Please select a country first",
+                  });
+                  return;
+                }
+                setCityModalVisible(true);
+              }}
+              style={{
+                borderWidth: 1,
+                borderColor: errors["address.city"]
+                  ? currentTheme.error
+                  : currentTheme.text?.secondary || currentTheme.secondary,
+                borderRadius: 8,
+                paddingHorizontal: 16,
+                paddingVertical: 16,
+                backgroundColor: currentTheme.background,
+                minHeight: 56,
+                opacity: formData.address?.country ? 1 : 0.6,
+              }}
+              disabled={!formData.address?.country}
+            >
+              <Text
+                variant="caption"
+                color="secondary"
+                style={{
+                  marginBottom: 4,
+                  fontSize: 12,
+                  color: currentTheme.text?.secondary || currentTheme.secondary,
+                }}
+              >
                 {t("property.location.city")} *
               </Text>
-            </Container>
-            <AutocompleteInput
-              value={formData.address?.city || ""}
-              onSearchTextChange={handleCityChange}
-              onSelect={handleCitySelect}
-              placeholder={t("property.location.cityPlaceholder")}
-              suggestions={citySuggestions}
-              error={errors["address.city"]}
-              disabled={!selectedCountryCode}
-              label={t("property.location.city")}
-              modalTitle={t("property.location.selectCity")}
-            />
+              <Text
+                variant="body"
+                style={{
+                  color: formData.address?.city
+                    ? currentTheme.text?.primary || currentTheme.primary
+                    : currentTheme.text?.secondary || currentTheme.secondary,
+                  fontSize: 16,
+                  fontWeight: formData.address?.city ? "400" : "300",
+                }}
+              >
+                {formData.address?.city ||
+                  (formData.address?.country
+                    ? t("property.location.cityPlaceholder")
+                    : "Select country first")}
+              </Text>
+            </TouchableOpacity>
+            {errors["address.city"] && (
+              <Text
+                variant="caption"
+                color="error"
+                style={{
+                  marginTop: 4,
+                  marginLeft: 4,
+                  fontSize: 12,
+                  color: currentTheme.error,
+                }}
+              >
+                {errors["address.city"]}
+              </Text>
+            )}
+            {cityModalVisible && (
+              <CitySelectModal
+                visible={cityModalVisible}
+                onClose={() => setCityModalVisible(false)}
+                cities={filteredCities}
+                onSelect={handleCitySelect}
+                selectedCountry={selectedCountry || { name: "" }}
+                theme={{ border: "#F0F0F0" }}
+                t={t}
+              />
+            )}
           </Container>
 
           {/* Street Address */}
@@ -392,6 +638,248 @@ export default function LocationStep({
               </Text>
             </Container>
 
+            {/* Interactive Map */}
+            <Container
+              marginBottom="lg"
+              style={{
+                height: mapHeight,
+                borderRadius: 12,
+                overflow: "hidden",
+                borderWidth: 1,
+                borderColor: "#E0E0E0",
+              }}
+            >
+              {/* Static Map View - Non-interactive */}
+              {Platform.OS === "ios" ? (
+                <AppleMaps.View
+                  style={{ flex: 1 }}
+                  cameraPosition={{
+                    coordinates: {
+                      latitude: selectedCoordinates.latitude,
+                      longitude: selectedCoordinates.longitude,
+                    },
+                    zoom: 10,
+                  }}
+                  annotations={
+                    selectedCoordinates.latitude &&
+                    selectedCoordinates.longitude
+                      ? [
+                          {
+                            id: "property-marker",
+                            coordinates: {
+                              latitude: selectedCoordinates.latitude,
+                              longitude: selectedCoordinates.longitude,
+                            },
+                            title: "Selected Location",
+                          },
+                        ]
+                      : []
+                  }
+                  uiSettings={{}}
+                />
+              ) : (
+                <GoogleMaps.View
+                  style={{ flex: 1 }}
+                  cameraPosition={{
+                    coordinates: {
+                      latitude: selectedCoordinates.latitude,
+                      longitude: selectedCoordinates.longitude,
+                    },
+                    zoom: 10,
+                  }}
+                  markers={
+                    selectedCoordinates.latitude &&
+                    selectedCoordinates.longitude
+                      ? [
+                          {
+                            id: "property-marker",
+                            coordinates: {
+                              latitude: selectedCoordinates.latitude,
+                              longitude: selectedCoordinates.longitude,
+                            },
+                            title: "Selected Location",
+                          },
+                        ]
+                      : []
+                  }
+                  uiSettings={{
+                    scrollGesturesEnabled: false,
+                    zoomGesturesEnabled: false,
+                    rotationGesturesEnabled: false,
+                    tiltGesturesEnabled: false,
+                    zoomControlsEnabled: false,
+                    mapToolbarEnabled: false,
+                    myLocationButtonEnabled: false,
+                  }}
+                />
+              )}
+            </Container>
+
+            {/* Pick Coordinates Button */}
+            <Container marginBottom="md">
+              <TouchableOpacity
+                onPress={openMapPicker}
+                style={{
+                  backgroundColor: "#007AFF",
+                  paddingHorizontal: spacing.md,
+                  paddingVertical: spacing.sm,
+                  borderRadius: 8,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Icon
+                  name="map-outline"
+                  size={iconSize.sm}
+                  color="white"
+                  style={{ marginRight: spacing.xs }}
+                />
+                <Text
+                  variant="body"
+                  color="white"
+                  style={{ fontWeight: "600" }}
+                >
+                  {t("property.location.pickCoordinates")}
+                </Text>
+              </TouchableOpacity>
+            </Container>
+
+            {/* Map Picker Modal */}
+            <Modal
+              visible={mapPickerVisible}
+              animationType="slide"
+              presentationStyle="fullScreen"
+              onRequestClose={closeMapPicker}
+            >
+              <Screen
+                header={{
+                  right: {
+                    icon: "close",
+                    onPress: closeMapPicker,
+                  },
+                  variant: "transparent",
+                }}
+              >
+                <Container style={{ flex: 1 }}>
+                  {/* Interactive Map in Modal */}
+                  {Platform.OS === "ios" ? (
+                    <AppleMaps.View
+                      style={{ flex: 1 }}
+                      cameraPosition={{
+                        coordinates: {
+                          latitude: selectedCoordinates.latitude,
+                          longitude: selectedCoordinates.longitude,
+                        },
+                        zoom: 10,
+                      }}
+                      annotations={
+                        tempCoordinates.latitude && tempCoordinates.longitude
+                          ? [
+                              {
+                                id: "temp-marker",
+                                coordinates: {
+                                  latitude: tempCoordinates.latitude,
+                                  longitude: tempCoordinates.longitude,
+                                },
+                                title: "Selected Location",
+                              },
+                            ]
+                          : []
+                      }
+                      onMapClick={(event: {
+                        coordinates: { latitude?: number; longitude?: number };
+                      }) => {
+                        if (
+                          event &&
+                          event.coordinates &&
+                          typeof event.coordinates.latitude === "number" &&
+                          typeof event.coordinates.longitude === "number"
+                        ) {
+                          handleMapPickerClick({
+                            latitude: event.coordinates.latitude,
+                            longitude: event.coordinates.longitude,
+                          });
+                        }
+                      }}
+                    />
+                  ) : (
+                    <GoogleMaps.View
+                      style={{ flex: 1 }}
+                      cameraPosition={{
+                        coordinates: {
+                          latitude: selectedCoordinates.latitude,
+                          longitude: selectedCoordinates.longitude,
+                        },
+                        zoom: 10,
+                      }}
+                      markers={
+                        tempCoordinates.latitude && tempCoordinates.longitude
+                          ? [
+                              {
+                                id: "temp-marker",
+                                coordinates: {
+                                  latitude: tempCoordinates.latitude,
+                                  longitude: tempCoordinates.longitude,
+                                },
+                                title: "Selected Location",
+                              },
+                            ]
+                          : []
+                      }
+                      onMapClick={(event: {
+                        coordinates: { latitude?: number; longitude?: number };
+                      }) => {
+                        if (
+                          event &&
+                          event.coordinates &&
+                          typeof event.coordinates.latitude === "number" &&
+                          typeof event.coordinates.longitude === "number"
+                        ) {
+                          handleMapPickerClick({
+                            latitude: event.coordinates.latitude,
+                            longitude: event.coordinates.longitude,
+                          });
+                        }
+                      }}
+                    />
+                  )}
+                </Container>
+
+                {/* Selected Coordinates Display */}
+                <Tab>
+                  {/* Confirm Button */}
+                  <Button
+                    onPress={confirmCoordinates}
+                    variant="primary"
+                    title={t("property.location.confirmLocation")}
+                  />
+                </Tab>
+              </Screen>
+            </Modal>
+
+            {/* Selected Coordinates Display */}
+            <Container
+              style={{
+                padding: spacing.md,
+                backgroundColor: "#F8F9FA",
+                borderRadius: 8,
+                marginBottom: spacing.md,
+              }}
+            >
+              <Text
+                variant="body"
+                color="onBackground"
+                style={{ marginBottom: spacing.xs, fontWeight: "600" }}
+              >
+                {t("property.location.selectedCoordinates")}:
+              </Text>
+              <Text>
+                {selectedCoordinates.latitude.toFixed(6)},
+                {selectedCoordinates.longitude.toFixed(6)}
+              </Text>
+            </Container>
+
             <Container flexDirection="row" marginTop="md">
               {/* Latitude */}
               <Container flex={1} marginRight="sm">
@@ -401,7 +889,11 @@ export default function LocationStep({
                   </Text>
                 </Container>
                 <Input
-                  value={latitudeStr}
+                  value={
+                    formData.coordinates?.latitude
+                      ? String(formData.coordinates.latitude)
+                      : ""
+                  }
                   onChangeText={(value) =>
                     handleCoordinateChange("latitude", value)
                   }
@@ -420,7 +912,11 @@ export default function LocationStep({
                   </Text>
                 </Container>
                 <Input
-                  value={longitudeStr}
+                  value={
+                    formData.coordinates?.longitude
+                      ? String(formData.coordinates.longitude)
+                      : ""
+                  }
                   onChangeText={(value) =>
                     handleCoordinateChange("longitude", value)
                   }
@@ -448,7 +944,8 @@ export default function LocationStep({
             variant="info"
           />
         </Container>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
+      {/* <KeyboardToolbar /> */}
+    </Container>
   );
 }

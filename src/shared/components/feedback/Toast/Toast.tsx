@@ -219,7 +219,7 @@ const Toast: React.FC<ToastProps> = ({
                 numberOfLines={2}
                 style={styles.message}
               >
-                {message}
+                {message || ""}
               </Text>
             </Container>
 
@@ -236,7 +236,7 @@ const Toast: React.FC<ToastProps> = ({
                   color={colors.iconColor}
                   style={styles.actionText}
                 >
-                  {action.label}
+                  {action.label || ""}
                 </Text>
               </TouchableOpacity>
             )}

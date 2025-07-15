@@ -1,12 +1,14 @@
 /**
  * Guest Step Component for Reservation Flow
+ * Modern, clean design with improved visual hierarchy and user experience
  */
 
 import React, { useState } from "react";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { Text, Container, Icon } from "@shared/components";
 import { GuestSelector } from "../GuestSelector";
 import { useTheme } from "@core/hooks/useTheme";
+import { useTranslation } from "react-i18next";
 
 interface GuestStepProps {
   startDate: Date | null;
@@ -41,7 +43,8 @@ export const GuestStep: React.FC<GuestStepProps> = ({
   calculateNights,
   onEditDates,
 }) => {
-  const { theme } = useTheme();
+  const { theme, isDark } = useTheme();
+  const { t } = useTranslation();
   const [isEditingDates, setIsEditingDates] = useState(false);
 
   // Create a debounced version of onEditDates to prevent multiple rapid calls
@@ -62,52 +65,113 @@ export const GuestStep: React.FC<GuestStepProps> = ({
 
   return (
     <Container style={{ flex: 1 }}>
-      {/* Date Summary */}
-      <Container marginBottom="lg">
+      {/* Header Section */}
+      <Container marginBottom="xl">
+        <Text
+          variant="h4"
+          weight="bold"
+          color={isDark ? theme.colors.gray[50] : theme.colors.gray[900]}
+          style={{ marginBottom: 8 }}
+        >
+          {t("reservation.whoIsComing", "Who's coming?")}
+        </Text>
+        <Text
+          variant="body"
+          color={isDark ? theme.colors.gray[400] : theme.colors.gray[600]}
+        >
+          {t(
+            "reservation.selectGuestCount",
+            "Select the number of guests for your stay"
+          )}
+        </Text>
+      </Container>
+
+      {/* Date Summary Card */}
+      <Container marginBottom="xl">
+        <Container marginBottom="sm">
+          <Text
+            variant="caption"
+            weight="semibold"
+            style={{ textTransform: "uppercase", letterSpacing: 0.5 }}
+          >
+            {t("reservation.selectedDates", "Selected Dates")}
+          </Text>
+        </Container>
+
         <TouchableOpacity onPress={handleEditDates} disabled={isEditingDates}>
           <Container
             flexDirection="row"
             alignItems="center"
             justifyContent="space-between"
-            padding="md"
-            borderRadius="md"
-            backgroundColor="rgba(0, 0, 0, 0.05)"
           >
             <Container style={{ flex: 1 }}>
               <Text
                 variant="body"
-                weight="medium"
-                color={theme.colors.gray[600]}
+                weight="semibold"
+                color={isDark ? theme.colors.gray[100] : theme.colors.gray[900]}
               >
                 {startDate && endDate
                   ? `${formatDate(startDate)} - ${formatDate(endDate)}`
-                  : "Select dates"}
+                  : t("reservation.selectDates", "Select dates")}
               </Text>
-              <Text
-                variant="caption"
-                color={theme.colors.gray[500]}
-                style={{ marginTop: 4 }}
-              >
-                {calculateNights()} nights
-              </Text>
+              <Container flexDirection="row" alignItems="center" marginTop="xs">
+                <Icon
+                  name="calendar"
+                  size={14}
+                  color={
+                    isDark ? theme.colors.gray[400] : theme.colors.gray[500]
+                  }
+                />
+                <Text
+                  variant="caption"
+                  color={
+                    isDark ? theme.colors.gray[400] : theme.colors.gray[500]
+                  }
+                  style={{ marginLeft: 6 }}
+                >
+                  {calculateNights()} {t("reservation.nights", "nights")}
+                </Text>
+              </Container>
             </Container>
-            <Icon name="pencil" size={16} color={theme.colors.primary} />
+            <Container>
+              <Icon name="pencil" size={16} />
+            </Container>
           </Container>
         </TouchableOpacity>
       </Container>
 
-      {/* Guest Selector */}
-      <GuestSelector
-        adults={adults}
-        childrenCount={childrenCount}
-        infants={infants}
-        pets={pets}
-        onChangeAdults={onChangeAdults}
-        onChangeChildren={onChangeChildren}
-        onChangeInfants={onChangeInfants}
-        onChangePets={onChangePets}
-        maxGuests={maxGuests}
-      />
+      {/* Guest Selector with improved styling */}
+      <Container>
+        <Container marginBottom="lg">
+          <Text
+            variant="h6"
+            weight="semibold"
+            color={isDark ? theme.colors.gray[100] : theme.colors.gray[900]}
+          >
+            {t("reservation.guestInformation", "Guest Information")}
+          </Text>
+          <Text
+            variant="caption"
+            color={isDark ? theme.colors.gray[400] : theme.colors.gray[600]}
+            style={{ marginTop: 4 }}
+          >
+            {t("reservation.maxGuests", "Maximum")} {maxGuests}{" "}
+            {t("reservation.guests", "guests")}
+          </Text>
+        </Container>
+
+        <GuestSelector
+          adults={adults}
+          childrenCount={childrenCount}
+          infants={infants}
+          pets={pets}
+          onChangeAdults={onChangeAdults}
+          onChangeChildren={onChangeChildren}
+          onChangeInfants={onChangeInfants}
+          onChangePets={onChangePets}
+          maxGuests={maxGuests}
+        />
+      </Container>
     </Container>
   );
 };

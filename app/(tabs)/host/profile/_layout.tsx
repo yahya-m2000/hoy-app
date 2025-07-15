@@ -1,9 +1,12 @@
-import React from "react";
+/**
+ * Account section layout
+ * Handles navigation for account-related screens
+ */
+
 import { Stack } from "expo-router";
-import { useThemedScreenOptions } from "@core/navigation";
 import { t } from "i18next";
 
-export default function SettingsLayout() {
+export default function AccountLayout() {
   return (
     <Stack screenOptions={{}}>
       <Stack.Screen
@@ -22,21 +25,33 @@ export default function SettingsLayout() {
           animation: "fade",
         }}
       />
+
       <Stack.Screen
-        name="currency"
+        name="personal-info"
         options={{
-          title: t("profile.currency"),
           headerShown: false,
           presentation: "fullScreenModal",
-          animation: "fade",
         }}
       />
+      {/* <Stack.Screen
+        name="language"
+        options={{
+          headerShown: false,
+          presentation: "fullScreenModal",
+        }}
+      /> */}
       <Stack.Screen
         name="[setting]"
         options={{
           headerShown: false,
           presentation: "fullScreenModal",
-          animation: "fade",
+        }}
+      />
+      <Stack.Screen
+        name="feedback"
+        options={{
+          headerShown: false,
+          presentation: "fullScreenModal",
         }}
       />
     </Stack>

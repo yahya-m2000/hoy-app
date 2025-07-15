@@ -49,7 +49,7 @@ const PropertyOverviewCard = ({ formData }: { formData: PropertyFormData }) => {
         <Container flex={1}>
           <Container marginBottom="xs">
             <Text variant="h6" weight="semibold" color="primary">
-              {formData.name || t("property.add.review.noName")}
+              {formData.name || t("property.noName")}
             </Text>
           </Container>
 
@@ -84,11 +84,7 @@ const PropertyOverviewCard = ({ formData }: { formData: PropertyFormData }) => {
               />
               <Text variant="body" color="secondary">
                 {formData.bedrooms || 0}{" "}
-                {t(
-                  `property.add.review.${
-                    formData.bedrooms === 1 ? "bed" : "beds"
-                  }`
-                )}
+                {t(`property.${formData.bedrooms === 1 ? "bed" : "beds"}`)}
               </Text>
             </Container>
 
@@ -104,11 +100,7 @@ const PropertyOverviewCard = ({ formData }: { formData: PropertyFormData }) => {
               />
               <Text variant="body" color="secondary">
                 {formData.bathrooms || 0}{" "}
-                {t(
-                  `property.add.review.${
-                    formData.bathrooms === 1 ? "bath" : "baths"
-                  }`
-                )}
+                {t(`property.${formData.bathrooms === 1 ? "bath" : "baths"}`)}
               </Text>
             </Container>
 
@@ -124,22 +116,18 @@ const PropertyOverviewCard = ({ formData }: { formData: PropertyFormData }) => {
               />
               <Text variant="body" color="secondary">
                 {formData.maxGuests || 0}{" "}
-                {t(
-                  `property.add.review.${
-                    formData.maxGuests === 1 ? "guest" : "guests"
-                  }`
-                )}
+                {t(`property.${formData.maxGuests === 1 ? "guest" : "guests"}`)}
               </Text>
             </Container>
           </Container>
 
           <Container flexDirection="row" alignItems="baseline">
             <Text variant="h5" weight="bold" color="primary">
-              ${formData.price || 0}
+              ${String(formData.price || 0)}
             </Text>
             <Container marginLeft="xs">
               <Text variant="body" color="secondary">
-                {t("property.add.review.perNight")}
+                {t("property.pricing.perNight")}
               </Text>
             </Container>
           </Container>
@@ -166,7 +154,7 @@ const AmenitiesSection = ({ amenities }: { amenities: string[] }) => {
     >
       <Container marginBottom="md">
         <Text variant="h6" weight="semibold" color="primary">
-          {t("property.add.review.amenities")} ({amenities.length})
+          {t("property.amenities")} ({amenities.length})
         </Text>
       </Container>
 
@@ -213,7 +201,7 @@ const PhotosSection = ({ images }: { images: string[] }) => {
     >
       <Container marginBottom="md">
         <Text variant="h6" weight="semibold" color="primary">
-          {t("property.add.review.photos")} ({images.length})
+          {t("property.images.title")} ({images.length})
         </Text>
       </Container>
 
@@ -247,7 +235,7 @@ const PhotosSection = ({ images }: { images: string[] }) => {
                 backgroundColor="success"
               >
                 <Text variant="caption" weight="semibold" color="white">
-                  {t("property.add.review.main")}
+                  {t("property.images.main")}
                 </Text>
               </Container>
             )}
@@ -266,7 +254,7 @@ const PhotosSection = ({ images }: { images: string[] }) => {
             justifyContent="center"
           >
             <Text variant="caption" weight="medium" color="secondary">
-              +{remainingCount} {t("property.add.review.more")}
+              +{remainingCount} {t("property.showAll")}
             </Text>
           </Container>
         )}
@@ -286,15 +274,15 @@ export default function ReviewStep({ formData, isEditMode }: ReviewStepProps) {
     >
       <Container paddingBottom="xxl">
         <StepHeader
-          title={t("property.add.review.title")}
-          description={t("property.add.review.description")}
+          title={t("property.steps.review.title")}
+          description={t("property.steps.review.description")}
         />
 
         {/* Property Overview */}
         <Container marginBottom="lg">
           <Container marginBottom="md">
             <Text variant="h6" weight="semibold" color="primary">
-              {t("property.add.review.overview")}
+              {t("property.steps.review.overview")}
             </Text>
           </Container>
           <PropertyOverviewCard formData={formData} />
@@ -305,7 +293,7 @@ export default function ReviewStep({ formData, isEditMode }: ReviewStepProps) {
           <Container marginBottom="lg">
             <Container marginBottom="md">
               <Text variant="h6" weight="semibold" color="primary">
-                {t("property.description")}
+                {t("property.steps.description.title")}
               </Text>
             </Container>
             <Container
@@ -333,15 +321,15 @@ export default function ReviewStep({ formData, isEditMode }: ReviewStepProps) {
         </Container>
 
         <InfoBox
-          title={t("property.add.review.readyTo", {
+          title={t("property.steps.review.readyTo", {
             action: isEditMode
-              ? t("property.add.review.update")
-              : t("property.add.review.publish"),
+              ? t("property.steps.review.update")
+              : t("property.steps.review.publish"),
           })}
           content={
             isEditMode
-              ? t("property.add.review.updateMessage")
-              : t("property.add.review.publishMessage")
+              ? t("property.steps.review.updateMessage")
+              : t("property.steps.review.publishMessage")
           }
         />
       </Container>

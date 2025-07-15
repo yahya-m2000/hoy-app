@@ -10,5 +10,7 @@ import { DynamicSettingsScreen } from "@features/account/components/DynamicSetti
 export default function SettingScreen() {
   const { setting } = useLocalSearchParams<{ setting: string }>();
 
+  console.log("Host [setting] route - setting parameter:", setting);
+
   return <DynamicSettingsScreen settingType={setting || ""} />;
 }

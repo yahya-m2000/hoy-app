@@ -12,6 +12,7 @@ import { spacing, iconSize } from "@core/design";
 import { useTheme } from "@core/hooks";
 import StepHeader from "../StepHeader";
 import InfoBox from "../InfoBox";
+import { useTranslation } from "react-i18next";
 
 interface DetailsStepProps {
   formData: PropertyFormData;
@@ -31,6 +32,7 @@ export default function DetailsStep({
   errors,
 }: DetailsStepProps) {
   const { theme } = useTheme();
+  const { t } = useTranslation();
 
   const incrementValue = (field: keyof PropertyFormData) => {
     const currentValue = formData[field] as number;
@@ -120,15 +122,15 @@ export default function DetailsStep({
       >
         <Container paddingBottom="xxl">
           <StepHeader
-            title="Property Details"
-            description="Tell us about the specifics of your property"
+            title={t("property.steps.details.title")}
+            description={t("property.steps.details.description")}
           />
 
           {/* Price per Night */}
           <Container marginBottom="lg">
             <Container marginBottom="sm">
               <Text variant="label" color="onBackground">
-                Price per Night *
+                {t("property.common.pricePerNight")} *
               </Text>
             </Container>
             <Container flexDirection="row" alignItems="center">
@@ -138,7 +140,7 @@ export default function DetailsStep({
                   const numValue = parseFloat(value) || 0;
                   updateFormData("price", numValue);
                 }}
-                placeholder="0"
+                placeholder={t("property.pricePlaceholder")}
                 keyboardType="numeric"
                 style={{
                   flex: 1,
@@ -163,7 +165,7 @@ export default function DetailsStep({
 
           {/* Bedrooms */}
           <CounterInput
-            label="Bedrooms"
+            label={t("property.common.bedrooms")}
             value={formData.bedrooms}
             onIncrement={() => incrementValue("bedrooms")}
             onDecrement={() => decrementValue("bedrooms")}
@@ -172,7 +174,7 @@ export default function DetailsStep({
 
           {/* Beds */}
           <CounterInput
-            label="Beds"
+            label={t("property.common.beds")}
             value={formData.beds}
             onIncrement={() => incrementValue("beds")}
             onDecrement={() => decrementValue("beds", 1)}
@@ -182,7 +184,7 @@ export default function DetailsStep({
 
           {/* Bathrooms */}
           <CounterInput
-            label="Bathrooms"
+            label={t("property.common.bathrooms")}
             value={formData.bathrooms}
             onIncrement={() => incrementValue("bathrooms")}
             onDecrement={() => decrementValue("bathrooms", 1)}
@@ -192,7 +194,7 @@ export default function DetailsStep({
 
           {/* Max Guests */}
           <CounterInput
-            label="Maximum Guests"
+            label={t("property.common.maxGuests")}
             value={formData.maxGuests}
             onIncrement={() => incrementValue("maxGuests")}
             onDecrement={() => decrementValue("maxGuests", 1)}
@@ -202,8 +204,8 @@ export default function DetailsStep({
 
           {/* Info Box */}
           <InfoBox
-            title="Pricing Tips"
-            content="Research similar properties in your area to set competitive pricing. You can always adjust your rates later based on demand."
+            title={t("property.details.tipTitle")}
+            content={t("property.details.tipContent")}
             icon="bulb"
             variant="tip"
           />

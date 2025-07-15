@@ -5,17 +5,25 @@
  */
 
 import React, { useState, useCallback } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+  Alert,
+} from "react-native";
 
 // Shared Context and Hooks
 import { useTheme } from "@core/hooks";
 import { useCalendarDateSelection } from "@features/calendar/context/CalendarContext";
+import { useWishlistState } from "@features/properties/context/PropertyContext";
 
 // Shared Components
-import { Text, BookingStatusBadge } from "@shared/components";
+import { Text, BookingStatusBadge, Icon } from "@shared/components";
 import { PropertyImageContainer } from "../details";
 import RatingDisplay from "../shared/RatingDisplay";
 import WishlistButton from "../shared/WishlistButton";
+import { useTranslation } from "react-i18next";
 
 // Shared Constants
 import { radius, fontSize, spacing } from "@core/design";
@@ -27,11 +35,22 @@ import {
 } from "src/features/properties/utils/propertyUtils";
 
 // Types
-import { PropertyCardProps } from "@core/types";
+import type { PropertyCardProps as BasePropertyCardProps } from "@core/types/property.types";
 import CollectionsModal from "src/features/properties/modals/collections/CollectionsModal";
 import { t } from "i18next";
 
-export const PropertyCard: React.FC<PropertyCardProps> = ({
+interface HostPropertyCardProps {
+  isHost?: boolean;
+  onEdit?: () => void;
+  onDelete?: () => void;
+  onToggleStatus?: () => void;
+  isDeleting?: boolean;
+  hostStatus?: "active" | "inactive" | "draft";
+}
+
+type CombinedPropertyCardProps = BasePropertyCardProps & HostPropertyCardProps;
+
+export const PropertyCard: React.FC<CombinedPropertyCardProps> = ({
   _id,
   name,
   address,
@@ -60,12 +79,23 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   location,
   city,
   country,
+  isHost = false,
+  onEdit,
+  onDelete,
+  onToggleStatus,
+  isDeleting = false,
+  hostStatus,
+  ...props
 }) => {
   const { theme, isDark } = useTheme();
   const { searchDates } = useCalendarDateSelection();
-
-  // Collections modal state
-  const [showCollectionsModal, setShowCollectionsModal] = useState(false);
+  const {
+    isPropertyWishlisted,
+    showCollectionsModalAction,
+    hideCollectionsModal,
+    showCollectionsModal: showCollectionsModalState,
+  } = useWishlistState();
+  const { t } = useTranslation();
 
   // Get display data based on mode
   const getDisplayData = () => {
@@ -125,12 +155,17 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
 
   // Handle collections
   const handleShowCollections = useCallback(() => {
-    setShowCollectionsModal(true);
-  }, []);
+    console.log(
+      "PropertyCard: handleShowCollections called for property:",
+      _id
+    );
+    showCollectionsModalAction(_id);
+  }, [_id, showCollectionsModalAction]);
 
   const handleCloseCollections = useCallback(() => {
-    setShowCollectionsModal(false);
-  }, []);
+    console.log("PropertyCard: handleCloseCollections called");
+    hideCollectionsModal();
+  }, [hideCollectionsModal]);
 
   const handleCollectionToggle = useCallback(
     (collectionId: string, isAdded: boolean) => {
@@ -138,6 +173,77 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
     },
     []
   );
+
+  // Host status badge
+  const renderHostStatus = () => {
+    if (!isHost || !hostStatus) return null;
+    let color = "#aaa";
+    let label = hostStatus.charAt(0).toUpperCase() + hostStatus.slice(1);
+    if (hostStatus === "active") color = "#22c55e";
+    if (hostStatus === "inactive") color = "#f59e42";
+    if (hostStatus === "draft") color = "#64748b";
+    return (
+      <View
+        style={{ flexDirection: "row", alignItems: "center", marginBottom: 4 }}
+      >
+        <View
+          style={{
+            width: 8,
+            height: 8,
+            borderRadius: 4,
+            backgroundColor: color,
+            marginRight: 6,
+          }}
+        />
+        <Text size="xs" color={color} style={{ fontWeight: "bold" }}>
+          {label}
+        </Text>
+      </View>
+    );
+  };
+
+  // Host actions via ellipsis
+  const handleHostActions = () => {
+    if (isDeleting) return;
+    const buttons = [
+      onEdit
+        ? {
+            text: t("common.edit"),
+            onPress: onEdit,
+          }
+        : undefined,
+      onToggleStatus
+        ? {
+            text:
+              hostStatus === "active"
+                ? t("property.deactivate")
+                : t("property.activate"),
+            onPress: onToggleStatus,
+          }
+        : undefined,
+      onDelete
+        ? {
+            text: t("property.delete"),
+            style: "destructive" as const,
+            onPress: () => {
+              Alert.alert(t("property.delete"), t("property.deleteConfirm"), [
+                { text: t("common.cancel"), style: "cancel" as const },
+                {
+                  text: t("property.delete"),
+                  style: "destructive" as const,
+                  onPress: onDelete,
+                },
+              ]);
+            },
+          }
+        : undefined,
+      {
+        text: t("common.cancel"),
+        style: "cancel" as const,
+      },
+    ].filter(Boolean);
+    Alert.alert(t("property.title"), undefined, buttons as any);
+  };
 
   return (
     <TouchableOpacity
@@ -150,7 +256,37 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
         price,
         currency
       )} per night`}
+      disabled={isHost && (!onPress || isDeleting)}
     >
+      {/* Ellipsis for host actions */}
+      {isHost && (
+        <TouchableOpacity
+          style={{ position: "absolute", top: 8, right: 8, zIndex: 10 }}
+          onPress={handleHostActions}
+          disabled={isDeleting}
+        >
+          <View
+            style={{
+              backgroundColor: theme.background,
+              borderRadius: 16,
+              padding: 6,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 1 },
+              shadowOpacity: 0.08,
+              shadowRadius: 2,
+              elevation: 2,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {isDeleting ? (
+              <ActivityIndicator size="small" color="#e11d48" />
+            ) : (
+              <Icon name="ellipsis-horizontal" size={22} color="#64748b" />
+            )}
+          </View>
+        </TouchableOpacity>
+      )}
       {/* Image Container */}
       <View style={styles.imageContainer}>
         <PropertyImageContainer
@@ -166,7 +302,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
               size="small"
             />
           )}
-          {!displayData.isBookingMode && (
+          {!displayData.isBookingMode && !isHost && (
             <WishlistButton
               propertyId={_id}
               variant="small"
@@ -179,6 +315,8 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
 
       {/* Property Details */}
       <View style={styles.detailsContainer}>
+        {/* Host status badge */}
+        {renderHostStatus()}
         {/* Property Type and Location */}
         <Text
           size="sm"
@@ -228,10 +366,11 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
             }}
           />
         </View>
+        {/* Host status badge remains */}
       </View>
 
       <CollectionsModal
-        visible={showCollectionsModal}
+        visible={showCollectionsModalState}
         onClose={handleCloseCollections}
         propertyId={_id}
         onCollectionToggle={handleCollectionToggle}

@@ -55,6 +55,7 @@ export const Button: React.FC<ButtonProps> = ({
   accessibilityLabel,
   radius: buttonRadius = "circle",
 }) => {
+  const { isDark } = useTheme();
   // Determine border radius based on radius prop
   const getBorderRadius = () => {
     if (typeof buttonRadius === "number") {
@@ -87,7 +88,7 @@ export const Button: React.FC<ButtonProps> = ({
 
     switch (variant) {
       case "primary":
-        return theme.text.primary; // #F56320 - Primary brand color
+        return theme.surface;
       case "secondary":
         return secondary[500];
       case "outline":
@@ -105,7 +106,7 @@ export const Button: React.FC<ButtonProps> = ({
 
     switch (variant) {
       case "outline":
-        return primary[500];
+        return isDark ? gray[700] : gray[300];
       case "primary":
         return primary[500];
       case "secondary":
@@ -121,7 +122,8 @@ export const Button: React.FC<ButtonProps> = ({
 
     switch (variant) {
       case "primary":
-        return "#FFFFFF"; // White text on primary background
+        return theme.text.primary; // Use theme text color instead of primary color
+
       case "secondary":
         return "#FFFFFF";
       case "outline":
@@ -129,7 +131,7 @@ export const Button: React.FC<ButtonProps> = ({
       case "ghost":
         return gray[700];
       default:
-        return "#FFFFFF";
+        return theme.text.primary; // Use theme text color instead of primary color
     }
   };
 

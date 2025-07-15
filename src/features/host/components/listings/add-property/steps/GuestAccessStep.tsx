@@ -3,6 +3,7 @@ import { Container, Button, Text } from "@shared/components";
 import StepHeader from "../StepHeader";
 import { GUEST_ACCESS_TYPES } from "@core/types/listings.types";
 import { spacing } from "@core/design";
+import { useTranslation } from "react-i18next";
 
 interface GuestAccessStepProps {
   formData: any;
@@ -13,18 +14,19 @@ export default function GuestAccessStep({
   formData,
   updateFormData,
 }: GuestAccessStepProps) {
+  const { t } = useTranslation();
   return (
     <Container>
       <StepHeader
-        title="What will guests have access to?"
-        description="Select the type of access your guests will have."
+        title={t("property.steps.guestAccess.title")}
+        description={t("property.steps.guestAccess.description")}
       />
 
       <Container marginTop="lg">
         {GUEST_ACCESS_TYPES.map((option) => (
           <Container key={option.value} marginBottom="md">
             <Button
-              title={option.label}
+              title={t(`property.types.${option.value}`)}
               onPress={() => updateFormData({ guestAccessType: option.value })}
               variant={
                 formData.guestAccessType === option.value
@@ -38,7 +40,7 @@ export default function GuestAccessStep({
               color="secondary"
               style={{ marginLeft: spacing.sm }}
             >
-              {option.description}
+              {t(`property.types.${option.value}Description`)}
             </Text>
           </Container>
         ))}

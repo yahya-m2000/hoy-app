@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { host } from "@core/api/services";
 import type { Property } from "@core/types/property.types";
@@ -17,6 +17,7 @@ export const useProperties = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const hasInitialized = useRef(false);
 
   /**
    * Fetches properties from API or cache.
@@ -80,8 +81,11 @@ export const useProperties = () => {
 
   // Initial load
   useEffect(() => {
-    fetchProperties();
-  }, [fetchProperties]);
+    if (!hasInitialized.current) {
+      hasInitialized.current = true;
+      fetchProperties();
+    }
+  }, []);
 
   // When screen focuses, refresh only if cache is stale (older than TTL)
   useFocusEffect(
@@ -108,6 +112,7 @@ export const useProperty = (id: string) => {
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const hasInitialized = useRef(false);
 
   const fetchProperty = useCallback(async () => {
     if (!id) return;
@@ -124,8 +129,11 @@ export const useProperty = (id: string) => {
   }, [id]);
 
   useEffect(() => {
-    fetchProperty();
-  }, [fetchProperty]);
+    if (!hasInitialized.current) {
+      hasInitialized.current = true;
+      fetchProperty();
+    }
+  }, []);
 
   return {
     property,

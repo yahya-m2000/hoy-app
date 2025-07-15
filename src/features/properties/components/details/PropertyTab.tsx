@@ -31,7 +31,7 @@ const PropertyTab: React.FC<PropertyTabProps> = ({
             ${price}
           </Text>
           <Text variant="body" color="secondary" style={{ marginLeft: 4 }}>
-            {t("property.perNight")}
+            {t("property.pricing.perNight")}
           </Text>
         </Container>
 
@@ -44,8 +44,8 @@ const PropertyTab: React.FC<PropertyTabProps> = ({
       <Button
         title={
           selectedDates?.startDate && selectedDates?.endDate
-            ? t("property.reserve")
-            : t("property.checkAvailability")
+            ? t("property.common.reserve")
+            : t("property.common.checkAvailability")
         }
         onPress={handleReservePress}
         variant="primary"

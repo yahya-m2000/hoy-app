@@ -38,6 +38,7 @@ const ImageItem = ({
   uploading?: boolean;
 }) => {
   const { theme } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Container flex={1} marginBottom="sm" style={{ position: "relative" }}>
@@ -85,7 +86,7 @@ const ImageItem = ({
           backgroundColor="success"
         >
           <Text variant="caption" weight="semibold" color="white">
-            Main
+            {t("property.images.main")}
           </Text>
         </Container>
       )}
@@ -186,8 +187,8 @@ export default function ImagesStep({
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
       Alert.alert(
-        t("property.images.permissionRequired"),
-        t("property.images.cameraRollPermission"),
+        t("property.permissionRequired"),
+        t("property.cameraRollPermission"),
         [{ text: t("common.ok") }]
       );
       return false;
@@ -220,7 +221,7 @@ export default function ImagesStep({
       return uploadResult.data.images.map((img) => img.imageUrl);
     } catch (error) {
       console.error("Property image upload error", error);
-      throw new Error(t("property.images.uploadError"));
+      throw new Error(t("property.uploadError"));
     }
   };
 
@@ -262,7 +263,7 @@ export default function ImagesStep({
       }
     } catch {
       setUploading(false);
-      Alert.alert(t("common.error"), t("property.images.pickError"));
+      Alert.alert(t("common.error"), t("property.pickError"));
     }
   };
 
@@ -273,8 +274,8 @@ export default function ImagesStep({
     const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
     if (cameraPermission.status !== "granted") {
       Alert.alert(
-        t("property.images.permissionRequired"),
-        t("property.images.cameraPermission"),
+        t("property.permissionRequired"),
+        t("property.cameraPermission"),
         [{ text: t("common.ok") }]
       );
       return;
@@ -311,7 +312,7 @@ export default function ImagesStep({
       }
     } catch {
       setUploading(false);
-      Alert.alert(t("common.error"), t("property.images.cameraError"));
+      Alert.alert(t("common.error"), t("property.cameraError"));
     }
   };
 
@@ -349,8 +350,8 @@ export default function ImagesStep({
     >
       <Container paddingBottom="xxl">
         <StepHeader
-          title={t("property.images.title")}
-          description={t("property.images.description")}
+          title={t("property.steps.images.title")}
+          description={t("property.steps.images.description")}
         />
 
         <UploadButton onPress={showImageOptions} uploading={uploading} />
@@ -360,7 +361,7 @@ export default function ImagesStep({
           <Container marginBottom="lg">
             <Container marginBottom="md">
               <Text variant="h6" weight="semibold" color="primary">
-                {t("property.images.photosAdded", { count: images.length })}
+                {t("property.photosAdded", { count: images.length })}
               </Text>
             </Container>
 
@@ -394,8 +395,8 @@ export default function ImagesStep({
         )}
 
         <InfoBox
-          title={t("property.images.tipTitle")}
-          content={t("property.images.tipContent")}
+          title={t("property.steps.images.tipTitle")}
+          content={t("property.steps.images.tipContent")}
           icon="bulb-outline"
           variant="tip"
         />

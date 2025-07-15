@@ -49,7 +49,11 @@ export default function PropertiesLayout() {
         }}
         activeOpacity={0.7}
       >
-        <Ionicons name="arrow-back" size={22} color={backButtonColor} />
+        <Ionicons
+          name="chevron-back-outline"
+          size={22}
+          color={backButtonColor}
+        />
       </TouchableOpacity>
     );
   };

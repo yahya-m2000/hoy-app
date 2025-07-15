@@ -1,0 +1,26 @@
+{ "home": {
+  "hello": "Salaan",
+  "discoverAmazingPlaces": "Ka hel meelaha cajiibka ah ee la dego",
+  "cannotConnect": "Lama xariiri karo. Fadlan hubi internet-kaaga.",
+  "pleaseTryAgainLater": "Fadlan isku day mar dambe.",
+  "in": "ku",
+  "signIn": "Soo gal",
+  "individualHost": "Martigeliye Qofeed",
+  "businessHost": "Martigeliye Ganacsi",
+  "organizationHost": "Martigeliye Urur",
+  "perNight": "habeenkii",
+  "whatThisPlaceOffers": "Waxa goobtan bixiso",
+  "showAll": "Dhammaan Muuji",
+  "meetYourHost": "La kulan Martidaada",
+  "night": "habeen",
+  "monthlyPotential": "Awoodda Bil kasta",
+  "analytics": "Falanqayn",
+  "categories": {
+    "popular": "Caan ah",
+    "available": "La heli karo",
+    "topRated": "Kuwa ugu sareeya",
+    "new": "Cusub",
+    "featured": "La xushay"
+  },
+  "noPropertiesInCategory": "Hanti kuma jirto qaybtaan"
+} }

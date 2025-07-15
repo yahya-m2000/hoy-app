@@ -1,6 +1,8 @@
 // Host setup and policies
 export * from "./useHostPolicies";
 export * from "./useHostSetupWithState";
+export * from "./useHostSetupStatus";
+export { useHostSetupNew } from "./useHostSetupNew";
 
 // Properties - prioritize React Query implementation and add simple version with different name
 export { useHostProperties, useHostProperty } from "./useHostProperties";

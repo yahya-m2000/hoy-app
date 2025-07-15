@@ -66,16 +66,36 @@ export default function SearchDateModal({
     initialStartDate ||
     (searchState.startDate && typeof searchState.startDate === "string"
       ? searchState.startDate
-      : searchState.startDate
-      ? format(new Date(searchState.startDate), "yyyy-MM-dd")
+      : searchState.startDate && searchState.startDate !== undefined
+      ? (() => {
+          try {
+            const date = new Date(searchState.startDate);
+            return !isNaN(date.getTime())
+              ? format(date, "yyyy-MM-dd")
+              : format(today, "yyyy-MM-dd");
+          } catch (error) {
+            console.warn("Error formatting start date:", error);
+            return format(today, "yyyy-MM-dd");
+          }
+        })()
       : format(today, "yyyy-MM-dd"));
 
   const defaultEndDate =
     initialEndDate ||
     (searchState.endDate && typeof searchState.endDate === "string"
       ? searchState.endDate
-      : searchState.endDate
-      ? format(new Date(searchState.endDate), "yyyy-MM-dd")
+      : searchState.endDate && searchState.endDate !== undefined
+      ? (() => {
+          try {
+            const date = new Date(searchState.endDate);
+            return !isNaN(date.getTime())
+              ? format(date, "yyyy-MM-dd")
+              : format(tomorrow, "yyyy-MM-dd");
+          } catch (error) {
+            console.warn("Error formatting end date:", error);
+            return format(tomorrow, "yyyy-MM-dd");
+          }
+        })()
       : format(tomorrow, "yyyy-MM-dd"));
 
   const [startDate, setStartDate] = useState<string>(defaultStartDate);
@@ -101,29 +121,53 @@ export default function SearchDateModal({
   }, [startDate, endDate]);
 
   const handleApply = () => {
-    // Format the dates for display
-    const formattedStart = format(new Date(startDate), "MMM dd");
-    const formattedEnd = format(new Date(endDate), "MMM dd");
-    const displayDates = `${formattedStart} - ${formattedEnd}`;
+    try {
+      // Format the dates for display
+      const formattedStart = (() => {
+        try {
+          const date = new Date(startDate);
+          return !isNaN(date.getTime()) ? format(date, "MMM dd") : "Invalid";
+        } catch (error) {
+          console.warn("Error formatting start date for display:", error);
+          return "Invalid";
+        }
+      })();
 
-    // Always update search state (removed property-specific logic)
-    updateSearchState({
-      startDate,
-      endDate,
-      displayDates,
-      nights,
-    });
+      const formattedEnd = (() => {
+        try {
+          const date = new Date(endDate);
+          return !isNaN(date.getTime()) ? format(date, "MMM dd") : "Invalid";
+        } catch (error) {
+          console.warn("Error formatting end date for display:", error);
+          return "Invalid";
+        }
+      })();
 
-    // Call the callback if provided
-    onDatesSelected?.({
-      startDate,
-      endDate,
-      nights,
-      displayDates,
-    });
+      const displayDates = `${formattedStart} - ${formattedEnd}`;
 
-    // Close the modal
-    onClose();
+      // Always update search state (removed property-specific logic)
+      updateSearchState({
+        startDate,
+        endDate,
+        displayDates,
+        nights,
+      });
+
+      // Call the callback if provided
+      onDatesSelected?.({
+        startDate,
+        endDate,
+        nights,
+        displayDates,
+      });
+
+      // Close the modal
+      onClose();
+    } catch (error) {
+      console.error("Error in handleApply:", error);
+      // Still close the modal even if there's an error
+      onClose();
+    }
   };
 
   return (
@@ -156,9 +200,21 @@ export default function SearchDateModal({
                 {t("search.checkIn") || "Check In"}
               </Text>
               <Text variant="body" weight="semibold">
-                {startDate && !isNaN(new Date(startDate).getTime())
-                  ? format(new Date(startDate), "E, MMM d")
-                  : t("common.notSelected") || "--"}
+                {(() => {
+                  if (!startDate) return t("common.notSelected") || "--";
+                  try {
+                    const date = new Date(startDate);
+                    return !isNaN(date.getTime())
+                      ? format(date, "E, MMM d")
+                      : t("common.notSelected") || "--";
+                  } catch (error) {
+                    console.warn(
+                      "Error formatting check-in date display:",
+                      error
+                    );
+                    return t("common.notSelected") || "--";
+                  }
+                })()}
               </Text>
             </Container>
             <Container marginHorizontal="sm">
@@ -173,9 +229,21 @@ export default function SearchDateModal({
                 weight="semibold"
                 color={isDark ? "primary" : "primary"}
               >
-                {endDate && !isNaN(new Date(endDate).getTime())
-                  ? format(new Date(endDate), "E, MMM d")
-                  : t("common.notSelected") || "--"}
+                {(() => {
+                  if (!endDate) return t("common.notSelected") || "--";
+                  try {
+                    const date = new Date(endDate);
+                    return !isNaN(date.getTime())
+                      ? format(date, "E, MMM d")
+                      : t("common.notSelected") || "--";
+                  } catch (error) {
+                    console.warn(
+                      "Error formatting check-out date display:",
+                      error
+                    );
+                    return t("common.notSelected") || "--";
+                  }
+                })()}
               </Text>
             </Container>
           </Container>
@@ -192,16 +260,37 @@ export default function SearchDateModal({
 
           {/* Calendar Component */}
           <Calendar
-            initialStartDate={new Date(startDate)}
-            initialEndDate={endDate ? new Date(endDate) : undefined}
+            initialStartDate={(() => {
+              try {
+                const date = new Date(startDate);
+                return !isNaN(date.getTime()) ? date : today;
+              } catch (error) {
+                console.warn("Error creating initial start date:", error);
+                return today;
+              }
+            })()}
+            initialEndDate={(() => {
+              if (!endDate) return undefined;
+              try {
+                const date = new Date(endDate);
+                return !isNaN(date.getTime()) ? date : undefined;
+              } catch (error) {
+                console.warn("Error creating initial end date:", error);
+                return undefined;
+              }
+            })()}
             enableRangeSelection={true}
             showLegend={false}
             onDateSelect={(selectedStartDate: Date, selectedEndDate?: Date) => {
-              setStartDate(format(selectedStartDate, "yyyy-MM-dd"));
-              if (selectedEndDate) {
-                setEndDate(format(selectedEndDate, "yyyy-MM-dd"));
-              } else {
-                setEndDate("");
+              try {
+                setStartDate(format(selectedStartDate, "yyyy-MM-dd"));
+                if (selectedEndDate) {
+                  setEndDate(format(selectedEndDate, "yyyy-MM-dd"));
+                } else {
+                  setEndDate("");
+                }
+              } catch (error) {
+                console.error("Error in onDateSelect:", error);
               }
             }}
             minDate={today}

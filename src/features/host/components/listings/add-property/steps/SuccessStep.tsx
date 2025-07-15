@@ -2,6 +2,7 @@ import React from "react";
 import { Container, Text, Button, Icon } from "@shared/components";
 import { router } from "expo-router";
 import { spacing, iconSize } from "@core/design";
+import { useTranslation } from "react-i18next";
 
 interface SuccessStepProps {
   formData: any;
@@ -12,14 +13,19 @@ export default function SuccessStep({
   formData,
   isPublished,
 }: SuccessStepProps) {
+  const { t } = useTranslation();
   const handleViewListing = () => {
     if (formData._id) {
-      router.push(`/property/${formData._id}`);
+      router.push(`/(tabs)/host/listings/${formData._id}`);
     }
   };
 
   const handleAddAnother = () => {
     router.replace("/host/listings/add/index");
+  };
+
+  const handleClose = () => {
+    router.replace("/(tabs)/host/listings");
   };
 
   return (
@@ -41,7 +47,9 @@ export default function SuccessStep({
         weight="bold"
         style={{ marginBottom: spacing.sm, textAlign: "center" }}
       >
-        {isPublished ? "Congratulations!" : "Draft Saved!"}
+        {isPublished
+          ? t("property.steps.success.congratulations")
+          : t("property.steps.success.draftSaved")}
       </Text>
 
       <Text
@@ -50,22 +58,29 @@ export default function SuccessStep({
         style={{ marginBottom: spacing.xl, textAlign: "center" }}
       >
         {isPublished
-          ? "Your property has been published and is now live"
-          : "Your property has been saved as a draft"}
+          ? t("property.steps.success.publishedMessage")
+          : t("property.steps.success.draftMessage")}
       </Text>
 
       <Container marginTop="lg">
         <Button
-          title="View Listing"
+          title={t("property.common.viewListing")}
           variant="primary"
           onPress={handleViewListing}
           style={{ marginBottom: spacing.md }}
         />
 
         <Button
-          title="Add Another Property"
+          title={t("property.common.addAnother")}
           variant="outline"
           onPress={handleAddAnother}
+          style={{ marginBottom: spacing.md }}
+        />
+
+        <Button
+          title={t("common.close", "Close")}
+          variant="ghost"
+          onPress={handleClose}
         />
       </Container>
     </Container>

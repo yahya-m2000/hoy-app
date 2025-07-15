@@ -4,25 +4,19 @@
  */
 
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ActivityIndicator,
-  ScrollView,
-} from "react-native";
+import { TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 
 import { useTranslation } from "react-i18next";
-import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 // Context
 import { useTheme } from "@core/hooks";
 import { useAuth } from "@core/context";
 import { useCurrentUser } from "@features/user/hooks";
+import { Container, Text, Icon } from "@shared/components";
 
 // Constants
 import { fontSize, spacing, radius } from "@core/design";
+
 interface PaymentMethod {
   id: string;
   type: "zaad";
@@ -139,295 +133,129 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
+      <Container alignItems="center" justifyContent="center" padding="xl">
         <ActivityIndicator size="large" color={theme.colors.primary} />
-        <Text
-          style={[
-            styles.loadingText,
-            { color: isDark ? theme.colors.gray[400] : theme.colors.gray[600] },
-          ]}
-        >
+        <Text variant="body" style={{ marginTop: spacing.md }}>
           {t("payment.loading")}
         </Text>
-      </View>
+      </Container>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <Text
-        style={[
-          styles.title,
-          { color: isDark ? theme.colors.gray[200] : theme.colors.gray[800] },
-        ]}
-      >
-        {t("payment.selectMethod")}
-      </Text>
-
+    <Container>
       {error && (
-        <View
-          style={[
-            styles.errorContainer,
-            {
-              backgroundColor: isDark
-                ? theme.colors.error[900]
-                : theme.colors.error[50],
-              borderColor: theme.colors.error[500],
-            },
-          ]}
-        >
-          <Ionicons
-            name="alert-circle-outline"
-            size={20}
-            color={theme.colors.error[500]}
-          />
-          <Text
-            style={[
-              styles.errorText,
-              {
-                color: isDark
-                  ? theme.colors.error[100]
-                  : theme.colors.error[700],
-              },
-            ]}
-          >
+        <Container flexDirection="row" alignItems="center" marginBottom="md">
+          <Icon name="alert-circle" size={20} color={theme.colors.error} />
+          <Text variant="caption" style={{ marginLeft: spacing.xs, flex: 1 }}>
             {error}
           </Text>
-        </View>
+        </Container>
       )}
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={styles.methodsList}
+        style={{ marginBottom: spacing.md }}
       >
         {paymentMethods.length === 0 && !error ? (
           // Show message when user has no phone number for ZAAD
-          <View
-            style={[
-              styles.noPhoneContainer,
-              {
-                backgroundColor: isDark
-                  ? theme.colors.gray[800]
-                  : theme.colors.gray[50],
-                borderColor: isDark
-                  ? theme.colors.gray[700]
-                  : theme.colors.gray[300],
-              },
-            ]}
-          >
-            <Ionicons
-              name="phone-portrait-outline"
+          <Container alignItems="center" padding="xl">
+            <Icon
+              name="phone-portrait"
               size={48}
-              color={isDark ? theme.colors.gray[400] : theme.colors.gray[500]}
-              style={styles.noPhoneIcon}
+              style={{ marginBottom: spacing.md }}
             />
             <Text
-              style={[
-                styles.noPhoneTitle,
-                { color: isDark ? theme.white : theme.colors.gray[900] },
-              ]}
+              variant="h6"
+              weight="semibold"
+              style={{ marginBottom: spacing.sm, textAlign: "center" }}
             >
               {t("reservation.noPaymentMethodTitle")}
             </Text>
             <Text
-              style={[
-                styles.noPhoneDescription,
-                {
-                  color: isDark
-                    ? theme.colors.gray[400]
-                    : theme.colors.gray[600],
-                },
-              ]}
+              variant="body"
+              style={{
+                marginBottom: spacing.lg,
+                textAlign: "center",
+                lineHeight: 20,
+              }}
             >
               {t("reservation.noPaymentMethodDescription")}
             </Text>
             <TouchableOpacity
-              style={[
-                styles.goToProfileButton,
-                { backgroundColor: theme.colors.primary },
-              ]}
+              style={{
+                backgroundColor: theme.colors.primary,
+                paddingHorizontal: spacing.lg,
+                paddingVertical: spacing.sm,
+                borderRadius: radius.md,
+              }}
               onPress={() => router.push("/(overlays)/account/personal-info")}
             >
-              <Text style={styles.goToProfileButtonText}>
+              <Text variant="body" weight="semibold" color={theme.white}>
                 {t("reservation.goToProfile")}
               </Text>
             </TouchableOpacity>
-          </View>
+          </Container>
         ) : (
           paymentMethods.map((method) => (
             <TouchableOpacity
               key={method.id}
-              style={[
-                styles.methodItem,
-                {
-                  backgroundColor: isDark
-                    ? theme.colors.gray[800]
-                    : theme.white,
-                  borderColor:
-                    method.id === selectedMethod?.id
-                      ? theme.colors.primary
-                      : isDark
-                      ? theme.colors.gray[700]
-                      : theme.colors.gray[300],
-                  borderWidth: method.id === selectedMethod?.id ? 2 : 1,
-                },
-              ]}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: spacing.md,
+                borderRadius: radius.md,
+                borderWidth: method.id === selectedMethod?.id ? 2 : 1,
+                borderColor:
+                  method.id === selectedMethod?.id
+                    ? theme.colors.primary
+                    : isDark
+                    ? theme.colors.gray[700]
+                    : theme.colors.gray[300],
+                marginBottom: spacing.sm,
+              }}
               onPress={() => handleSelectMethod(method)}
             >
-              <View style={styles.methodContent}>
-                <View style={[styles.zaadLogo, { backgroundColor: "#00A651" }]}>
-                  <Text style={styles.zaadLogoText}>ZAAD</Text>
-                </View>
-                <View style={styles.paymentDetails}>
-                  <Text
-                    style={[
-                      styles.paymentBrand,
-                      {
-                        color: isDark ? theme.white : theme.colors.gray[900],
-                      },
-                    ]}
-                  >
+              <Container flexDirection="row" alignItems="center" flex={1}>
+                <Container
+                  width={40}
+                  height={40}
+                  borderRadius="circle"
+                  alignItems="center"
+                  justifyContent="center"
+                  marginRight="sm"
+                  backgroundColor="#00A651"
+                >
+                  <Text variant="caption" weight="bold" color={theme.white}>
+                    ZAAD
+                  </Text>
+                </Container>
+                <Container flex={1}>
+                  <Text variant="body" weight="semibold">
                     ZAAD Mobile Payment
                   </Text>
-                  <Text
-                    style={[
-                      styles.paymentPhone,
-                      {
-                        color: isDark
-                          ? theme.colors.gray[400]
-                          : theme.colors.gray[600],
-                      },
-                    ]}
-                  >
+                  <Text variant="caption">
                     {t("payment.phone")}: {method.details.phone}
                   </Text>
-                </View>
-              </View>
+                </Container>
+              </Container>
 
               {method.id === selectedMethod?.id && (
-                <View style={styles.checkmarkContainer}>
-                  <Ionicons
+                <Container marginLeft="md">
+                  <Icon
                     name="checkmark-circle"
                     size={24}
                     color={theme.colors.primary}
                   />
-                </View>
+                </Container>
               )}
             </TouchableOpacity>
           ))
         )}
       </ScrollView>
-    </View>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: spacing.md,
-  },
-  title: {
-    fontSize: fontSize.lg,
-    fontWeight: "600",
-    marginBottom: spacing.md,
-  },
-  loadingContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    padding: spacing.xl,
-  },
-  loadingText: {
-    marginTop: spacing.md,
-    fontSize: fontSize.md,
-  },
-  errorContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: spacing.sm,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    marginBottom: spacing.md,
-  },
-  errorText: {
-    marginLeft: spacing.xs,
-    fontSize: fontSize.sm,
-    flex: 1,
-  },
-  methodsList: {
-    marginBottom: spacing.md,
-  },
-  methodItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: spacing.md,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    marginBottom: spacing.sm,
-  },
-  methodContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  paymentDetails: {
-    flex: 1,
-  },
-  paymentBrand: {
-    fontSize: fontSize.md,
-    fontWeight: "500",
-    marginBottom: 2,
-  },
-  paymentPhone: {
-    fontSize: fontSize.sm,
-  },
-  checkmarkContainer: {
-    paddingLeft: spacing.md,
-  },
-  zaadLogo: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: spacing.sm,
-  },
-  zaadLogoText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: fontSize.sm,
-  },
-  noPhoneContainer: {
-    alignItems: "center",
-    padding: spacing.xl,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    marginBottom: spacing.md,
-  },
-  noPhoneIcon: {
-    marginBottom: spacing.md,
-  },
-  noPhoneTitle: {
-    fontSize: fontSize.lg,
-    fontWeight: "600",
-    marginBottom: spacing.sm,
-    textAlign: "center",
-  },
-  noPhoneDescription: {
-    fontSize: fontSize.md,
-    textAlign: "center",
-    marginBottom: spacing.lg,
-    lineHeight: 20,
-  },
-  goToProfileButton: {
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.md,
-  },
-  goToProfileButtonText: {
-    color: "white",
-    fontSize: fontSize.md,
-    fontWeight: "600",
-  },
-});
 
 export default PaymentMethodSelector;

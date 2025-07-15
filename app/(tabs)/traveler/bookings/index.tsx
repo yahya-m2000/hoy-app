@@ -75,7 +75,8 @@ const BookingsScreen = () => {
         totalAmount: booking.totalAmount,
         totalPrice: booking.totalPrice || booking.totalAmount,
         specialRequests: booking.specialRequests,
-        status: booking.status,
+        status: booking.bookingStatus || booking.status,
+        bookingStatus: booking.bookingStatus || booking.status, // <-- Add this line
         paymentStatus: booking.paymentStatus,
         paymentId: booking.paymentId,
         contactInfo: booking.contactInfo,
@@ -100,21 +101,33 @@ const BookingsScreen = () => {
   }, [refetch]);
 
   // Separate bookings into upcoming and past
-  const upcomingBookings = allBookings.filter(
-    (booking) =>
-      (booking.status === "confirmed" ||
-        booking.status === "pending" ||
-        booking.status === "in_progress") &&
-      new Date(booking.checkIn) >= new Date()
-  );
+  const upcomingBookings = allBookings.filter((booking) => {
+    const isUpcomingStatus =
+      booking.status === "confirmed" ||
+      booking.status === "pending" ||
+      booking.status === "in_progress";
+    const isFutureDate = new Date(booking.checkIn) >= new Date();
 
-  const pastBookings = allBookings.filter(
-    (booking) =>
-      booking.status === "completed" ||
-      booking.status === "cancelled" ||
-      (new Date(booking.checkOut) < new Date() &&
-        booking.status !== "in_progress")
-  );
+    console.log(
+      `📅 Booking ${booking._id}: status=${booking.status}, checkIn=${booking.checkIn}, isUpcomingStatus=${isUpcomingStatus}, isFutureDate=${isFutureDate}`
+    );
+
+    return isUpcomingStatus && isFutureDate;
+  });
+
+  const pastBookings = allBookings.filter((booking) => {
+    const isPastStatus =
+      booking.status === "completed" || booking.status === "cancelled";
+    const isPastDate =
+      new Date(booking.checkOut) < new Date() &&
+      booking.status !== "in_progress";
+
+    console.log(
+      `📅 Booking ${booking._id}: status=${booking.status}, checkOut=${booking.checkOut}, isPastStatus=${isPastStatus}, isPastDate=${isPastDate}`
+    );
+
+    return isPastStatus || isPastDate;
+  });
 
   // Show loading state
   if (isLoading) {
@@ -146,7 +159,7 @@ const BookingsScreen = () => {
           <EmptyState
             icon="calendar-outline"
             title={t("bookings.signInToViewBookings")}
-            message={t("bookings.signInToViewBookings")}
+            message={t("bookings.signInToViewBookingsMessage")}
             action={{
               label: t("auth.signIn"),
               onPress: () => router.push("/auth/login"),

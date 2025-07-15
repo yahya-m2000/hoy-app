@@ -196,7 +196,8 @@ export class BookingService {
    */
   static async cancelBooking(id: string, reason?: string): Promise<Booking> {
     try {
-      const response = await api.put<{ data: Booking }>(BOOKING_ENDPOINTS.CANCEL(id), { reason });
+      const body = reason ? { reason } : {};
+      const response = await api.put<{ data: Booking }>(BOOKING_ENDPOINTS.CANCEL(id), body);
       return response.data.data;
     } catch (error: any) {
       logger.error("Error cancelling booking:", error);
@@ -285,10 +286,37 @@ export class BookingService {
       try {
         const response = await api.get(BOOKING_ENDPOINTS.BOOKED_DATES(propertyId));
         
-        if (response.data && Array.isArray((response.data as any)?.data)) {
-          return (response.data as any)?.data;
+        // Add comprehensive null checks and logging for iOS debugging
+        const responseData = response?.data as any;
+        logger.log("Raw API response for booked dates:", {
+          hasResponse: !!response,
+          hasData: !!responseData,
+          responseDataType: typeof responseData,
+          responseDataKeys: responseData ? Object.keys(responseData) : [],
+          isArray: Array.isArray(responseData),
+          isDataArray: Array.isArray(responseData?.data)
+        });
+        
+        // Handle different response structures safely
+        if (responseData) {
+          // Case 1: response.data is directly an array
+          if (Array.isArray(responseData)) {
+            logger.log("Using response.data as array:", responseData.length);
+            return responseData;
+          }
+          
+          // Case 2: response.data.data is an array
+          if (responseData.data && Array.isArray(responseData.data)) {
+            logger.log("Using response.data.data as array:", responseData.data.length);
+            return responseData.data;
+          }
+          
+          // Case 3: response.data has a different structure
+          logger.warn("Unexpected response structure for booked dates:", responseData);
         }
         
+        // Fallback: return empty array if no valid data found
+        logger.warn("No valid booked dates data found, returning empty array");
         return [];
       } catch (error: any) {
         if (retryCount < MAX_RETRY_ATTEMPTS) {
@@ -298,7 +326,8 @@ export class BookingService {
         }
         
         logger.error("Error fetching booked dates:", error);
-        throw formatError(error, "Could not fetch booked dates");
+        // Return empty array instead of throwing to prevent app crashes
+        return [];
       }
     });
   }

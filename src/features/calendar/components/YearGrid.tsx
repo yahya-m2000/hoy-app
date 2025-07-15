@@ -1,9 +1,11 @@
 import React, { useMemo, useCallback } from "react";
-import { View, StyleSheet, FlatList } from "react-native";
+import { FlatList } from "react-native";
 import { useTranslation } from "react-i18next";
 import { MonthThumbnail } from "./MonthThumbnail";
 import { generateYearData, MonthData } from "../utils/dateUtils";
 import { spacing } from "@core/design";
+import { Container, Text } from "@shared/components";
+import { useProperty } from "@features/calendar/hooks/useProperty";
 
 interface YearGridProps {
   year: number;
@@ -23,6 +25,7 @@ const YearGridComponent: React.FC<YearGridProps> = ({
   isLoading = false,
 }) => {
   const { t } = useTranslation();
+  const { selectedProperty } = useProperty();
 
   console.log("📅 YearGrid: Rendering with props", {
     year,
@@ -32,10 +35,22 @@ const YearGridComponent: React.FC<YearGridProps> = ({
   });
 
   // Memoize year data generation
-  const yearData = useMemo(
-    () => generateYearData(year, propertyId),
-    [year, propertyId]
-  );
+  const [yearData, setYearData] = React.useState<MonthData[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  React.useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+    (async () => {
+      const data = await generateYearData(year, selectedProperty?.id);
+      if (isMounted) {
+        setYearData(data);
+        setLoading(false);
+      }
+    })();
+    return () => {
+      isMounted = false;
+    };
+  }, [year, selectedProperty]);
   // Memoize the month press handler to prevent unnecessary re-renders of MonthThumbnails
   const handleMonthPress = useCallback(
     (month: Date) => {
@@ -74,13 +89,13 @@ const YearGridComponent: React.FC<YearGridProps> = ({
       });
 
       return (
-        <View style={styles.monthContainer}>
+        <Container width="33%" marginBottom="lg">
           <MonthThumbnail
             monthData={monthData}
             onPress={handleMonthPress}
             propertyId={propertyId}
           />
-        </View>
+        </Container>
       );
     },
     [handleMonthPress, propertyId, t]
@@ -92,10 +107,17 @@ const YearGridComponent: React.FC<YearGridProps> = ({
       `${monthData.month.getFullYear()}-${monthData.month.getMonth()}`,
     []
   );
+  if (loading) {
+    return (
+      <Container flex={1} justifyContent="center" alignItems="center">
+        <Text>Loading...</Text>
+      </Container>
+    );
+  }
   return (
-    <View style={styles.container}>
+    <Container flex={1}>
       {/* Grid using FlatList for better performance */}
-      <View style={styles.gridContainer}>
+      <Container flex={1}>
         <FlatList
           data={yearData}
           renderItem={renderMonth}
@@ -110,34 +132,13 @@ const YearGridComponent: React.FC<YearGridProps> = ({
             offset: 160 * Math.floor(index / 3),
             index,
           })}
-          contentContainerStyle={styles.flatListContent}
+          contentContainerStyle={{ justifyContent: "space-between" }}
           showsVerticalScrollIndicator={false}
         />
-      </View>
-    </View>
+      </Container>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  gridContainer: {
-    flex: 1,
-  },
-  flatListContent: {
-    justifyContent: "space-between",
-  },
-  grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-  },
-  monthContainer: {
-    width: "33%",
-    marginBottom: spacing.lg,
-  },
-});
 
 // Export component with display name
 YearGridComponent.displayName = "YearGrid";

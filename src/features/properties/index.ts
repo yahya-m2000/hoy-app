@@ -3,6 +3,9 @@
  * All property-related functionality exports
  */
 
+// Export context
+export * from "./context";
+
 // Export modals
 export * from "./modals";
 

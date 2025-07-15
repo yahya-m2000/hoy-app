@@ -175,7 +175,7 @@ export default function AccountLinkingScreen() {
         <Header
           title={t("auth.accountLinking")}
           left={{
-            icon: "arrow-back",
+            icon: "chevron-back-outline",
             onPress: handleCancel,
           }}
         />
@@ -193,7 +193,7 @@ export default function AccountLinkingScreen() {
       <Header
         title={t("auth.accountLinking")}
         left={{
-          icon: "arrow-back",
+          icon: "chevron-back-outline",
           onPress: handleCancel,
         }}
       />

@@ -108,7 +108,7 @@ export const PaymentMethodStep: React.FC<PaymentMethodStepProps> = ({
         {onBack && (
           <TouchableOpacity style={styles.backButton} onPress={onBack}>
             <Ionicons
-              name="arrow-back"
+              name="chevron-back-outline"
               size={20}
               color={theme.colors.gray[700]}
             />

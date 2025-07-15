@@ -71,11 +71,11 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isUpcoming }) => {
 
   // Get property data
 
-  // Helper function to get property title using Property type structure
-  const getPropertyTitle = () => {
+  // Helper function to get property name using Property type structure
+  const getPropertyName = () => {
     if (!property) return "Property";
-    // Property type uses 'title' field
-    return property.title || "Property";
+    // Property type uses 'name' field, fallback to 'title' for compatibility
+    return (property as any).name || property.title || "Property";
   };
 
   // Format location display using Property type address structure
@@ -87,11 +87,23 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isUpcoming }) => {
       return property.locationString;
     }
 
+    // Check if property has address object
+    if ((property as any).address) {
+      const address = (property as any).address;
+      if (address.city && address.country) {
+        return `${address.city}, ${address.country}`;
+      } else if (address.city) {
+        return address.city;
+      } else if (address.country) {
+        return address.country;
+      }
+    }
+
     // Fallback to location or "Location not specified"
     return property.location || "Location not specified";
   };
   const locationDisplay = getLocationDisplay();
-  const propertyTitle = getPropertyTitle();
+  const propertyName = getPropertyName();
 
   // Format price with null check
   const formatPrice = (amount: number | undefined) => {
@@ -109,7 +121,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isUpcoming }) => {
       style={[styles.container]}
       onPress={navigateToBookingDetails}
       accessibilityRole="button"
-      accessibilityLabel={`Booking for ${propertyTitle || "Property"} in ${
+      accessibilityLabel={`Booking for ${propertyName || "Property"} in ${
         locationDisplay || "Location"
       }`}
     >
@@ -130,7 +142,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isUpcoming }) => {
       </View>
       {/* Property Details */}
       <View style={styles.detailsContainer}>
-        {/* Location and Status Row */}
+        {/* Property Name and Status Row */}
         <View style={styles.locationRow}>
           <Text
             size="sm"
@@ -138,17 +150,17 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isUpcoming }) => {
             color={isDark ? theme.colors.gray[50] : theme.colors.gray[900]}
             style={[styles.location]}
           >
-            {locationDisplay || "Location not specified"}
+            {propertyName || "Property"}
           </Text>
         </View>
-        {/* Property Title */}
+        {/* Property Location */}
         <Text
           size="sm"
           weight="normal"
           color={isDark ? theme.colors.gray[300] : theme.colors.gray[600]}
           style={[styles.title]}
         >
-          {propertyTitle || "Property"}
+          {locationDisplay || "Location not specified"}
         </Text>
         {/* Dates */}
         <Text

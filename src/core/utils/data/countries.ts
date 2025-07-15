@@ -2,9 +2,9 @@ export interface Country {
   code: string; // ISO 3166-1 alpha-2 code
   name: string;
   phoneCode: string;
-  flag: string;
-  cities: string[];
-  states: string[];
+  flag?: string;
+  cities?: string[];
+  states?: string[];
 }
 
 export const COUNTRIES: Country[] = [
@@ -456,10 +456,12 @@ export const searchCities = (query: string, countryCode?: string): string[] => {
   // Search across all countries
   const allCities: string[] = [];
   COUNTRIES.forEach(country => {
-    const matchingCities = country.cities.filter(city =>
-      city.toLowerCase().includes(lowerQuery)
-    );
-    allCities.push(...matchingCities);
+    if (country.cities) {
+      const matchingCities = country.cities.filter(city =>
+        city.toLowerCase().includes(lowerQuery)
+      );
+      allCities.push(...matchingCities);
+    }
   });
   
   // Remove duplicates and sort
@@ -502,11 +504,10 @@ export const getCountryByCity = (cityName: string): Country | null => {
   const lowerCityName = cityName.toLowerCase();
   
   for (const country of COUNTRIES) {
-    if (country.cities.some(city => city.toLowerCase() === lowerCityName)) {
+    if (country.cities && country.cities.some(city => city.toLowerCase() === lowerCityName)) {
       return country;
     }
   }
-  
   return null;
 };
 
@@ -526,7 +527,7 @@ export const validateCountryCityState = (
   
   // Validate city belongs to country
   if (country) {
-    const cityMatch = country.cities.some(city => city.toLowerCase() === cityName.toLowerCase());
+    const cityMatch = country.cities?.some(city => city.toLowerCase() === cityName.toLowerCase());
     
     if (!cityMatch) {
       errors.push('City does not belong to selected country');
@@ -535,7 +536,7 @@ export const validateCountryCityState = (
   
   // Validate state belongs to country
   if (country && stateName) {
-    const stateMatch = country.states.some(state => state.toLowerCase() === stateName.toLowerCase());
+    const stateMatch = country.states?.some(state => state.toLowerCase() === stateName.toLowerCase());
     
     if (!stateMatch) {
       errors.push('State does not belong to selected country');
@@ -558,7 +559,7 @@ export const isCityValidForCountry = (countryCode: string, cityName: string): bo
   const country = getCountryByCode(countryCode);
   if (!country) return false;
   
-  return country.cities.some(city => 
+  return !!country.cities?.some(city => 
     city.toLowerCase() === cityName.toLowerCase()
   );
 }; 

@@ -11,9 +11,10 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { logger } from "@core/utils/sys/log/";
 import { WishlistService, WishlistCollection } from "@core/api/services";
+import { useWishlistState } from "@features/properties/context/PropertyContext";
 
 // Base components
-import { Button, Container } from "@shared/components";
+import { Button, Container, Tab } from "@shared/components";
 
 // Local components
 import { ModalHeader } from "./ModalHeader";
@@ -37,38 +38,22 @@ const CollectionsModal: React.FC<CollectionsModalProps> = ({
   const queryClient = useQueryClient();
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
+  const {
+    collections,
+    isLoadingCollections,
+    addToWishlist,
+    removeFromWishlist,
+  } = useWishlistState();
 
-  const [collections, setCollections] = useState<WishlistCollection[]>([]);
-  const [loading, setLoading] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState("");
   const [creating, setCreating] = useState(false);
-
-  // Load collections when modal opens
-  useEffect(() => {
-    if (visible) {
-      loadCollections();
-    }
-  }, [visible]);
 
   // Debug: Track showCreateModal changes
   // Remove debug logging to prevent console spam
   // useEffect(() => {
   //   console.log("showCreateModal changed to:", showCreateModal);
   // }, [showCreateModal]);
-
-  const loadCollections = useCallback(async () => {
-    try {
-      setLoading(true);
-      const collectionsData = await WishlistService.getCollections();
-      setCollections(collectionsData);
-    } catch (err) {
-      logger.error("Failed to load collections:", err);
-      Alert.alert("Error", "Failed to load collections");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
 
   const handleCreateCollection = useCallback(async () => {
     if (!newCollectionName.trim()) {
@@ -85,10 +70,7 @@ const CollectionsModal: React.FC<CollectionsModalProps> = ({
 
       // Add property to the new collection if propertyId is provided
       if (propertyId) {
-        await WishlistService.addPropertyToCollection(
-          newCollection._id,
-          propertyId
-        );
+        await addToWishlist(propertyId, newCollection._id);
         onCollectionToggle?.(newCollection._id, true);
       }
 
@@ -98,26 +80,19 @@ const CollectionsModal: React.FC<CollectionsModalProps> = ({
 
       // Close main modal first
       onClose();
-
-      // Refresh collections data in background
-      setTimeout(async () => {
-        try {
-          await loadCollections();
-          queryClient.invalidateQueries({ queryKey: ["wishlistCollections"] });
-        } catch (refreshError) {
-          console.warn(
-            "Failed to refresh collections after creation:",
-            refreshError
-          );
-        }
-      }, 100);
     } catch (err) {
       logger.error("Failed to create collection:", err);
       Alert.alert("Error", "Failed to create collection");
     } finally {
       setCreating(false);
     }
-  }, [newCollectionName, propertyId, onCollectionToggle, onClose, queryClient]);
+  }, [
+    newCollectionName,
+    propertyId,
+    onCollectionToggle,
+    onClose,
+    addToWishlist,
+  ]);
 
   const handleCollectionPress = useCallback(
     async (collection: WishlistCollection) => {
@@ -128,42 +103,21 @@ const CollectionsModal: React.FC<CollectionsModalProps> = ({
           collection.properties.includes(propertyId);
 
         if (isPropertyInCollection) {
-          await WishlistService.removePropertyFromCollection(
-            collection._id,
-            propertyId
-          );
+          await removeFromWishlist(propertyId);
           onCollectionToggle?.(collection._id, false);
         } else {
-          await WishlistService.addPropertyToCollection(
-            collection._id,
-            propertyId
-          );
+          await addToWishlist(propertyId, collection._id);
           onCollectionToggle?.(collection._id, true);
         }
 
         // Close modal first to prevent UI issues
         onClose();
-
-        // Then refresh data in background to prevent UI conflicts
-        setTimeout(async () => {
-          try {
-            await loadCollections();
-            queryClient.invalidateQueries({
-              queryKey: ["wishlistCollections"],
-            });
-          } catch (refreshError) {
-            console.warn(
-              "Failed to refresh collections after update:",
-              refreshError
-            );
-          }
-        }, 100);
       } catch (error) {
         logger.error("Failed to toggle property in collection:", error);
         Alert.alert("Error", "Failed to update collection");
       }
     },
-    [propertyId, onCollectionToggle, onClose, queryClient]
+    [propertyId, onCollectionToggle, onClose, removeFromWishlist, addToWishlist]
   );
 
   const handleClearName = useCallback(() => {
@@ -201,32 +155,20 @@ const CollectionsModal: React.FC<CollectionsModalProps> = ({
             <CollectionsList
               collections={collections}
               propertyId={propertyId}
-              loading={loading}
+              loading={isLoadingCollections}
               onCollectionPress={handleCollectionPress}
               onCreatePress={handleCreatePress}
             />
           </Container>
 
           {/* Fixed bottom button - Always visible at bottom */}
-          <Container
-            paddingHorizontal="xl"
-            paddingVertical="lg"
-            backgroundColor="background"
-            style={{
-              borderTopWidth: 1,
-              borderTopColor: theme.border || "rgba(0,0,0,0.1)",
-              paddingBottom: Math.max(insets.bottom + 16, 24), // Enhanced safe area handling
-              // Ensure button is always visible above safe area
-              position: "relative",
-              zIndex: 1000,
-            }}
-          >
+          <Tab backgroundColor={theme.background} borderColor={theme.border}>
             <Button
               onPress={handleCreatePress}
               title="Create a Wishlist"
               variant="primary"
             />
-          </Container>
+          </Tab>
         </Container>
       </Modal>
 

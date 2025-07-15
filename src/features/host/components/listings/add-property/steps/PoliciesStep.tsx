@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { Container, Text, Button, Icon } from "@shared/components";
 import StepHeader from "../StepHeader";
 import { spacing, iconSize } from "@core/design";
+import { useTranslation } from "react-i18next";
 
 interface PoliciesStepProps {
   formData: any;
@@ -13,20 +14,21 @@ export default function PoliciesStep({
   formData,
   updateFormData,
 }: PoliciesStepProps) {
+  const { t } = useTranslation();
   const policies = [
     {
-      title: "Cancellation Policy",
-      description: "Moderate - Full refund 5 days before arrival",
+      title: t("property.pricing.cancellationPolicy"),
+      description: t("property.pricing.cancellationPolicyDescription"),
       icon: "close-circle-outline",
     },
     {
-      title: "House Rules",
-      description: "Check-in: 3:00 PM, Check-out: 11:00 AM",
+      title: t("property.steps.policies.houseRules.title"),
+      description: t("property.steps.policies.houseRules.description"),
       icon: "home-outline",
     },
     {
-      title: "Safety Information",
-      description: "Standard safety features included",
+      title: t("property.steps.policies.safetyInfo.title"),
+      description: t("property.steps.policies.safetyInfo.description"),
       icon: "shield-outline",
     },
   ];
@@ -34,8 +36,8 @@ export default function PoliciesStep({
   return (
     <Container>
       <StepHeader
-        title="Review your policies"
-        description="These are your default policies. You can customize them for this property."
+        title={t("property.steps.policies.title")}
+        description={t("property.steps.policies.description")}
       />
 
       <Container marginTop="lg">
@@ -60,7 +62,7 @@ export default function PoliciesStep({
               </Text>
             </View>
             <Button
-              title="Modify"
+              title={t("property.common.modify")}
               variant="outline"
               size="small"
               onPress={() => {}}

@@ -211,8 +211,8 @@ export default function AddPropertyScreen() {
       } catch (error) {
         console.error("Error loading drafts:", error);
         Alert.alert(
-          t("property.add.alerts.errorTitle"),
-          t("property.add.alerts.loadError")
+          t("property.alerts.errorTitle"),
+          t("property.alerts.loadError")
         );
         setShowDraftSelection(false);
       } finally {
@@ -313,7 +313,7 @@ export default function AddPropertyScreen() {
         formData.price > 0;
 
       if (!hasMeaningfulData) {
-        console.log(t("property.add.alerts.noMeaningfulData"));
+        console.log(t("property.alerts.noMeaningfulData"));
         return;
       }
 
@@ -379,31 +379,29 @@ export default function AddPropertyScreen() {
       case "propertyType":
         if (!formData.propertyType) {
           validationErrors.propertyType = t(
-            "property.add.validation.propertyTypeRequired"
+            "property.errors.propertyTypeRequired"
           );
         }
         break;
       case "guestAccess":
         if (!formData.guestAccessType) {
           validationErrors.guestAccessType = t(
-            "property.add.validation.guestAccessRequired"
+            "property.errors.guestAccessRequired"
           );
         }
         break;
       case "location":
         if (!formData.address.street?.trim()) {
           validationErrors["address.street"] = t(
-            "property.add.validation.streetRequired"
+            "property.errors.streetRequired"
           );
         }
         if (!formData.address.city?.trim()) {
-          validationErrors["address.city"] = t(
-            "property.add.validation.cityRequired"
-          );
+          validationErrors["address.city"] = t("property.errors.cityRequired");
         }
         if (!formData.address.country?.trim()) {
           validationErrors["address.country"] = t(
-            "property.add.validation.countryRequired"
+            "property.errors.countryRequired"
           );
         }
         if (
@@ -411,28 +409,22 @@ export default function AddPropertyScreen() {
           !formData.coordinates?.longitude
         ) {
           validationErrors.coordinates = t(
-            "property.add.validation.coordinatesRequired"
+            "property.errors.coordinatesRequired"
           );
         }
         break;
       case "details":
         if (formData.bedrooms < 1) {
-          validationErrors.bedrooms = t(
-            "property.add.validation.bedroomsRequired"
-          );
+          validationErrors.bedrooms = t("property.errors.bedroomsRequired");
         }
         if (formData.beds < 1) {
-          validationErrors.beds = t("property.add.validation.bedsRequired");
+          validationErrors.beds = t("property.errors.bedsRequired");
         }
         if (formData.bathrooms < 1) {
-          validationErrors.bathrooms = t(
-            "property.add.validation.bathroomsRequired"
-          );
+          validationErrors.bathrooms = t("property.errors.bathroomsRequired");
         }
         if (formData.maxGuests < 1) {
-          validationErrors.maxGuests = t(
-            "property.add.validation.maxGuestsRequired"
-          );
+          validationErrors.maxGuests = t("property.errors.maxGuestsRequired");
         }
         break;
       case "amenities":
@@ -440,14 +432,14 @@ export default function AddPropertyScreen() {
         break;
       case "photos":
         if (formData.images.length === 0) {
-          validationErrors.images = t("property.add.validation.photosRequired");
+          validationErrors.images = t("property.errors.photosRequired");
         }
         break;
       case "title":
         if (!formData.name?.trim()) {
-          validationErrors.name = t("property.add.validation.titleRequired");
+          validationErrors.name = t("property.errors.titleRequired");
         } else if (formData.name.length < 3) {
-          validationErrors.name = t("property.add.validation.titleMinLength");
+          validationErrors.name = t("property.errors.titleMinLength");
         }
         break;
       case "tags":
@@ -456,25 +448,25 @@ export default function AddPropertyScreen() {
       case "description":
         if (!formData.description?.trim()) {
           validationErrors.description = t(
-            "property.add.validation.descriptionRequired"
+            "property.errors.descriptionRequired"
           );
         } else if (formData.description.length < 50) {
           validationErrors.description = t(
-            "property.add.validation.descriptionMinLength"
+            "property.errors.descriptionMinLength"
           );
         }
         break;
       case "weekdayPrice":
         if (!formData.weekdayPrice || formData.weekdayPrice <= 0) {
           validationErrors.weekdayPrice = t(
-            "property.add.validation.weekdayPriceRequired"
+            "property.errors.weekdayPriceRequired"
           );
         }
         break;
       case "weekendPrice":
         if (!formData.weekendPrice || formData.weekendPrice <= 0) {
           validationErrors.weekendPrice = t(
-            "property.add.validation.weekendPriceRequired"
+            "property.errors.weekendPriceRequired"
           );
         }
         break;
@@ -497,8 +489,8 @@ export default function AddPropertyScreen() {
     // Validate current step before proceeding
     if (!validateCurrentStep()) {
       Alert.alert(
-        t("property.add.alerts.requiredFieldsTitle"),
-        t("property.add.alerts.requiredFieldsMessage"),
+        t("property.alerts.requiredFieldsTitle"),
+        t("property.alerts.requiredFieldsMessage"),
         [{ text: t("common.ok") }]
       );
       return;
@@ -553,11 +545,11 @@ export default function AddPropertyScreen() {
 
   const handleSaveAndExit = async () => {
     Alert.alert(
-      t("property.add.alerts.saveAndExitTitle"),
-      t("property.add.alerts.saveAndExitMessage"),
+      t("property.alerts.saveAndExitTitle"),
+      t("property.alerts.saveAndExitMessage"),
       [
         {
-          text: t("property.add.alerts.exitWithoutSaving"),
+          text: t("property.alerts.exitWithoutSaving"),
           style: "destructive",
           onPress: () => router.back(),
         },
@@ -566,7 +558,7 @@ export default function AddPropertyScreen() {
           style: "cancel",
         },
         {
-          text: t("property.add.alerts.saveAndExit"),
+          text: t("property.alerts.saveAndExit"),
           onPress: async () => {
             await saveDraft();
             router.back();
@@ -614,8 +606,8 @@ export default function AddPropertyScreen() {
       setCurrentStep(-1); // Success step
     } catch (error) {
       Alert.alert(
-        t("property.add.alerts.errorTitle"),
-        t("property.add.alerts.submitError")
+        t("property.alerts.errorTitle"),
+        t("property.alerts.submitError")
       );
     } finally {
       setLoading(false);

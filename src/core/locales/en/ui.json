@@ -1,0 +1,66 @@
+{
+  "toast": {
+    "stackedNotifications": "{{count}} notifications",
+    "dismissAll": "Dismiss All",
+    "viewAll": "View All",
+    "queued": "{{count}} queued",
+    "skipToNext": "Skip to Next"
+  },
+  "validation": {
+    "required": "{{field}} is required",
+    "minLength": "{{field}} must be at least {{length}} characters",
+    "maxLength": "{{field}} must be no more than {{length}} characters"
+  },
+  "navigation": {
+    "profile": "Profile",
+    "wishlist": "Wishlist",
+    "bookings": "Bookings",
+    "messages": "Messages",
+    "reservations": "Reservations",
+    "properties": "Properties",
+    
+    "settings": "Settings",
+    "search": "Search",
+    "home": "Home",
+    "listings": "Listings"
+  },
+  "location": {
+    "permissionGranted": "Location permission granted",
+    "permissionDenied": "Location permission denied",
+    "servicesDisabled": "Location services are disabled",
+    "locationUpdated": "Location updated successfully",
+    "locationError": "Failed to get location",
+    "enableLocation": "Enable Location",
+    "locationDebug": "Location Debug",
+    "addressAutoFilled": "Address auto-filled from your location",
+    "noAddressFound": "Location obtained but address not found",
+    "enable": "Enable",
+    "disable": "Disable",
+    "auto": "Auto",
+    "title": "Location Details",
+    "description": "Provide the exact location of your property",
+    "country": "Country",
+    "countryPlaceholder": "Select country",
+    "city": "City",
+    "cityPlaceholder": "Select city",
+    "street": "Street Address",
+    "streetPlaceholder": "Enter street address",
+    "state": "State/Province",
+    "statePlaceholder": "Enter state or province",
+    "postalCode": "Postal Code",
+    "postalCodePlaceholder": "Enter postal code",
+    "coordinates": "Coordinates",
+    "coordinatesHelp": "Set the exact coordinates of your property",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "invalidLatitude": "Invalid latitude value",
+    "invalidLongitude": "Invalid longitude value",
+    "privacyTitle": "Location Privacy",
+    "privacyNote": "Your exact address will only be shared with confirmed guests after booking",
+    "pickOnMap": "Pick on Map",
+    "selectLocation": "Select Location",
+    "selectedCoordinates": "Selected Coordinates",
+    "pickCoordinates": "Pick Coordinates",
+    "confirmLocation": "Confirm Location"
+  }
+} 

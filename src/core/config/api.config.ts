@@ -88,7 +88,7 @@ const getValidatedApiUrl = (): string => {
 // ========================================
 
 export const API_CONFIG = {
-  baseURL: /* getValidatedApiUrl(), */'https://cfb68c78775b.ngrok-free.app/api/v1',
+  baseURL:  getValidatedApiUrl(),
   timeout: 15000,
   maxRetries: 3,
   initialRetryDelay: 1000,

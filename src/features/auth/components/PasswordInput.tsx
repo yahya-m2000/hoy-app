@@ -24,6 +24,9 @@ interface PasswordInputProps {
   onTogglePassword: () => void;
   editable?: boolean;
   style?: any;
+  textContentType?: "password" | "newPassword";
+  autoComplete?: "password" | "new-password";
+  passwordRules?: string;
 }
 
 export default function PasswordInput({
@@ -35,6 +38,9 @@ export default function PasswordInput({
   onTogglePassword,
   editable = true,
   style,
+  textContentType,
+  autoComplete,
+  passwordRules,
 }: PasswordInputProps) {
   const { theme, isDark } = useTheme();
 
@@ -70,6 +76,9 @@ export default function PasswordInput({
           value={value}
           onChangeText={onChangeText}
           editable={editable}
+          textContentType={textContentType}
+          autoComplete={autoComplete}
+          passwordRules={passwordRules}
         />
         <TouchableOpacity
           style={styles.passwordVisibilityBtn}

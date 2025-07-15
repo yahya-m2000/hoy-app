@@ -5,9 +5,11 @@
 
 import React from "react";
 import { Modal, KeyboardAvoidingView, Platform } from "react-native";
-import { Container } from "@shared/components";
+import { Button, Container, Tab, Text } from "@shared/components";
 import { ModalHeader } from "./ModalHeader";
 import { CreateCollectionForm } from "./CreateCollectionForm";
+import { useTheme } from "src/core/hooks";
+import { spacing } from "src/core/design";
 
 interface CreateCollectionModalProps {
   visible: boolean;
@@ -30,6 +32,10 @@ export const CreateCollectionModal: React.FC<CreateCollectionModalProps> =
       onClear,
       onCreate,
     }) => {
+      const { theme } = useTheme();
+      const isValidName =
+        collectionName.trim().length >= 3 && collectionName.trim().length <= 50;
+      const characterCount = collectionName.length;
       return (
         <Modal
           visible={visible}
@@ -60,9 +66,34 @@ export const CreateCollectionModal: React.FC<CreateCollectionModalProps> =
                 onClear={onClear}
                 onCreate={onCreate}
                 creating={creating}
+                isValidName={isValidName}
+                characterCount={characterCount}
               />
             </Container>
           </KeyboardAvoidingView>
+          <Tab backgroundColor={theme.background} borderColor={theme.border}>
+            <Container flexDirection="row" style={{ gap: spacing.md }}>
+              <Container flex={1}>
+                <Button
+                  title="Cancel"
+                  variant="outline"
+                  onPress={onClear}
+                  disabled={creating}
+                  icon="close"
+                />
+              </Container>
+              <Container flex={1}>
+                <Button
+                  title="Create Wishlist"
+                  variant="primary"
+                  onPress={onCreate}
+                  loading={creating}
+                  disabled={!isValidName || creating}
+                  icon="heart"
+                />
+              </Container>
+            </Container>
+          </Tab>
         </Modal>
       );
     }

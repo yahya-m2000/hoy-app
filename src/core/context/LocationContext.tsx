@@ -9,6 +9,7 @@ import React, {
   useState,
   useEffect,
   useCallback,
+  useRef,
 } from "react";
 import * as Location from "expo-location";
 import { useToast } from "./ToastContext";
@@ -74,10 +75,17 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
     manualOverride: null,
   });
 
+  // Use ref to track state for stable function references
+  const locationStateRef = useRef(locationState);
+  locationStateRef.current = locationState;
+
   // Check initial permission status and location services
   useEffect(() => {
-    checkPermissionStatus();
-    checkLocationServices();
+    const initializeLocation = async () => {
+      await checkPermissionStatus();
+      await checkLocationServices();
+    };
+    initializeLocation();
   }, []);
 
   const checkPermissionStatus = useCallback(async () => {
@@ -93,16 +101,22 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
   const checkLocationServices = useCallback(async (): Promise<boolean> => {
     try {
       console.log("Checking location services...");
-      console.log("Manual override status:", locationState.manualOverride);
+      console.log(
+        "Manual override status:",
+        locationStateRef.current.manualOverride
+      );
 
       // Check if manual override is set
-      if (locationState.manualOverride !== null) {
-        console.log("Using manual override:", locationState.manualOverride);
+      if (locationStateRef.current.manualOverride !== null) {
+        console.log(
+          "Using manual override:",
+          locationStateRef.current.manualOverride
+        );
         setLocationState((prev) => ({
           ...prev,
-          locationServicesEnabled: locationState.manualOverride,
+          locationServicesEnabled: locationStateRef.current.manualOverride,
         }));
-        return locationState.manualOverride;
+        return locationStateRef.current.manualOverride;
       }
 
       // Try multiple methods to check if location services are available
@@ -119,7 +133,8 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
       // Method 2: Try to get last known position (if permission granted)
       if (
         !isEnabled &&
-        locationState.permissionStatus === Location.PermissionStatus.GRANTED
+        locationStateRef.current.permissionStatus ===
+          Location.PermissionStatus.GRANTED
       ) {
         try {
           const lastKnownPosition = await Location.getLastKnownPositionAsync({
@@ -174,7 +189,7 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
       }));
       return false;
     }
-  }, [locationState.permissionStatus, locationState.manualOverride]);
+  }, []);
 
   const requestLocationPermission = useCallback(async (): Promise<boolean> => {
     try {

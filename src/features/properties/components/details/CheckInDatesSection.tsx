@@ -40,7 +40,7 @@ export const CheckInDatesSection: React.FC<CheckInDatesSectionProps> = ({
   const hasDatesSelected = checkIn.date && checkOut.date;
   const linkText = hasDatesSelected
     ? t("property.changeDates")
-    : t("property.selectDates");
+    : t("property.common.selectDates");
 
   const ContentComponent = (
     <>
@@ -53,7 +53,7 @@ export const CheckInDatesSection: React.FC<CheckInDatesSectionProps> = ({
         {/* Check In */}
         <Container flex={1} padding="md">
           <Text weight="bold" color="primary">
-            {t("property.checkIn")}
+            {t("property.common.checkIn")}
           </Text>
           <Text variant="body" color="subtitle">
             {formatDate(checkIn.date)}
@@ -67,7 +67,7 @@ export const CheckInDatesSection: React.FC<CheckInDatesSectionProps> = ({
         {/* Check Out */}
         <Container flex={1} alignItems="flex-end" padding="md">
           <Text weight="bold" color="primary">
-            {t("property.checkout")}
+            {t("property.common.checkout")}
           </Text>
           <Text variant="body" color="subtitle">
             {formatDate(checkOut.date)}

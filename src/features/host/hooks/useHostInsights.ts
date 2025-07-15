@@ -109,11 +109,23 @@ export const useHostInsights = (hostId?: string) => {
         }
 
         return safeResponse;
-      } catch (error) {
+      } catch (error: any) {
         console.error(
           "❌ [useHostInsights] Error fetching host insights:",
           error
         );
+        
+        // Handle 403 errors gracefully - user doesn't have host permissions yet
+        if (error?.response?.status === 403) {
+          console.log("🔐 [useHostInsights] User doesn't have host permissions yet - returning fallback data");
+          return {
+            hostId: hostId || "current",
+            averageRating: 0,
+            totalReviews: 0,
+            properties: [],
+          } as HostInsightsData;
+        }
+        
         // Return fallback data instead of propagating the error so that the UI can remain functional
         return {
           hostId: hostId || "current",
@@ -125,6 +137,18 @@ export const useHostInsights = (hostId?: string) => {
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
+    retry: (failureCount, error: any) => {
+      // Don't retry on 403 errors (user needs to complete setup)
+      if (error?.response?.status === 403) {
+        return false;
+      }
+      // Don't retry on auth errors (401)
+      if (error?.response?.status === 401) {
+        return false;
+      }
+      // Retry up to 3 times for other errors
+      return failureCount < 3;
+    },
   });
 };
 

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+// Remove react-native primitives
+// import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Container, Text, Icon } from "@shared/components";
+import { Pressable } from "react-native";
 import { useTheme } from "@core/hooks";
 import { useCurrency } from "@core/context";
 import { useCurrencyConversion } from "@core/hooks";
 import { spacing } from "@core/design";
-import { Ionicons } from "@expo/vector-icons";
+// import { Ionicons } from "@expo/vector-icons";
 
 export interface Reservation {
   id: string;
@@ -73,110 +76,69 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
   }, [reservation.totalAmount, currency, convertAmount]);
 
   return (
-    <TouchableOpacity
-      style={[styles.card, { borderColor: theme.border }]}
-      onPress={() => onPress?.(reservation)}
-    >
-      <View style={styles.content}>
-        {statusLabel && (
-          <Text
-            style={[
-              styles.statusLabel,
-              isCurrentlyHosting && { color: theme.colors.primary },
-              !isCurrentlyHosting && { color: theme.text.secondary },
-            ]}
-          >
-            {statusLabel}
-          </Text>
-        )}
-        <View style={styles.guestInfo}>
-          <Text
-            style={[
-              styles.guestName,
-              { color: theme.text.primary },
-              isCurrentlyHosting && styles.guestNameLarge,
-            ]}
-          >
-            {reservation.guestName}
-          </Text>
-          <Text style={[styles.propertyName, { color: theme.text.secondary }]}>
-            {reservation.property}
-          </Text>
-        </View>
-
-        <View style={styles.details}>
-          <Text
-            style={[
-              styles.dateRange,
-              { color: theme.text.secondary },
-              isCurrentlyHosting && styles.dateRangeLarge,
-            ]}
-          >
-            {formatDate(reservation.checkIn)} -
-            {formatDate(reservation.checkOut)}
-          </Text>
-          {!isCurrentlyHosting && (
-            <Text style={[styles.amount, { color: theme.text.primary }]}>
-              {getCurrencySymbol()} {convertedTotalAmount}
+    <Pressable onPress={() => onPress?.(reservation)}>
+      <Container
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="space-between"
+        padding={"md"}
+        marginBottom={"sm"}
+        borderRadius={"md"}
+        borderWidth={1}
+        borderColor={theme.border}
+      >
+        <Container flex={1}>
+          {statusLabel && (
+            <Text
+              variant="caption"
+              weight="semibold"
+              style={{
+                textTransform: "uppercase",
+                letterSpacing: 0.5,
+                marginBottom: spacing.xs,
+              }}
+              color={isCurrentlyHosting ? "primary" : "onSurfaceVariant"}
+            >
+              {statusLabel}
             </Text>
           )}
-        </View>
-      </View>
-
-      <Ionicons name="chevron-forward" size={16} color={theme.text.secondary} />
-    </TouchableOpacity>
+          <Container marginBottom={"xs"}>
+            <Text
+              variant={isCurrentlyHosting ? "h6" : "body"}
+              weight="semibold"
+              color="onSurface"
+              style={{ marginBottom: 2 }}
+            >
+              {reservation.guestName}
+            </Text>
+            <Text variant="body" color="onSurfaceVariant">
+              {reservation.property}
+            </Text>
+          </Container>
+          <Container
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Text
+              variant="body"
+              color="onSurfaceVariant"
+              style={isCurrentlyHosting ? { fontSize: 16 } : undefined}
+            >
+              {formatDate(reservation.checkIn)} -{" "}
+              {formatDate(reservation.checkOut)}
+            </Text>
+            {!isCurrentlyHosting && (
+              <Text variant="body" weight="semibold" color="onSurface">
+                {getCurrencySymbol()} {convertedTotalAmount}
+              </Text>
+            )}
+          </Container>
+        </Container>
+        <Icon name="chevron-forward" size={16} color={theme.text.secondary} />
+      </Container>
+    </Pressable>
   );
 };
-
-const styles = StyleSheet.create({
-  card: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: spacing.md,
-    marginBottom: spacing.sm,
-    borderRadius: 8,
-    borderWidth: 1,
-  },
-  content: {
-    flex: 1,
-  },
-  statusLabel: {
-    fontSize: 12,
-    fontWeight: "600",
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
-    marginBottom: spacing.xs,
-  },
-  guestInfo: {
-    marginBottom: spacing.xs,
-  },
-  guestName: {
-    fontSize: 16,
-    fontWeight: "600",
-    marginBottom: 2,
-  },
-  guestNameLarge: {
-    fontSize: 18,
-  },
-  propertyName: {
-    fontSize: 14,
-  },
-  details: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  dateRange: {
-    fontSize: 14,
-  },
-  dateRangeLarge: {
-    fontSize: 16,
-  },
-  amount: {
-    fontSize: 16,
-    fontWeight: "600",
-  },
-});
 
 export default ReservationCard;

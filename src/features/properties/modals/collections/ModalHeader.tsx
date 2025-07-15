@@ -22,21 +22,16 @@ export const ModalHeader: React.FC<ModalHeaderProps> = ({
   const { theme } = useTheme();
 
   return (
-    <Container
-      borderBottomWidth={1}
-      style={{ borderBottomColor: theme.border }}
-    >
-      <Header
-        title={title}
-        variant="modal"
-        useSafeArea={false}
-        showDivider={false}
-        right={{
-          icon: showCloseIcon ? "close" : undefined,
-          text: showCloseIcon ? undefined : "Cancel",
-          onPress: onClose,
-        }}
-      />
-    </Container>
+    <Header
+      title={title}
+      variant="modal"
+      useSafeArea={false}
+      showDivider={false}
+      right={{
+        icon: showCloseIcon ? "close" : undefined,
+        text: showCloseIcon ? undefined : "Cancel",
+        onPress: onClose,
+      }}
+    />
   );
 };

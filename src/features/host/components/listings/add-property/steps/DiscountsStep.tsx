@@ -4,6 +4,7 @@ import { Container, Text } from "@shared/components";
 import StepHeader from "../StepHeader";
 import { spacing } from "@core/design";
 import { useTheme } from "@core/hooks";
+import { useTranslation } from "react-i18next";
 
 interface DiscountsStepProps {
   formData: any;
@@ -15,17 +16,18 @@ export default function DiscountsStep({
   updateFormData,
 }: DiscountsStepProps) {
   const { theme } = useTheme();
+  const { t } = useTranslation();
 
   const discounts = [
     {
       key: "newListingPromo",
-      label: "New listing promotion",
-      description: "20% off first 3 bookings",
+      label: t("property.pricing.newListingDiscount"),
+      description: t("property.pricing.newListingDiscountDescription"),
     },
     {
       key: "lastMinuteDiscount",
-      label: "Last-minute discount",
-      description: "For bookings within 24 hours",
+      label: t("property.pricing.lastMinuteDiscount"),
+      description: t("property.pricing.lastMinuteDiscountDescription"),
     },
   ];
 
@@ -41,8 +43,8 @@ export default function DiscountsStep({
   return (
     <Container>
       <StepHeader
-        title="Offer discounts to attract guests"
-        description="Optional: Increase bookings with strategic discounts"
+        title={t("property.steps.discounts.title")}
+        description={t("property.steps.discounts.description")}
       />
 
       <Container marginTop="lg">

@@ -4,17 +4,20 @@
  * Renders different sections based on authentication state and user preferences
  */
 
-import React from "react";
+import React, { useState } from "react";
 import { Alert } from "react-native";
 import { useTranslation } from "react-i18next";
-import { router } from "expo-router";
+import { router, useSegments } from "expo-router";
 
 // Base Components
 import SettingsSection from "./SettingsSection";
+import { Button } from "@shared/components";
 
 // Hooks
 import { useTheme } from "@core/hooks";
 import { useUserRole, useCurrency } from "@core/context";
+import { api } from "@core/api/client";
+import { useCurrentUser } from "@features/user/hooks";
 
 // Types
 import type { SettingsItem } from "@core/types";
@@ -40,13 +43,25 @@ export default function ProfileSection({
   const { theme, isDark, toggleTheme, mode } = useTheme();
   const { t, i18n } = useTranslation();
   const { currency } = useCurrency();
-  const { userRole, setUserRole, isRoleLoading } = useUserRole();
+  const { data: user } = useCurrentUser();
+  const { setUserRole, isRoleLoading, userRole } = useUserRole();
+  const segments = useSegments();
+  const segmentsArray = Array.from(segments) as string[];
+  const isHostTab = segmentsArray[1] === "host";
+  const isHost = user?.role === "host";
 
-  const isHost = userRole === "host";
+  console.log(
+    "ProfileSection - user?.role:",
+    user?.role,
+    "userRole:",
+    userRole,
+    "isHost:",
+    isHost
+  );
 
   // Helper functions
   const toggleUserRole = () => {
-    const newRole = userRole === "host" ? "traveler" : "host";
+    const newRole = isHost ? "traveler" : "host";
     setUserRole(newRole);
   };
 
@@ -115,174 +130,298 @@ export default function ProfileSection({
     );
   };
 
-  // Account Settings (only for authenticated users)
-  const accountSettings: SettingsItem[] = isAuthenticated
-    ? [
-        {
-          id: "personal",
-          icon: "person-outline",
-          title: t("profile.personalInfo"),
-          subtitle: t("profile.personalInfoDesc"),
-          action: () =>
-            router.push(
-              isHost
-                ? "/(tabs)/host/profile/personal-info"
-                : "/(tabs)/traveler/profile/personal-info"
-            ),
-        },
-        {
-          id: "logout",
-          icon: "log-out-outline",
-          title: t("profile.signOut"),
-          isDanger: true,
-          action: onLogout,
-        },
-      ]
-    : [];
+  // AUTHENTICATED USER SECTIONS
+  const getAuthenticatedSections = () => {
+    const sections = [];
 
-  // Preferences Settings
-  const preferenceSettings: SettingsItem[] = [
-    {
-      id: "language",
-      icon: "language-outline",
-      title: t("profile.language"),
-      subtitle: getLanguageDisplayName(),
-      action: () =>
-        router.push(
-          isHost
-            ? "/(tabs)/host/profile/language"
-            : "/(tabs)/traveler/profile/language"
-        ),
-    },
-    {
-      id: "currency",
-      icon: "cash-outline",
-      title: t("profile.currency"),
-      subtitle: `${currency} (${getSymbol(currency)})`,
-      action: () =>
-        router.push(
-          isHost
-            ? "/(tabs)/host/profile/currency"
-            : "/(tabs)/traveler/profile/currency"
-        ),
-    },
-    {
-      id: "theme",
-      icon: isDark ? "moon-outline" : "sunny-outline",
-      title: t("profile.theme"),
-      subtitle: t("profile.themeDesc"),
-      action: () =>
-        router.push(
-          isHost
-            ? "/(tabs)/host/profile/theme"
-            : "/(tabs)/traveler/profile/theme"
-        ),
-    },
-    {
-      id: "debug",
-      icon: "bug-outline",
-      title: "Debug",
-      subtitle: "Font testing and debug settings",
-      action: () =>
-        router.push(
-          isHost
-            ? "/(tabs)/host/profile/debug"
-            : "/(tabs)/traveler/profile/debug"
-        ),
-    },
-    // Only show host mode toggle for authenticated users
-    ...(isAuthenticated
-      ? [
-          {
-            id: "hostMode",
-            icon: "swap-horizontal-outline",
-            title: isHost
-              ? t("profile.switchToTraveler")
-              : t("profile.switchToHost"),
-            subtitle: t("profile.hostModeDesc"),
-            action: () => toggleUserRole(),
-          },
-        ]
-      : []),
-  ];
+    // Account Settings (only for authenticated users)
+    const accountSettings: SettingsItem[] = [
+      {
+        id: "personal",
+        icon: "person-outline",
+        title: t("profile.personalInfo"),
+        subtitle: t("profile.personalInfoDesc"),
+        action: () =>
+          router.push(
+            isHostTab
+              ? "/(tabs)/host/profile/personal-info"
+              : "/(tabs)/traveler/profile/personal-info"
+          ),
+      },
+      {
+        id: "logout",
+        icon: "log-out-outline",
+        title: t("profile.signOut"),
+        isDanger: true,
+        action: onLogout,
+      },
+    ];
 
-  // Support Settings
-  const supportSettings: SettingsItem[] = [
-    {
-      id: "help",
-      icon: "help-circle-outline",
-      title: t("profile.helpCenter"),
-      subtitle: t("profile.helpCenterDesc"),
-      action: () =>
-        router.push(
-          isHost
-            ? "/(tabs)/host/profile/help-center"
-            : "/(tabs)/traveler/profile/help-center"
-        ),
-    },
-    {
-      id: "feedback",
-      icon: "chatbubble-outline",
-      title: t("profile.giveFeedback"),
-      subtitle: t("profile.giveFeedbackDesc"),
-      action: () =>
-        router.push(
-          isHost
-            ? "/(tabs)/host/profile/feedback"
-            : "/(tabs)/traveler/profile/feedback"
-        ),
-    },
-    {
-      id: "resetApp",
-      icon: "refresh-circle-outline",
-      title: t("profile.resetApp") || "Reset App Data",
-      subtitle:
-        t("profile.resetAppDesc") || "Fix issues by clearing cached data",
-      action: () => showCleanSlateAlert(),
-    },
-    {
-      id: "terms",
-      icon: "document-text-outline",
-      title: t("profile.termsOfService"),
-      subtitle: t("profile.termsOfServiceDesc"),
-      action: () =>
-        router.push(
-          isHost
-            ? "/(tabs)/host/profile/terms-of-service"
-            : "/(tabs)/traveler/profile/terms-of-service"
-        ),
-    },
-    // Developer options (if enabled)
-    ...(showDevOptions
-      ? [
-          {
-            id: "dev-refresh",
-            icon: "refresh-circle-outline",
-            title: "🛠️ Force Refresh User Data",
-            subtitle: `Last refresh: ${new Date(
-              lastRefresh
-            ).toLocaleTimeString()}`,
-            action: handleRefresh,
-          },
-        ]
-      : []),
-  ];
-
-  return (
-    <>
-      {/* Account Settings Section - Only for authenticated users */}
-      {isAuthenticated && accountSettings.length > 0 && (
-        <SettingsSection title={t("profile.account")} items={accountSettings} />
-      )}
-
-      {/* Preferences Section */}
+    sections.push(
       <SettingsSection
+        key="account"
+        title={t("profile.account")}
+        items={accountSettings}
+      />
+    );
+
+    // Preferences Settings (with host mode toggle for authenticated users)
+    const preferenceSettings: SettingsItem[] = [
+      {
+        id: "language",
+        icon: "language-outline",
+        title: t("profile.language"),
+        subtitle: getLanguageDisplayName(),
+        action: () => {
+          const pathname = isHostTab
+            ? "/(tabs)/host/profile/[setting]"
+            : "/(tabs)/traveler/profile/[setting]";
+          console.log("Language navigation - pathname:", pathname, "params:", {
+            setting: "language",
+          });
+          router.push({
+            pathname,
+            params: { setting: "language" },
+          });
+        },
+      },
+      {
+        id: "currency",
+        icon: "cash-outline",
+        title: t("profile.currency"),
+        subtitle: `${currency} (${getSymbol(currency)})`,
+        action: () => {
+          const pathname = isHostTab
+            ? "/(tabs)/host/profile/currency"
+            : "/(tabs)/traveler/profile/[setting]";
+          console.log("Currency navigation - pathname:", pathname, "params:", {
+            setting: "currency",
+          });
+          router.push({
+            pathname,
+            params: { setting: "currency" },
+          });
+        },
+      },
+      {
+        id: "theme",
+        icon: isDark ? "moon-outline" : "sunny-outline",
+        title: t("profile.theme"),
+        subtitle: t("profile.themeDesc"),
+        action: () => {
+          const pathname = isHostTab
+            ? "/(tabs)/host/profile/[setting]"
+            : "/(tabs)/traveler/profile/[setting]";
+          console.log("Theme navigation - pathname:", pathname, "params:", {
+            setting: "theme",
+          });
+          router.push({
+            pathname,
+            params: { setting: "theme" },
+          });
+        },
+      },
+      // Only show the hostMode toggle if user is a host
+      ...(isHost
+        ? [
+            {
+              id: "hostMode",
+              icon: "swap-horizontal-outline",
+              title:
+                userRole === "host"
+                  ? t("profile.switchToTraveler")
+                  : t("profile.switchToHost"),
+              subtitle: t("profile.hostModeDesc"),
+              action: async () => {
+                const newRole = userRole === "host" ? "traveler" : "host";
+                await setUserRole(newRole);
+              },
+            },
+          ]
+        : []),
+      ...(showDevOptions
+        ? [
+            {
+              id: "debug",
+              icon: "bug-outline",
+              title: "Debug",
+              subtitle: "Font testing and debug settings",
+              action: () =>
+                router.push({
+                  pathname: isHostTab
+                    ? "/(tabs)/host/profile/[setting]"
+                    : "/(tabs)/traveler/profile/[setting]",
+                  params: { setting: "debug" },
+                }),
+            },
+          ]
+        : []),
+    ];
+
+    sections.push(
+      <SettingsSection
+        key="preferences"
         title={t("profile.preferences")}
         items={preferenceSettings}
       />
+    );
 
-      {/* Support Section */}
-      <SettingsSection title={t("profile.support")} items={supportSettings} />
+    // Support Settings (full version for authenticated users)
+    const supportSettings: SettingsItem[] = [
+      {
+        id: "help",
+        icon: "help-circle-outline",
+        title: t("profile.helpCenter"),
+        subtitle: t("profile.helpCenterDesc"),
+        action: () =>
+          router.push({
+            pathname: isHostTab
+              ? "/(tabs)/host/profile/[setting]"
+              : "/(tabs)/traveler/profile/[setting]",
+            params: { setting: "help-center" },
+          }),
+      },
+      {
+        id: "feedback",
+        icon: "chatbubble-outline",
+        title: t("profile.giveFeedback"),
+        subtitle: t("profile.giveFeedbackDesc"),
+        action: () =>
+          router.push(
+            isHostTab
+              ? "/(tabs)/host/profile/feedback"
+              : "/(tabs)/traveler/profile/feedback"
+          ),
+      },
+      {
+        id: "resetApp",
+        icon: "refresh-circle-outline",
+        title: t("profile.resetApp") || "Reset App Data",
+        subtitle:
+          t("profile.resetAppDesc") || "Fix issues by clearing cached data",
+        action: () => showCleanSlateAlert(),
+      },
+      {
+        id: "terms",
+        icon: "document-text-outline",
+        title: t("profile.termsOfService"),
+        subtitle: t("profile.termsOfServiceDesc"),
+        action: () =>
+          router.push({
+            pathname: isHostTab
+              ? "/(tabs)/host/profile/[setting]"
+              : "/(tabs)/traveler/profile/[setting]",
+            params: { setting: "terms-of-service" },
+          }),
+      },
+    ];
+
+    sections.push(
+      <SettingsSection
+        key="support"
+        title={t("profile.support")}
+        items={supportSettings}
+      />
+    );
+
+    return sections;
+  };
+
+  // UNAUTHENTICATED USER SECTIONS
+  const getUnauthenticatedSections = () => {
+    const sections = [];
+
+    // Basic Preferences Settings (without host mode toggle)
+    const preferenceSettings: SettingsItem[] = [
+      {
+        id: "language",
+        icon: "language-outline",
+        title: t("profile.language"),
+        subtitle: getLanguageDisplayName(),
+        action: () => {
+          console.log(
+            "Unauthenticated language navigation - pathname: /(tabs)/traveler/profile/language"
+          );
+          router.push("/(tabs)/traveler/profile/language");
+        },
+      },
+      {
+        id: "currency",
+        icon: "cash-outline",
+        title: t("profile.currency"),
+        subtitle: `${currency} (${getSymbol(currency)})`,
+        action: () => {
+          console.log(
+            "Unauthenticated currency navigation - pathname: /(tabs)/traveler/profile/currency"
+          );
+          router.push("/(tabs)/traveler/profile/currency");
+        },
+      },
+      {
+        id: "theme",
+        icon: isDark ? "moon-outline" : "sunny-outline",
+        title: t("profile.theme"),
+        subtitle: t("profile.themeDesc"),
+        action: () => {
+          console.log(
+            "Unauthenticated theme navigation - pathname: /(tabs)/traveler/profile/theme"
+          );
+          router.push("/(tabs)/traveler/profile/theme");
+        },
+      },
+    ];
+
+    sections.push(
+      <SettingsSection
+        key="preferences"
+        title={t("profile.preferences")}
+        items={preferenceSettings}
+      />
+    );
+
+    // Limited Support Settings (without account-specific features)
+    const supportSettings: SettingsItem[] = [
+      {
+        id: "help",
+        icon: "help-circle-outline",
+        title: t("profile.helpCenter"),
+        subtitle: t("profile.helpCenterDesc"),
+        action: () =>
+          router.push({
+            pathname: "/(tabs)/traveler/profile/[setting]",
+            params: { setting: "help-center" },
+          }),
+      },
+      {
+        id: "terms",
+        icon: "document-text-outline",
+        title: t("profile.termsOfService"),
+        subtitle: t("profile.termsOfServiceDesc"),
+        action: () =>
+          router.push({
+            pathname: "/(tabs)/traveler/profile/[setting]",
+            params: { setting: "terms-of-service" },
+          }),
+      },
+    ];
+
+    sections.push(
+      <SettingsSection
+        key="support"
+        title={t("profile.support")}
+        items={supportSettings}
+      />
+    );
+
+    return sections;
+  };
+
+  // Render sections based on authentication state
+  return (
+    <>
+      {isAuthenticated
+        ? getAuthenticatedSections()
+        : getUnauthenticatedSections()}
     </>
   );
 }

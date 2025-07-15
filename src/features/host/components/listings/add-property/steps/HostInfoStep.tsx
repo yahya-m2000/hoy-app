@@ -12,6 +12,7 @@ import StepHeader from "../StepHeader";
 import InfoBox from "../InfoBox";
 import { spacing } from "@core/design";
 import { useTheme } from "@core/hooks";
+import { useTranslation } from "react-i18next";
 
 interface HostInfoStepProps {
   formData: any;
@@ -25,29 +26,42 @@ export default function HostInfoStep({
   errors,
 }: HostInfoStepProps) {
   const { theme } = useTheme();
+  const { t } = useTranslation();
 
   const hostTypes = [
-    { label: "Individual", value: "individual" },
-    { label: "Business", value: "business" },
+    { label: t("property.common.individual"), value: "individual" },
+    { label: t("property.common.business"), value: "business" },
   ];
 
   const safetyDisclosures = [
     {
       key: "weaponsOnProperty",
-      question: "Are there any weapons on the property?",
+      question: t(
+        "property.steps.hostInfo.safetyDisclosures.weaponsOnProperty"
+      ),
     },
     {
       key: "securityCameras",
-      question: "Are there security cameras on the property?",
+      question: t("property.steps.hostInfo.safetyDisclosures.securityCameras"),
     },
   ];
 
   const toggleSafetyFeature = (key: string) => {
     const currentSafetyFeatures = formData.safetyFeatures || {};
-    updateFormData("safetyFeatures", {
-      ...currentSafetyFeatures,
-      [key]: !currentSafetyFeatures[key],
-    });
+    let updatedSafetyFeatures = { ...currentSafetyFeatures };
+    if (key === "securityCameras") {
+      const isOn = !!(
+        currentSafetyFeatures.securityCameras &&
+        currentSafetyFeatures.securityCameras.exterior
+      );
+      updatedSafetyFeatures.securityCameras = isOn
+        ? { exterior: false, interior: false, description: "" }
+        : { exterior: true, interior: false, description: "" };
+    } else if (key === "weaponsOnProperty") {
+      updatedSafetyFeatures.weaponsOnProperty =
+        !currentSafetyFeatures.weaponsOnProperty;
+    }
+    updateFormData("safetyFeatures", updatedSafetyFeatures);
   };
 
   return (
@@ -62,8 +76,8 @@ export default function HostInfoStep({
       >
         <Container paddingBottom="xxl">
           <StepHeader
-            title="Tell us about yourself"
-            description="Are you listing as an individual or business?"
+            title={t("property.steps.hostInfo.title")}
+            description={t("property.steps.hostInfo.description")}
           />
 
           <Container marginTop="lg">
@@ -86,7 +100,7 @@ export default function HostInfoStep({
               weight="medium"
               style={{ marginBottom: spacing.md }}
             >
-              Safety disclosures
+              {t("property.steps.hostInfo.safetyDisclosures.title")}
             </Text>
 
             {safetyDisclosures.map((item) => (
@@ -108,8 +122,8 @@ export default function HostInfoStep({
           </Container>
 
           <InfoBox
-            title="Safety & Legal"
-            content="Being transparent about safety features and potential risks helps build trust with guests and ensures compliance with local regulations."
+            title={t("property.steps.hostInfo.infoBox.title")}
+            content={t("property.steps.hostInfo.infoBox.content")}
             icon="information-circle"
             variant="info"
           />

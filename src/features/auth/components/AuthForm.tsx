@@ -72,6 +72,8 @@ export default function AuthForm({
         keyboardType="email-address"
         autoCapitalize="none"
         editable={!loading}
+        textContentType="emailAddress"
+        autoComplete="email"
       />
 
       {/* Registration fields */}
@@ -84,6 +86,8 @@ export default function AuthForm({
             value={firstName}
             onChangeText={setFirstName}
             editable={!loading}
+            textContentType="givenName"
+            autoComplete="given-name"
             style={[styles.nameInput, { marginRight: spacing.sm }]}
           />
 
@@ -94,6 +98,8 @@ export default function AuthForm({
             value={lastName}
             onChangeText={setLastName}
             editable={!loading}
+            textContentType="familyName"
+            autoComplete="family-name"
             style={styles.nameInput}
           />
         </View>
@@ -108,6 +114,9 @@ export default function AuthForm({
         showPassword={showPassword}
         onTogglePassword={() => setShowPassword(!showPassword)}
         editable={!loading}
+        textContentType={authView === "register" ? "newPassword" : "password"}
+        autoComplete={authView === "register" ? "new-password" : "password"}
+        passwordRules="minlength: 8; required: lower; required: upper; required: digit; required: [-];"
       />
 
       {/* Confirm Password (Register only) */}
@@ -120,6 +129,9 @@ export default function AuthForm({
           showPassword={showConfirmPassword}
           onTogglePassword={() => setShowConfirmPassword(!showConfirmPassword)}
           editable={!loading}
+          textContentType="newPassword"
+          autoComplete="new-password"
+          passwordRules="minlength: 8; required: lower; required: upper; required: digit; required: [-];"
         />
       )}
 

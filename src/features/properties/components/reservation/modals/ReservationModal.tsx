@@ -1,45 +1,35 @@
 /**
  * Reservation Screen for Property Bookings
- * Step-based reservation flow with dates, guests, payment, and confirmation
+ * Step-based reservation flow with guests, payment, and confirmation
  * Uses Screen component with modal header and base components
+ *
+ * @module @features/properties/components/reservation/modals/ReservationModal
  */
 
 import React, { useState } from "react";
 import { View } from "react-native";
-import { router } from "expo-router";
-import { format } from "date-fns";
-
-// Context and hooks
-import { useToast } from "src/core/context/ToastContext";
 import { useTranslation } from "react-i18next";
 
 // Shared components
 import { Screen, Container, Text } from "@shared/components";
 
-// Booking service
-import { createBooking } from "@core/api/services/booking";
-
-// Step components
-
-import { DateStep, GuestStep, PaymentStep, ConfirmationStep } from "../steps";
-
 // Step navigation tab
 import { StepNavigationTab } from "../StepNavigationTab";
 
-// Types
-import type { CalendarBookingData, PropertyType } from "@core/types";
+// Modular imports
+import { useReservationState } from "../hooks";
+import {
+  formatDate,
+  calculateNights,
+  canProceedToNextStep,
+  getModalTitle,
+} from "../utils";
+import { ReservationStepRenderer } from "../components";
+import type { ReservationModalProps } from "../types";
+import { RESERVATION_STEPS, BUTTON_TEXTS, ERROR_MESSAGES } from "../constants";
 
-// Hooks
-import { useCurrentUser } from "@features/user/hooks";
-
-interface ReservationModalProps {
-  onClose: () => void;
-  property: PropertyType | null;
-  currentTabContext?: string;
-  unit?: any;
-  initialStartDate?: Date;
-  initialEndDate?: Date;
-}
+// Import existing DateSelectionModal
+import DateSelectionModal from "../../../modals/modals/DateSelectionModal";
 
 export default function ReservationModal({
   onClose,
@@ -50,323 +40,74 @@ export default function ReservationModal({
   initialEndDate,
 }: ReservationModalProps) {
   const { t } = useTranslation();
-  const { data: currentUser } = useCurrentUser();
-  const { showToast } = useToast();
 
-  // Get the correct confirmation route based on current tab context
-  const getConfirmationRoute = () => {
-    switch (currentTabContext) {
-      case "home":
-        return "/(tabs)/traveler/home/property/confirmation";
-      case "search":
-        return "/(tabs)/traveler/search/property/confirmation";
-      case "wishlist":
-        return "/(tabs)/traveler/wishlist/property/confirmation";
-      case "bookings":
-        return "/(tabs)/traveler/bookings/property/confirmation";
-      case "properties":
-        return "/(tabs)/traveler/properties/property/confirmation";
-      default:
-        return "/(tabs)/traveler/properties/property/confirmation";
-    }
-  };
-
-  // Check if we have initial dates
-  const hasInitialDates = Boolean(initialStartDate && initialEndDate);
-
-  // State management
-  const [step, setStep] = useState(hasInitialDates ? 2 : 1);
-  const [startDate, setStartDate] = useState<Date | null>(
-    initialStartDate || null
+  // Use the custom hook for state management
+  const [state, actions] = useReservationState(
+    property,
+    unit,
+    onClose,
+    initialStartDate,
+    initialEndDate,
+    currentTabContext
   );
-  const [endDate, setEndDate] = useState<Date | null>(initialEndDate || null);
-  const [adults, setAdults] = useState(1);
-  const [childrenCount, setChildrenCount] = useState(0);
-  const [infants, setInfants] = useState(0);
-  const [pets, setPets] = useState(0);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<any>(null);
 
-  const handlePaymentMethodChange = (method: any) => {
-    setSelectedPaymentMethod(method);
-  };
-  const [isBooking, setIsBooking] = useState(false);
-  const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
-  const [isAvailable, setIsAvailable] = useState<boolean | null>(
-    hasInitialDates ? true : null
-  );
-  const [priceDetails] = useState<any>(null);
+  const {
+    step,
+    startDate,
+    endDate,
+    adults,
+    childrenCount,
+    infants,
+    pets,
+    selectedPaymentMethod,
+    isBooking,
+    isCheckingAvailability,
+    isAvailable,
+  } = state;
 
-  // Property price handling
-  const propertyPrice = unit?.price || property?.price || 0;
-  const safePropertyPrice =
-    typeof propertyPrice === "number" && !isNaN(propertyPrice)
-      ? propertyPrice
-      : typeof propertyPrice === "object" && propertyPrice?.amount
-      ? propertyPrice.amount
-      : 0;
+  const {
+    nextStep,
+    prevStep,
+    handleDateSelection,
+    handleAvailabilityChange,
+    handlePaymentMethodChange,
+    handleBookingConfirmation,
+    setAdults,
+    setChildrenCount,
+    setInfants,
+    setPets,
+    setStep,
+  } = actions;
 
-  // Format date for display
-  const formatDate = (date: Date | null) => {
-    if (!date) return "";
-    try {
-      return format(date, "EEE, MMM d, yyyy");
-    } catch (error) {
-      console.error("Error formatting date:", error);
-      return "Invalid date";
-    }
-  };
+  // State for date selection modal
+  const [isDateModalVisible, setIsDateModalVisible] = useState(false);
 
-  // Calculate nights
-  const calculateNights = () => {
-    if (!startDate || !endDate) return 0;
-    try {
-      const timeDiff = endDate.getTime() - startDate.getTime();
-      const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-      return Math.max(1, daysDiff);
-    } catch (error) {
-      console.error("Error calculating nights:", error);
-      return 0;
-    }
-  };
-
-  // Handle date selection
-  const handleDateSelection = (start: Date, end: Date) => {
-    setStartDate(start);
-    setEndDate(end);
-  };
-
-  // Step navigation
-  const nextStep = () => {
-    if (step < 4) setStep(step + 1);
-  };
-
-  const prevStep = () => {
-    if (step > 1) setStep(step - 1);
-  };
-
-  // Handle availability status updates from DateStep
-  const handleAvailabilityChange = (
-    available: boolean | null,
-    checking: boolean
-  ) => {
-    setIsAvailable(available);
-    setIsCheckingAvailability(checking);
-  };
+  // Utility functions
+  const formatDateForDisplay = (date: Date | null) => formatDate(date);
+  const calculateNightsForDisplay = () => calculateNights(startDate, endDate);
 
   // Check if current step can proceed
-  const canProceed = () => {
-    const result = (() => {
-      switch (step) {
-        case 1:
-          return startDate && endDate && isAvailable;
-        case 2:
-          return adults > 0;
-        case 3:
-          return selectedPaymentMethod;
-        case 4:
-          return true;
-        default:
-          return false;
-      }
-    })();
-
-    return result;
-  };
+  const canProceed = canProceedToNextStep(
+    step,
+    startDate,
+    endDate,
+    isAvailable,
+    adults,
+    selectedPaymentMethod
+  );
 
   // Get modal title based on current step
-  const getModalTitle = () => {
-    switch (step) {
-      case 1:
-        return t("reservation.selectDates");
-      case 2:
-        return t("reservation.guestDetails");
-      case 3:
-        return t("reservation.paymentMethod");
-      case 4:
-        return t("reservation.confirmReservation");
-      default:
-        return t("reservation.reservation");
-    }
+  const modalTitle = getModalTitle(step, t);
+
+  // Handle date editing from GuestStep
+  const handleEditDates = () => {
+    setIsDateModalVisible(true);
   };
 
-  // Handle booking confirmation
-  const handleBookingConfirmation = async () => {
-    if (!property?._id || !startDate || !endDate) {
-      showToast({
-        type: "error",
-        message: "Missing required booking information",
-      });
-      return;
-    }
-
-    setIsBooking(true);
-    try {
-      // Only include paymentId if it looks like a valid MongoDB ObjectId (24 hex chars)
-      const isValidObjectId = (id: string) => /^[0-9a-fA-F]{24}$/.test(id);
-      const paymentId =
-        selectedPaymentMethod?.id && isValidObjectId(selectedPaymentMethod.id)
-          ? selectedPaymentMethod.id
-          : undefined;
-
-      // Prepare booking data using the real API structure
-      const bookingData = {
-        propertyId: property._id,
-        unitId: unit?._id || property._id,
-        checkIn: startDate.toISOString(),
-        checkOut: endDate.toISOString(),
-        guestCount: adults + childrenCount,
-        guests: {
-          adults,
-          children: childrenCount,
-          infants,
-          pets,
-        },
-        totalPrice:
-          priceDetails?.totalPrice || safePropertyPrice * calculateNights(),
-        contactInfo: {
-          // Get user information from current user data
-          name: currentUser
-            ? `${currentUser.firstName} ${currentUser.lastName}`
-            : "Guest",
-          email: currentUser?.email || "",
-          phone: currentUser?.phoneNumber || "",
-        },
-        // Only include paymentId if it's valid, don't include paymentType and paymentStatus as they're not in server schema
-        ...(paymentId && { paymentId }),
-        specialRequests: "",
-      } as const;
-
-      // Create the booking using the real API
-      const createdBooking = await createBooking(bookingData);
-
-      // Show success message
-      showToast({
-        type: "success",
-        message: "Reservation created successfully!",
-      });
-
-      // Get the confirmation route and log it for debugging
-      const confirmationRoute = getConfirmationRoute();
-      console.log(
-        "ReservationModal: Navigating to confirmation route:",
-        confirmationRoute
-      );
-      console.log("ReservationModal: Current tab context:", currentTabContext);
-      console.log("ReservationModal: Navigation params:", {
-        id: createdBooking._id || property._id,
-        booking: typeof createdBooking,
-        property: typeof property,
-      });
-
-      // Navigate to confirmation screen with booking and property data
-      router.push({
-        pathname: confirmationRoute,
-        params: {
-          id: createdBooking._id || property._id,
-          booking: JSON.stringify(createdBooking),
-          property: JSON.stringify(property),
-          paymentMethod: selectedPaymentMethod
-            ? JSON.stringify(selectedPaymentMethod)
-            : null,
-        },
-      });
-
-      // Close the modal after a small delay to ensure navigation completes
-      setTimeout(() => {
-        onClose();
-      }, 100);
-    } catch (error: any) {
-      console.error("Booking creation error:", error);
-
-      // Show appropriate error message
-      const errorMessage =
-        error?.message ||
-        error?.response?.data?.message ||
-        "Failed to create booking. Please try again.";
-
-      showToast({
-        type: "error",
-        message: errorMessage,
-      });
-    } finally {
-      setIsBooking(false);
-    }
-  };
-
-  // Render current step
-  const renderStep = () => {
-    switch (step) {
-      case 1:
-        return (
-          <DateStep
-            startDate={startDate}
-            endDate={endDate}
-            onSelectRange={handleDateSelection}
-            propertyId={property?._id}
-            isCheckingAvailability={isCheckingAvailability}
-            isAvailable={isAvailable}
-            formatDate={formatDate}
-            onAvailabilityChange={handleAvailabilityChange}
-          />
-        );
-
-      case 2:
-        return (
-          <GuestStep
-            startDate={startDate}
-            endDate={endDate}
-            adults={adults}
-            childrenCount={childrenCount}
-            infants={infants}
-            pets={pets}
-            onChangeAdults={setAdults}
-            onChangeChildren={setChildrenCount}
-            onChangeInfants={setInfants}
-            onChangePets={setPets}
-            maxGuests={property?.maxGuests || 10}
-            formatDate={formatDate}
-            calculateNights={calculateNights}
-            onEditDates={() => setStep(1)}
-          />
-        );
-
-      case 3:
-        return (
-          <PaymentStep
-            startDate={startDate}
-            endDate={endDate}
-            adults={adults}
-            childrenCount={childrenCount}
-            pets={pets}
-            selectedPaymentMethod={selectedPaymentMethod}
-            onSelectPaymentMethod={handlePaymentMethodChange}
-            formatDate={formatDate}
-            onEditDates={() => setStep(1)}
-            onEditGuests={() => setStep(2)}
-          />
-        );
-
-      case 4:
-        return (
-          <ConfirmationStep
-            property={property}
-            startDate={startDate}
-            endDate={endDate}
-            adults={adults}
-            childrenCount={childrenCount}
-            infants={infants}
-            pets={pets}
-            selectedPaymentMethod={selectedPaymentMethod}
-            priceDetails={priceDetails}
-            safePropertyPrice={safePropertyPrice}
-            formatDate={formatDate}
-            calculateNights={calculateNights}
-          />
-        );
-
-      default:
-        return null;
-    }
+  // Handle date selection from modal
+  const handleDateSelectionFromModal = (start: Date, end: Date) => {
+    handleDateSelection(start, end);
+    setIsDateModalVisible(false);
   };
 
   if (!property) {
@@ -383,7 +124,7 @@ export default function ReservationModal({
       >
         <Container padding="lg">
           <Text style={{ textAlign: "center" }}>
-            Property information is required to make a reservation.
+            {ERROR_MESSAGES.MISSING_PROPERTY}
           </Text>
         </Container>
       </Screen>
@@ -395,16 +136,42 @@ export default function ReservationModal({
       <Screen
         header={{
           variant: "solid",
-          title: getModalTitle(),
           left: {
             icon: "close",
             onPress: onClose,
           },
+          showDivider: false,
         }}
         scrollable
         style={{ paddingBottom: 100 }} // Add space for fixed footer
       >
-        <Container>{renderStep()}</Container>
+        <Container>
+          <ReservationStepRenderer
+            step={step}
+            startDate={startDate}
+            endDate={endDate}
+            adults={adults}
+            childrenCount={childrenCount}
+            infants={infants}
+            pets={pets}
+            selectedPaymentMethod={selectedPaymentMethod}
+            property={property}
+            unit={unit}
+            isCheckingAvailability={isCheckingAvailability}
+            isAvailable={isAvailable}
+            onEditDates={handleEditDates}
+            onEditGuests={() => setStep(RESERVATION_STEPS.GUEST_DETAILS)}
+            formatDate={formatDateForDisplay}
+            calculateNights={calculateNightsForDisplay}
+            onAvailabilityChange={handleAvailabilityChange}
+            onSelectRange={handleDateSelection}
+            onChangeAdults={setAdults}
+            onChangeChildren={setChildrenCount}
+            onChangeInfants={setInfants}
+            onChangePets={setPets}
+            onSelectPaymentMethod={handlePaymentMethodChange}
+          />
+        </Container>
       </Screen>
 
       {/* Fixed bottom footer */}
@@ -422,15 +189,19 @@ export default function ReservationModal({
         <StepNavigationTab
           showBackButton={step > 1}
           onBackPress={prevStep}
-          nextButtonTitle={step === 4 ? "Confirm Reservation" : "Next"}
+          nextButtonTitle={
+            step === RESERVATION_STEPS.CONFIRMATION
+              ? BUTTON_TEXTS.CONFIRM_RESERVATION
+              : BUTTON_TEXTS.NEXT
+          }
           onNextPress={() => {
-            if (step === 4) {
+            if (step === RESERVATION_STEPS.CONFIRMATION) {
               handleBookingConfirmation();
             } else {
               nextStep();
             }
           }}
-          nextButtonDisabled={!canProceed() || isBooking}
+          nextButtonDisabled={!canProceed || isBooking}
           nextButtonLoading={isBooking}
           spacing={24}
         />

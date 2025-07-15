@@ -1,12 +1,20 @@
 {
   "build": {
     "production": {
-      "android": {},
+      "android": {
+        "buildType": "app-bundle"
+      },
       "ios": {}
     },
     "development": {
       "developmentClient": true,
       "distribution": "internal"
+    },
+    "beta": {
+      "extends": "production",
+      "android": {
+        "buildType": "app-bundle"
+      }
     }
   }
 }

@@ -1,0 +1,96 @@
+{  "profile": {
+    "personalInfo": "Personal Info",
+    "becomeAHost": "Become a Host",
+    "personalInfoDesc": "Update your name, contact information, and profile picture",
+    "signOut": "Sign Out",
+    "language": "Language",
+    "languageDesc": "Choose your preferred language for the app",
+    "currency": "Currency",
+    "currencyDesc": "Select your preferred currency for prices and payments",
+    "theme": "Theme",
+    "themeDesc": "Choose your preferred app appearance",
+    "themeSystem": "System",
+    "themeSystemDesc": "Follow your device's theme setting",
+    "themeDark": "Dark",
+    "themeDarkDesc": "Use dark theme for better visibility in low light",
+    "themeLight": "Light",
+    "themeLightDesc": "Use light theme for better visibility in bright light",
+    "currentCurrency": "Current Currency",
+    "changeCurrency": "Change Currency",
+    "currencyChanged": "Currency changed to {{currency}}",
+    "currencyChangeError": "Failed to change currency. Please try again.",
+    "selectCurrency": "Select Currency",
+    "currencyInfo": {
+      "title": "Currency Information",
+      "description": "Your currency preference will be used throughout the app for displaying prices and payments. You can change this at any time."
+    },
+    "account": "Account",
+    "preferences": "Preferences",
+    "support": "Support",
+    "hostMode": "Host Mode",
+    "switchToHost": "Switch to Host",
+    "switchToTraveler": "Switch to Traveler",
+    "hostModeDesc": "Switch between host and traveler modes",
+    "hostModeOn": "Enabled",
+    "hostModeOff": "Disabled",
+    "helpCenter": "Help Center",
+    "helpCenterDesc": "Get help and find answers to common questions",
+    "giveFeedback": "Give Feedback",
+    "giveFeedbackDesc": "Share your thoughts and suggestions with us",
+    "resetApp": "Reset App Data",
+    "resetAppDesc": "Fix issues by clearing cached data",
+    "termsOfService": "Terms of Service",
+    "termsOfServiceDesc": "View our terms and conditions",
+    "notifications": "Notifications",
+    "notificationsDesc": "Manage your notification preferences",
+    "privacy": "Privacy",
+    "privacyDesc": "Control your privacy settings",
+    "selectLanguage": "Select Language",
+    "currentLanguage": "Current Language",
+    "languageInfo": {
+      "title": "Language Information",
+      "description": "Choose your preferred language for the app interface. This will change all text and messages to your selected language."
+    },
+    "themeInfo": {
+      "title": "Theme Information",
+      "description": "Choose how the app looks. System will follow your device's theme setting."
+    },
+    "personalInfoForm": {
+      "title": "Personal Information",
+      "description": "Update your personal details and contact information",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "city": "City",
+      "country": "Country",
+      "profilePicture": "Profile Picture"
+    },
+    "helpCenterInfo": {
+      "title": "Help Center",
+      "description": "Find answers to frequently asked questions and get support for using the app."
+    },
+    "feedbackInfo": {
+      "title": "Give Feedback",
+      "description": "We'd love to hear from you! Share your thoughts, suggestions, or report any issues you've encountered."
+    },
+    "termsInfo": {
+      "title": "Terms of Service",
+      "description": "Read our terms and conditions that govern your use of the app."
+    }
+  },
+
+  "upload": {
+    "profileImageSuccess": "Profile image uploaded successfully",
+    "profileImageError": "Failed to upload profile image",
+    "propertyImageSuccess": "Property images uploaded successfully",
+    "propertyImageError": "Failed to upload property images",
+    "unitImageSuccess": "Unit images uploaded successfully",
+    "unitImageError": "Failed to upload unit images",
+    "uploadingImage": "Uploading image...",
+    "uploadComplete": "Upload complete",
+    "uploadFailed": "Upload failed",
+    "imageTooLarge": "Image size must be less than {{maxSize}}MB",
+    "unsupportedFormat": "Unsupported image format. Please use JPEG, PNG, or WebP",
+    "networkError": "Network error. Please check your connection and try again"
+  }}

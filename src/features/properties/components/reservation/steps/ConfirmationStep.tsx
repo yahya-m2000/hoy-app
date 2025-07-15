@@ -6,6 +6,7 @@ import React from "react";
 import { Text, Container } from "@shared/components";
 import { formatCurrency } from "@core/utils/data/formatting/data-formatters";
 import { useTheme } from "@core/hooks/useTheme";
+import { useTranslation } from "react-i18next";
 
 interface ConfirmationStepProps {
   property: any;
@@ -37,39 +38,67 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
   calculateNights,
 }) => {
   const { theme, isDark } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Container style={{ flex: 1 }}>
-      <Container padding="md">
-        {/* Booking Details */}
-        <Container
-          marginBottom="lg"
-          paddingBottom="lg"
-          borderBottomWidth={1}
-          style={{ borderColor: "rgba(0, 0, 0, 0.1)" }}
-        >
+      {/* Booking Details */}
+      <Container marginBottom="xl">
+        <Container marginBottom="lg">
+          <Text variant="h4" weight="bold" style={{ marginBottom: 8 }}>
+            {t("reservation.bookingDetails", "Booking Details")}
+          </Text>
+          <Text variant="body">
+            {t(
+              "reservation.bookingDetailsDescription",
+              "Review your reservation details before confirming"
+            )}
+          </Text>
+        </Container>
+
+        <Container marginBottom="lg">
           <Container
             flexDirection="row"
             justifyContent="space-between"
             alignItems="flex-start"
             marginBottom="md"
           >
-            <Text
-              variant="caption"
-              color={theme.colors.gray[600]}
-              style={{ flex: 1 }}
-            >
-              Dates
+            <Text variant="caption" weight="semibold" style={{ flex: 1 }}>
+              {t("reservation.dates", "Dates")}
             </Text>
             <Text
               variant="body"
               weight="medium"
-              color={isDark ? theme.white : theme.colors.gray[900]}
               style={{ flex: 2, textAlign: "right" }}
             >
               {startDate && endDate
                 ? `${formatDate(startDate)} - ${formatDate(endDate)}`
+                : t("reservation.noDatesSelected", "No dates selected yet")}
+            </Text>
+          </Container>
+
+          <Container
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="flex-start"
+            marginBottom="md"
+          >
+            <Text variant="caption" weight="semibold" style={{ flex: 1 }}>
+              {t("reservation.guests", "Guests")}
+            </Text>
+            <Text
+              variant="body"
+              weight="medium"
+              style={{ flex: 2, textAlign: "right" }}
+            >
+              {adults} {t("reservation.adults", "adults")}
+              {childrenCount > 0
+                ? `, ${childrenCount} ${t("reservation.children", "children")}`
                 : ""}
+              {infants > 0
+                ? `, ${infants} ${t("reservation.infants", "infants")}`
+                : ""}
+              {pets > 0 ? `, ${pets} ${t("reservation.pets", "pets")}` : ""}
             </Text>
           </Container>
 
@@ -79,80 +108,48 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
             alignItems="flex-start"
             marginBottom="md"
           >
-            <Text
-              variant="caption"
-              color={theme.colors.gray[600]}
-              style={{ flex: 1 }}
-            >
-              Guests
+            <Text variant="caption" weight="semibold" style={{ flex: 1 }}>
+              {t("reservation.paymentMethod", "Payment Method")}
             </Text>
             <Text
               variant="body"
               weight="medium"
-              color={isDark ? theme.white : theme.colors.gray[900]}
               style={{ flex: 2, textAlign: "right" }}
             >
-              {adults} adults
-              {childrenCount > 0 ? `, ${childrenCount} children` : ""}
-              {infants > 0 ? `, ${infants} infants` : ""}
-              {pets > 0 ? `, ${pets} pets` : ""}
-            </Text>
-          </Container>
-
-          <Container
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="flex-start"
-            marginBottom="md"
-          >
-            <Text
-              variant="caption"
-              color={theme.colors.gray[600]}
-              style={{ flex: 1 }}
-            >
-              Payment Method
-            </Text>
-            <Text
-              variant="body"
-              weight="medium"
-              color={isDark ? theme.white : theme.colors.gray[900]}
-              style={{ flex: 2, textAlign: "right" }}
-            >
-              {selectedPaymentMethod?.name || "Not selected"}
+              {selectedPaymentMethod?.name ||
+                t("reservation.paymentMethodNotSelected", "Not selected")}
             </Text>
           </Container>
         </Container>
+      </Container>
 
-        {/* Price Breakdown */}
-        {priceDetails && (
+      {/* Price Breakdown */}
+      {priceDetails && (
+        <Container>
           <Container marginBottom="lg">
-            <Text
-              variant="h3"
-              weight="semibold"
-              color={isDark ? theme.white : theme.colors.gray[900]}
-              style={{ marginBottom: theme.spacing.md }}
-            >
-              Price breakdown
+            <Text variant="h4" weight="bold" style={{ marginBottom: 8 }}>
+              {t("reservation.priceBreakdown", "Price Breakdown")}
             </Text>
+            <Text variant="body">
+              {t(
+                "reservation.priceBreakdownDescription",
+                "Detailed breakdown of your total cost"
+              )}
+            </Text>
+          </Container>
 
+          <Container marginBottom="lg">
             <Container
               flexDirection="row"
               justifyContent="space-between"
               alignItems="center"
               marginBottom="sm"
             >
-              <Text
-                variant="caption"
-                color={theme.colors.gray[600]}
-                style={{ flex: 1 }}
-              >
-                {formatCurrency(safePropertyPrice)} x {calculateNights()} nights
+              <Text variant="caption" style={{ flex: 1 }}>
+                {formatCurrency(safePropertyPrice)} x {calculateNights()}{" "}
+                {t("reservation.nights", "nights")}
               </Text>
-              <Text
-                variant="body"
-                weight="medium"
-                color={isDark ? theme.white : theme.colors.gray[900]}
-              >
+              <Text variant="body" weight="medium">
                 {formatCurrency(safePropertyPrice * calculateNights())}
               </Text>
             </Container>
@@ -164,18 +161,10 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
                 alignItems="center"
                 marginBottom="sm"
               >
-                <Text
-                  variant="caption"
-                  color={theme.colors.gray[600]}
-                  style={{ flex: 1 }}
-                >
-                  Cleaning fee
+                <Text variant="caption" style={{ flex: 1 }}>
+                  {t("reservation.cleaningFee", "Cleaning fee")}
                 </Text>
-                <Text
-                  variant="body"
-                  weight="medium"
-                  color={isDark ? theme.white : theme.colors.gray[900]}
-                >
+                <Text variant="body" weight="medium">
                   {formatCurrency(priceDetails.cleaningFee)}
                 </Text>
               </Container>
@@ -188,18 +177,10 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
                 alignItems="center"
                 marginBottom="sm"
               >
-                <Text
-                  variant="caption"
-                  color={theme.colors.gray[600]}
-                  style={{ flex: 1 }}
-                >
-                  Service fee
+                <Text variant="caption" style={{ flex: 1 }}>
+                  {t("reservation.serviceFee", "Service fee")}
                 </Text>
-                <Text
-                  variant="body"
-                  weight="medium"
-                  color={isDark ? theme.white : theme.colors.gray[900]}
-                >
+                <Text variant="body" weight="medium">
                   {formatCurrency(priceDetails.serviceFee)}
                 </Text>
               </Container>
@@ -212,18 +193,10 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
                 alignItems="center"
                 marginBottom="sm"
               >
-                <Text
-                  variant="caption"
-                  color={theme.colors.gray[600]}
-                  style={{ flex: 1 }}
-                >
-                  Taxes
+                <Text variant="caption" style={{ flex: 1 }}>
+                  {t("reservation.taxes", "Taxes")}
                 </Text>
-                <Text
-                  variant="body"
-                  weight="medium"
-                  color={isDark ? theme.white : theme.colors.gray[900]}
-                >
+                <Text variant="body" weight="medium">
                   {formatCurrency(priceDetails.taxes)}
                 </Text>
               </Container>
@@ -234,28 +207,23 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
               justifyContent="space-between"
               alignItems="center"
               borderTopWidth={1}
-              style={{ borderTopColor: "rgba(0, 0, 0, 0.1)" }}
+              borderColor={
+                isDark ? theme.colors.gray[700] : theme.colors.gray[200]
+              }
               paddingTop="md"
               marginTop="md"
             >
-              <Text
-                variant="body"
-                weight="semibold"
-                color={isDark ? theme.white : theme.colors.gray[900]}
-              >
-                Total
+              <Text variant="body" weight="semibold">
+                {t("reservation.total", "Total")}
               </Text>
-              <Text
-                variant="h3"
-                weight="bold"
-                color={isDark ? theme.white : theme.colors.gray[900]}
-              >
+
+              <Text variant="h3" weight="bold">
                 {formatCurrency(priceDetails.totalPrice)}
               </Text>
             </Container>
           </Container>
-        )}
-      </Container>
+        </Container>
+      )}
     </Container>
   );
 };

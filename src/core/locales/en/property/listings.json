@@ -1,0 +1,107 @@
+{
+    "title": "My Listings",
+    "noListings": "No listings yet",
+    "noListingsDescription": "Start creating your first property listing",
+    "createListing": "Create Listing",
+    "draft": "Draft",
+    "active": "Active",
+    "inactive": "Inactive",
+    "published": "Published",
+    "pending": "Pending Review",
+    "rejected": "Rejected",
+    "edit": "Edit",
+    "delete": "Delete",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "view": "View",
+    "stats": "Statistics",
+    "bookings": "Bookings",
+    "revenue": "Revenue",
+    "rating": "Rating",
+    "reviews": "Reviews",
+    "noReviews": "No reviews yet",
+    "averageRating": "Average Rating",
+    "totalBookings": "Total Bookings",
+    "totalRevenue": "Total Revenue",
+    "lastBooking": "Last Booking",
+    "noBookings": "No bookings yet",
+    "noRevenue": "No revenue yet",
+    "loading": "Loading listings...",
+    "error": "Error loading listings",
+    "retry": "Retry",
+    "filter": {
+      "all": "All",
+      "drafts": "Drafts",
+      "active": "Active",
+      "inactive": "Inactive",
+      "published": "Published",
+      "pending": "Pending"
+    },
+    "sort": {
+      "newest": "Newest First",
+      "oldest": "Oldest First",
+      "name": "Name A-Z",
+      "nameDesc": "Name Z-A",
+      "rating": "Highest Rated",
+      "bookings": "Most Booked",
+      "revenue": "Highest Revenue"
+    },
+    "actions": {
+      "edit": "Edit Listing",
+      "delete": "Delete Listing",
+      "activate": "Activate Listing",
+      "deactivate": "Deactivate Listing",
+      "view": "View Listing",
+      "duplicate": "Duplicate Listing",
+      "preview": "Preview Listing"
+    },
+    "deleteConfirm": {
+      "title": "Delete Listing",
+      "message": "Are you sure you want to delete this listing? This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "statusChange": {
+      "activateConfirm": "Are you sure you want to activate this listing?",
+      "deactivateConfirm": "Are you sure you want to deactivate this listing?",
+      "success": "Listing status updated successfully",
+      "error": "Failed to update listing status"
+    },
+    "add": {
+      "title": "List Your Property",
+      "progressSaved": "Your progress has been saved",
+      "savingProgress": "Saving progress...",
+      "errorSaving": "Error saving progress",
+      "exitConfirmTitle": "Save & Exit?",
+      "exitConfirmMessage": "Your progress will be saved and you can continue later",
+      "flow": {
+        "step1Title": "Tell Us About Your Place",
+        "step2Title": "Make Your Place Stand Out",
+        "step3Title": "Finish Up and Publish"
+      },
+    
+      
+      "review": {
+        "title": "Review Your Listing",
+        "description": "Check all your details before publishing.",
+        "overview": "Property Overview",
+        "noName": "Untitled Property",
+        "bed": "bed",
+        "beds": "beds",
+        "bath": "bath",
+        "baths": "baths",
+        "guest": "guest",
+        "guests": "guests",
+        "perNight": "/night",
+        "amenities": "Amenities",
+        "photos": "Photos",
+        "main": "Main",
+        "more": "more",
+        "readyTo": "Ready to {{action}}?",
+        "publish": "Publish",
+        "publishMessage": "Everything looks good! You can now publish your property.",
+        "update": "Update",
+        "updateMessage": "Review your changes before updating your listing."
+      }
+    }
+  }

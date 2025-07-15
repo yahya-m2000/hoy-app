@@ -50,7 +50,7 @@ export default function BackButton({
       onPress={handlePress}
       activeOpacity={0.7}
     >
-      <Icon name="arrow-back" size={size} color={iconColor} />
+      <Icon name="chevron-back-outline" size={size} color={iconColor} />
     </TouchableOpacity>
   );
 }

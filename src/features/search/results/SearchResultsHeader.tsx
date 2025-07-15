@@ -40,7 +40,7 @@ export const SearchResultsHeader: React.FC<SearchResultsHeaderProps> = ({
         activeOpacity={0.7}
       >
         <Ionicons
-          name="arrow-back"
+          name="chevron-back-outline"
           size={24}
           color={isDark ? theme.colors.gray[100] : theme.colors.gray[800]}
         />

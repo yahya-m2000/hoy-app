@@ -21,6 +21,7 @@ import {
   PropertyImage,
 } from "@shared/components";
 import { Screen } from "@shared/components/layout/Screen";
+import { EmptyState } from "@shared/components/feedback";
 
 // Local Property interface
 interface Property {
@@ -30,6 +31,10 @@ interface Property {
   type: string;
   images: string[];
   isActive: boolean;
+  price: number;
+  weekdayPrice: number;
+  weekendPrice: number;
+  currency: string;
 }
 
 // Transform API Property to Calendar Property interface
@@ -44,6 +49,27 @@ const transformAPIProperty = (apiProperty: APIProperty): Property => {
     type: apiProperty.type,
     images: apiProperty.images || [],
     isActive: apiProperty.isActive,
+    price:
+      typeof apiProperty.price === "object"
+        ? apiProperty.price.amount
+        : apiProperty.price || 0,
+    weekdayPrice:
+      apiProperty.weekdayPrice ||
+      (typeof apiProperty.price === "object"
+        ? apiProperty.price.amount
+        : apiProperty.price) ||
+      0,
+    weekendPrice:
+      apiProperty.weekendPrice ||
+      (typeof apiProperty.price === "object"
+        ? apiProperty.price.amount
+        : apiProperty.price) ||
+      0,
+    currency:
+      apiProperty.currency ||
+      (typeof apiProperty.price === "object"
+        ? apiProperty.price.currency
+        : "USD"),
   };
 };
 
@@ -80,13 +106,6 @@ export default function PropertySelectionScreen() {
     [setSelectedProperty, router]
   );
 
-  // Handle "All Properties" selection
-  const handleAllPropertiesSelect = useCallback(() => {
-    // Clear the selected property and go back
-    setSelectedProperty(null);
-    router.back();
-  }, [setSelectedProperty, router]);
-
   // Render property item
   const renderPropertyItem = useCallback(
     ({ item }: { item: Property }) => (
@@ -114,7 +133,7 @@ export default function PropertySelectionScreen() {
           children: (
             <TouchableOpacity onPress={handleClosePress}>
               <Icon
-                name="arrow-back"
+                name="chevron-back-outline"
                 size={iconSize.md}
                 color={theme.text.primary || "#007AFF"}
               />
@@ -123,70 +142,26 @@ export default function PropertySelectionScreen() {
         },
       }}
     >
-      <Container paddingHorizontal="lg">
-        {/* Properties List */}
-        <Text
-          variant="h6"
-          weight="semibold"
-          color={theme.text?.secondary || "#666666"}
-          style={{ marginBottom: spacing.md }}
-        >
-          {t("calendar.yourProperties")}
-        </Text>
-
-        <FlatList
-          data={properties}
-          renderItem={renderPropertyItem}
-          keyExtractor={(item) => item.id}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: spacing.xl }}
-        />
-
-        {/* All Properties Option */}
-        <Button
-          title={t("calendar.allProperties")}
-          variant="ghost"
-          size="large"
-          onPress={handleAllPropertiesSelect}
-          icon={
-            <Icon
-              name="grid-outline"
-              size={iconSize.md}
-              color={theme.colors.primary || "#007AFF"}
-              style={{ marginRight: spacing.sm }}
-            />
-          }
-        />
-
-        {/* Empty State */}
-        {properties.length === 0 && (
-          <Container
-            flex={1}
-            justifyContent="center"
-            alignItems="center"
-            padding="xl"
-          >
-            <Icon
-              name="home-outline"
-              size={64}
-              color={theme.colors.gray?.[300] || "#cccccc"}
-            />
-            <Text
-              variant="h6"
-              weight="medium"
-              color={theme.text?.secondary || "#666666"}
-              style={{ marginTop: spacing.md, textAlign: "center" }}
-            >
-              {t("calendar.noProperties")}
-            </Text>
-            <Text
-              variant="body"
-              color={theme.text?.tertiary || "#999999"}
-              style={{ marginTop: spacing.sm, textAlign: "center" }}
-            >
-              {t("calendar.addPropertiesToStart")}
-            </Text>
-          </Container>
+      <Container
+        flex={1}
+        paddingHorizontal="lg"
+        justifyContent="center"
+        alignItems="center"
+      >
+        {properties.length === 0 ? (
+          <EmptyState
+            icon="home-outline"
+            title={t("calendar.noProperties")}
+            message={t("calendar.addPropertiesToStart")}
+          />
+        ) : (
+          <FlatList
+            data={properties}
+            renderItem={renderPropertyItem}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: spacing.xl }}
+          />
         )}
       </Container>
     </Screen>

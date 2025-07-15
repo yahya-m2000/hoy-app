@@ -6,6 +6,7 @@
  * - Property rules and safety information
  * - Cancellation policies and refunds
  * - Host setup and onboarding
+ * - New Airbnb-style host setup types
  * 
  * @module @core/types/host
  * @author Hoy Development Team
@@ -13,6 +14,31 @@
  */
 
 import type { BaseEntity } from './common.types';
+
+// ========================================
+// SETUP STEP TYPES
+// ========================================
+
+/**
+ * Setup step enumeration
+ */
+export enum SetupStepType {
+  VERIFICATION = "verification",
+  AGREEMENT = "agreement", 
+  POLICIES = "policies",
+  PREFERENCES = "preferences",
+  PROFILE = "profile"
+}
+
+/**
+ * Setup step status
+ */
+export enum SetupStepStatus {
+  PENDING = "pending",
+  IN_PROGRESS = "in_progress", 
+  COMPLETED = "completed",
+  SKIPPED = "skipped"
+}
 
 // ========================================
 // CANCELLATION POLICY TYPES
@@ -236,47 +262,336 @@ export interface HostPolicies {
 }
 
 // ========================================
-// HOST SETUP TYPES
+// NEW AIRBNB-STYLE HOST SETUP TYPES
 // ========================================
+
+/**
+ * Account verification status and information
+ */
+export interface HostVerification {
+  /** Email verification status */
+  isEmailVerified: boolean;
+  /** Phone verification status */
+  isPhoneVerified: boolean;
+  /** Identity verification status */
+  isIdentityVerified: boolean;
+  /** Identity verification documents */
+  identityDocuments?: string[];
+  /** Verification completion date */
+  verificationDate?: Date;
+  /** Verification provider (e.g., "jumio", "onfido") */
+  verificationProvider?: string;
+}
+
+/**
+ * Host agreement and terms acceptance
+ */
+export interface HostAgreement {
+  /** Terms of service accepted */
+  termsAccepted: boolean;
+  /** Terms acceptance timestamp */
+  termsAcceptedAt?: Date;
+  /** Terms version accepted */
+  termsVersion?: string;
+  /** Privacy policy accepted */
+  privacyPolicyAccepted: boolean;
+  /** Privacy policy acceptance timestamp */
+  privacyPolicyAcceptedAt?: Date;
+  /** Privacy policy version accepted */
+  privacyPolicyVersion?: string;
+  /** Host guarantee acceptance */
+  hostGuaranteeAccepted?: boolean;
+  /** Host guarantee acceptance timestamp */
+  hostGuaranteeAcceptedAt?: Date;
+}
+
+/**
+ * Enhanced cancellation policy with type selection
+ */
+export interface HostCancellationPolicy {
+  /** Policy type */
+  type: "flexible" | "moderate" | "strict" | "custom";
+  /** Refund period before booking (in days) */
+  refundPeriodDays: number;
+  /** Full refund period (in days) */
+  fullRefundDays: number;
+  /** Partial refund period (in days) */
+  partialRefundDays: number;
+  /** No refund period (in days) */
+  noRefundDays: number;
+  /** Partial refund percentage */
+  partialRefundPercentage?: number;
+}
+
+/**
+ * Enhanced house rules with additional options
+ */
+export interface HostHouseRules {
+  /** Check-in time (24-hour format) */
+  checkInTime: string;
+  /** Check-out time (24-hour format) */
+  checkOutTime: string;
+  /** Whether smoking is allowed */
+  smokingAllowed: boolean;
+  /** Whether pets are allowed */
+  petsAllowed: boolean;
+  /** Whether parties/events are allowed */
+  partiesAllowed: boolean;
+  /** Quiet hours configuration */
+  quietHours: {
+    enabled: boolean;
+    start: string;
+    end: string;
+  };
+  /** Additional custom rules */
+  additionalRules: string[];
+  /** Maximum number of guests */
+  maxGuests?: number;
+  /** Minimum age requirement */
+  minimumAge?: number;
+}
+
+/**
+ * Check-in preferences and instructions
+ */
+export interface CheckInPreferences {
+  /** Self check-in available */
+  selfCheckIn: boolean;
+  /** Key pickup required */
+  keyPickup: boolean;
+  /** Meet and greet preferred */
+  meetAndGreet: boolean;
+  /** Check-in instructions */
+  instructions?: string;
+  /** Key location details */
+  keyLocation?: string;
+}
+
+/**
+ * Default host policies (applied to all properties)
+ */
+export interface HostDefaultPolicies {
+  /** Cancellation policy */
+  cancellationPolicy: HostCancellationPolicy;
+  /** House rules */
+  houseRules: HostHouseRules;
+  /** Check-in preferences */
+  checkInPreferences: CheckInPreferences;
+}
+
+/**
+ * Host preferences and settings
+ */
+export interface HostPreferences {
+  /** Response time commitment */
+  responseTime: "within_1_hour" | "within_24_hours" | "within_48_hours";
+  /** Instant booking enabled */
+  instantBooking: boolean;
+  /** Minimum notice required (hours) */
+  minimumNotice: number;
+  /** Maximum advance booking (days) */
+  maxAdvanceBooking: number;
+  /** Languages spoken */
+  languages: string[];
+  /** Timezone */
+  timezone: string;
+  /** Preferred currency */
+  currency: string;
+  /** Notification preferences */
+  notifications: {
+    email: boolean;
+    push: boolean;
+    sms: boolean;
+    bookingRequests: boolean;
+    messages: boolean;
+    reviews: boolean;
+    payments: boolean;
+  };
+}
+
+/**
+ * Host profile information
+ */
+export interface HostProfile {
+  /** Host bio/description */
+  bio?: string;
+  /** Profile photo URL */
+  photo?: string;
+  /** Languages spoken */
+  languages: string[];
+  /** Response rate percentage */
+  responseRate?: number;
+  /** Average response time */
+  responseTime?: string;
+  /** Superhost status */
+  isSuperhost: boolean;
+  /** Hosting start date */
+  hostingSince?: Date;
+  /** Host location */
+  location?: string;
+  /** Host occupation */
+  occupation?: string;
+  /** Host interests */
+  interests?: string[];
+}
+
+/**
+ * Setup status and progress tracking
+ */
+export interface HostSetupStatus {
+  /** Current step in setup */
+  currentStep: string;
+  /** Completed steps */
+  completedSteps: string[];
+  /** Setup completion status */
+  isComplete: boolean;
+  /** Setup completion timestamp */
+  setupCompletedAt?: Date;
+  /** Last saved timestamp */
+  lastSavedAt?: Date;
+  /** Setup flow version */
+  setupVersion?: string;
+}
+
+/**
+ * Complete host setup data structure (Airbnb-style)
+ */
+export interface HostSetupData {
+  /** Account verification */
+  verification: HostVerification;
+  /** Host agreement */
+  agreement: HostAgreement;
+  /** Default policies */
+  defaultPolicies: HostDefaultPolicies;
+  /** Host preferences */
+  preferences: HostPreferences;
+  /** Host profile */
+  profile: HostProfile;
+  /** Setup status */
+  setupStatus: HostSetupStatus;
+}
 
 /**
  * Host setup step configuration
  */
-export interface HostSetupStep {
+export interface HostSetupStepConfig {
   /** Step identifier */
   id: string;
   /** Step title */
   title: string;
   /** Step subtitle/description */
   subtitle: string;
-  /** Whether step is completed */
-  completed: boolean;
-  /** Step-specific data */
-  data?: Record<string, unknown>;
-  /** Step order */
-  order?: number;
+  /** Step icon */
+  icon: string;
   /** Whether step is required */
-  required?: boolean;
-  /** Estimated time to complete */
+  required: boolean;
+  /** Estimated completion time */
   estimatedTime?: string;
 }
 
 /**
- * Form data for host setup process
+ * Host setup API responses
  */
-export interface SetupFormData {
-  /** Partial cancellation policy data */
-  cancellationPolicy: Partial<CancellationPolicy>;
-  /** Partial house rules data */
-  houseRules: Partial<HouseRules>;
-  /** Partial safety information data */
-  safetyInformation: Partial<SafetyInformation>;
-  /** Partial property information data */
-  propertyInformation: Partial<PropertyInformation>;
+export interface HostSetupStatusResponse {
+  success: boolean;
+  data: {
+    isHost: boolean;
+    isSetupComplete: boolean;
+    currentStep: string;
+    completedSteps: string[];
+    verification: HostVerification;
+    agreement: HostAgreement;
+    canProceed: {
+      toAgreement: boolean;
+      toPolicies: boolean;
+      toPreferences: boolean;
+      toProfile: boolean;
+      toComplete: boolean;
+    };
+    setupProgress: {
+      totalSteps: number;
+      completedSteps: number;
+      percentage: number;
+    };
+  };
 }
 
 /**
- * Setup progress tracking
+ * Verification API types
+ */
+export interface VerificationResult {
+  success: boolean;
+  message: string;
+  verificationId?: string;
+  expiresAt?: Date;
+}
+
+export interface VerificationCodeRequest {
+  type: "email" | "phone";
+  contact: string;
+}
+
+export interface VerificationCodeVerification {
+  verificationId: string;
+  code: string;
+}
+
+/**
+ * Step update requests
+ */
+export interface VerificationUpdateRequest {
+  verification: Partial<HostVerification>;
+}
+
+export interface AgreementUpdateRequest {
+  agreement: Partial<HostAgreement>;
+}
+
+export interface DefaultPoliciesUpdateRequest {
+  defaultPolicies: Partial<HostDefaultPolicies>;
+}
+
+export interface PreferencesUpdateRequest {
+  preferences: Partial<HostPreferences>;
+}
+
+export interface ProfileUpdateRequest {
+  profile: Partial<HostProfile>;
+}
+
+/**
+ * Complete setup request
+ */
+export interface CompleteHostSetupRequest {
+  verification: HostVerification;
+  agreement: HostAgreement;
+  defaultPolicies: HostDefaultPolicies;
+  preferences: HostPreferences;
+  profile: HostProfile;
+}
+
+/**
+ * Setup form data for UI components
+ */
+export interface HostSetupFormData {
+  verification: Partial<HostVerification>;
+  agreement: Partial<HostAgreement>;
+  defaultPolicies: Partial<HostDefaultPolicies>;
+  preferences: Partial<HostPreferences>;
+  profile: Partial<HostProfile>;
+}
+
+/**
+ * Validation result for form steps
+ */
+export interface StepValidationResult {
+  isValid: boolean;
+  errors: Record<string, string>;
+  canProceed: boolean;
+}
+
+/**
+ * Legacy setup progress interface (keep for backward compatibility)
  */
 export interface SetupProgress {
   /** Completed steps count */
@@ -289,6 +604,20 @@ export interface SetupProgress {
   currentStep?: string;
   /** Estimated time remaining */
   estimatedTimeRemaining?: string;
+}
+
+/**
+ * Legacy form data interface (keep for backward compatibility)
+ */
+export interface SetupFormData {
+  /** Partial cancellation policy data */
+  cancellationPolicy: Partial<CancellationPolicy>;
+  /** Partial house rules data */
+  houseRules: Partial<HouseRules>;
+  /** Partial safety information data */
+  safetyInformation: Partial<SafetyInformation>;
+  /** Partial property information data */
+  propertyInformation: Partial<PropertyInformation>;
 }
 
 // ========================================

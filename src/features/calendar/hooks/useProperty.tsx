@@ -9,6 +9,10 @@ export interface Property {
   type: string;
   images: string[];
   isActive: boolean;
+  price: number;
+  weekdayPrice: number;
+  weekendPrice: number;
+  currency: string;
 }
 
 interface PropertyContextType {
@@ -37,6 +41,27 @@ const transformAPIProperty = (apiProperty: APIProperty): Property => {
     type: apiProperty.type,
     images: apiProperty.images || [],
     isActive: apiProperty.isActive,
+    price:
+      typeof apiProperty.price === "object"
+        ? apiProperty.price.amount
+        : apiProperty.price || 0,
+    weekdayPrice:
+      apiProperty.weekdayPrice ||
+      (typeof apiProperty.price === "object"
+        ? apiProperty.price.amount
+        : apiProperty.price) ||
+      0,
+    weekendPrice:
+      apiProperty.weekendPrice ||
+      (typeof apiProperty.price === "object"
+        ? apiProperty.price.amount
+        : apiProperty.price) ||
+      0,
+    currency:
+      apiProperty.currency ||
+      (typeof apiProperty.price === "object"
+        ? apiProperty.price.currency
+        : "USD"),
   };
 };
 

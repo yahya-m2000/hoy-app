@@ -1,0 +1,65 @@
+{ "feedback": {
+  "title": "Bixi Fikradaada",
+  "selectType": "Noocee fikrad ah ayaad rabtaa inaad la wadaagto?",
+  "selectTypeDescription": "Dooro qaybta ugu habboon ee ka tarjumaysa fikradaada",
+  "selectCategory": "Qaybtee ayey la xiriirtaa?",
+  "selectCategoryDescription": "Dooro qaybta gaarka ah ee fikradaadu khusayso",
+  "details": "Faahfaahin dheeraad ah",
+  "review": "Dib u eeg fikradaada",
+  "reviewDescription": "Fadlan dib u eeg fikradaada ka hor intaadan gudbin",
+  "submit": "Gudbi Fikradaada",
+  "type": "Nooc",
+  "category": "Qayb",
+  "priority": "Mudnaanta",
+  "subject": "Mawduuc",
+  "description": "Sharaxaad",
+  "anonymous": "Magac la'aan",
+  "submitAnonymously": "Gudbi adigoo aan la garanayn",
+  "submitAnonymouslyDescription": "Magacaaga iyo faahfaahinta akoonka lama wadaagi doono",
+  "email": "Email",
+  "emailPlaceholder": "Gali cinwaanka emailkaaga",
+  "subjectPlaceholder": "Kooban mawduuca fikradaada",
+  "descriptionPlaceholder": "Faahfaahi fikradaada si buuxda",
+  "stepsToReproduce": "Tallaabooyinka lagu celin karo",
+  "stepsToReproducePlaceholder": "Sidee baanu ku arki karnaa dhibaatadan?",
+  "expectedBehavior": "Dabeecadda la filayo",
+  "expectedBehaviorPlaceholder": "Maxaa la rabay inuu dhaco?",
+  "actualBehavior": "Dabeecadda dhabta ah",
+  "actualBehaviorPlaceholder": "Maxaa dhab ahaantii dhacay?",
+  "success": {
+    "title": "Fikrada waa la gudbiyay",
+    "message": "Waad ku mahadsan tahay fikradaada! Waxaan dib u eegi doonaa oo waan kula soo xiriiri doonaa haddii loo baahdo."
+  },
+  "errors": {
+    "typeRequired": "Fadlan dooro nooca fikrada",
+    "categoryRequired": "Fadlan dooro qayb",
+    "subjectRequired": "Mawduuca waa loo baahan yahay",
+    "subjectTooShort": "Mawduuca waa inuu ahaadaa ugu yaraan 5 xaraf",
+    "descriptionRequired": "Sharaxaadu waa loo baahan yahay",
+    "descriptionTooShort": "Sharaxaaddu waa inay ahaataa ugu yaraan 10 xaraf",
+    "emailRequiredForAnonymous": "Email ayaa loo baahan yahay marka la gudbinayo magac la'aan"
+  },
+  "types": {
+    "bugReport": "Warbixin Cillad",
+    "featureRequest": "Codsi Astaamo",
+    "improvement": "Hagaajin",
+    "general": "Fikrad Guud",
+    "complaint": "Caban"
+  },
+  "categories": {
+    "appFunctionality": "Shaqada App-ka",
+    "uiUx": "UI/UX",
+    "performance": "Waxqabad",
+    "payment": "Bixinta",
+    "booking": "Boos celin",
+    "property": "Hanti",
+    "account": "Akoon",
+    "other": "Kale"
+  },
+  "priorities": {
+    "low": "Hoose",
+    "medium": "Dhexdhexaad",
+    "high": "Sare",
+    "critical": "Muhiim"
+  }
+} }

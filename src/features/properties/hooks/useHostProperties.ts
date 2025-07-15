@@ -3,7 +3,7 @@
  * Fetches properties belonging to the current host user
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Property } from "@core/types/property.types";
 import { HostPropertyService } from "@core/api/services/host";
 import { logErrorWithContext } from "@core/utils/sys/error";
@@ -24,6 +24,7 @@ export function useHostProperties(): UseHostPropertiesReturn {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const hasInitialized = useRef(false);
 
   const fetchProperties = useCallback(async () => {
     setLoading(true);
@@ -33,8 +34,16 @@ export function useHostProperties(): UseHostPropertiesReturn {
       const response = await HostPropertyService.getProperties();
       setProperties(response.properties || []);
       setError(null);
-    } catch (err) {
+    } catch (err: any) {
       logErrorWithContext("useHostProperties.fetchProperties", err);
+      
+      // Handle 403 errors gracefully - user doesn't have host permissions yet
+      if (err?.response?.status === 403) {
+        console.log("🔐 [useHostProperties] User doesn't have host permissions yet - returning empty properties");
+        setProperties([]);
+        setError(null);
+        return;
+      }
       
       let errorMessage = "Unable to load your properties";
       if (err instanceof Error) {
@@ -57,8 +66,11 @@ export function useHostProperties(): UseHostPropertiesReturn {
   }, [fetchProperties]);
 
   useEffect(() => {
-    fetchProperties();
-  }, [fetchProperties]);
+    if (!hasInitialized.current) {
+      hasInitialized.current = true;
+      fetchProperties();
+    }
+  }, []);
 
   return {
     properties,

@@ -94,7 +94,11 @@ const CustomBackButton = ({
       }}
       activeOpacity={0.7}
     >
-      <Icon name="arrow-back" size={22} color={getBackButtonColor()} />
+      <Icon
+        name="chevron-back-outline"
+        size={22}
+        color={getBackButtonColor()}
+      />
     </TouchableOpacity>
   );
 };

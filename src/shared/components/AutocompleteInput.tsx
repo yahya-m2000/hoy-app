@@ -143,7 +143,7 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
             >
               <TouchableOpacity onPress={handleCloseModal}>
                 <Icon
-                  name="arrow-back"
+                  name="chevron-back-outline"
                   size={iconSize.md}
                   color={theme.text?.primary || theme.primary}
                 />

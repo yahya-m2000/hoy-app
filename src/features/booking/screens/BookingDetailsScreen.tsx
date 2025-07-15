@@ -21,6 +21,7 @@ import { useToast } from "@core/context";
 import { useTheme, useCurrencyConversion } from "@core/hooks";
 import { useCurrency } from "@core/context";
 import { useBookingDetails } from "@features/booking/hooks";
+import { useCancelBooking } from "@features/booking/hooks/useBookings";
 import { useHostBooking } from "@features/host/hooks/useHostBookings";
 import { useBookingActions } from "@features/host/hooks";
 import { calculateDaysCount, canUpdateBooking } from "@features/host/utils";
@@ -105,6 +106,9 @@ export default function BookingDetailsScreen({
     error: hostError,
     refetch: hostRefetch,
   } = useHostBooking(isHostView ? bookingIdParam : ""); // Only call for host view
+
+  // Guest cancel booking mutation
+  const cancelBookingMutation = useCancelBooking();
 
   // Use the appropriate booking data and loading states
   const booking = isHostView ? hostBooking : travelerBooking;
@@ -259,13 +263,23 @@ export default function BookingDetailsScreen({
           style: "cancel",
         },
         {
-          text: t("bookings.confirmCancel"),
+          text: t("common.confirmCancel"),
           style: "destructive",
-          onPress: () => {
-            showToast({
-              message: t("bookings.cancellationComingSoon"),
-              type: "info",
-            });
+          onPress: async () => {
+            if (!booking) return;
+            try {
+              await cancelBookingMutation.mutateAsync(booking._id);
+              showToast({
+                message: t("bookings.cancellationSuccess"),
+                type: "success",
+              });
+              refetch();
+            } catch (error) {
+              showToast({
+                message: t("bookings.cancellationFailed"),
+                type: "error",
+              });
+            }
           },
         },
       ]
@@ -288,7 +302,10 @@ export default function BookingDetailsScreen({
   // Check if booking can be cancelled (traveler view)
   const canCancelBooking = () => {
     if (!booking) return false;
-    return booking.status === "confirmed" || booking.status === "pending";
+    return (
+      booking.bookingStatus === "confirmed" ||
+      booking.bookingStatus === "pending"
+    );
   };
 
   // Get screen title
@@ -351,7 +368,7 @@ export default function BookingDetailsScreen({
         title: getScreenTitle(),
         showDivider: false,
         left: {
-          icon: "arrow-back",
+          icon: "chevron-back-outline",
           onPress: getBackHandler(),
         },
       }}
@@ -404,11 +421,7 @@ export default function BookingDetailsScreen({
                         alignItems="center"
                         marginTop="xs"
                       >
-                        <Icon
-                          name="star"
-                          size={iconSize.xs}
-                          color={theme.colors.primary}
-                        />
+                        <Icon name="star" size={iconSize.xs} />
                         <Container marginLeft="xs">
                           <Text
                             variant="caption"
@@ -437,54 +450,12 @@ export default function BookingDetailsScreen({
 
         {/* Booking Status */}
         <Container marginBottom="lg">
-          <Section
-            title={
-              isHostView
-                ? t("host.today.reservations.statusTitle")
-                : t("bookings.statusTitle")
-            }
-          >
+          <Section title={t("bookings.status.title")}>
             <Container flexDirection="row" style={{ gap: 16 }}>
               <Container flex={1}>
-                <Container marginBottom="xs">
-                  <Text variant="caption" color={theme.colors.gray[600]}>
-                    {isHostView
-                      ? t("host.today.reservations.reservation")
-                      : t("bookings.booking")}
-                  </Text>
-                </Container>
                 <BookingStatusBadge
-                  status={booking.status}
+                  status={booking.bookingStatus as any}
                   type="booking"
-                  size="medium"
-                />
-              </Container>
-              <Container flex={1}>
-                <Container marginBottom="xs">
-                  <Text variant="caption" color={theme.colors.gray[600]}>
-                    {isHostView
-                      ? t("host.today.reservations.paymentStatus")
-                      : t("bookings.paymentStatus")}
-                  </Text>
-                </Container>
-                <BookingStatusBadge
-                  status={
-                    [
-                      "pending",
-                      "confirmed",
-                      "cancelled",
-                      "completed",
-                      "in_progress",
-                      "refunded",
-                      "disputed",
-                      "paid",
-                      "partial",
-                      "failed",
-                    ].includes(booking.paymentStatus)
-                      ? (booking.paymentStatus as any)
-                      : "pending"
-                  }
-                  type="payment"
                   size="medium"
                 />
               </Container>
@@ -504,11 +475,7 @@ export default function BookingDetailsScreen({
             <Container style={{ gap: 16 }}>
               <Container flexDirection="row" alignItems="flex-start">
                 <Container width={32} alignItems="center" marginTop="sm">
-                  <Icon
-                    name="calendar-outline"
-                    size={iconSize.sm}
-                    color={theme.colors.primary}
-                  />
+                  <Icon name="calendar-outline" size={iconSize.sm} />
                 </Container>
                 <Container flex={1} marginLeft="md">
                   <Text variant="body" weight="medium">
@@ -526,11 +493,7 @@ export default function BookingDetailsScreen({
 
               <Container flexDirection="row" alignItems="flex-start">
                 <Container width={32} alignItems="center" marginTop="sm">
-                  <Icon
-                    name="calendar-outline"
-                    size={iconSize.sm}
-                    color={theme.colors.primary}
-                  />
+                  <Icon name="calendar-outline" size={iconSize.sm} />
                 </Container>
                 <Container flex={1} marginLeft="md">
                   <Text variant="body" weight="medium">
@@ -548,11 +511,7 @@ export default function BookingDetailsScreen({
 
               <Container flexDirection="row" alignItems="flex-start">
                 <Container width={32} alignItems="center" marginTop="sm">
-                  <Icon
-                    name="people-outline"
-                    size={iconSize.sm}
-                    color={theme.colors.primary}
-                  />
+                  <Icon name="people-outline" size={iconSize.sm} />
                 </Container>
                 <Container flex={1} marginLeft="md">
                   <Text variant="body" weight="medium">
@@ -606,11 +565,7 @@ export default function BookingDetailsScreen({
 
               <Container flexDirection="row" alignItems="flex-start">
                 <Container width={32} alignItems="center" marginTop="sm">
-                  <Icon
-                    name="time-outline"
-                    size={iconSize.sm}
-                    color={theme.colors.primary}
-                  />
+                  <Icon name="time-outline" size={iconSize.sm} />
                 </Container>
                 <Container flex={1} marginLeft="md">
                   <Text variant="body" weight="medium">
@@ -648,11 +603,7 @@ export default function BookingDetailsScreen({
               <Container style={{ gap: 16 }}>
                 <Container flexDirection="row" alignItems="flex-start">
                   <Container width={32} alignItems="center" marginTop="sm">
-                    <Icon
-                      name="person-outline"
-                      size={iconSize.sm}
-                      color={theme.colors.primary}
-                    />
+                    <Icon name="person-outline" size={iconSize.sm} />
                   </Container>
                   <Container flex={1} marginLeft="md">
                     <Text variant="body" weight="medium">
@@ -668,11 +619,7 @@ export default function BookingDetailsScreen({
 
                 <Container flexDirection="row" alignItems="flex-start">
                   <Container width={32} alignItems="center" marginTop="sm">
-                    <Icon
-                      name="mail-outline"
-                      size={iconSize.sm}
-                      color={theme.colors.primary}
-                    />
+                    <Icon name="mail-outline" size={iconSize.sm} />
                   </Container>
                   <Container flex={1} marginLeft="md">
                     <Text variant="body" weight="medium">
@@ -689,11 +636,7 @@ export default function BookingDetailsScreen({
                 {booking.contactInfo.phone && (
                   <Container flexDirection="row" alignItems="flex-start">
                     <Container width={32} alignItems="center" marginTop="sm">
-                      <Icon
-                        name="call-outline"
-                        size={iconSize.sm}
-                        color={theme.colors.primary}
-                      />
+                      <Icon name="call-outline" size={iconSize.sm} />
                     </Container>
                     <Container flex={1} marginLeft="md">
                       <Text variant="body" weight="medium">
@@ -719,11 +662,7 @@ export default function BookingDetailsScreen({
               <Container style={{ gap: 16 }}>
                 <Container flexDirection="row" alignItems="flex-start">
                   <Container width={32} alignItems="center" marginTop="sm">
-                    <Icon
-                      name="person-outline"
-                      size={iconSize.sm}
-                      color={theme.colors.primary}
-                    />
+                    <Icon name="person-outline" size={iconSize.sm} />
                   </Container>
                   <Container flex={1} marginLeft="md">
                     <Text variant="body" weight="medium">
@@ -739,11 +678,7 @@ export default function BookingDetailsScreen({
 
                 <Container flexDirection="row" alignItems="flex-start">
                   <Container width={32} alignItems="center" marginTop="sm">
-                    <Icon
-                      name="mail-outline"
-                      size={iconSize.sm}
-                      color={theme.colors.primary}
-                    />
+                    <Icon name="mail-outline" size={iconSize.sm} />
                   </Container>
                   <Container flex={1} marginLeft="md">
                     <Text variant="body" weight="medium">
@@ -760,11 +695,7 @@ export default function BookingDetailsScreen({
                 {booking.contactInfo.phone && (
                   <Container flexDirection="row" alignItems="flex-start">
                     <Container width={32} alignItems="center" marginTop="sm">
-                      <Icon
-                        name="call-outline"
-                        size={iconSize.sm}
-                        color={theme.colors.primary}
-                      />
+                      <Icon name="call-outline" size={iconSize.sm} />
                     </Container>
                     <Container flex={1} marginLeft="md">
                       <Text variant="body" weight="medium">
@@ -872,64 +803,61 @@ export default function BookingDetailsScreen({
           <Section>
             <Container style={{ gap: 16 }}>
               {isHostView ? (
-                // Host actions
+                // Host actions (stacked vertically, only confirm/cancel)
                 <>
                   <Button
                     variant="primary"
-                    title={t("host.today.reservations.addToCalendar")}
-                    onPress={() => handleCalendarAction(booking)}
+                    title={t("host.today.reservations.confirmBooking")}
+                    onPress={async () => {
+                      if (!booking) return;
+                      const updated = await handleUpdateStatus(
+                        booking,
+                        "confirmed"
+                      );
+                      if (
+                        updated &&
+                        typeof updated === "object" &&
+                        "status" in updated
+                      ) {
+                        booking.status =
+                          updated.status as typeof booking.status;
+                      }
+                    }}
                     icon={
                       <Icon
-                        name="calendar-outline"
+                        name="checkmark-circle-outline"
                         size={iconSize.sm}
-                        color={theme.colors.white}
                       />
                     }
                     iconPosition="left"
                   />
-                  {(property as any)?.coordinates && (
-                    <Button
-                      variant="primary"
-                      title={t("host.today.reservations.getDirections")}
-                      onPress={() => handleDirectionsAction(booking)}
-                      icon={
-                        <Icon
-                          name="navigate-outline"
-                          size={iconSize.sm}
-                          color={theme.colors.white}
-                        />
-                      }
-                      iconPosition="left"
-                    />
-                  )}
                   <Button
-                    variant="primary"
-                    title={t("host.today.reservations.contactGuest")}
-                    onPress={() => handleContactAction(booking)}
+                    variant="secondary"
+                    title={t("host.today.reservations.cancelBooking")}
+                    onPress={async () => {
+                      if (!booking) return;
+                      const updated = await handleUpdateStatus(
+                        booking,
+                        "cancelled"
+                      );
+                      if (
+                        updated &&
+                        typeof updated === "object" &&
+                        "status" in updated
+                      ) {
+                        booking.status =
+                          updated.status as typeof booking.status;
+                      }
+                    }}
                     icon={
                       <Icon
-                        name="logo-whatsapp"
+                        name="close-circle-outline"
                         size={iconSize.sm}
                         color={theme.colors.white}
                       />
                     }
                     iconPosition="left"
                   />
-                  {canUpdateBooking(booking) && (
-                    <Button
-                      variant="primary"
-                      title={t("host.today.reservations.updateStatus")}
-                      onPress={() => handleUpdateStatus(booking, "confirmed")}
-                      icon={
-                        <Icon
-                          name="checkmark-circle-outline"
-                          size={iconSize.sm}
-                          color={theme.colors.white}
-                        />
-                      }
-                      iconPosition="left"
-                    />
-                  )}
                 </>
               ) : (
                 // Traveler actions
@@ -938,13 +866,7 @@ export default function BookingDetailsScreen({
                     variant="primary"
                     title={t("bookings.addToCalendar")}
                     onPress={handleAddToCalendar}
-                    icon={
-                      <Icon
-                        name="calendar-outline"
-                        size={iconSize.sm}
-                        color={theme.colors.white}
-                      />
-                    }
+                    icon={<Icon name="calendar-outline" size={iconSize.sm} />}
                     iconPosition="left"
                   />
                   {(property as any)?.coordinates && (
@@ -952,13 +874,7 @@ export default function BookingDetailsScreen({
                       variant="primary"
                       title={t("bookings.getDirections")}
                       onPress={handleGetDirections}
-                      icon={
-                        <Icon
-                          name="navigate-outline"
-                          size={iconSize.sm}
-                          color={theme.colors.white}
-                        />
-                      }
+                      icon={<Icon name="navigate-outline" size={iconSize.sm} />}
                       iconPosition="left"
                     />
                   )}
@@ -966,30 +882,26 @@ export default function BookingDetailsScreen({
                     variant="primary"
                     title={t("bookings.contactHost")}
                     onPress={handleContactHost}
-                    icon={
-                      <Icon
-                        name="logo-whatsapp"
-                        size={iconSize.sm}
-                        color={theme.colors.white}
-                      />
-                    }
+                    icon={<Icon name="logo-whatsapp" size={iconSize.sm} />}
                     iconPosition="left"
                   />
-                  {canCancelBooking() && (
-                    <Button
-                      variant="primary"
-                      title={t("bookings.cancelBooking")}
-                      onPress={handleCancelBooking}
-                      icon={
-                        <Icon
-                          name="close-circle-outline"
-                          size={iconSize.sm}
-                          color={theme.colors.white}
-                        />
-                      }
-                      iconPosition="left"
-                    />
-                  )}
+                  {booking &&
+                    (booking.bookingStatus === "confirmed" ||
+                      booking.bookingStatus === "pending") && (
+                      <Button
+                        variant="primary"
+                        title={t("bookings.cancelBooking")}
+                        onPress={handleCancelBooking}
+                        icon={
+                          <Icon
+                            name="close-circle-outline"
+                            size={iconSize.sm}
+                            color={theme.colors.white}
+                          />
+                        }
+                        iconPosition="left"
+                      />
+                    )}
                 </>
               )}
             </Container>

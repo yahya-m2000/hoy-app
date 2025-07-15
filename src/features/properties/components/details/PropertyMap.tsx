@@ -92,7 +92,7 @@ const PropertyMap: React.FC<PropertyMapProps> = ({
       >
         <Container flex={1}>
           <Text variant="h6" weight="semibold" color="primary">
-            {t("property.locationTitle")}
+            {t("property.location.locationTitle")}
           </Text>
           {displayAddress && (
             <Text variant="body" color="secondary" marginTop="sm">
@@ -122,7 +122,7 @@ const PropertyMap: React.FC<PropertyMapProps> = ({
               />
             </Container>
             <Text variant="body" weight="medium" color="primary">
-              {t("property.getDirections")}
+              {t("property.location.getDirections")}
             </Text>
           </Container>
         </TouchableOpacity>
@@ -216,7 +216,7 @@ const PropertyMap: React.FC<PropertyMapProps> = ({
         </Container>
         <Container flex={1}>
           <Text variant="caption" color="secondary">
-            {t("property.exactLocation")}
+            {t("property.location.exactLocation")}
           </Text>
           <Text variant="body" weight="medium" color="primary">
             {coordinates.latitude.toFixed(6)},{" "}

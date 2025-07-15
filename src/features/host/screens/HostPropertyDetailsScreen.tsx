@@ -156,10 +156,10 @@ export default function HostPropertyDetailsScreen({
   // Property status
   const getStatus = () => {
     if (property.status === "draft")
-      return { text: t("property.status.draft"), color: "warning" as const };
+      return { text: t("property.draft"), color: "warning" as const };
     return property.isActive
-      ? { text: t("property.status.active"), color: "success" as const }
-      : { text: t("property.status.inactive"), color: "error" as const };
+      ? { text: t("property.active"), color: "success" as const }
+      : { text: t("property.inactive"), color: "error" as const };
   };
   const status = getStatus();
 
@@ -232,7 +232,7 @@ export default function HostPropertyDetailsScreen({
             marginBottom="md"
           >
             <Text variant="body" color="secondary">
-              {t("property.status.label")}&nbsp;
+              {t("property.label")}&nbsp;
             </Text>
             <Text variant="body" weight="medium" color={status.color}>
               {status.text}
@@ -311,7 +311,7 @@ export default function HostPropertyDetailsScreen({
           <Container>
             <Container marginBottom="md">
               <Text variant="h6" weight="medium">
-                {t("property.pricing")}
+                {t("pricing.title")}
               </Text>
             </Container>
             <Container>
@@ -465,7 +465,7 @@ export default function HostPropertyDetailsScreen({
             <PolicyNavigationItem
               icon="home-outline"
               title={t("property.houseRules")}
-              subtitle={`${t("property.checkIn")}: ${
+              subtitle={`${t("property.common.checkIn")}: ${
                 property.houseRules?.checkInTime?.from || "15:00"
               } - ${property.houseRules?.checkInTime?.to || "22:00"}`}
               onPress={() => openModal("houseRules")}
@@ -473,7 +473,7 @@ export default function HostPropertyDetailsScreen({
             <PolicyNavigationItem
               icon="shield-outline"
               title={t("property.safetyAndProperty")}
-              subtitle={t("property.safetyInformation")}
+              subtitle={t("property.details.safetyInformation")}
               onPress={() => openModal("safety")}
             />
           </Container>

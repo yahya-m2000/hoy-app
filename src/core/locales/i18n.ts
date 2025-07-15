@@ -6,14 +6,14 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import type { LanguageDetectorAsyncModule } from "i18next";
-import * as Localization from "expo-localization";
+import { getLocales } from "expo-localization";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Import translations
-import en from "./en/translation.json";
+import en from "./en";
 import fr from "./fr/translation.json";
 import ar from "./ar/translation.json";
-import so from "./so/translation.json";
+import so from "./so";
 import { logger } from "../utils/sys/log";
 
 const LANGUAGE_STORAGE_KEY = "hoy_language";
@@ -34,7 +34,7 @@ const languageDetector: LanguageDetectorAsyncModule = {
       }
 
       // If no stored language, use device locale
-      const deviceLocale = Localization.locale.split("-")[0];
+      const deviceLocale = getLocales()[0]?.languageCode || "en";
       callback(deviceLocale);
     })();
   },
@@ -49,25 +49,45 @@ const languageDetector: LanguageDetectorAsyncModule = {
 };
 
 // Initialize i18n
-i18n
-  .use(languageDetector)
-  .use(initReactI18next)
-  .init({
-    resources: {
-      en: { translation: en },
-      fr: { translation: fr },
-      ar: { translation: ar },
-      so: { translation: so },
-    },
-    fallbackLng: "en",
-    debug: false,
-    interpolation: {
-      escapeValue: false,
-    },
-    react: {
-      useSuspense: false,
-    },
-  });
+const initI18n = async () => {
+  try {
+    await i18n
+      .use(languageDetector)
+      .use(initReactI18next)
+      .init({
+        resources: {
+          en: { translation: en },
+          fr: { translation: fr },
+          ar: { translation: ar },
+          so: { translation: so },
+        },
+        fallbackLng: "en",
+        debug: false,
+        interpolation: {
+          escapeValue: false,
+        },
+        react: {
+          useSuspense: false,
+        },
+        keySeparator: ".",
+        nsSeparator: ":",
+      });
+    
+    logger.info("i18n initialized successfully");
+    logger.info("Available languages:", Object.keys(i18n.options.resources || {}));
+    logger.info("Current language:", i18n.language);
+    
+    // Test a translation to ensure it's working
+    const testTranslation = i18n.t("common.save");
+    logger.info("Test translation (common.save):", testTranslation);
+    
+  } catch (error) {
+    logger.error("Error initializing i18n:", error);
+  }
+};
+
+// Initialize i18n immediately
+initI18n();
 
 export default i18n;
 
