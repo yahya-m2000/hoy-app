@@ -200,6 +200,27 @@ const getCertificatePins = (): DomainPinningConfig[] => {
 };
 
 // ========================================
+// DEFAULT CONFIGURATION
+// ========================================
+
+const DEFAULT_CONFIG: CertificatePinningConfig = {
+  enabled: getEnv('ENABLE_CERTIFICATE_PINNING'),
+  strictMode: true,
+  allowedFailures: 3,
+  certificateUpdateWindow: 60 * 60 * 1000, // 1 hour
+  monitoringEnabled: true,
+  debugMode: __DEV__,
+  domains: getCertificatePins(),
+  allowSelfSigned: !isProduction(), // Never allow self-signed in production
+  validateExpiry: true,
+  enforceForAllDomains: false,
+  maxPinAge: 60 * 24 * 60 * 60 * 1000, // 60 days
+  reportOnly: false,
+  backupPins: true,
+  performanceMonitoring: getEnv('ENABLE_PERFORMANCE_MONITORING'),
+};
+
+// ========================================
 // CERTIFICATE PINNING MANAGER
 // ========================================
 
@@ -647,25 +668,4 @@ export const updateCertificatePins = (domain: string, newPins: CertificatePin[])
  */
 export const clearCertificateCache = (): void => {
   certificatePinningManager.clearCache();
-};
-
-// ========================================
-// DEFAULT CONFIGURATION
-// ========================================
-
-const DEFAULT_CONFIG: CertificatePinningConfig = {
-  enabled: getEnv('ENABLE_CERTIFICATE_PINNING'),
-  strictMode: true,
-  allowedFailures: 3,
-  certificateUpdateWindow: 60 * 60 * 1000, // 1 hour
-  monitoringEnabled: true,
-  debugMode: __DEV__,
-  domains: getCertificatePins(),
-  allowSelfSigned: !isProduction(), // Never allow self-signed in production
-  validateExpiry: true,
-  enforceForAllDomains: false,
-  maxPinAge: 60 * 24 * 60 * 60 * 1000, // 60 days
-  reportOnly: false,
-  backupPins: true,
-  performanceMonitoring: getEnv('ENABLE_PERFORMANCE_MONITORING'),
 };

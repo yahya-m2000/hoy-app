@@ -81,32 +81,37 @@ const SENSITIVE_KEYS = [
 /**
  * Sanitize sensitive data from objects
  */
-function sanitizeData(data: any): any {
-  if (!data || typeof data !== 'object') {
-    return data;
-  }
+function sanitizeData(data: any, seen = new WeakSet(), depth = 0): any {
+  if (depth > 5) return '[MaxDepth]';
+  if (data === null || typeof data !== 'object') return data;
+  if (seen.has(data)) return '[Circular]';
+  seen.add(data);
 
   if (Array.isArray(data)) {
-    return data.map(item => sanitizeData(item));
+    return data.map(item => sanitizeData(item, seen, depth + 1));
   }
 
-  const sanitized: any = {};
-  
-  for (const [key, value] of Object.entries(data)) {
-    const isSensitive = SENSITIVE_KEYS.some(pattern => 
-      key.toLowerCase().includes(pattern.toLowerCase())
-    ) || SENSITIVE_PATTERNS.some(pattern => pattern.test(key));
+  // Only process plain objects
+  if (Object.prototype.toString.call(data) === '[object Object]') {
+    const sanitized: any = {};
+    for (const [key, value] of Object.entries(data)) {
+      const isSensitive = SENSITIVE_KEYS.some(pattern => 
+        key.toLowerCase().includes(pattern.toLowerCase())
+      ) || SENSITIVE_PATTERNS.some(pattern => pattern.test(key));
 
-    if (isSensitive) {
-      sanitized[key] = '[REDACTED]';
-    } else if (typeof value === 'object' && value !== null) {
-      sanitized[key] = sanitizeData(value);
-    } else {
-      sanitized[key] = value;
+      if (isSensitive) {
+        sanitized[key] = '[REDACTED]';
+      } else if (typeof value === 'object' && value !== null) {
+        sanitized[key] = sanitizeData(value, seen, depth + 1);
+      } else {
+        sanitized[key] = value;
+      }
     }
+    return sanitized;
   }
 
-  return sanitized;
+  // For other types (Buffer, Socket, etc.), return a string
+  return `[${data.constructor?.name || typeof data}]`;
 }
 
 /**

@@ -6,8 +6,13 @@
  * @module @core/utils/storage/data-purge
  */
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as SecureStore from "expo-secure-store";
+import { Platform } from 'react-native';
+let SecureStore: typeof import('expo-secure-store') | undefined;
+let AsyncStorage: typeof import('@react-native-async-storage/async-storage') | undefined;
+if (Platform.OS !== 'web' && typeof navigator !== 'undefined') {
+  SecureStore = require('expo-secure-store');
+  AsyncStorage = require('@react-native-async-storage/async-storage');
+}
 import { getTokenFromStorage } from "../../auth/storage";
 import { logger } from "../sys/log";
 
@@ -77,7 +82,7 @@ export const purgeNonEssentialData = async (): Promise<void> => {
     ];
 
     // Remove non-essential data
-    await AsyncStorage.multiRemove(nonEssentialKeys);
+    await safeMultiRemove(AsyncStorage, nonEssentialKeys);
 
     logger.debug("Non-essential data purged successfully", {
       purgedKeys: nonEssentialKeys.length
@@ -185,7 +190,7 @@ export const purgeUserData = async (): Promise<boolean> => {
 
     // Remove remaining keys in batch
     try {
-      await AsyncStorage.multiRemove(keysToRemove);
+      await safeMultiRemove(AsyncStorage, keysToRemove);
       logger.debug("AsyncStorage keys removed", { count: keysToRemove.length }, {
         module: "DataPurge"
       });
@@ -283,5 +288,12 @@ export const verifyPurgeSuccess = async (): Promise<boolean> => {
       module: "DataPurge"
     });
     return false;
+  }
+};
+
+// Helper function to safely call multiRemove
+const safeMultiRemove = async (storage: any, keys: string[]): Promise<void> => {
+  if (storage && typeof storage.multiRemove === 'function') {
+    await storage.multiRemove(keys);
   }
 };

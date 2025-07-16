@@ -120,111 +120,106 @@ const FRAME_BUSTING_SCRIPT = `
   
   try {
     // Check if we're in a frame
-    isFramed = (window.self !== window.top);
-    
-    // Additional checks for sophisticated frame attacks
-    if (!isFramed) {
-      isFramed = (window.frameElement !== null);
-    }
-    
-    if (!isFramed) {
-      isFramed = (document.referrer && document.referrer !== window.location.href);
-    }
-    
-    // Check for parent frame access
-    if (!isFramed) {
-      try {
-        isFramed = (window.parent && window.parent !== window);
-      } catch (e) {
-        // Cross-origin parent access blocked - might be framed
-        isFramed = true;
+    if (typeof window !== 'undefined') {
+      isFramed = (window.self !== window.top);
+      // Additional checks for sophisticated frame attacks
+      if (!isFramed) {
+        isFramed = (window.frameElement !== null);
       }
-    }
-    
-    if (isFramed) {
-      // Log the violation
-      console.warn('[ClickjackingProtection] Frame-busting activated - potential clickjacking attempt detected');
-      
-      // Multiple frame-busting techniques
-      try {
-        // Technique 1: Break out of frame
-        if (window.top) {
-          window.top.location = window.location;
-        }
-      } catch (e) {
-        // Technique 2: Replace parent window
+      if (!isFramed && typeof document !== 'undefined') {
+        isFramed = (document.referrer && document.referrer !== window.location.href);
+      }
+      // Check for parent frame access
+      if (!isFramed) {
         try {
-          window.parent.location = window.location;
-        } catch (e2) {
-          // Technique 3: Block the page
-          document.body.style.display = 'none';
-          document.body.innerHTML = '<div style="background: red; color: white; padding: 20px; text-align: center; font-size: 18px;">Security Warning: This page cannot be displayed in a frame for your protection.</div>';
+          isFramed = (window.parent && window.parent !== window);
+        } catch (e) {
+          // Cross-origin parent access blocked - might be framed
+          isFramed = true;
         }
       }
-      
-      // Notify the mobile app about the violation
-      if (window.ReactNativeWebView) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({
-          type: 'CLICKJACKING_VIOLATION',
-          severity: 'high',
-          description: 'Frame-busting activated',
-          timestamp: Date.now()
-        }));
-      }
-    }
-    
-    // Monitor for dynamic frame injection
-    var observer = new MutationObserver(function(mutations) {
-      mutations.forEach(function(mutation) {
-        if (mutation.type === 'childList') {
-          mutation.addedNodes.forEach(function(node) {
-            if (node.nodeType === 1) { // Element node
-              var tagName = node.tagName ? node.tagName.toLowerCase() : '';
-              if (tagName === 'iframe' || tagName === 'frame' || tagName === 'object' || tagName === 'embed') {
-                console.warn('[ClickjackingProtection] Suspicious frame element added:', tagName);
-                if (window.ReactNativeWebView) {
-                  window.ReactNativeWebView.postMessage(JSON.stringify({
-                    type: 'SUSPICIOUS_FRAME_INJECTION',
-                    severity: 'medium',
-                    description: 'Dynamic frame element detected: ' + tagName,
-                    timestamp: Date.now()
-                  }));
-                }
-              }
+      if (isFramed) {
+        // Log the violation
+        console.warn('[ClickjackingProtection] Frame-busting activated - potential clickjacking attempt detected');
+        // Multiple frame-busting techniques
+        try {
+          // Technique 1: Break out of frame
+          if (window.top) {
+            window.top.location = window.location;
+          }
+        } catch (e) {
+          // Technique 2: Replace parent window
+          try {
+            window.parent.location = window.location;
+          } catch (e2) {
+            // Technique 3: Block the page
+            if (typeof document !== 'undefined') {
+              document.body.style.display = 'none';
+              document.body.innerHTML = '<div style="background: red; color: white; padding: 20px; text-align: center; font-size: 18px;">Security Warning: This page cannot be displayed in a frame for your protection.</div>';
             }
-          });
-        }
-      });
-    });
-    
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-    
-    // Prevent frame overlay attacks
-    document.addEventListener('click', function(event) {
-      var element = event.target;
-      var computedStyle = window.getComputedStyle(element);
-      
-      // Check for suspicious overlay elements
-      if (computedStyle.position === 'fixed' || computedStyle.position === 'absolute') {
-        var zIndex = parseInt(computedStyle.zIndex) || 0;
-        if (zIndex > 999999) { // Suspiciously high z-index
-          console.warn('[ClickjackingProtection] Suspicious overlay element detected');
-          if (window.ReactNativeWebView) {
-            window.ReactNativeWebView.postMessage(JSON.stringify({
-              type: 'SUSPICIOUS_OVERLAY',
-              severity: 'medium',
-              description: 'High z-index overlay element detected',
-              timestamp: Date.now(),
-              zIndex: zIndex
-            }));
           }
         }
+        // Notify the mobile app about the violation
+        if (window.ReactNativeWebView) {
+          window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'CLICKJACKING_VIOLATION',
+            severity: 'high',
+            description: 'Frame-busting activated',
+            timestamp: Date.now()
+          }));
+        }
       }
-    });
-    
+      // Monitor for dynamic frame injection
+      if (typeof document !== 'undefined') {
+        var observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList') {
+              mutation.addedNodes.forEach(function(node) {
+                if (node.nodeType === 1) { // Element node
+                  var tagName = node.tagName ? node.tagName.toLowerCase() : '';
+                  if (tagName === 'iframe' || tagName === 'frame' || tagName === 'object' || tagName === 'embed') {
+                    console.warn('[ClickjackingProtection] Suspicious frame element added:', tagName);
+                    if (window.ReactNativeWebView) {
+                      window.ReactNativeWebView.postMessage(JSON.stringify({
+                        type: 'SUSPICIOUS_FRAME_INJECTION',
+                        severity: 'medium',
+                        description: 'Dynamic frame element detected: ' + tagName,
+                        timestamp: Date.now()
+                      }));
+                    }
+                  }
+                }
+              });
+            }
+          });
+        });
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+        // Prevent frame overlay attacks
+        document.addEventListener('click', function(event) {
+          var element = event.target;
+          var computedStyle = window.getComputedStyle(element);
+          // Check for suspicious overlay elements
+          if (computedStyle.position === 'fixed' || computedStyle.position === 'absolute') {
+            var zIndex = parseInt(computedStyle.zIndex) || 0;
+            if (zIndex > 999999) { // Suspiciously high z-index
+              console.warn('[ClickjackingProtection] Suspicious overlay element detected');
+              if (window.ReactNativeWebView) {
+                window.ReactNativeWebView.postMessage(JSON.stringify({
+                  type: 'SUSPICIOUS_OVERLAY',
+                  severity: 'medium',
+                  description: 'High z-index overlay element detected',
+                  timestamp: Date.now(),
+                  zIndex: zIndex
+                }));
+              }
+            }
+          }
+        });
+      }
+    }
   } catch (error) {
     console.error('[ClickjackingProtection] Frame-busting script error:', error);
   }

@@ -15,6 +15,12 @@
       "android": {
         "buildType": "app-bundle"
       }
+    },
+    "beta-local": {
+      "extends": "production",
+      "android": {
+        "buildType": "apk"
+      }
     }
   }
 }

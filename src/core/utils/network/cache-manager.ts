@@ -5,11 +5,17 @@
  * It's a simple but effective solution to ensure users can get rid of stale data
  */
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Platform } from 'react-native';
 import { Alert } from "react-native";
-import * as SecureStore from "expo-secure-store";
 import { eventEmitter, AppEvents } from "src/core/utils/sys/event-emitter";
 import { logger } from "../sys/log";
+
+let SecureStore: typeof import('expo-secure-store') | undefined;
+let AsyncStorage: typeof import('@react-native-async-storage/async-storage') | undefined;
+if (Platform.OS !== 'web' && typeof navigator !== 'undefined') {
+  SecureStore = require('expo-secure-store');
+  AsyncStorage = require('@react-native-async-storage/async-storage');
+}
 
 /**
  * Completely resets all app data by clearing AsyncStorage, SecureStore, etc.
@@ -20,7 +26,7 @@ export const resetAllAppData = async (): Promise<boolean> => {
     logger.log("🧨 EXECUTING FULL APP DATA RESET");
 
     // 1. Clear all AsyncStorage
-    await AsyncStorage.clear();
+    await AsyncStorage?.clear();
     logger.log("✅ AsyncStorage cleared");
 
     // 2. Clear SecureStore (for platforms that support it)
@@ -33,7 +39,7 @@ export const resetAllAppData = async (): Promise<boolean> => {
       ];
 
       for (const key of secureKeys) {
-        await SecureStore.deleteItemAsync(key);
+        await SecureStore?.deleteItemAsync(key);
       }
       logger.log("✅ SecureStore cleared");
     } catch (err) {
@@ -43,7 +49,7 @@ export const resetAllAppData = async (): Promise<boolean> => {
     }
 
     // 3. Set a marker to indicate fresh state
-    await AsyncStorage.setItem("appResetTimestamp", Date.now().toString());
+    await AsyncStorage?.setItem("appResetTimestamp", Date.now().toString());
 
     // 4. Notify the app about the reset
     eventEmitter.emit(AppEvents.AUTH_LOGOUT_COMPLETE);

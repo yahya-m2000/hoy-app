@@ -10,8 +10,9 @@
  * @module @core/auth/storage
  */
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as SecureStore from "expo-secure-store";
+import { Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import { jwtDecode } from "jwt-decode";
 
 import { logger } from "../utils/sys/log";
@@ -159,7 +160,7 @@ export const hasValidAuthentication = async (): Promise<boolean> => {
     const [accessToken, refreshToken, userId] = await Promise.all([
       getTokenFromStorage(),
       getRefreshTokenFromStorage(),
-      AsyncStorage.getItem(STORAGE_KEYS.USER_ID),
+      safeGetItem(AsyncStorage, STORAGE_KEYS.USER_ID),
     ]);
 
     // Check if tokens exist
@@ -171,7 +172,7 @@ export const hasValidAuthentication = async (): Promise<boolean> => {
     }
 
     // Check if tokens are blacklisted
-    const isBlacklisted = await AsyncStorage.getItem(STORAGE_KEYS.TOKEN_BLACKLISTED);
+    const isBlacklisted = await safeGetItem(AsyncStorage, STORAGE_KEYS.TOKEN_BLACKLISTED);
     if (isBlacklisted === "true") {
       // Double-check if tokens themselves are still valid; if so, the blacklist flag may be stale
       const accessExpired = isTokenExpired(accessToken);
@@ -188,7 +189,7 @@ export const hasValidAuthentication = async (): Promise<boolean> => {
     }
 
     // Check token invalidation timestamp
-    const invalidatedAt = await AsyncStorage.getItem(STORAGE_KEYS.TOKEN_INVALIDATED_AT);
+    const invalidatedAt = await safeGetItem(AsyncStorage, STORAGE_KEYS.TOKEN_INVALIDATED_AT);
     if (invalidatedAt) {
       const invalidatedTime = parseInt(invalidatedAt, 10);
       const currentTime = Date.now();
@@ -197,7 +198,7 @@ export const hasValidAuthentication = async (): Promise<boolean> => {
         logger.debug("Clearing stale token invalidation flag", undefined, {
           module: "AuthStorage"
         });
-        await AsyncStorage.removeItem(STORAGE_KEYS.TOKEN_INVALIDATED_AT);
+        await safeRemoveItem(AsyncStorage, STORAGE_KEYS.TOKEN_INVALIDATED_AT);
       }
     }
 
@@ -230,8 +231,9 @@ export const hasValidAuthentication = async (): Promise<boolean> => {
  */
 export const markTokensAsInvalid = async (): Promise<void> => {
   try {
-    await AsyncStorage.setItem(STORAGE_KEYS.TOKEN_BLACKLISTED, "true");
-    await AsyncStorage.setItem(
+    await safeSetItem(AsyncStorage, STORAGE_KEYS.TOKEN_BLACKLISTED, "true");
+    await safeSetItem(
+      AsyncStorage,
       STORAGE_KEYS.TOKEN_INVALIDATED_AT,
       Date.now().toString()
     );
@@ -252,8 +254,8 @@ export const markTokensAsInvalid = async (): Promise<void> => {
 export const clearTokenInvalidation = async (): Promise<void> => {
   try {
     await Promise.all([
-      AsyncStorage.removeItem(STORAGE_KEYS.TOKEN_BLACKLISTED),
-      AsyncStorage.removeItem(STORAGE_KEYS.TOKEN_INVALIDATED_AT),
+      safeRemoveItem(AsyncStorage, STORAGE_KEYS.TOKEN_BLACKLISTED),
+      safeRemoveItem(AsyncStorage, STORAGE_KEYS.TOKEN_INVALIDATED_AT),
     ]);
     logger.debug("Token invalidation flags cleared", undefined, {
       module: "AuthStorage"
@@ -277,9 +279,9 @@ export const clearTokensFromStorage = async (): Promise<void> => {
     await Promise.all([
       SecureStore.deleteItemAsync(STORAGE_KEYS.ACCESS_TOKEN).catch(() => {}),
       SecureStore.deleteItemAsync(STORAGE_KEYS.REFRESH_TOKEN).catch(() => {}),
-      AsyncStorage.removeItem(STORAGE_KEYS.USER_ID),
-      AsyncStorage.removeItem(STORAGE_KEYS.TOKEN_BLACKLISTED),
-      AsyncStorage.removeItem(STORAGE_KEYS.TOKEN_INVALIDATED_AT),
+      safeRemoveItem(AsyncStorage, STORAGE_KEYS.USER_ID),
+      safeRemoveItem(AsyncStorage, STORAGE_KEYS.TOKEN_BLACKLISTED),
+      safeRemoveItem(AsyncStorage, STORAGE_KEYS.TOKEN_INVALIDATED_AT),
     ]);
     
     logger.debug("Auth state cleared", undefined, {
@@ -290,5 +292,23 @@ export const clearTokensFromStorage = async (): Promise<void> => {
     logger.error("Failed to clear auth state", error, {
       module: "AuthStorage"
     });
+  }
+};
+
+// Helper functions for safe AsyncStorage usage
+const safeGetItem = async (storage: typeof AsyncStorage, key: string): Promise<string | null> => {
+  if (storage && typeof storage.getItem === 'function') {
+    return await storage.getItem(key);
+  }
+  return null;
+};
+const safeSetItem = async (storage: typeof AsyncStorage, key: string, value: string): Promise<void> => {
+  if (storage && typeof storage.setItem === 'function') {
+    await storage.setItem(key, value);
+  }
+};
+const safeRemoveItem = async (storage: typeof AsyncStorage, key: string): Promise<void> => {
+  if (storage && typeof storage.removeItem === 'function') {
+    await storage.removeItem(key);
   }
 };

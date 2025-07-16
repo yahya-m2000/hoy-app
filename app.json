@@ -64,7 +64,8 @@
       "offlineCacheMaxAge": 86400000,
       "eas": {
         "projectId": "ec4a30fe-59ce-49a3-ab69-e8020236a7f8"
-      }
+      },
+      "apiUrl": "https://hoy-api.onrender.com/api/v1"
     },
     "plugins": [
       [

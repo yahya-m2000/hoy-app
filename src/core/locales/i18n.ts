@@ -7,7 +7,24 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import type { LanguageDetectorAsyncModule } from "i18next";
 import { getLocales } from "expo-localization";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// Remove top-level AsyncStorage import
+// import AsyncStorage from "@react-native-async-storage/async-storage";
+
+// In-memory fallback for SSR/build
+const memoryLanguageStore: { value?: string } = {};
+
+// Helper to get AsyncStorage if available
+const getAsyncStorage = () => {
+  if (typeof window !== 'undefined') {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      return require('@react-native-async-storage/async-storage').default;
+    } catch (e) {
+      return undefined;
+    }
+  }
+  return undefined;
+};
 
 // Import translations
 import en from "./en";
@@ -24,15 +41,20 @@ const languageDetector: LanguageDetectorAsyncModule = {
   async: true,
   detect: (callback) => {
     (async () => {
+      const AsyncStorage = getAsyncStorage();
       try {
-        const storedLanguage = await AsyncStorage.getItem(LANGUAGE_STORAGE_KEY);
+        let storedLanguage: string | undefined | null = undefined;
+        if (AsyncStorage) {
+          storedLanguage = await AsyncStorage.getItem(LANGUAGE_STORAGE_KEY);
+        } else if (memoryLanguageStore.value) {
+          storedLanguage = memoryLanguageStore.value;
+        }
         if (storedLanguage) {
           return callback(storedLanguage);
         }
       } catch (error) {
         logger.error("Error reading language from storage:", error);
       }
-
       // If no stored language, use device locale
       const deviceLocale = getLocales()[0]?.languageCode || "en";
       callback(deviceLocale);
@@ -40,8 +62,13 @@ const languageDetector: LanguageDetectorAsyncModule = {
   },
   init: () => {},
   cacheUserLanguage: async (language: string) => {
+    const AsyncStorage = getAsyncStorage();
     try {
-      await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+      if (AsyncStorage) {
+        await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+      } else {
+        memoryLanguageStore.value = language;
+      }
     } catch (error) {
       logger.error("Error storing language:", error);
     }
@@ -99,7 +126,12 @@ export const useLanguage = () => {
       await i18n.changeLanguage(language);
       
       // Cache the language selection
-      await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+      const AsyncStorage = getAsyncStorage();
+      if (AsyncStorage) {
+        await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+      } else {
+        memoryLanguageStore.value = language;
+      }
       
       logger.info(`Language changed to: ${language}`);
     } catch (error) {

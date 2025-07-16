@@ -18,9 +18,28 @@
  * @version 1.0.0
  */
 
+import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { logger } from '@core/utils/sys/log';
 import { api } from '@core/api/client';
+
+// Helper functions for safe AsyncStorage usage
+const safeGetItem = async (storage: typeof AsyncStorage, key: string): Promise<string | null> => {
+  if (storage && typeof storage.getItem === 'function') {
+    return await storage.getItem(key);
+  }
+  return null;
+};
+const safeSetItem = async (storage: typeof AsyncStorage, key: string, value: string): Promise<void> => {
+  if (storage && typeof storage.setItem === 'function') {
+    await storage.setItem(key, value);
+  }
+};
+const safeRemoveItem = async (storage: typeof AsyncStorage, key: string): Promise<void> => {
+  if (storage && typeof storage.removeItem === 'function') {
+    await storage.removeItem(key);
+  }
+};
 
 // ========================================
 // TYPES AND INTERFACES
@@ -165,7 +184,7 @@ export class CsrfTokenManager {
   public async clearToken(): Promise<void> {
     try {
       this.tokenCache = null;
-      await AsyncStorage.removeItem(this.config.cacheKey);
+      await safeRemoveItem(AsyncStorage, this.config.cacheKey);
       
       logger.debug('[CsrfTokenManager] Token cache cleared', undefined, {
         module: 'CsrfTokenManager'
@@ -227,7 +246,7 @@ export class CsrfTokenManager {
 
       // Cache the token
       this.tokenCache = tokenInfo;
-      await this.saveCachedToken(tokenInfo);
+      await safeSetItem(AsyncStorage, this.config.cacheKey, JSON.stringify(tokenInfo));
 
       this.stats.tokensFetched++;
       this.stats.tokensGenerated++;
@@ -306,7 +325,14 @@ export class CsrfTokenManager {
    */
   private async loadCachedToken(): Promise<void> {
     try {
-      const cached = await AsyncStorage.getItem(this.config.cacheKey);
+      if (!AsyncStorage) {
+        logger.warn('[CsrfTokenManager] AsyncStorage is not available, cannot load cached token.', undefined, {
+          module: 'CsrfTokenManager'
+        });
+        return;
+      }
+
+      const cached = await safeGetItem(AsyncStorage, this.config.cacheKey);
       if (cached) {
         const tokenInfo: CsrfTokenInfo = JSON.parse(cached);
         if (this.isTokenValid(tokenInfo)) {
@@ -316,7 +342,7 @@ export class CsrfTokenManager {
           });
         } else {
           // Remove expired token
-          await AsyncStorage.removeItem(this.config.cacheKey);
+          await safeRemoveItem(AsyncStorage, this.config.cacheKey);
           logger.debug('[CsrfTokenManager] Removed expired cached token', undefined, {
             module: 'CsrfTokenManager'
           });
@@ -334,7 +360,13 @@ export class CsrfTokenManager {
    */
   private async saveCachedToken(tokenInfo: CsrfTokenInfo): Promise<void> {
     try {
-      await AsyncStorage.setItem(this.config.cacheKey, JSON.stringify(tokenInfo));
+      if (!AsyncStorage) {
+        logger.warn('[CsrfTokenManager] AsyncStorage is not available, cannot save token to cache.', undefined, {
+          module: 'CsrfTokenManager'
+        });
+        return;
+      }
+      await safeSetItem(AsyncStorage, this.config.cacheKey, JSON.stringify(tokenInfo));
     } catch (error) {
       logger.error('[CsrfTokenManager] Failed to save token to cache:', error, {
         module: 'CsrfTokenManager'

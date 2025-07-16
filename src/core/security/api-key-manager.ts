@@ -23,11 +23,40 @@
  * @version 1.0.0
  */
 
-import * as SecureStore from 'expo-secure-store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Crypto from 'expo-crypto';
+import { Platform } from 'react-native';
 import { logger } from '@core/utils/sys/log';
 import { api } from '@core/api/client';
+
+// Helper to get AsyncStorage if available
+const getAsyncStorage = () => {
+  if (typeof window !== 'undefined') {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      return require('@react-native-async-storage/async-storage').default;
+    } catch (e) { return undefined; }
+  }
+  return undefined;
+};
+// Helper to get SecureStore if available
+const getSecureStore = () => {
+  if (typeof window !== 'undefined') {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      return require('expo-secure-store');
+    } catch (e) { return undefined; }
+  }
+  return undefined;
+};
+// Helper to get Crypto if available
+const getCrypto = () => {
+  if (typeof window !== 'undefined') {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      return require('expo-crypto');
+    } catch (e) { return undefined; }
+  }
+  return undefined;
+};
 
 // ========================================
 // TYPES AND INTERFACES
@@ -700,10 +729,12 @@ export class ApiKeyManager {
    */
   private async getDeviceSalt(): Promise<string> {
     try {
-      let salt = await SecureStore.getItemAsync('device_salt');
+      const SecureStore = getSecureStore();
+      let salt = await SecureStore?.getItemAsync('device_salt');
       if (!salt) {
-        salt = await Crypto.randomUUID();
-        await SecureStore.setItemAsync('device_salt', salt);
+        const Crypto = getCrypto();
+        salt = await Crypto?.randomUUID();
+        await SecureStore?.setItemAsync('device_salt', salt);
       }
       return salt;
     } catch (error) {
@@ -716,7 +747,8 @@ export class ApiKeyManager {
    */
   private async loadStoredKeys(): Promise<void> {
     try {
-      const storedKeys = await SecureStore.getItemAsync(STORAGE_KEYS.API_KEYS);
+      const SecureStore = getSecureStore();
+      const storedKeys = await SecureStore?.getItemAsync(STORAGE_KEYS.API_KEYS);
       if (storedKeys) {
         const keyData = JSON.parse(storedKeys);
         for (const [keyPath, config] of Object.entries(keyData)) {
@@ -735,8 +767,9 @@ export class ApiKeyManager {
    */
   private async saveKeys(): Promise<void> {
     try {
+      const SecureStore = getSecureStore();
       const keyData = Object.fromEntries(this.keys);
-      await SecureStore.setItemAsync(STORAGE_KEYS.API_KEYS, JSON.stringify(keyData));
+      await SecureStore?.setItemAsync(STORAGE_KEYS.API_KEYS, JSON.stringify(keyData));
     } catch (error) {
       logger.error('[ApiKeyManager] Failed to save keys:', error, {
         module: 'ApiKeyManager'
@@ -749,7 +782,8 @@ export class ApiKeyManager {
    */
   private async loadUsageStats(): Promise<void> {
     try {
-      const storedStats = await AsyncStorage.getItem(STORAGE_KEYS.USAGE_STATS);
+      const AsyncStorage = getAsyncStorage();
+      const storedStats = await AsyncStorage?.getItem(STORAGE_KEYS.USAGE_STATS);
       if (storedStats) {
         const statsData = JSON.parse(storedStats);
         for (const [keyId, stats] of Object.entries(statsData)) {
@@ -768,6 +802,7 @@ export class ApiKeyManager {
    */
   private async updateUsageStats(provider: string, keyId: string): Promise<void> {
     try {
+      const AsyncStorage = getAsyncStorage();
       let stats = this.usageStats.get(keyId);
       if (!stats) {
         stats = {
@@ -803,8 +838,9 @@ export class ApiKeyManager {
    */
   private async saveUsageStats(): Promise<void> {
     try {
+      const AsyncStorage = getAsyncStorage();
       const statsData = Object.fromEntries(this.usageStats);
-      await AsyncStorage.setItem(STORAGE_KEYS.USAGE_STATS, JSON.stringify(statsData));
+      await AsyncStorage?.setItem(STORAGE_KEYS.USAGE_STATS, JSON.stringify(statsData));
     } catch (error) {
       logger.error('[ApiKeyManager] Failed to save usage stats:', error, {
         module: 'ApiKeyManager'
@@ -872,13 +908,14 @@ export class ApiKeyManager {
    */
   private async saveRotationHistory(result: KeyRotationResult): Promise<void> {
     try {
+      const AsyncStorage = getAsyncStorage();
       const history = await this.getRotationHistory();
       history.push(result);
       
       // Keep only last 50 rotations
       const limitedHistory = history.slice(-50);
       
-      await AsyncStorage.setItem(STORAGE_KEYS.ROTATION_HISTORY, JSON.stringify(limitedHistory));
+      await AsyncStorage?.setItem(STORAGE_KEYS.ROTATION_HISTORY, JSON.stringify(limitedHistory));
     } catch (error) {
       logger.warn('[ApiKeyManager] Failed to save rotation history:', error, {
         module: 'ApiKeyManager'
@@ -891,7 +928,8 @@ export class ApiKeyManager {
    */
   private async getRotationHistory(): Promise<KeyRotationResult[]> {
     try {
-      const historyData = await AsyncStorage.getItem(STORAGE_KEYS.ROTATION_HISTORY);
+      const AsyncStorage = getAsyncStorage();
+      const historyData = await AsyncStorage?.getItem(STORAGE_KEYS.ROTATION_HISTORY);
       return historyData ? JSON.parse(historyData) : [];
     } catch (error) {
       return [];

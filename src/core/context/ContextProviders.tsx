@@ -32,12 +32,6 @@ import { ThemeProvider } from "./ThemeContext";
 import { CurrencyProvider } from "./CurrencyContext";
 import { ToastProvider } from "./ToastContext";
 import { LocationProvider } from "./LocationContext";
-import {
-  Auth0Provider,
-  LocalAuthenticationOptions,
-  LocalAuthenticationStrategy,
-  LocalAuthenticationLevel,
-} from "react-native-auth0";
 import { UserRoleProvider } from "./UserRoleContext";
 
 // Error Boundaries
@@ -128,31 +122,42 @@ const CoreProviders: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <KeyboardProvider>
-        <Auth0Provider
-          domain={"dev-12t76epiidwfskdk.uk.auth0.com"}
-          clientId={"XdHmY0ud5HVHiztgOcbe7MxR7XrBViuZ"}
-        >
-          <GenericContextErrorBoundary
-            contextName="QueryClient"
-            critical={true}
-          >
-            <QueryClientProvider client={queryClient}>
-              <ThemeProvider>
-                <NetworkProvider>
-                  <AuthProvider>
-                    <UserRoleProvider>
-                      <CurrencyProvider>
-                        <ToastProvider>
-                          <LocationProvider>{children}</LocationProvider>
-                        </ToastProvider>
-                      </CurrencyProvider>
-                    </UserRoleProvider>
-                  </AuthProvider>
-                </NetworkProvider>
-              </ThemeProvider>
-            </QueryClientProvider>
+        {typeof window !== "undefined" ? (
+          (() => {
+            const Auth0Provider = require("react-native-auth0").Auth0Provider;
+            return (
+              <Auth0Provider
+                domain={"dev-12t76epiidwfskdk.uk.auth0.com"}
+                clientId={"XdHmY0ud5HVHiztgOcbe7MxR7XrBViuZ"}
+              >
+                <GenericContextErrorBoundary
+                  contextName="QueryClient"
+                  critical={true}
+                >
+                  <QueryClientProvider client={queryClient}>
+                    <ThemeProvider>
+                      <NetworkProvider>
+                        <AuthProvider>
+                          <UserRoleProvider>
+                            <CurrencyProvider>
+                              <ToastProvider>
+                                <LocationProvider>{children}</LocationProvider>
+                              </ToastProvider>
+                            </CurrencyProvider>
+                          </UserRoleProvider>
+                        </AuthProvider>
+                      </NetworkProvider>
+                    </ThemeProvider>
+                  </QueryClientProvider>
+                </GenericContextErrorBoundary>
+              </Auth0Provider>
+            );
+          })()
+        ) : (
+          <GenericContextErrorBoundary contextName="Auth0" critical={true}>
+            <div>Auth0 is not available on this platform.</div>
           </GenericContextErrorBoundary>
-        </Auth0Provider>
+        )}
       </KeyboardProvider>
     </SafeAreaProvider>
   );

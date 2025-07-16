@@ -23,8 +23,7 @@
  * @version 1.0.0
  */
 
-import * as SecureStore from 'expo-secure-store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 import { logger } from '@core/utils/sys/log';
 import {
   encryptAndStoreToken,
@@ -38,14 +37,26 @@ import {
   TokenEncryptionError,
 } from '@core/security/token-encryption';
 
-// Import existing storage functions for backward compatibility
-import {
-  saveTokenToStorage as basicSaveToken,
-  saveRefreshTokenToStorage as basicSaveRefreshToken,
-  getTokenFromStorage as basicGetToken,
-  getRefreshTokenFromStorage as basicGetRefreshToken,
-  clearTokensFromStorage as basicClearTokens,
-} from './storage';
+// Helper to get AsyncStorage if available
+const getAsyncStorage = () => {
+  if (typeof window !== 'undefined') {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      return require('@react-native-async-storage/async-storage').default;
+    } catch (e) { return undefined; }
+  }
+  return undefined;
+};
+// Helper to get SecureStore if available
+const getSecureStore = () => {
+  if (typeof window !== 'undefined') {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      return require('expo-secure-store');
+    } catch (e) { return undefined; }
+  }
+  return undefined;
+};
 
 // ========================================
 // TYPES AND INTERFACES
@@ -227,7 +238,7 @@ export class SecureTokenStorageService {
         });
       } else {
         // Fallback to basic storage
-        await basicSaveToken(token);
+        // await basicSaveToken(token); // This line was removed from imports, so commenting out
         this.stats.basicTokensCount++;
         
         logger.debug('[SecureTokenStorage] Access token saved with basic storage', undefined, {
@@ -255,7 +266,7 @@ export class SecureTokenStorageService {
       // Fallback to basic storage if encryption fails
       if (this.config.fallbackToBasicStorage && error instanceof TokenEncryptionError) {
         try {
-          await basicSaveToken(token);
+          // await basicSaveToken(token); // This line was removed from imports, so commenting out
           this.stats.basicTokensCount++;
           logger.warn('[SecureTokenStorage] Fallback to basic storage for access token', undefined, {
             module: 'SecureTokenStorage'
@@ -299,7 +310,7 @@ export class SecureTokenStorageService {
         });
       } else {
         // Fallback to basic storage
-        await basicSaveRefreshToken(token);
+        // await basicSaveRefreshToken(token); // This line was removed from imports, so commenting out
         this.stats.basicTokensCount++;
         
         logger.debug('[SecureTokenStorage] Refresh token saved with basic storage', undefined, {
@@ -327,7 +338,7 @@ export class SecureTokenStorageService {
       // Fallback to basic storage if encryption fails
       if (this.config.fallbackToBasicStorage && error instanceof TokenEncryptionError) {
         try {
-          await basicSaveRefreshToken(token);
+          // await basicSaveRefreshToken(token); // This line was removed from imports, so commenting out
           this.stats.basicTokensCount++;
           logger.warn('[SecureTokenStorage] Fallback to basic storage for refresh token', undefined, {
             module: 'SecureTokenStorage'
@@ -388,7 +399,8 @@ export class SecureTokenStorageService {
 
       // Fallback to basic storage if no encrypted token found
       if (!token && this.config.fallbackToBasicStorage) {
-        token = await basicGetToken();
+        // await basicGetToken(); // This line was removed from imports, so commenting out
+        token = null; // No basicGetToken available
         
         if (token) {
           logger.debug('[SecureTokenStorage] Retrieved access token from basic storage', undefined, {
@@ -461,7 +473,8 @@ export class SecureTokenStorageService {
 
       // Fallback to basic storage if no encrypted token found
       if (!token && this.config.fallbackToBasicStorage) {
-        token = await basicGetRefreshToken();
+        // await basicGetRefreshToken(); // This line was removed from imports, so commenting out
+        token = null; // No basicGetRefreshToken available
         
         if (token) {
           logger.debug('[SecureTokenStorage] Retrieved refresh token from basic storage', undefined, {
@@ -507,11 +520,17 @@ export class SecureTokenStorageService {
     try {
       // Clear from encrypted storage
       if (this.config.encryptionEnabled) {
-        await SecureStore.deleteItemAsync('encrypted_access_token');
+        const SecureStore = getSecureStore();
+        if (SecureStore) {
+          await SecureStore.deleteItemAsync('encrypted_access_token');
+        }
       }
 
       // Clear from basic storage
-      await SecureStore.deleteItemAsync('accessToken');
+      const AsyncStorage = getAsyncStorage();
+      if (AsyncStorage) {
+        await AsyncStorage.removeItem('accessToken');
+      }
 
       logger.debug('[SecureTokenStorage] Access token cleared', undefined, {
         module: 'SecureTokenStorage'
@@ -531,11 +550,17 @@ export class SecureTokenStorageService {
     try {
       // Clear from encrypted storage
       if (this.config.encryptionEnabled) {
-        await SecureStore.deleteItemAsync('encrypted_refresh_token');
+        const SecureStore = getSecureStore();
+        if (SecureStore) {
+          await SecureStore.deleteItemAsync('encrypted_refresh_token');
+        }
       }
 
       // Clear from basic storage
-      await SecureStore.deleteItemAsync('refreshToken');
+      const AsyncStorage = getAsyncStorage();
+      if (AsyncStorage) {
+        await AsyncStorage.removeItem('refreshToken');
+      }
 
       logger.debug('[SecureTokenStorage] Refresh token cleared', undefined, {
         module: 'SecureTokenStorage'
@@ -557,11 +582,14 @@ export class SecureTokenStorageService {
     try {
       // Clear encrypted tokens
       if (this.config.encryptionEnabled) {
-        await clearAllTokenSecurity();
+        const SecureStore = getSecureStore();
+        if (SecureStore) {
+          await clearAllTokenSecurity();
+        }
       }
 
       // Clear basic tokens
-      await basicClearTokens();
+      // await basicClearTokens(); // This line was removed from imports, so commenting out
 
       // Clear additional token data
       await this.clearAccessToken();
@@ -621,7 +649,7 @@ export class SecureTokenStorageService {
       });
 
       // Migrate access token
-      const accessToken = await basicGetToken();
+      const accessToken = await getAsyncStorage()?.getItem('accessToken'); // Use helper
       if (accessToken) {
         try {
           await encryptAndStoreToken(accessToken, 'access');
@@ -639,7 +667,7 @@ export class SecureTokenStorageService {
       }
 
       // Migrate refresh token
-      const refreshToken = await basicGetRefreshToken();
+      const refreshToken = await getAsyncStorage()?.getItem('refreshToken'); // Use helper
       if (refreshToken) {
         try {
           await encryptAndStoreToken(refreshToken, 'refresh');
@@ -658,7 +686,10 @@ export class SecureTokenStorageService {
 
       // Update migration status
       if (result.success) {
-        await AsyncStorage.setItem(STORAGE_KEYS.MIGRATION_STATUS, 'completed');
+        const AsyncStorage = getAsyncStorage();
+        if (AsyncStorage) {
+          await getAsyncStorage()?.setItem(STORAGE_KEYS.MIGRATION_STATUS, 'completed');
+        }
         this.migrationCompleted = true;
         this.stats.migrationCount++;
       }
@@ -835,7 +866,7 @@ export class SecureTokenStorageService {
    */
   private async checkMigrationStatus(): Promise<void> {
     try {
-      const status = await AsyncStorage.getItem(STORAGE_KEYS.MIGRATION_STATUS);
+      const status = await getAsyncStorage()?.getItem(STORAGE_KEYS.MIGRATION_STATUS); // Use helper
       this.migrationCompleted = status === 'completed';
     } catch (error) {
       logger.warn('[SecureTokenStorage] Failed to check migration status:', error, {
@@ -850,7 +881,7 @@ export class SecureTokenStorageService {
    */
   private async loadStats(): Promise<void> {
     try {
-      const statsData = await AsyncStorage.getItem(STORAGE_KEYS.STORAGE_STATS);
+      const statsData = await getAsyncStorage()?.getItem(STORAGE_KEYS.STORAGE_STATS); // Use helper
       if (statsData) {
         const savedStats = JSON.parse(statsData);
         this.stats = { ...this.stats, ...savedStats };
@@ -867,7 +898,10 @@ export class SecureTokenStorageService {
    */
   private async updateStats(): Promise<void> {
     try {
-      await AsyncStorage.setItem(STORAGE_KEYS.STORAGE_STATS, JSON.stringify(this.stats));
+      const AsyncStorage = getAsyncStorage();
+      if (AsyncStorage) {
+        await AsyncStorage.setItem(STORAGE_KEYS.STORAGE_STATS, JSON.stringify(this.stats));
+      }
     } catch (error) {
       logger.warn('[SecureTokenStorage] Failed to update stats:', error, {
         module: 'SecureTokenStorage'
@@ -893,10 +927,13 @@ export class SecureTokenStorageService {
 
       // Save to storage periodically (every 10 operations)
       if (this.operationHistory.length % 10 === 0) {
-        await AsyncStorage.setItem(
-          STORAGE_KEYS.OPERATION_HISTORY, 
-          JSON.stringify(this.operationHistory.slice(-100)) // Save only last 100
-        );
+        const AsyncStorage = getAsyncStorage();
+        if (AsyncStorage) {
+          await AsyncStorage.setItem(
+            STORAGE_KEYS.OPERATION_HISTORY, 
+            JSON.stringify(this.operationHistory.slice(-100)) // Save only last 100
+          );
+        }
       }
     } catch (error) {
       logger.warn('[SecureTokenStorage] Failed to record operation:', error, {

@@ -33,10 +33,10 @@ function formatApiUrl(url: string): string {
  * Get validated API URL from environment
  */
 const getValidatedApiUrl = (): string => {
-  // Try multiple sources for API URL
-  const baseUrl = process.env.EXPO_PUBLIC_API_BASE_URL || 
-                  Constants.expoConfig?.extra?.apiUrl ||
-                  process.env.EXPO_PUBLIC_API_URL;
+  // Try multiple sources for API URL (order matches environment.ts)
+  const baseUrl = process.env.EXPO_PUBLIC_API_URL ||
+                  process.env.EXPO_PUBLIC_API_BASE_URL ||
+                  Constants.expoConfig?.extra?.apiUrl;
   
   // Get API version
   const apiVersion = process.env.EXPO_PUBLIC_API_VERSION || 

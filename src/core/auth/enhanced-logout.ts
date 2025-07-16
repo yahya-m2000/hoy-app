@@ -25,12 +25,11 @@
  * @version 1.0.0
  */
 
+import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as SecureStore from 'expo-secure-store';
 import { logger } from '@core/utils/sys/log';
-import { apiClient } from '@core/api/client';
+import apiClient from '@core/api/client';
 import { 
-  sessionManager, 
   invalidateSession,
   getCurrentSession,
   type SessionInfo 
@@ -38,7 +37,6 @@ import {
 import {
   clearTokensFromStorage,
   markTokensAsInvalid,
-  getTokenFromStorage,
   getRefreshTokenFromStorage,
 } from '@core/auth/storage';
 import { clearUserData } from '@core/auth/clear-user-data';
@@ -211,7 +209,7 @@ export class EnhancedLogoutService {
    */
   public async getLogoutAuditHistory(limit: number = 50): Promise<LogoutAuditEntry[]> {
     try {
-      const auditData = await AsyncStorage.getItem(AUDIT_STORAGE_KEY);
+      const auditData = await safeGetItem(AsyncStorage, AUDIT_STORAGE_KEY);
       if (!auditData) {
         return [];
       }
@@ -224,7 +222,7 @@ export class EnhancedLogoutService {
       
       // Save filtered entries back
       if (validEntries.length !== auditEntries.length) {
-        await AsyncStorage.setItem(AUDIT_STORAGE_KEY, JSON.stringify(validEntries));
+        await safeSetItem(AsyncStorage, AUDIT_STORAGE_KEY, JSON.stringify(validEntries));
       }
 
       return validEntries.slice(-limit);
@@ -242,7 +240,7 @@ export class EnhancedLogoutService {
    */
   public async clearAuditHistory(): Promise<void> {
     try {
-      await AsyncStorage.removeItem(AUDIT_STORAGE_KEY);
+      await safeRemoveItem(AsyncStorage, AUDIT_STORAGE_KEY);
       logger.info('[EnhancedLogout] Audit history cleared', undefined, {
         module: 'EnhancedLogout'
       });
@@ -464,18 +462,18 @@ export class EnhancedLogoutService {
   private async clearDeviceBinding(result: LogoutResult): Promise<void> {
     try {
       // Clear device fingerprint from storage
-      await AsyncStorage.removeItem('device_fingerprint');
+      await safeRemoveItem(AsyncStorage, 'device_fingerprint');
       
       // Clear any device-specific session data
-      const keys = await AsyncStorage.getAllKeys();
-      const deviceKeys = keys.filter(key => 
+      const keys = await safeGetAllKeys(AsyncStorage);
+      const deviceKeys = keys?.filter(key => 
         key.includes('device') || 
         key.includes('fingerprint') ||
         key.includes('binding')
       );
       
-      if (deviceKeys.length > 0) {
-        await AsyncStorage.multiRemove(deviceKeys);
+      if (deviceKeys?.length > 0) {
+        await safeMultiRemove(AsyncStorage, deviceKeys);
       }
 
       result.deviceUnbound = true;
@@ -536,7 +534,7 @@ export class EnhancedLogoutService {
       };
 
       // Get existing audit entries
-      const existingData = await AsyncStorage.getItem(AUDIT_STORAGE_KEY);
+      const existingData = await safeGetItem(AsyncStorage, AUDIT_STORAGE_KEY);
       const auditEntries: LogoutAuditEntry[] = existingData ? JSON.parse(existingData) : [];
       
       // Add new entry
@@ -547,7 +545,7 @@ export class EnhancedLogoutService {
       const validEntries = auditEntries.filter(entry => entry.timestamp > cutoffTime);
       
       // Save back to storage
-      await AsyncStorage.setItem(AUDIT_STORAGE_KEY, JSON.stringify(validEntries));
+      await safeSetItem(AsyncStorage, AUDIT_STORAGE_KEY, JSON.stringify(validEntries));
       
       result.auditLogged = true;
       logger.debug('[EnhancedLogout] Audit entry created', undefined, {
@@ -607,4 +605,33 @@ export const logoutAllSessions = async (): Promise<LogoutResult> => {
  */
 export const getLogoutAuditHistory = async (limit?: number): Promise<LogoutAuditEntry[]> => {
   return await enhancedLogoutService.getLogoutAuditHistory(limit);
+};
+
+// Helper functions for safe AsyncStorage usage
+const safeGetItem = async (storage: any, key: string): Promise<string | null> => {
+  if (storage && typeof storage.getItem === 'function') {
+    return await storage.getItem(key as string);
+  }
+  return null;
+};
+const safeSetItem = async (storage: any, key: string, value: string): Promise<void> => {
+  if (storage && typeof storage.setItem === 'function') {
+    await storage.setItem(key as string, value as string);
+  }
+};
+const safeRemoveItem = async (storage: any, key: string): Promise<void> => {
+  if (storage && typeof storage.removeItem === 'function') {
+    await storage.removeItem(key as string);
+  }
+};
+const safeGetAllKeys = async (storage: any): Promise<string[]> => {
+  if (storage && typeof storage.getAllKeys === 'function') {
+    return (await storage.getAllKeys()) as string[];
+  }
+  return [];
+};
+const safeMultiRemove = async (storage: any, keys: string[]): Promise<void> => {
+  if (storage && typeof storage.multiRemove === 'function') {
+    await storage.multiRemove(keys as string[]);
+  }
 };

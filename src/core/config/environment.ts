@@ -134,6 +134,7 @@ class EnvironmentManager {
     
     return {
       // API Configuration
+      // Order: EXPO_PUBLIC_API_URL, extra.apiUrl, fallback (matches api.config.ts)
       API_URL: process.env.EXPO_PUBLIC_API_URL || 
                Constants.expoConfig?.extra?.apiUrl ||
                (isDev ? 'http://localhost:5000/api/v1' : ''),

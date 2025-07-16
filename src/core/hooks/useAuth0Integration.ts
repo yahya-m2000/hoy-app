@@ -9,12 +9,11 @@
  */
 
 import { useCallback, useState } from 'react';
-import { useAuth0 } from 'react-native-auth0';
+import type { WebAuthorizeParameters, WebAuthorizeOptions } from 'react-native-auth0';
 import { auth0Service } from '@core/api/services/auth/auth0.service';
 import { logger } from '@core/utils/sys/log/logger';
 import { logErrorWithContext } from '@core/utils/sys/error';
 import * as AuthSession from 'expo-auth-session';
-import type { WebAuthorizeParameters, WebAuthorizeOptions } from 'react-native-auth0';
 import { AuthService } from '@core/api/services/auth';
 import { saveTokenToStorage, saveRefreshTokenToStorage, clearTokenInvalidation } from '@core/auth/storage';
 import { setUserIdentity } from '@core/utils/data/validation/integrity-check';
@@ -32,7 +31,13 @@ export interface Auth0IntegrationResult {
   getAuth0DebugInfo: () => Promise<any>;
 }
 
-export const useAuth0Integration = (): Auth0IntegrationResult => {
+export function useAuth0Integration() {
+  let useAuth0: any;
+  if (typeof window !== 'undefined') {
+    useAuth0 = require('react-native-auth0').useAuth0;
+  } else {
+    throw new Error('useAuth0Integration: react-native-auth0 is not available in SSR/build');
+  }
   const { authorize, clearSession, user: auth0User } = useAuth0();
   const { markAsAuthenticated } = useAuth();
   const [isAuth0Loading, setIsAuth0Loading] = useState(false);

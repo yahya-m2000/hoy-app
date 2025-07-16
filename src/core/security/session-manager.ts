@@ -24,12 +24,17 @@
  * @version 1.0.0
  */
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants';
 import { logger } from '@core/utils/sys/log';
 import { api } from '@core/api/client';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+let SecureStore: typeof import('expo-secure-store') | undefined;
+if (Platform.OS !== 'web' && typeof navigator !== 'undefined') {
+  SecureStore = require('expo-secure-store');
+}
 
 // ========================================
 // TYPES AND INTERFACES
@@ -453,7 +458,7 @@ export class SessionManager {
       }
 
       const sessionData = this.config.secureStorage
-        ? await SecureStore.getItemAsync(STORAGE_KEYS.SESSION_INFO)
+        ? await SecureStore?.getItemAsync(STORAGE_KEYS.SESSION_INFO)
         : await AsyncStorage.getItem(STORAGE_KEYS.SESSION_INFO);
 
       if (!sessionData) {
@@ -614,7 +619,7 @@ export class SessionManager {
     const sessionData = JSON.stringify(session);
     
     if (this.config.secureStorage) {
-      await SecureStore.setItemAsync(STORAGE_KEYS.SESSION_INFO, sessionData);
+      await SecureStore?.setItemAsync(STORAGE_KEYS.SESSION_INFO, sessionData);
     } else {
       await AsyncStorage.setItem(STORAGE_KEYS.SESSION_INFO, sessionData);
     }
@@ -626,7 +631,7 @@ export class SessionManager {
   private async clearSessionData(): Promise<void> {
     try {
       if (this.config.secureStorage) {
-        await SecureStore.deleteItemAsync(STORAGE_KEYS.SESSION_INFO).catch(() => {});
+        await SecureStore?.deleteItemAsync(STORAGE_KEYS.SESSION_INFO).catch(() => {});
       } else {
         await AsyncStorage.removeItem(STORAGE_KEYS.SESSION_INFO);
       }

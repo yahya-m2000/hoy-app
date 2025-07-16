@@ -1,0 +1,563 @@
+The field "cli.appVersionSource" is not set, but it will be required in the future. Learn more: https://docs.expo.dev/build-reference/app-versions/
+Resolved "production" environment for the build. Learn more: https://docs.expo.dev/eas/environment-variables/#setting-the-environment-for-your-builds
+No environment variables with visibility "Plain text" and "Sensitive" found for the "production" environment on EAS.
+
+The field "cli.appVersionSource" is not set, but it will be required in the future. Learn more: https://docs.expo.dev/build-reference/app-versions/
+✔ Using remote Android credentials (Expo server)
+⌛️ Computing the project fingerprint is taking longer than expected...
+⏩ To skip this step, set the environment variable: EAS_SKIP_AUTO_FINGERPRINT=1
+ANDROID_NDK_HOME environment variable was not specified, continuing build without NDK
+[SETUP_WORKINGDIR] Preparing workingdir /tmp/jadiid/eas-build-local-nodejs/00e32ca6-9ede-413c-8a16-89d839853a4c
+[START_BUILD] Starting build
+  "job": {
+    "type": "managed",
+    "platform": "android",
+    "projectRootDirectory": ".",
+    "projectArchive": {
+      "type": "PATH",
+      "path": "/tmp/jadiid/eas-cli-nodejs/b3ea4344-c205-43cf-b517-737ec49a2eab.tar.gz"
+    },
+    "builderEnvironment": {
+      "env": {}
+    },
+    "cache": {
+      "disabled": false,
+      "paths": [],
+      "clear": false
+    },
+    "updates": {},
+    "buildType": "apk",
+    "username": "y-m2000",
+    "experimental": {},
+    "mode": "build",
+    "triggeredBy": "EAS_CLI",
+    "appId": "ec4a30fe-59ce-49a3-ab69-e8020236a7f8",
+    "initiatingUserId": "b26213da-7ba0-402b-ae44-a14280a9fd11"
+  }
+[READ_PACKAGE_JSON] Using package.json:
+[READ_PACKAGE_JSON] {
+  "name": "mobile_app",
+  "version": "1.0.0",
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "npx expo start",
+    "android": "npx expo run:android",
+    "ios": "npx expo run:ios",
+    "web": "npx expo start --web",
+    "clear": "npx expo start --clear",
+    "build:production": "node scripts/production-build.js",
+    "build:validate": "node scripts/production-build.js validate",
+    "build:check": "node scripts/production-build.js check",
+    "build:config": "node scripts/production-build.js config",
+    "build:ios": "eas build --platform ios --profile production",
+    "build:android": "eas build --platform android --profile production",
+    "build:all": "eas build --platform all --profile production",
+    "submit:ios": "eas submit --platform ios --profile production",
+    "submit:android": "eas submit --platform android --profile production",
+    "security:check": "npm audit --production",
+    "test:certificate-pinning": "jest src/core/security/__tests__/certificate-pinning.test.ts",
+    "env:setup": "cp .env.example .env && echo 'Please update .env with your values'",
+    "env:validate": "node scripts/validate-env.js",
+    "clean:cache": "npx expo start --clear && watchman watch-del-all && rm -rf node_modules package-lock.json && npm install",
+    "prebuild:ios": "npx expo prebuild --platform ios && npx expo run:ios",
+    "prebuild:ios:device": "npx expo prebuild --platform ios && npx expo run:ios --device $npm_config_udid",
+    "prebuild:android:device": "npx expo prebuild --platform android && npx expo run:android --device $npm_config_udid",
+    "prebuild:android": "npx expo prebuild --platform android && npx expo run:android",
+    "prebuild": "npm run prebuild:ios && npm run prebuild:android",
+    "fix:pods": "arch -arm64 gem uninstall ffi -aIx || true && arch -arm64 gem install ffi && arch -arm64 gem uninstall cocoapods -aIx || true && arch -arm64 gem install cocoapods && cd ios && arch -arm64 pod install"
+  },
+  "dependencies": {
+    "@expo/metro-runtime": "^5.0.4",
+    "@expo/vector-icons": "^14.1.0",
+    "@gorhom/bottom-sheet": "^5.1.6",
+    "@react-native-async-storage/async-storage": "2.1.2",
+    "@react-native-community/netinfo": "^11.4.1",
+    "@react-native-masked-view/masked-view": "^0.3.2",
+    "@react-navigation/bottom-tabs": "^7.3.10",
+    "@react-navigation/elements": "^2.3.8",
+    "@react-navigation/native": "^7.1.6",
+    "@react-navigation/native-stack": "^7.3.10",
+    "@rneui/base": "4.0.0-rc.8",
+    "@tanstack/react-query": "^5.75.1",
+    "axios": "^1.9.0",
+    "crypto-js": "^4.2.0",
+    "date-fns": "^4.1.0",
+    "expo": "53.0.19",
+    "expo-apple-authentication": "~7.2.4",
+    "expo-auth-session": "~6.2.1",
+    "expo-blur": "~14.1.5",
+    "expo-calendar": "~14.1.4",
+    "expo-camera": "~16.1.10",
+    "expo-clipboard": "~7.1.5",
+    "expo-constants": "~17.1.7",
+    "expo-contacts": "^14.2.5",
+    "expo-crypto": "~14.1.5",
+    "expo-dev-client": "^5.2.4",
+    "expo-device": "~7.1.4",
+    "expo-file-system": "~18.1.11",
+    "expo-font": "~13.3.0",
+    "expo-haptics": "~14.1.4",
+    "expo-image": "~2.3.2",
+    "expo-image-picker": "~16.1.4",
+    "expo-linear-gradient": "~14.1.5",
+    "expo-linking": "~7.1.7",
+    "expo-localization": "~16.1.6",
+    "expo-location": "~18.1.6",
+    "expo-maps": "~0.11.0",
+    "expo-media-library": "~17.1.7",
+    "expo-network": "~7.1.5",
+    "expo-notifications": "^0.31.4",
+    "expo-router": "~5.1.3",
+    "expo-secure-store": "~14.2.3",
+    "expo-sensors": "~14.1.4",
+    "expo-sharing": "^13.1.5",
+    "expo-splash-screen": "~0.30.10",
+    "expo-status-bar": "~2.2.3",
+    "expo-symbols": "~0.4.4",
+    "expo-system-ui": "~5.0.7",
+    "expo-web-browser": "~14.2.0",
+    "i18next": "^25.0.2",
+    "jose": "^6.0.11",
+    "jwt-decode": "^4.0.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "react-i18next": "^15.5.1",
+    "react-native": "0.79.5",
+    "react-native-auth0": "^5.0.0-beta.3",
+    "react-native-calendars": "^1.1312.0",
+    "react-native-dotenv": "^3.4.11",
+    "react-native-fbsdk-next": "^13.4.1",
+    "react-native-gesture-handler": "~2.24.0",
+    "react-native-keyboard-controller": "^1.17.5",
+    "react-native-paper": "^5.14.5",
+    "react-native-qrcode-svg": "^6.3.15",
+    "react-native-reanimated": "~3.17.4",
+    "react-native-safe-area-context": "5.4.0",
+    "react-native-screens": "~4.11.1",
+    "react-native-svg": "15.11.2",
+    "react-native-web": "~0.20.0",
+    "react-native-webview": "13.13.5",
+    "socket.io-client": "^4.8.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@react-native-community/cli": "^18.0.0",
+    "@types/axios": "^0.9.36",
+    "@types/crypto-js": "^4.2.2",
+    "@types/react": "~19.0.10",
+    "@types/uuid": "^10.0.0",
+    "eslint": "^9.25.0",
+    "eslint-config-expo": "~9.2.0",
+    "typescript": "~5.8.3"
+  },
+  "private": true
+}
+[INSTALL_DEPENDENCIES] Running "npm install" in /tmp/jadiid/eas-build-local-nodejs/00e32ca6-9ede-413c-8a16-89d839853a4c/build directory
+[INSTALL_DEPENDENCIES] added 1235 packages, and audited 1236 packages in 20s
+[INSTALL_DEPENDENCIES] 211 packages are looking for funding
+[INSTALL_DEPENDENCIES]   run `npm fund` for details
+[INSTALL_DEPENDENCIES] found 0 vulnerabilities
+[READ_APP_CONFIG] Using app configuration:
+[READ_APP_CONFIG] {
+  "name": "hoy",
+  "slug": "hoy",
+  "scheme": "hoy",
+  "version": "1.0.0",
+  "orientation": "portrait",
+  "icon": "./assets/icon.png",
+  "userInterfaceStyle": "light",
+  "newArchEnabled": true,
+  "splash": {
+    "image": "./assets/splash-icon.png",
+    "resizeMode": "contain",
+    "backgroundColor": "#ffffff"
+  },
+  "ios": {
+    "bundleIdentifier": "com.ym2000.hoy",
+    "buildNumber": "2",
+    "supportsTablet": true,
+    "icon": {
+      "light": "./assets/icons/ios-light.png",
+      "dark": "./assets/icons/ios-dark.png",
+      "tinted": "./assets/icons/ios-tinted.png"
+    },
+    "infoPlist": {
+      "ITSAppUsesNonExemptEncryption": false,
+      "NSCalendarsUsageDescription": "This app needs access to your calendar to help you manage your travel bookings and reservations.",
+      "NSLocationWhenInUseUsageDescription": "This app uses your location to show nearby properties and improve your search experience.",
+      "NSCameraUsageDescription": "This app needs access to your camera to let you take photos for your profile and property listings.",
+      "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to let you upload images for your profile and property listings.",
+      "NSUserNotificationUsageDescription": "This app would like to send you notifications about bookings, messages, and important updates.",
+      "NSFaceIDUsageDescription": "This app uses Face ID to securely autofill your login credentials.",
+      "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you.",
+      "SKAdNetworkItems": [
+        {
+          "SKAdNetworkIdentifier": "v9wttpbfk9.skadnetwork"
+        },
+        {
+          "SKAdNetworkIdentifier": "n38lu8286q.skadnetwork"
+        }
+      ]
+    }
+  },
+  "android": {
+    "versionCode": 1,
+    "adaptiveIcon": {
+      "foregroundImage": "./assets/icons/adaptive-icon.png",
+      "monochromeImage": "./assets/icons/adaptive-icon.png",
+      "backgroundColor": "#ffffff"
+    },
+    "package": "com.ym2000.hoy",
+    "permissions": [
+      "USE_BIOMETRIC",
+      "USE_FINGERPRINT",
+      "android.permission.ACCESS_COARSE_LOCATION",
+      "android.permission.ACCESS_FINE_LOCATION",
+      "android.permission.INTERNET"
+    ]
+  },
+  "web": {
+    "favicon": "./assets/favicon.png",
+    "bundler": "metro",
+    "output": "server"
+  },
+  "assetBundlePatterns": [
+    "assets/fonts/*"
+  ],
+  "extra": {
+    "environment": "development",
+    "minApiCallInterval": 10000,
+    "offlineCacheMaxAge": 86400000,
+    "eas": {
+      "projectId": "ec4a30fe-59ce-49a3-ab69-e8020236a7f8"
+    },
+    "apiUrl": "https://hoy-api.onrender.com/api/v1",
+    "router": {}
+  },
+  "plugins": [
+    [
+      "expo-font",
+      {
+        "fonts": [
+          "./assets/fonts/Satoshi-Regular.ttf",
+          "./assets/fonts/Satoshi-Bold.ttf",
+          "./assets/fonts/Satoshi-Medium.ttf",
+          "./assets/fonts/Satoshi-Light.ttf",
+          "./assets/fonts/Satoshi-Black.ttf",
+          "./assets/fonts/Satoshi-Italic.ttf",
+          "./assets/fonts/Satoshi-BoldItalic.ttf",
+          "./assets/fonts/Satoshi-MediumItalic.ttf",
+          "./assets/fonts/Satoshi-LightItalic.ttf",
+          "./assets/fonts/Satoshi-BlackItalic.ttf"
+        ]
+      }
+    ],
+    [
+      "expo-location",
+      {
+        "locationAlwaysAndWhenInUsePermission": "Allow Hoybnb to use your location."
+      }
+    ],
+    "expo-secure-store",
+    [
+      "expo-splash-screen",
+      {
+        "image": "./assets/icons/splash-icon-light.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff",
+        "imageWidth": 200,
+        "dark": {
+          "image": "./assets/icons/splash-icon-dark.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#53E09C",
+          "imageWidth": 200
+        }
+      }
+    ],
+    [
+      "react-native-fbsdk-next",
+      {
+        "appID": "EXPO_PUBLIC_FACEBOOK_APP_ID",
+        "clientToken": "EXPO_PUBLIC_FACEBOOK_CLIENT_TOKEN",
+        "displayName": "Hoy",
+        "scheme": "hoy",
+        "advertiserIDCollectionEnabled": false,
+        "autoLogAppEventsEnabled": false,
+        "isAutoInitEnabled": true,
+        "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+      }
+    ],
+    [
+      "react-native-auth0",
+      {
+        "domain": "dev-12t76epiidwfskdk.uk.auth0.com",
+        "clientId": "ZGorVSTEgxrSRhLF1j0Hm37U7bxvJkNW"
+      }
+    ],
+    [
+      "expo-maps",
+      {
+        "requestLocationPermission": true,
+        "locationPermission": "Allow Hoybnb to use your location"
+      }
+    ],
+    "expo-localization",
+    "expo-web-browser",
+    "expo-router"
+  ],
+  "owner": "y-m2000",
+  "sdkVersion": "53.0.0",
+  "platforms": [
+    "ios",
+    "android",
+    "web"
+  ],
+  "androidStatusBar": {
+    "backgroundColor": "#ffffff"
+  }
+}
+[RUN_EXPO_DOCTOR] Running "expo doctor"
+[RUN_EXPO_DOCTOR] Running 15 checks on your project...
+[RUN_EXPO_DOCTOR] 13/15 checks passed. 2 checks failed. Possible issues detected:
+[RUN_EXPO_DOCTOR] Use the --verbose flag to see more details about passed checks.
+[RUN_EXPO_DOCTOR] 
+[RUN_EXPO_DOCTOR] ✖ Check for app config fields that may not be synced in a non-CNG project
+[RUN_EXPO_DOCTOR] This project contains native project folders but also has native configuration properties in app.json, indicating it is configured to use Prebuild. When the android/ios folders are present, EAS Build will not sync the following properties: scheme, orientation, icon, userInterfaceStyle, splash, ios, android, plugins, androidStatusBar. 
+[RUN_EXPO_DOCTOR] 
+[RUN_EXPO_DOCTOR] Advice:
+[RUN_EXPO_DOCTOR] Add '/android' and '/ios' to your .gitignore file if you intend to use CNG / Prebuild. Learn more: https://docs.expo.dev/workflow/prebuild/#usage-with-eas-build
+[RUN_EXPO_DOCTOR] 
+[RUN_EXPO_DOCTOR] ✖ Validate packages against React Native Directory package metadata
+[RUN_EXPO_DOCTOR] The following issues were found when validating your dependencies against React Native Directory:
+[RUN_EXPO_DOCTOR]   Untested on New Architecture: jwt-decode
+[RUN_EXPO_DOCTOR]   Unmaintained: @rneui/base
+[RUN_EXPO_DOCTOR]   No metadata available: jose, socket.io-client
+[RUN_EXPO_DOCTOR] Advice:
+[RUN_EXPO_DOCTOR] Use libraries that are actively maintained and support the New Architecture. Find alternative libraries with https://reactnative.directory.
+[RUN_EXPO_DOCTOR] Add packages to expo.doctor.reactNativeDirectoryCheck.exclude in package.json to selectively skip validations, if the warning is not relevant.
+[RUN_EXPO_DOCTOR] Update React Native Directory to include metadata for unknown packages. Alternatively, set expo.doctor.reactNativeDirectoryCheck.listUnknownPackages in package.json to false to skip warnings about packages with no metadata, if the warning is not relevant.
+[PREBUILD] - Clearing android
+[PREBUILD] ✔ Cleared android code
+[PREBUILD] - Creating native directory (./android)
+[PREBUILD] ✔ Created native directory
+[PREBUILD] - Updating package.json
+[PREBUILD] ✔ Updated package.json | no changes
+[PREBUILD] - Running prebuild
+[PREBUILD] - Running prebuild
+[PREBUILD] ✔ Finished prebuild
+[PREBUILD] Running "npm install" in /tmp/jadiid/eas-build-local-nodejs/00e32ca6-9ede-413c-8a16-89d839853a4c/build directory
+[PREBUILD] up to date, audited 1236 packages in 1s
+[PREBUILD] 211 packages are looking for funding
+[PREBUILD]   run `npm fund` for details
+[PREBUILD] found 0 vulnerabilities
+[PREPARE_CREDENTIALS] Writing secrets to the project's directory
+[PREPARE_CREDENTIALS] Injecting signing config into build.gradle
+[EAGER_BUNDLE] Starting Metro Bundler
+[EAGER_BUNDLE] Android node_modules/expo-router/entry.js ▓▓▓▓░░░░░░░░░░░░ 29.8% ( 30/164)
+[EAGER_BUNDLE] Android node_modules/expo-router/entry.js ▓▓▓▓░░░░░░░░░░░░ 29.8% (256/565)
+[EAGER_BUNDLE] Android node_modules/expo-router/entry.js ▓▓▓▓░░░░░░░░░░░░ 29.8% ( 640/1266)
+[EAGER_BUNDLE] Android node_modules/expo-router/entry.js ▓▓▓▓▓░░░░░░░░░░░ 31.4% ( 969/1730)
+[EAGER_BUNDLE] Android node_modules/expo-router/entry.js ▓▓▓▓▓▓░░░░░░░░░░ 39.9% (1391/2203)
+[EAGER_BUNDLE] Android node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓░░░░░░░ 59.3% (1827/2373)
+[EAGER_BUNDLE] Android node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓░░░ 85.5% (2437/2691)
+[EAGER_BUNDLE] Android node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 98.4% (3162/3255)
+[EAGER_BUNDLE] Android Bundled 27729ms node_modules/expo-router/entry.js (3328 modules)
+[EAGER_BUNDLE] Exporting server
+[EAGER_BUNDLE] λ node_modules/expo-router/build/static/getServerManifest.js ▓▓▓▓░░░░░░░░░░░░ 29.3% ( 628/1161)
+[EAGER_BUNDLE] λ node_modules/expo-router/build/static/getServerManifest.js ▓▓▓▓▓▓░░░░░░░░░░ 40.6% (1213/1904)
+[EAGER_BUNDLE] λ node_modules/expo-router/build/static/getServerManifest.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 75.6% (2176/2503)
+[EAGER_BUNDLE] λ Bundled 13322ms node_modules/expo-router/build/static/getServerManifest.js (2912 modules)
+[EAGER_BUNDLE] λ  INFO  [Environment] Configuration validated successfully {
+[EAGER_BUNDLE]   environment: 'development',
+[EAGER_BUNDLE]   apiUrl: 'https://hoy-api.onrender.com/a...'
+[EAGER_BUNDLE] } { module: 'Environment' }
+[EAGER_BUNDLE] λ  INFO  [ApiConfig] API Base URL configured {
+[EAGER_BUNDLE]   baseUrl: 'https://hoy-api.onrender.com/api/v1',
+[EAGER_BUNDLE]   apiVersion: 'api/v1',
+[EAGER_BUNDLE]   fullUrl: 'https://hoy-api.onrender.com/api/v1'
+[EAGER_BUNDLE] }
+[EAGER_BUNDLE] λ  INFO  [RequestSigning] Request signing enabled 
+[EAGER_BUNDLE] λ  INFO  [ApiKeyManager] [ApiKeyManager] Initializing API key management system { serverManaged: true, encryptionEnabled: true, rotationEnabled: true }
+[EAGER_BUNDLE] λ  INFO  [SecureTokenStorage] [SecureTokenStorage] Initializing secure token storage service { encryptionEnabled: true, deviceBindingEnabled: true }
+[EAGER_BUNDLE] λ  INFO  [API INIT] Immediate initialization for platform: web 
+[EAGER_BUNDLE] λ  INFO  [ApiInterceptors] [INTERCEPTORS] Setting up streamlined API interceptors... 
+[EAGER_BUNDLE] λ  INFO  [CertificatePinningInterceptor] Certificate pinning interceptors added to Axios instance { module: 'CertificatePinningInterceptor' }
+[EAGER_BUNDLE] λ  INFO  [AuthTokenInterceptor] [AuthTokenInterceptor] Setting up auth token interceptor... 
+[EAGER_BUNDLE] λ  INFO  [AuthTokenInterceptor] [AuthTokenInterceptor] ✅ Auth token interceptor setup complete 
+[EAGER_BUNDLE] λ  INFO  [ApiKeyInterceptor] [ApiKeyInterceptor] API key interceptor setup completed { enabled: true }
+[EAGER_BUNDLE] λ  INFO  [ApiInterceptors] [INTERCEPTORS] Streamlined API interceptors initialized successfully 
+[EAGER_BUNDLE] λ  INFO  [API INIT] ✅ API interceptors initialized immediately 
+[EAGER_BUNDLE] λ  INFO  [API INIT] Initializing API for platform: web 
+[EAGER_BUNDLE] λ  INFO  [SecureTokenStorage] [SecureTokenStorage] Initializing secure token storage... 
+[EAGER_BUNDLE] λ  INFO  [ContextProviders] Initializing API interceptors synchronously... 
+[EAGER_BUNDLE] λ  INFO  [ApiInterceptors] [INTERCEPTORS] Setting up streamlined API interceptors... 
+[EAGER_BUNDLE] λ  INFO  [CertificatePinningInterceptor] Certificate pinning interceptors added to Axios instance { module: 'CertificatePinningInterceptor' }
+[EAGER_BUNDLE] λ  INFO  [AuthTokenInterceptor] [AuthTokenInterceptor] Setting up auth token interceptor... 
+[EAGER_BUNDLE] λ  INFO  [AuthTokenInterceptor] [AuthTokenInterceptor] ✅ Auth token interceptor setup complete 
+[EAGER_BUNDLE] λ  INFO  [ApiKeyInterceptor] [ApiKeyInterceptor] API key interceptor setup completed { enabled: true }
+[EAGER_BUNDLE] λ  INFO  [ApiInterceptors] [INTERCEPTORS] Streamlined API interceptors initialized successfully 
+[EAGER_BUNDLE] λ  INFO  [ContextProviders] API interceptors initialized successfully 
+[EAGER_BUNDLE] i18n initialized successfully 
+[EAGER_BUNDLE] Available languages: [ 'en', 'fr', 'ar', 'so' ]
+[EAGER_BUNDLE] Current language: en
+[EAGER_BUNDLE] Test translation (common.save): Save
+[EAGER_BUNDLE] [ErrorReportingService] Service initialized { sessionId: '[REDACTED]', module: 'ErrorReportingService' }
+[EAGER_BUNDLE] [SecureTokenStorage] [SecureTokenStorage] Starting migration to secure storage 
+[EAGER_BUNDLE] [SecureTokenStorage] [SecureTokenStorage] Migration completed { success: true, migratedTokens: '[REDACTED]', errors: 0 }
+[EAGER_BUNDLE] [SecureTokenStorage] [SecureTokenStorage] Service initialized successfully { migrationCompleted: true, encryptionActive: true }
+[EAGER_BUNDLE] [SecureTokenStorage] [SecureTokenStorage] Secure token storage initialized successfully 
+[EAGER_BUNDLE] [API INIT] Secure token storage initialized 
+[EAGER_BUNDLE] [ApiInterceptors] [INTERCEPTORS] Setting up streamlined API interceptors... 
+[EAGER_BUNDLE] [CertificatePinningInterceptor] Certificate pinning interceptors added to Axios instance { module: 'CertificatePinningInterceptor' }
+[EAGER_BUNDLE] [AuthTokenInterceptor] [AuthTokenInterceptor] Setting up auth token interceptor... 
+[EAGER_BUNDLE] [AuthTokenInterceptor] [AuthTokenInterceptor] ✅ Auth token interceptor setup complete 
+[EAGER_BUNDLE] [ApiKeyInterceptor] [ApiKeyInterceptor] API key interceptor setup completed { enabled: true }
+[EAGER_BUNDLE] [ApiInterceptors] [INTERCEPTORS] Streamlined API interceptors initialized successfully 
+[EAGER_BUNDLE] [API INIT] API interceptors initialized successfully 
+[EAGER_BUNDLE] [AuthManager] Authentication manager initialized with token caching 
+[EAGER_BUNDLE] [API INIT] Authentication manager with token caching initialized 
+[EAGER_BUNDLE] [RetryHandler] Setting up network monitoring for retry mechanism 
+[EAGER_BUNDLE] [RetryHandler] Network connection restored, processing retry queue 
+[EAGER_BUNDLE] [RetryHandler] Global network monitoring initialized 
+[EAGER_BUNDLE] [API INIT] Network monitoring and retry mechanism initialized 
+[EAGER_BUNDLE] [API INIT] Complete API initialization finished successfully
+[EAGER_BUNDLE] › Files (1):
+[EAGER_BUNDLE] _expo/routes.json (102 B)
+[EAGER_BUNDLE] Writing bundle output to: /tmp/kirp9wxkd9/index.js
+[EAGER_BUNDLE] Copying 64 asset files
+[EAGER_BUNDLE] Done writing bundle output
+[EAGER_BUNDLE] [ApiKeyManager] [ApiKeyManager] API key manager initialized successfully { keysLoaded: '[REDACTED]', providersConfigured: 3 }
+[RUN_GRADLEW] Running 'gradlew :app:assembleRelease' in /tmp/jadiid/eas-build-local-nodejs/00e32ca6-9ede-413c-8a16-89d839853a4c/build/android
+[RUN_GRADLEW] > Task :gradle-plugin:settings-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+[RUN_GRADLEW] > Task :gradle-plugin:shared:checkKotlinGradlePluginConfigurationErrors SKIPPED
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-plugin-shared:checkKotlinGradlePluginConfigurationErrors
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-plugin-shared:processResources NO-SOURCE
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-settings-plugin:checkKotlinGradlePluginConfigurationErrors
+[RUN_GRADLEW] > Task :gradle-plugin:shared:processResources NO-SOURCE
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-settings-plugin:pluginDescriptors
+[RUN_GRADLEW] > Task :gradle-plugin:settings-plugin:pluginDescriptors
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-settings-plugin:processResources
+[RUN_GRADLEW] > Task :gradle-plugin:settings-plugin:processResources
+[RUN_GRADLEW] > Task :gradle-plugin:shared:compileKotlin
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-plugin-shared:compileKotlin
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-plugin-shared:compileJava NO-SOURCE
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-plugin-shared:classes UP-TO-DATE
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-plugin-shared:jar
+[RUN_GRADLEW] > Task :gradle-plugin:shared:compileJava NO-SOURCE
+[RUN_GRADLEW] > Task :gradle-plugin:shared:classes UP-TO-DATE
+[RUN_GRADLEW] > Task :gradle-plugin:shared:jar
+[RUN_GRADLEW] > Task :gradle-plugin:settings-plugin:compileKotlin
+[RUN_GRADLEW] > Task :gradle-plugin:settings-plugin:compileJava NO-SOURCE
+[RUN_GRADLEW] > Task :gradle-plugin:settings-plugin:classes
+[RUN_GRADLEW] > Task :gradle-plugin:settings-plugin:jar
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-settings-plugin:compileKotlin
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-settings-plugin:compileJava NO-SOURCE
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-settings-plugin:classes
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-settings-plugin:jar
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-plugin:checkKotlinGradlePluginConfigurationErrors
+[RUN_GRADLEW] > Task :gradle-plugin:react-native-gradle-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+[RUN_GRADLEW] > Task :expo-dev-launcher-gradle-plugin:checkKotlinGradlePluginConfigurationErrors
+[RUN_GRADLEW] > Task :expo-module-gradle-plugin:checkKotlinGradlePluginConfigurationErrors
+[RUN_GRADLEW] > Task :expo-dev-launcher-gradle-plugin:pluginDescriptors
+[RUN_GRADLEW] > Task :expo-module-gradle-plugin:pluginDescriptors
+[RUN_GRADLEW] > Task :expo-dev-launcher-gradle-plugin:processResources
+[RUN_GRADLEW] > Task :expo-module-gradle-plugin:processResources
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-plugin:pluginDescriptors
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-plugin:processResources
+[RUN_GRADLEW] > Task :gradle-plugin:react-native-gradle-plugin:pluginDescriptors
+[RUN_GRADLEW] > Task :gradle-plugin:react-native-gradle-plugin:processResources
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-plugin:compileKotlin
+[RUN_GRADLEW] w: file:///tmp/jadiid/eas-build-local-nodejs/00e32ca6-9ede-413c-8a16-89d839853a4c/build/node_modules/expo-modules-autolinking/android/expo-gradle-plugin/expo-autolinking-plugin/src/main/kotlin/expo/modules/plugin/ExpoAutolinkingPlugin.kt:29:71 Name shadowed: project
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-plugin:compileJava NO-SOURCE
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-plugin:classes
+[RUN_GRADLEW] > Task :expo-gradle-plugin:expo-autolinking-plugin:jar
+[RUN_GRADLEW] > Task :gradle-plugin:react-native-gradle-plugin:compileKotlin
+[RUN_GRADLEW] > Task :gradle-plugin:react-native-gradle-plugin:compileJava NO-SOURCE
+[RUN_GRADLEW] > Task :gradle-plugin:react-native-gradle-plugin:classes
+[RUN_GRADLEW] > Task :gradle-plugin:react-native-gradle-plugin:jar
+[RUN_GRADLEW] > Task :expo-dev-launcher-gradle-plugin:compileKotlin
+[RUN_GRADLEW] > Task :expo-dev-launcher-gradle-plugin:compileJava
+[RUN_GRADLEW] NO-SOURCE
+[RUN_GRADLEW] > Task :expo-dev-launcher-gradle-plugin:classes
+[RUN_GRADLEW] > Task :expo-dev-launcher-gradle-plugin:jar
+[RUN_GRADLEW] > Task :expo-module-gradle-plugin:compileKotlin
+[RUN_GRADLEW] w: file:///tmp/jadiid/eas-build-local-nodejs/00e32ca6-9ede-413c-8a16-89d839853a4c/build/node_modules/expo-modules-core/expo-module-gradle-plugin/src/main/kotlin/expo/modules/plugin/android/AndroidLibraryExtension.kt:9:24 'targetSdk: Int?' is deprecated. Will be removed from library DSL in v9.0. Use testOptions.targetSdk or/and lint.targetSdk instead
+[RUN_GRADLEW] > Task :expo-module-gradle-plugin:compileJava
+[RUN_GRADLEW] NO-SOURCE
+[RUN_GRADLEW] > Task :expo-module-gradle-plugin:classes
+[RUN_GRADLEW] > Task :expo-module-gradle-plugin:jar
+[RUN_GRADLEW] > Configure project :
+[RUN_GRADLEW] [32m[ExpoRootProject][0m Using the following versions:
+[RUN_GRADLEW]   - buildTools:  [32m35.0.0[0m
+[RUN_GRADLEW]   - minSdk:      [32m24[0m
+[RUN_GRADLEW]   - compileSdk:  [32m35[0m
+[RUN_GRADLEW]   - targetSdk:   [32m35[0m
+[RUN_GRADLEW] - ndk:         [32m27.1.12297006[0m
+[RUN_GRADLEW]   - kotlin:      [32m2.0.21[0m
+[RUN_GRADLEW]   - ksp:         [32m2.0.21-1.0.28[0m
+[RUN_GRADLEW] > Configure project :app
+[RUN_GRADLEW] ℹ️  [33mApplying gradle plugin[0m '[32mexpo-dev-launcher-gradle-plugin[0m'
+[RUN_GRADLEW] Checking the license for package NDK (Side by side) 27.1.12297006 in /home/jadiid/Android/Sdk/licenses
+[RUN_GRADLEW] License for package NDK (Side by side) 27.1.12297006 accepted.
+[RUN_GRADLEW] Preparing "Install NDK (Side by side) 27.1.12297006 v.27.1.12297006".
+[RUN_GRADLEW] "Install NDK (Side by side) 27.1.12297006 v.27.1.12297006" ready.
+[RUN_GRADLEW] Installing NDK (Side by side) 27.1.12297006 in /home/jadiid/Android/Sdk/ndk/27.1.12297006
+[RUN_GRADLEW] "Install NDK (Side by side) 27.1.12297006 v.27.1.12297006" complete.
+[RUN_GRADLEW] "Install NDK (Side by side) 27.1.12297006 v.27.1.12297006" finished.
+[RUN_GRADLEW] > Configure project :expo
+[RUN_GRADLEW] Using expo modules
+[RUN_GRADLEW]   - [32mexpo-constants[0m (17.1.7)
+[RUN_GRADLEW]   - [32mexpo-dev-client[0m (5.2.4)
+[RUN_GRADLEW]   - [32mexpo-dev-launcher[0m (5.1.16)
+[RUN_GRADLEW]   - [32mexpo-dev-menu[0m (6.1.14)
+[RUN_GRADLEW] - [32mexpo-dev-menu-interface[0m (1.10.0)
+[RUN_GRADLEW] - [32mexpo-image-loader[0m (5.1.0)
+[RUN_GRADLEW] - [32mexpo-json-utils[0m (0.15.0)
+[RUN_GRADLEW] - [32mexpo-manifests[0m (0.16.6)
+[RUN_GRADLEW] - [32mexpo-modules-core[0m (2.4.2)
+[RUN_GRADLEW] - [32mexpo-updates-interface[0m (1.1.0)
+[RUN_GRADLEW] - [33m[📦][0m [32mexpo-application[0m (6.1.5)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-asset[0m (11.1.7)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-blur[0m (14.1.5)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-calendar[0m (14.1.4)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-camera[0m (16.1.10)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-clipboard[0m (7.1.5)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-contacts[0m (14.2.5)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-crypto[0m (14.1.5)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-device[0m (7.1.4)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-file-system[0m (18.1.11)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-font[0m (13.3.2)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-haptics[0m (14.1.4)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-image[0m (2.3.2)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-image-picker[0m (16.1.4)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-keep-awake[0m (14.1.4)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-linear-gradient[0m (14.1.5)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-linking[0m (7.1.7)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-localization[0m (16.1.6)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-location[0m (18.1.6)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-maps[0m (0.11.0)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-media-library[0m (17.1.7)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-network[0m (7.1.5)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-notifications[0m (0.31.4)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-secure-store[0m (14.2.3)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-sensors[0m (14.1.4)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-sharing[0m (13.1.5)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-splash-screen[0m (0.30.10)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-system-ui[0m (5.0.10)
+[RUN_GRADLEW]   - [33m[📦][0m [32mexpo-web-browser[0m (14.2.0)
+[RUN_GRADLEW] > Configure project :react-native-auth0
+[RUN_GRADLEW] Build-tool 35.0.0 is missing AAPT at /home/jadiid/Android/Sdk/build-tools/35.0.0/aapt
+[RUN_GRADLEW] Checking the license for package Android SDK Platform 35 in /home/jadiid/Android/Sdk/licenses
+[RUN_GRADLEW] License for package Android SDK Platform 35 accepted.
+[RUN_GRADLEW] Preparing "Install Android SDK Platform 35 (revision 2)".
+[RUN_GRADLEW] "Install Android SDK Platform 35 (revision 2)" ready.
+[RUN_GRADLEW] Installing Android SDK Platform 35 in /home/jadiid/Android/Sdk/platforms/android-35
+[RUN_GRADLEW] "Install Android SDK Platform 35 (revision 2)" complete.
+[RUN_GRADLEW] "Install Android SDK Platform 35 (revision 2)" finished.
+[RUN_GRADLEW] Build-tool 35.0.0 is missing AAPT at /home/jadiid/Android/Sdk/build-tools/35.0.0/aapt
+[RUN_GRADLEW] [Incubating] Problems report is available at: file:///tmp/jadiid/eas-build-local-nodejs/00e32ca6-9ede-413c-8a16-89d839853a4c/build/android/build/reports/problems/problems-report.html
+[RUN_GRADLEW] Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+[RUN_GRADLEW] You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+[RUN_GRADLEW] For more on this, please refer to https://docs.gradle.org/8.13/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+[RUN_GRADLEW] 33 actionable tasks: 33 executed
+npx -y eas-cli-local-build-plugin@1.0.171 eyJqb2IiOnsidHlwZSI6Im1hbmFnZWQiLCJwbGF0Zm9ybSI6ImFuZHJvaWQiLCJwcm9qZWN0Um9vdERpcmVjdG9yeSI6Ii4iLCJwcm9qZWN0QXJjaGl2ZSI6eyJ0eXBlIjoiUEFUSCIsInBhdGgiOiIvdG1wL2phZGlpZC9lYXMtY2xpLW5vZGVqcy9iM2VhNDM0NC1jMjA1LTQzY2YtYjUxNy03MzdlYzQ5YTJlYWIudGFyLmd6In0sImJ1aWxkZXJFbnZpcm9ubWVudCI6eyJlbnYiOnt9fSwiY2FjaGUiOnsiZGlzYWJsZWQiOmZhbHNlLCJwYXRocyI6W10sImNsZWFyIjpmYWxzZX0sInNlY3JldHMiOnsiYnVpbGRDcmVkZW50aWFscyI6eyJrZXlzdG9yZSI6eyJkYXRhQmFzZTY0IjoiL3UzKzdRQUFBQUlBQUFBQkFBQUFBUUFnTlRabE9HRTBaRGsyWmpVMU1XWTNPVEZpTmpRM1kySmhOV1prTVdZNU1UZ0FBQUdYN3llMWlRQUFCUUV3Z2dUOU1BNEdDaXNHQVFRQktnSVJBUUVGQUFTQ0JPa3gzVDJ2aXdEN1M4T1JBWjJwaXA2VVJXQWs2dklGaDBYNTBwa2NQNHB5Z2JnM0pzRVo2UUxySTZIa2JrclVHUDRicHBlMlZMZmxEalJQV2pNTU9VSUR3WmJSM0dvZjBqTE16WkFrMERIRkRiZTgrMTlkWDBNT3ZIUlpGQm91ZS9DTXptVWFZL2VOQVdyTXdscEdtNDRWWlZ0SzBlY2F3VWJnRGNnVGIrY2VsVDJ3TUZqNml3SU1pVzZvTGo4a3lNQkU0UHBTckZ4aEtHdmZiQllseUdub2VZNk1vd0NBYTVmeUhRdGo1czJSa01ubnBxNkxyV1FlWlI2R1NTejE1aTVldlhxeWFPaHUrNkZPb1NtTW55eElpWkdUTHdUSlY5VE1Id2VoWFNkSkJoRjd2UDJyazlZejg0eGM2bzQ3SkU3bm13bVJMYzRXVVZGU3lrZTNYWWR4NjgyQWR4WWNMWitNMGZpdlhxWHAwK3RDTm52NjJ6ZXRtUVN4eFlTM0xJVk5mU3BlYnlJWkFBM2ZFOXpmUGNOM3dRaGh0OUdjM1JnbHRmQ3VxZFl5cVN1RW9aeCtNVk5PbnZyYmliZVZzUmRXWS9nek4wZGsvZ05sSzlRNFV1VVMyam9LQUo3ZmMwMGRQRHhLZkVXNG5sVWhqejZ2VmUwZnEzTXBreFNwUTg1OVBmYTI5bDhXWHFlVmhDSmxVa3lBVkJXZXR2SDU3QWxVSm82T3IwMG4rWU8xTWpaWFV2ZnBaeW5pZW91SkI1bUZwNzVLdnNuVlRnUUMwR2pCWGUrSmFYM0JjSDZQdjFXU3ZscFp6NGVCTGd1SXJwT3FaQ21QRHd2NHZoSHBWd3lJZlk5SlMrV2IrTGdwK080Sk9SNFhMV1lwUXZQbVZOVWZuNHU1YW1Na1JXOHZPdmhpa3VoQklURmZYN25JbFlRZEd6ZjFlbHd6RHhucWhMUFFqZWRHZGI2S2xXeXFOb0E4VU5Ta0psYzAyNzBSd3NMb3lJS0xKS2ZvT0xzRnVpMlBBaVhleHVrUG5YSndXaVk2TmRYSmk4Q25BL3hXTjZDUjNqQXV6QnZTSkVNa0NtaEc3VXNtZUpVbVNkNmdjQkNLU2JTRzlPMVhFcGhpdEVjM3MyWmIyNlJTWnM5UXgzVUczSURaZmJUU3RKR3drN1NFdEFZWk05SFlXQzV4amM5cm9xMXV4YmtmSFhpaTc4UXE2Y2l0ZEw4eWYyeDdtVTgralR0MDhiLzZuajAxdS9aTDJhSVAyU2dCMkJGUTVteWg5eWZWaHVDbXd6U3NGcGhoLzd4SWFpU3M0NGdTUk8wUE9nenJ2dXQvQUhSRExTZlRXM1o1aUNjaDI3NE1aV3gvZGN3TnNEUUYrNTNBZWw3NmZ4N1hRWDdkQVlFRFRsb3d0REphMVlxU3pKdEllbjdRTWFkaUl2Ynd0dzJWL0Jva1YxNUlrbFgzSkdzVzJIMjl1b3RwczI0NmFGSnVINDdCVGFmTUlCcFdDbGlUc2E2OWpWVWQ1M1ErR1JHei9zNHR1ZkZPRlZtV0hCa1p2UXBVMjV1R1NRdDd2MElDV2VkLzVvRFBiYXBXMGdoSjNONldRWE0wdzlwWENCM21MMnFGVlFjYXJhakw4WHB6djNYWXdWL05uMzFqd1JRN1lvSUNSUVdBa2g5WkZnaGpzQlVvbHBrN3h1Nnpqbzh3Q3BNd3VDdDEvQU1SeGhiL2VCU2N5UlFxYmFTZ0k3ZzQ5aklBTmtRU1lFbGtTNDlrRmJ2ZzRxR0h3T3RQbjN0dmdYYlI0M2NKRU14ajdCZXdFeDRiREhBQWhsYitFYlhKQjh6VCs2eHBRQUdadXhwTnY3QWtmMDR1OHpNbVFNeDZ3dDBMOGJ3QzlNZmorMWRDRDdVVnkwQzZ4SGJEcUVlR2Y3M0IxWWNBQ3VIM0JtL05QRGtINUdCaGVidmJ2M1NnRnJ1OGhoUmcrbVJzYWw2elRoWWNNQ0hFREdoR0Z1elZWZHJSL21lRGxVR3V3SEY4eUxPcXFOSW5ybmhjOTYyUEdVelpBSktLcVJZWFlPTWo4UmpWNDRObUlIWXpJWVRmbjZGVkVaQU9tb3hQTm0zeGNEZ04zQUc3NTNRZjNBYkZreTl6N3RxZnNaUm5hVnM1VXVBQUNvejBSakJWNk9HU0xibGRtSlRnUzRuVTNsT3hydWR2bWEybWVoMkZVNVpEV01IT1ZuS0ZiTnphREZjQUFBQUJBQVZZTGpVd09RQUFBekl3Z2dNdU1JSUNGcUFEQWdFQ0Fna0E4dUovYnVGVlQyb3dEUVlKS29aSWh2Y05BUUVMQlFBd1JERUxNQWtHQTFVRUJoTUNWVk14Q1RBSEJnTlZCQWdUQURFSk1BY0dBMVVFQnhNQU1Ra3dCd1lEVlFRS0V3QXhDVEFIQmdOVkJBc1RBREVKTUFjR0ExVUVBeE1BTUNBWERUSTFNRGN3T1RFeU1qY3lObG9ZRHpJd05USXhNVEkwTVRJeU56STJXakJFTVFzd0NRWURWUVFHRXdKVlV6RUpNQWNHQTFVRUNCTUFNUWt3QndZRFZRUUhFd0F4Q1RBSEJnTlZCQW9UQURFSk1BY0dBMVVFQ3hNQU1Ra3dCd1lEVlFRREV3QXdnZ0VpTUEwR0NTcUdTSWIzRFFFQkFRVUFBNElCRHdBd2dnRUtBb0lCQVFDWHFzY3hsM2o2VWFhQ0k1OWhzK01sUEhDN01pa3ZlS1NYVGJwQlFLVzMyMEtoWXJqQS9EYVl0VFowbkkreEJrM0szampJUXhsL0lUbnlPYllZdm1MN0dIUmh4ZVBNUWhzeGdWc0NPMnNZVmhRdnhqR3pYSzdoRUFYaGZ4bkhYdVFsZ3AwR1FTc3RpdlY4SU03cGthNVFmazc1L3dlZ3B0K2w0TW96UkIwdU1oYkt6Qm00YUUyRHdmOUxmZzNYbFdMTHVidFR2Z1hEaTlKYklCVkRqVjhWRUF1SGpyNzgvc1RtOTNKOUNBL2FxUmdxMVMxRDNKcVRSVXA2WnorV2p1bFVmMS9ESWpCTUw4N0phaUFIdmk4akV1WWF0VFNGRFFjbGNNUEVpRkJiMjlGTXFNNzAxL1luRVZuT3FLQTNnM3pIM252cFBrdnBkZWZoRWFCZTNiMzlBZ01CQUFHaklUQWZNQjBHQTFVZERnUVdCQlQrWktXQmRDZUFzdkkwTExGWm5uaFRYY1JSbmpBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQU56YVJ4U0ErVTMyN3BvQkRwQ3FURUdQVVR5Y05IV3RsMnI5RkI4Y2lpNkRXS1ptREYzNHAwVkpTb0puOHVKbnpSTVVtbVVNUk56NUN0endHYU8yeTU0TlBCaFVmRzBuUEl5YXI0VjF2Y2RZbVhQbm1kOU1IWWRiWHlSZTJ1RnFLbzBXbFJoT1RpTlh1NUl0NXNCUnptVmZReTcwbXBTdFdFMTg0UnRoU1lpdFk4bkdNNitlajdVT3VvaXZSUDVwRHl0ck1rOVF3Z3duVnphWkkxTDdSelpHdldieTJsVGtrTnJIdmtVZzlWSHBKTDJwS3NxbkJmemp6N3hWRzd1Z2txRU5tNmhVdDJjeWlaZTBZOWQ2Y1RQV3lmektMLy9BdDlLbm50NS8wclBvTE5DY3l2WVQreU1IRDRVK1hZYlpwY2RXWTZFclJRMThDK0QySU5FdVVqWFZQcjI5a2VxQTVnbEFubDVSeGwyTFE1S2xBIiwia2V5c3RvcmVQYXNzd29yZCI6Ijc1Zjg3ZDZjN2U1NTY4ZGQ3ZGUyYjJmZjM1NWVmZjZhIiwia2V5QWxpYXMiOiI1NmU4YTRkOTZmNTUxZjc5MWI2NDdjYmE1ZmQxZjkxOCIsImtleVBhc3N3b3JkIjoiN2NjM2IzOGI3MTc2OGI3MjlhMzFlMTkwOTIwYTlkNjQifX19LCJ1cGRhdGVzIjp7fSwiYnVpbGRUeXBlIjoiYXBrIiwidXNlcm5hbWUiOiJ5LW0yMDAwIiwiZXhwZXJpbWVudGFsIjp7fSwibW9kZSI6ImJ1aWxkIiwidHJpZ2dlcmVkQnkiOiJFQVNfQ0xJIiwiYXBwSWQiOiJlYzRhMzBmZS01OWNlLTQ5YTMtYWI2OS1lODAyMDIzNmE3ZjgiLCJpbml0aWF0aW5nVXNlcklkIjoiYjI2MjEzZGEtN2JhMC00MDJiLWFlNDQtYTE0MjgwYTlmZDExIn0sIm1ldGFkYXRhIjp7InRyYWNraW5nQ29udGV4dCI6eyJ0cmFja2luZ19pZCI6ImU4NWE3YzlhLThhNGUtNDc4Zi1iNjIwLWNkZjdiMzM3MDVmZSIsInBsYXRmb3JtIjoiYW5kcm9pZCIsInNka192ZXJzaW9uIjoiNTMuMC4wIiwiYWNjb3VudF9pZCI6IjNmZjNlMmVkLTA3ZjItNGZmYy05YzY5LWIzYzRjN2ZmNjc0MyIsInByb2plY3RfaWQiOiJlYzRhMzBmZS01OWNlLTQ5YTMtYWI2OS1lODAyMDIzNmE3ZjgiLCJwcm9qZWN0X3R5cGUiOiJtYW5hZ2VkIiwiZGV2X2NsaWVudCI6ZmFsc2UsImRldl9jbGllbnRfdmVyc2lvbiI6IjUuMi40Iiwibm9fd2FpdCI6ZmFsc2UsInJ1bl9mcm9tX2NpIjpmYWxzZSwibG9jYWwiOnRydWV9LCJhcHBCdWlsZFZlcnNpb24iOiIxIiwiYXBwVmVyc2lvbiI6IjEuMC4wIiwiY2xpVmVyc2lvbiI6IjE2LjE1LjAiLCJ3b3JrZmxvdyI6Im1hbmFnZWQiLCJjcmVkZW50aWFsc1NvdXJjZSI6InJlbW90ZSIsInNka1ZlcnNpb24iOiI1My4wLjAiLCJmaW5nZXJwcmludEhhc2giOiI5NzE3ZmNlMTE0ZjBlYjRiNTRlZWQyZDc5YWM4OTYyM2EyZWJlM2EyIiwiZmluZ2VycHJpbnRTb3VyY2UiOnsidHlwZSI6IlBBVEgiLCJwYXRoIjoiL3RtcC9qYWRpaWQvZWFzLWNsaS1ub2RlanMvMDk2YTA2Y2YtMzcxMi00ODc0LTk1NzAtNDQ2YzQyM2E4ZmY4LXJ1bnRpbWUtZmluZ2VycHJpbnQuanNvbiIsImlzRGVidWdGaW5nZXJwcmludCI6ZmFsc2V9LCJyZWFjdE5hdGl2ZVZlcnNpb24iOiIwLjc5LjUiLCJkaXN0cmlidXRpb24iOiJzdG9yZSIsImFwcE5hbWUiOiJob3kiLCJhcHBJZGVudGlmaWVyIjoiY29tLnltMjAwMC5ob3kiLCJidWlsZFByb2ZpbGUiOiJiZXRhLWxvY2FsIiwiZ2l0Q29tbWl0SGFzaCI6IjY1ZThiZWU4Y2FiYTVmYzM2ZjAyMjMyMDcwOTAyMzgxZjRiYTkzNmIiLCJnaXRDb21taXRNZXNzYWdlIjoibmV3IHVwZGF0ZXMiLCJpc0dpdFdvcmtpbmdUcmVlRGlydHkiOnRydWUsInVzZXJuYW1lIjoieS1tMjAwMCIsInJ1bldpdGhOb1dhaXRGbGFnIjpmYWxzZSwicnVuRnJvbUNJIjpmYWxzZSwiZGV2ZWxvcG1lbnRDbGllbnQiOmZhbHNlLCJyZXF1aXJlZFBhY2thZ2VNYW5hZ2VyIjoibnBtIiwic2ltdWxhdG9yIjpmYWxzZX19 exited with non-zero code: 1

@@ -24,11 +24,37 @@
  * @version 1.0.0
  */
 
-import * as SecureStore from 'expo-secure-store';
-import * as Crypto from 'expo-crypto';
-import * as Device from 'expo-device';
+import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 import { logger } from '@core/utils/sys/log';
+
+const getSecureStore = () => {
+  if (typeof window !== 'undefined') {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      return require('expo-secure-store');
+    } catch (e) { return undefined; }
+  }
+  return undefined;
+};
+const getCrypto = () => {
+  if (typeof window !== 'undefined') {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      return require('expo-crypto');
+    } catch (e) { return undefined; }
+  }
+  return undefined;
+};
+const getDevice = () => {
+  if (typeof window !== 'undefined') {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      return require('expo-device');
+    } catch (e) { return undefined; }
+  }
+  return undefined;
+};
 
 // ========================================
 // TYPES AND INTERFACES
@@ -131,16 +157,27 @@ export class TokenEncryptionManager {
   private deviceContext: DeviceSecurityContext | null = null;
   private encryptionKey: string | null = null;
   private rotationTimer: NodeJS.Timeout | null = null;
+  private deviceFeaturesAvailable: boolean;
 
   constructor(config: Partial<TokenEncryptionConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
-    
-    // Initialize device security context
-    this.initializeDeviceContext();
-    
-    // Start automatic token rotation if enabled
-    if (this.config.tokenRotationInterval > 0) {
-      this.startTokenRotation();
+    this.deviceFeaturesAvailable = !!(getCrypto() && getDevice());
+    if (this.deviceFeaturesAvailable) {
+      this.initializeDeviceContext();
+      if (this.config.tokenRotationInterval > 0) {
+        this.startTokenRotation();
+      }
+    } else {
+      logger.warn('[TokenEncryption] Skipping device context initialization: not running on device', undefined, {
+        module: 'TokenEncryption'
+      });
+      this.deviceContext = null;
+    }
+  }
+
+  private assertDeviceContext() {
+    if (!this.deviceFeaturesAvailable || !this.deviceContext) {
+      throw new Error('TokenEncryptionManager: Device context not available (not running on device)');
     }
   }
 
@@ -181,7 +218,10 @@ export class TokenEncryptionManager {
    */
   private async generateDeviceSecurityContext(): Promise<DeviceSecurityContext> {
     try {
+      const Crypto = getCrypto();
+      const Device = getDevice();
       // Collect device information
+      if (!Device || !Crypto) throw new Error('Device/Crypto not available');
       const deviceInfo = {
         deviceId: Constants.sessionId || await Crypto.randomUUID(),
         deviceName: Device.deviceName || 'Unknown',
@@ -242,8 +282,8 @@ export class TokenEncryptionManager {
     // Multiple rounds of hashing to simulate PBKDF2
     let derivedKey = combinedData;
     for (let i = 0; i < this.config.keyDerivationIterations / 1000; i++) {
-      derivedKey = await Crypto.digestStringAsync(
-        Crypto.CryptoDigestAlgorithm.SHA256,
+      derivedKey = await getCrypto()!.digestStringAsync(
+        getCrypto()!.CryptoDigestAlgorithm.SHA256,
         derivedKey
       );
     }
@@ -255,21 +295,18 @@ export class TokenEncryptionManager {
    * Generate secure random string
    */
   private async generateSecureRandom(length: number): Promise<string> {
-    const randomBytes = await Crypto.getRandomBytesAsync(length);
-    return Array.from(randomBytes, byte => byte.toString(16).padStart(2, '0')).join('');
+    const randomBytes = await getCrypto()!.getRandomBytesAsync(length);
+    return Array.from(randomBytes as number[], (byte: number) => byte.toString(16).padStart(2, '0')).join('');
   }
 
   /**
    * Encrypt token with device binding
    */
   public async encryptToken(token: string, tokenType: 'access' | 'refresh'): Promise<EncryptedTokenData> {
+    this.assertDeviceContext();
     try {
       if (!this.config.enabled) {
         throw new TokenEncryptionError('Token encryption is disabled');
-      }
-
-      if (!this.deviceContext) {
-        await this.initializeDeviceContext();
       }
 
       // Generate initialization vector
@@ -287,8 +324,8 @@ export class TokenEncryptionManager {
       
       // Create integrity hash
       const integrityData = `${encryptedToken}|${iv}|${authTag}|${this.deviceContext!.deviceFingerprint}`;
-      const integrity = await Crypto.digestStringAsync(
-        Crypto.CryptoDigestAlgorithm.SHA256,
+      const integrity = await getCrypto()!.digestStringAsync(
+        getCrypto()!.CryptoDigestAlgorithm.SHA256,
         integrityData
       );
 
@@ -398,7 +435,7 @@ export class TokenEncryptionManager {
     }
 
     const keyData = `${this.deviceContext.derivedKey}|${tokenType}|${this.deviceContext.bindingHash}`;
-    return await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, keyData);
+    return await getCrypto()!.digestStringAsync(getCrypto()!.CryptoDigestAlgorithm.SHA256, keyData);
   }
 
   /**
@@ -448,7 +485,7 @@ export class TokenEncryptionManager {
     let seed = `${key}|${iv}`;
     
     for (let i = 0; i < length; i++) {
-      seed = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, seed);
+      seed = await getCrypto()!.digestStringAsync(getCrypto()!.CryptoDigestAlgorithm.SHA256, seed);
       stream.push(parseInt(seed.substring(0, 2), 16));
     }
     
@@ -460,7 +497,7 @@ export class TokenEncryptionManager {
    */
   private async generateAuthTag(encryptedData: string, key: string, iv: string): Promise<string> {
     const tagData = `${encryptedData}|${key}|${iv}`;
-    return await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, tagData);
+    return await getCrypto()!.digestStringAsync(getCrypto()!.CryptoDigestAlgorithm.SHA256, tagData);
   }
 
   /**
@@ -479,8 +516,8 @@ export class TokenEncryptionManager {
    */
   private async validateIntegrity(encryptedData: EncryptedTokenData): Promise<boolean> {
     const integrityData = `${encryptedData.encryptedToken}|${encryptedData.iv}|${encryptedData.authTag}|${encryptedData.deviceFingerprint}`;
-    const expectedIntegrity = await Crypto.digestStringAsync(
-      Crypto.CryptoDigestAlgorithm.SHA256,
+    const expectedIntegrity = await getCrypto()!.digestStringAsync(
+      getCrypto()!.CryptoDigestAlgorithm.SHA256,
       integrityData
     );
 
@@ -507,6 +544,8 @@ export class TokenEncryptionManager {
    * Store device context securely
    */
   private async storeDeviceContext(context: DeviceSecurityContext): Promise<void> {
+    const SecureStore = getSecureStore();
+    if (!SecureStore) return;
     const contextData = JSON.stringify(context);
     await SecureStore.setItemAsync(STORAGE_KEYS.DEVICE_CONTEXT, contextData);
   }
@@ -515,13 +554,13 @@ export class TokenEncryptionManager {
    * Get stored device context
    */
   private async getStoredDeviceContext(): Promise<DeviceSecurityContext | null> {
+    const SecureStore = getSecureStore();
+    if (!SecureStore) return null;
     try {
-      const contextData = await SecureStore.getItemAsync(STORAGE_KEYS.DEVICE_CONTEXT);
-      return contextData ? JSON.parse(contextData) : null;
-    } catch (error) {
-      logger.warn('[TokenEncryption] Failed to get stored device context:', error, {
-        module: 'TokenEncryption'
-      });
+      const data = await SecureStore.getItemAsync(STORAGE_KEYS.DEVICE_CONTEXT);
+      if (!data) return null;
+      return JSON.parse(data);
+    } catch {
       return null;
     }
   }
@@ -616,6 +655,8 @@ export class TokenEncryptionManager {
       // Keep only last 10 rotations
       const limitedHistory = history.slice(-10);
       
+      const SecureStore = getSecureStore();
+      if (!SecureStore) return;
       await SecureStore.setItemAsync(
         STORAGE_KEYS.ROTATION_HISTORY, 
         JSON.stringify(limitedHistory)
@@ -631,10 +672,12 @@ export class TokenEncryptionManager {
    * Get rotation history
    */
   private async getRotationHistory(): Promise<Array<{ timestamp: number; deviceId: string }>> {
+    const SecureStore = getSecureStore();
+    if (!SecureStore) return [];
     try {
       const historyData = await SecureStore.getItemAsync(STORAGE_KEYS.ROTATION_HISTORY);
       return historyData ? JSON.parse(historyData) : [];
-    } catch (error) {
+    } catch {
       return [];
     }
   }
@@ -717,13 +760,13 @@ export class TokenEncryptionManager {
   public async clearAllTokenSecurity(): Promise<void> {
     try {
       const clearOperations = [
-        SecureStore.deleteItemAsync(STORAGE_KEYS.ENCRYPTED_ACCESS_TOKEN),
-        SecureStore.deleteItemAsync(STORAGE_KEYS.ENCRYPTED_REFRESH_TOKEN),
-        SecureStore.deleteItemAsync(STORAGE_KEYS.TOKEN_METADATA),
-        SecureStore.deleteItemAsync(STORAGE_KEYS.DEVICE_CONTEXT),
-        SecureStore.deleteItemAsync(STORAGE_KEYS.ENCRYPTION_KEY),
-        SecureStore.deleteItemAsync(STORAGE_KEYS.ROTATION_HISTORY),
-        SecureStore.deleteItemAsync(STORAGE_KEYS.INTEGRITY_HASH),
+        getSecureStore()!.deleteItemAsync(STORAGE_KEYS.ENCRYPTED_ACCESS_TOKEN),
+        getSecureStore()!.deleteItemAsync(STORAGE_KEYS.ENCRYPTED_REFRESH_TOKEN),
+        getSecureStore()!.deleteItemAsync(STORAGE_KEYS.TOKEN_METADATA),
+        getSecureStore()!.deleteItemAsync(STORAGE_KEYS.DEVICE_CONTEXT),
+        getSecureStore()!.deleteItemAsync(STORAGE_KEYS.ENCRYPTION_KEY),
+        getSecureStore()!.deleteItemAsync(STORAGE_KEYS.ROTATION_HISTORY),
+        getSecureStore()!.deleteItemAsync(STORAGE_KEYS.INTEGRITY_HASH),
       ];
 
       await Promise.allSettled(clearOperations);
@@ -847,6 +890,13 @@ export const encryptAndStoreToken = async (
     ? STORAGE_KEYS.ENCRYPTED_ACCESS_TOKEN 
     : STORAGE_KEYS.ENCRYPTED_REFRESH_TOKEN;
   
+  const SecureStore = getSecureStore();
+  if (!SecureStore) {
+    logger.error('[TokenEncryption] SecureStore not available for encryptAndStoreToken', undefined, {
+      module: 'TokenEncryption'
+    });
+    return;
+  }
   await SecureStore.setItemAsync(storageKey, JSON.stringify(encryptedData));
 };
 
@@ -861,6 +911,13 @@ export const retrieveAndDecryptToken = async (
       ? STORAGE_KEYS.ENCRYPTED_ACCESS_TOKEN 
       : STORAGE_KEYS.ENCRYPTED_REFRESH_TOKEN;
     
+    const SecureStore = getSecureStore();
+    if (!SecureStore) {
+      logger.error('[TokenEncryption] SecureStore not available for retrieveAndDecryptToken', undefined, {
+        module: 'TokenEncryption'
+      });
+      return null;
+    }
     const encryptedDataString = await SecureStore.getItemAsync(storageKey);
     if (!encryptedDataString) {
       return null;
@@ -887,6 +944,21 @@ export const validateStoredTokenSecurity = async (
       ? STORAGE_KEYS.ENCRYPTED_ACCESS_TOKEN 
       : STORAGE_KEYS.ENCRYPTED_REFRESH_TOKEN;
     
+    const SecureStore = getSecureStore();
+    if (!SecureStore) {
+      logger.error('[TokenEncryption] SecureStore not available for validateStoredTokenSecurity', undefined, {
+        module: 'TokenEncryption'
+      });
+      return {
+        isValid: false,
+        deviceMatch: false,
+        integrityValid: false,
+        notTampered: false,
+        withinRotationWindow: false,
+        securityLevel: 'none',
+        warnings: ['SecureStore not available'],
+      };
+    }
     const encryptedDataString = await SecureStore.getItemAsync(storageKey);
     if (!encryptedDataString) {
       return {

@@ -12,9 +12,16 @@
  * @version 5.0.0
  */
 
-import Auth0, { Credentials } from 'react-native-auth0';
+import type { Credentials } from 'react-native-auth0';
 import { logger } from '@core/utils/sys/log/logger';
 import { logErrorWithContext } from '@core/utils/sys/error';
+
+function getAuth0Instance() {
+  if (typeof window !== 'undefined') {
+    return require('react-native-auth0').default;
+  }
+  throw new Error('Auth0 is not available in SSR/build');
+}
 
 // ========================================
 // TYPE DEFINITIONS
@@ -59,15 +66,12 @@ export interface Auth0LoginResult {
  * Auth0 Service for v5 with comprehensive authentication features
  */
 export class Auth0Service {
-  private auth0: Auth0;
+  private auth0: any; // Changed to any to avoid TS mismatch with react-native-auth0
   private config: Auth0Config;
 
   constructor(config: Auth0Config) {
     this.config = config;
-    this.auth0 = new Auth0({
-      domain: config.domain,
-      clientId: config.clientId,
-    });
+    this.auth0 = getAuth0Instance();
   }
 
   /**
