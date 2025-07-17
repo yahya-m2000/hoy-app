@@ -14,6 +14,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install npm dependencies
+        run: npm ci
+
       - name: Set up Ruby for CocoaPods
         uses: ruby/setup-ruby@v1
         with:
@@ -24,14 +32,6 @@ jobs:
 
       - name: Install Pods
         run: cd ios && pod install
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Install npm dependencies
-        run: npm ci
 
       - name: Build iOS app (archive)
         run: |
