@@ -30,6 +30,7 @@ import { userUtils } from "@shared/utils";
 import { spacing, radius } from "@core/design";
 import { Skeleton } from "@rneui/base/dist";
 import { t } from "i18next";
+import { getEnv } from "src/core/config/environment";
 
 const DebugLocation = () => {
   const { theme } = useTheme();
@@ -402,6 +403,9 @@ export default function HomeScreen() {
             </Container>
           </Container>
         )}
+
+        <Text>Current environment: {getEnv("ENVIRONMENT")}</Text>
+        <Text>Is production: {getEnv("IS_PRODUCTION")}</Text>
 
         {/* Content Section */}
         <Container>
