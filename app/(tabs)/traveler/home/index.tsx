@@ -406,18 +406,18 @@ export default function HomeScreen() {
         {/* Content Section */}
         <Container>
           <HorizontalListingsCarousel
-            key={`ny-${retryKey}`}
-            city="New York"
+            key={`ha-${retryKey}`}
+            city="Hargeisa"
             onStatusChange={(status) => handleStatusChange("ny", status)}
           />
           <HorizontalListingsCarousel
-            key={`sav-${retryKey}`}
-            city="Savannah"
+            key={`bo-${retryKey}`}
+            city="Boorama"
             onStatusChange={(status) => handleStatusChange("sav", status)}
           />
           <HorizontalListingsCarousel
-            key={`bk-${retryKey}`}
-            city="Brooklyn"
+            key={`bu-${retryKey}`}
+            city="Burco"
             onStatusChange={(status) => handleStatusChange("bk", status)}
           />
         </Container>

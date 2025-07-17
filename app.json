@@ -58,7 +58,7 @@
     },
     "assetBundlePatterns": ["assets/fonts/*"],
     "extra": {
-      "environment": "development",
+      "environment": "production",
       "minApiCallInterval": 10000,
       "offlineCacheMaxAge": 86400000,
       "eas": {
@@ -94,16 +94,10 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/icons/splash-icon-light.png",
+          "image": "./assets/splash-icon-light",
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
-          "imageWidth": 200,
-          "dark": {
-            "image": "./assets/icons/splash-icon-dark.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#53E09C",
-            "imageWidth": 200
-          }
+          "imageWidth": 200
         }
       ],
       [

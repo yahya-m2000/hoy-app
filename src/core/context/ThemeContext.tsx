@@ -27,7 +27,7 @@ export const ThemeContext = createContext<ThemeContextType | undefined>(
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const systemColorScheme = useColorScheme();
-  const [mode, setMode] = useState<ThemeMode>("system");
+  const [mode, setMode] = useState<ThemeMode>("light");
 
   // Determine if dark mode is active based on system or user preference
   const isDark =
