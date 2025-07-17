@@ -33,6 +33,26 @@ jobs:
       - name: Install Pods
         run: cd ios && pod install
 
+      - name: Decode and install certificate
+        run: |
+          echo "$IOS_CERTIFICATE_BASE64" | base64 --decode > certificate.p12
+          security create-keychain -p "" build.keychain
+          security import certificate.p12 -k build.keychain -P "$IOS_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security list-keychains -s build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "" build.keychain
+          security set-keychain-settings
+        env:
+          IOS_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BASE64 }}
+          IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+
+      - name: Decode and install provisioning profile
+        run: |
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "$IOS_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
+        env:
+          IOS_PROFILE_BASE64: ${{ secrets.IOS_PROFILE_BASE64 }}
+
       - name: Build iOS app (archive)
         run: |
           cd ios
@@ -41,6 +61,7 @@ jobs:
             -scheme hoy \
             -destination 'generic/platform=iOS' \
             -archivePath ${{ github.workspace }}/build.xcarchive \
-            CODE_SIGN_STYLE=Automatic \
-            DEVELOPMENT_TEAM=L9PA57Q5W8\
-            CODE_SIGN_IDENTITY="Apple Development"
+            CODE_SIGN_STYLE=Manual \
+            PROVISIONING_PROFILE_SPECIFIER=profile \
+            CODE_SIGN_IDENTITY="Apple Development" \
+            DEVELOPMENT_TEAM=<YOUR_TEAM_ID>
