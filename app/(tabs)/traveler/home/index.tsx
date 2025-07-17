@@ -404,9 +404,6 @@ export default function HomeScreen() {
           </Container>
         )}
 
-        <Text>Current environment: {getEnv("ENVIRONMENT")}</Text>
-        <Text>Is production: {getEnv("IS_PRODUCTION")}</Text>
-
         {/* Content Section */}
         <Container>
           <HorizontalListingsCarousel
