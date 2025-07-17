@@ -53,6 +53,17 @@ jobs:
         env:
           IOS_PROFILE_BASE64: ${{ secrets.IOS_PROFILE_BASE64 }}
 
+      - name: Debug List installed provisioning profiles
+        run: |
+          echo "Listing provisioning profiles:"
+          ls -lh ~/Library/MobileDevice/Provisioning\ Profiles/
+          echo "----"
+          for f in ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision; do
+            echo "Profile: $f"
+            grep -a -E 'UUID|Name|application-identifier|TeamIdentifier' "$f" || true
+            echo "----"
+          done
+
       - name: Build iOS app (archive)
         run: |
           cd ios
