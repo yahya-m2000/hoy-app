@@ -64,4 +64,4 @@ jobs:
             CODE_SIGN_STYLE=Manual \
             PROVISIONING_PROFILE_SPECIFIER=profile \
             CODE_SIGN_IDENTITY="Apple Development" \
-            DEVELOPMENT_TEAM=<YOUR_TEAM_ID>
+            DEVELOPMENT_TEAM=L9PA57Q5W8
