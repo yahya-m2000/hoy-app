@@ -29,6 +29,7 @@
         "NSLocationWhenInUseUsageDescription": "This app uses your location to show nearby properties and improve your search experience.",
         "NSCameraUsageDescription": "This app needs access to your camera to let you take photos for your profile and property listings.",
         "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to let you upload images for your profile and property listings.",
+        "NSContactsUsageDescription": "This app needs access to your contacts to help you invite friends and connect with people you know.",
         "NSUserNotificationUsageDescription": "This app would like to send you notifications about bookings, messages, and important updates.",
         "NSFaceIDUsageDescription": "This app uses Face ID to securely autofill your login credentials.",
         "NSRemindersFullAccessUsageDescription": "Allow $(PRODUCT_NAME) to access your reminders",
