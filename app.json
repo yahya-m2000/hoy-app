@@ -15,7 +15,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.ym2000.hoy",
-      "buildNumber": "2",
+      "buildNumber": "3",
       "supportsTablet": true,
       "icon": {
         "light": "./assets/icons/ios-light.png",
@@ -24,12 +24,15 @@
       },
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
-        "NSCalendarsUsageDescription": "This app needs access to your calendar to help you manage your travel bookings and reservations.",
+        "NSCalendarsFullAccessUsageDescription": "Allow $(PRODUCT_NAME) to access your calendar",
+        "NSCalendarsUsageDescription": "Allow $(PRODUCT_NAME) to access your calendar",
         "NSLocationWhenInUseUsageDescription": "This app uses your location to show nearby properties and improve your search experience.",
         "NSCameraUsageDescription": "This app needs access to your camera to let you take photos for your profile and property listings.",
         "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to let you upload images for your profile and property listings.",
         "NSUserNotificationUsageDescription": "This app would like to send you notifications about bookings, messages, and important updates.",
-        "NSFaceIDUsageDescription": "This app uses Face ID to securely autofill your login credentials."
+        "NSFaceIDUsageDescription": "This app uses Face ID to securely autofill your login credentials.",
+        "NSRemindersFullAccessUsageDescription": "Allow $(PRODUCT_NAME) to access your reminders",
+        "NSRemindersUsageDescription": "Allow $(PRODUCT_NAME) to access your reminders"
       }
     },
     "android": {
@@ -45,19 +48,14 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.ym2000.hoy",
-      "permissions": [
-        "USE_BIOMETRIC",
-        "USE_FINGERPRINT"
-      ]
+      "permissions": ["USE_BIOMETRIC", "USE_FINGERPRINT"]
     },
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro",
       "output": "server"
     },
-    "assetBundlePatterns": [
-      "assets/fonts/*"
-    ],
+    "assetBundlePatterns": ["assets/fonts/*"],
     "extra": {
       "environment": "development",
       "minApiCallInterval": 10000,

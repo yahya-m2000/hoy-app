@@ -7,49 +7,49 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		081A5050ED44272B6619C459 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FE4C99F5F4F99CEF40EDD5 /* ExpoModulesProvider.swift */; };
+		0550517011BFD7D54E8FB8B4 /* libPods-hoy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D008F76C586FEEF65C92866 /* libPods-hoy.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		1533871742A44E5ABE03DECF /* Satoshi-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F3A53A5C1E87488494FA9B63 /* Satoshi-BoldItalic.ttf */; };
-		29EF02F50AA04E8787EC7870 /* Satoshi-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CD01C4C023BC40868ED053DA /* Satoshi-Black.ttf */; };
-		3798BEBEF041424D8799FAFE /* Satoshi-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A3FC1F4880354FD1BF18818B /* Satoshi-Light.ttf */; };
-		39A310AFADD6479AB7A3F5BE /* Satoshi-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6859EAE66AA24360AC031D3B /* Satoshi-MediumItalic.ttf */; };
+		1DF806228480484D9BCCFE21 /* Satoshi-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FB16EEA3C67E414B9A680859 /* Satoshi-Regular.ttf */; };
+		272DA2B56365431EB5E4CF53 /* Satoshi-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37C9DC699151473A9F66CCF3 /* Satoshi-Bold.ttf */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		7D395887FFC74056ADD11563 /* Satoshi-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E2933A1B3499478BAF840E12 /* Satoshi-Medium.ttf */; };
-		83130ECDC81C0E77EE5713B2 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = B9EB1C04550D821A770F9C5A /* PrivacyInfo.xcprivacy */; };
-		9309BC6F99F83455363BE22A /* libPods-hoy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5952523AED36555B8417798 /* libPods-hoy.a */; };
-		9B963A71A75B40B98690139F /* Satoshi-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4B2FC4958ABB45E99559619D /* Satoshi-Bold.ttf */; };
-		A8CDE67C10EB4DFE9A66ACDE /* Satoshi-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 56FBE292DB7143B8B9CCFB1E /* Satoshi-BlackItalic.ttf */; };
-		B320E845C85A4C5084D7D7CB /* Satoshi-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5EB637BEBB44A9B90FD7AAD /* Satoshi-LightItalic.ttf */; };
+		49D0D558FD9F412381D4CED5 /* Satoshi-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 80C4A8F94A0C4EB7A135C9D0 /* Satoshi-BoldItalic.ttf */; };
+		673BF2C1DBB841E98AADA0F4 /* Satoshi-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0029BAA8625C42B79E7B782E /* Satoshi-Medium.ttf */; };
+		6CF20E469CCE471290A92B4C /* Satoshi-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 43D297F63BBC4843A2FAFBFF /* Satoshi-MediumItalic.ttf */; };
+		86501A392BD0468A83FA53CF /* Satoshi-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E5B8361DA78145D498BE01F1 /* Satoshi-Light.ttf */; };
+		86D3D2FD768872DAEAB0FD31 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F46164693643B49C5C7A27 /* ExpoModulesProvider.swift */; };
+		A73992627A134797941F8AA0 /* Satoshi-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 113CA11D697B49CA87344670 /* Satoshi-BlackItalic.ttf */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		D7FC87BAA0F84D8185BDA6E4 /* Satoshi-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4AD48A14BC704823BFFDB505 /* Satoshi-Italic.ttf */; };
+		DE608FA258A241EFA2155C8C /* Satoshi-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AB27B4B00F9243B38945B577 /* Satoshi-Italic.ttf */; };
+		DF66E7FB6E6D9D8A0E7A0985 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 5A8BE342E68340AEF75EAFEA /* PrivacyInfo.xcprivacy */; };
+		ED17A0111535420CA939196D /* Satoshi-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4A03CF66DBA549F3954D3256 /* Satoshi-LightItalic.ttf */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
-		F4DEFA56012246719DFF515D /* Satoshi-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 53A2AFFE764B49B69BF14C08 /* Satoshi-Regular.ttf */; };
+		FC28845A77884F848D4DE33D /* Satoshi-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6B0A5B984329412CB71C278E /* Satoshi-Black.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0029BAA8625C42B79E7B782E /* Satoshi-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Medium.ttf"; path = "../assets/fonts/Satoshi-Medium.ttf"; sourceTree = "<group>"; };
+		113CA11D697B49CA87344670 /* Satoshi-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-BlackItalic.ttf"; path = "../assets/fonts/Satoshi-BlackItalic.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* hoy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hoy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = hoy/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = hoy/Info.plist; sourceTree = "<group>"; };
-		19FE4C99F5F4F99CEF40EDD5 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-hoy/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		4AD48A14BC704823BFFDB505 /* Satoshi-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Italic.ttf"; path = "../assets/fonts/Satoshi-Italic.ttf"; sourceTree = "<group>"; };
-		4B2FC4958ABB45E99559619D /* Satoshi-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Bold.ttf"; path = "../assets/fonts/Satoshi-Bold.ttf"; sourceTree = "<group>"; };
-		53A2AFFE764B49B69BF14C08 /* Satoshi-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Regular.ttf"; path = "../assets/fonts/Satoshi-Regular.ttf"; sourceTree = "<group>"; };
-		56FBE292DB7143B8B9CCFB1E /* Satoshi-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-BlackItalic.ttf"; path = "../assets/fonts/Satoshi-BlackItalic.ttf"; sourceTree = "<group>"; };
-		6859EAE66AA24360AC031D3B /* Satoshi-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-MediumItalic.ttf"; path = "../assets/fonts/Satoshi-MediumItalic.ttf"; sourceTree = "<group>"; };
-		A3FC1F4880354FD1BF18818B /* Satoshi-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Light.ttf"; path = "../assets/fonts/Satoshi-Light.ttf"; sourceTree = "<group>"; };
-		A5EB637BEBB44A9B90FD7AAD /* Satoshi-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-LightItalic.ttf"; path = "../assets/fonts/Satoshi-LightItalic.ttf"; sourceTree = "<group>"; };
+		37C9DC699151473A9F66CCF3 /* Satoshi-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Bold.ttf"; path = "../assets/fonts/Satoshi-Bold.ttf"; sourceTree = "<group>"; };
+		43D297F63BBC4843A2FAFBFF /* Satoshi-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-MediumItalic.ttf"; path = "../assets/fonts/Satoshi-MediumItalic.ttf"; sourceTree = "<group>"; };
+		4A03CF66DBA549F3954D3256 /* Satoshi-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-LightItalic.ttf"; path = "../assets/fonts/Satoshi-LightItalic.ttf"; sourceTree = "<group>"; };
+		5A8BE342E68340AEF75EAFEA /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = hoy/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		6B0A5B984329412CB71C278E /* Satoshi-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Black.ttf"; path = "../assets/fonts/Satoshi-Black.ttf"; sourceTree = "<group>"; };
+		80C4A8F94A0C4EB7A135C9D0 /* Satoshi-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-BoldItalic.ttf"; path = "../assets/fonts/Satoshi-BoldItalic.ttf"; sourceTree = "<group>"; };
+		9D008F76C586FEEF65C92866 /* libPods-hoy.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hoy.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0F46164693643B49C5C7A27 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-hoy/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = hoy/SplashScreen.storyboard; sourceTree = "<group>"; };
-		B12639B5825C388E11768DB2 /* Pods-hoy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoy.debug.xcconfig"; path = "Target Support Files/Pods-hoy/Pods-hoy.debug.xcconfig"; sourceTree = "<group>"; };
-		B9EB1C04550D821A770F9C5A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = hoy/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		AB27B4B00F9243B38945B577 /* Satoshi-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Italic.ttf"; path = "../assets/fonts/Satoshi-Italic.ttf"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		C5952523AED36555B8417798 /* libPods-hoy.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hoy.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		CD01C4C023BC40868ED053DA /* Satoshi-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Black.ttf"; path = "../assets/fonts/Satoshi-Black.ttf"; sourceTree = "<group>"; };
-		E2933A1B3499478BAF840E12 /* Satoshi-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Medium.ttf"; path = "../assets/fonts/Satoshi-Medium.ttf"; sourceTree = "<group>"; };
+		D43A673D7C4B09C5EF2ECE39 /* Pods-hoy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoy.release.xcconfig"; path = "Target Support Files/Pods-hoy/Pods-hoy.release.xcconfig"; sourceTree = "<group>"; };
+		E5B8361DA78145D498BE01F1 /* Satoshi-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Light.ttf"; path = "../assets/fonts/Satoshi-Light.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = hoy/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* hoy-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "hoy-Bridging-Header.h"; path = "hoy/hoy-Bridging-Header.h"; sourceTree = "<group>"; };
-		F3A53A5C1E87488494FA9B63 /* Satoshi-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-BoldItalic.ttf"; path = "../assets/fonts/Satoshi-BoldItalic.ttf"; sourceTree = "<group>"; };
-		FEBDC1923A301FA48FE3323C /* Pods-hoy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoy.release.xcconfig"; path = "Target Support Files/Pods-hoy/Pods-hoy.release.xcconfig"; sourceTree = "<group>"; };
+		FA03BB6C1202802E0D106908 /* Pods-hoy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoy.debug.xcconfig"; path = "Target Support Files/Pods-hoy/Pods-hoy.debug.xcconfig"; sourceTree = "<group>"; };
+		FB16EEA3C67E414B9A680859 /* Satoshi-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Regular.ttf"; path = "../assets/fonts/Satoshi-Regular.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,23 +57,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9309BC6F99F83455363BE22A /* libPods-hoy.a in Frameworks */,
+				0550517011BFD7D54E8FB8B4 /* libPods-hoy.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		06B6AE8BB1CA3F4C232F2181 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				B12639B5825C388E11768DB2 /* Pods-hoy.debug.xcconfig */,
-				FEBDC1923A301FA48FE3323C /* Pods-hoy.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		13B07FAE1A68108700A75B9A /* hoy */ = {
 			isa = PBXGroup;
 			children = (
@@ -83,15 +73,7 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				B9EB1C04550D821A770F9C5A /* PrivacyInfo.xcprivacy */,
-			);
-			name = hoy;
-			sourceTree = "<group>";
-		};
-		22DF9FB806376F6F667DC9F2 /* hoy */ = {
-			isa = PBXGroup;
-			children = (
-				19FE4C99F5F4F99CEF40EDD5 /* ExpoModulesProvider.swift */,
+				5A8BE342E68340AEF75EAFEA /* PrivacyInfo.xcprivacy */,
 			);
 			name = hoy;
 			sourceTree = "<group>";
@@ -100,15 +82,15 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				C5952523AED36555B8417798 /* libPods-hoy.a */,
+				9D008F76C586FEEF65C92866 /* libPods-hoy.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		3741F536EDE5661C0B049374 /* ExpoModulesProviders */ = {
+		68721377275F05B7CAD55C8B /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				22DF9FB806376F6F667DC9F2 /* hoy */,
+				AEC0013790AF76E4BB0370AB /* hoy */,
 			);
 			name = ExpoModulesProviders;
 			sourceTree = "<group>";
@@ -127,9 +109,9 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				BB3F72BD79CF4A10AE32C2B8 /* Resources */,
-				06B6AE8BB1CA3F4C232F2181 /* Pods */,
-				3741F536EDE5661C0B049374 /* ExpoModulesProviders */,
+				9753A79CC02C4D91A09A28E2 /* Resources */,
+				FBA619CA5D1B80DB1A565956 /* Pods */,
+				68721377275F05B7CAD55C8B /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -144,6 +126,31 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		9753A79CC02C4D91A09A28E2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FB16EEA3C67E414B9A680859 /* Satoshi-Regular.ttf */,
+				37C9DC699151473A9F66CCF3 /* Satoshi-Bold.ttf */,
+				0029BAA8625C42B79E7B782E /* Satoshi-Medium.ttf */,
+				E5B8361DA78145D498BE01F1 /* Satoshi-Light.ttf */,
+				6B0A5B984329412CB71C278E /* Satoshi-Black.ttf */,
+				AB27B4B00F9243B38945B577 /* Satoshi-Italic.ttf */,
+				80C4A8F94A0C4EB7A135C9D0 /* Satoshi-BoldItalic.ttf */,
+				43D297F63BBC4843A2FAFBFF /* Satoshi-MediumItalic.ttf */,
+				4A03CF66DBA549F3954D3256 /* Satoshi-LightItalic.ttf */,
+				113CA11D697B49CA87344670 /* Satoshi-BlackItalic.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		AEC0013790AF76E4BB0370AB /* hoy */ = {
+			isa = PBXGroup;
+			children = (
+				A0F46164693643B49C5C7A27 /* ExpoModulesProvider.swift */,
+			);
+			name = hoy;
+			sourceTree = "<group>";
+		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
@@ -153,22 +160,13 @@
 			path = hoy/Supporting;
 			sourceTree = "<group>";
 		};
-		BB3F72BD79CF4A10AE32C2B8 /* Resources */ = {
+		FBA619CA5D1B80DB1A565956 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				53A2AFFE764B49B69BF14C08 /* Satoshi-Regular.ttf */,
-				4B2FC4958ABB45E99559619D /* Satoshi-Bold.ttf */,
-				E2933A1B3499478BAF840E12 /* Satoshi-Medium.ttf */,
-				A3FC1F4880354FD1BF18818B /* Satoshi-Light.ttf */,
-				CD01C4C023BC40868ED053DA /* Satoshi-Black.ttf */,
-				4AD48A14BC704823BFFDB505 /* Satoshi-Italic.ttf */,
-				F3A53A5C1E87488494FA9B63 /* Satoshi-BoldItalic.ttf */,
-				6859EAE66AA24360AC031D3B /* Satoshi-MediumItalic.ttf */,
-				A5EB637BEBB44A9B90FD7AAD /* Satoshi-LightItalic.ttf */,
-				56FBE292DB7143B8B9CCFB1E /* Satoshi-BlackItalic.ttf */,
+				FA03BB6C1202802E0D106908 /* Pods-hoy.debug.xcconfig */,
+				D43A673D7C4B09C5EF2ECE39 /* Pods-hoy.release.xcconfig */,
 			);
-			name = Resources;
-			path = "";
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -179,13 +177,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "hoy" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				41A14A3C1498462D6C7D5C29 /* [Expo] Configure project */,
+				CDBAC31007C1AB7C7EBD041C /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				FC47C4CC753E4CA6055E4B63 /* [CP] Embed Pods Frameworks */,
+				1539B5B7A91127A2EC809B88 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -206,8 +204,6 @@
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
 						LastSwiftMigration = 1250;
-						DevelopmentTeam = "L9PA57Q5W8";
-						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -237,17 +233,17 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				F4DEFA56012246719DFF515D /* Satoshi-Regular.ttf in Resources */,
-				9B963A71A75B40B98690139F /* Satoshi-Bold.ttf in Resources */,
-				7D395887FFC74056ADD11563 /* Satoshi-Medium.ttf in Resources */,
-				3798BEBEF041424D8799FAFE /* Satoshi-Light.ttf in Resources */,
-				29EF02F50AA04E8787EC7870 /* Satoshi-Black.ttf in Resources */,
-				D7FC87BAA0F84D8185BDA6E4 /* Satoshi-Italic.ttf in Resources */,
-				1533871742A44E5ABE03DECF /* Satoshi-BoldItalic.ttf in Resources */,
-				39A310AFADD6479AB7A3F5BE /* Satoshi-MediumItalic.ttf in Resources */,
-				B320E845C85A4C5084D7D7CB /* Satoshi-LightItalic.ttf in Resources */,
-				A8CDE67C10EB4DFE9A66ACDE /* Satoshi-BlackItalic.ttf in Resources */,
-				83130ECDC81C0E77EE5713B2 /* PrivacyInfo.xcprivacy in Resources */,
+				1DF806228480484D9BCCFE21 /* Satoshi-Regular.ttf in Resources */,
+				272DA2B56365431EB5E4CF53 /* Satoshi-Bold.ttf in Resources */,
+				673BF2C1DBB841E98AADA0F4 /* Satoshi-Medium.ttf in Resources */,
+				86501A392BD0468A83FA53CF /* Satoshi-Light.ttf in Resources */,
+				FC28845A77884F848D4DE33D /* Satoshi-Black.ttf in Resources */,
+				DE608FA258A241EFA2155C8C /* Satoshi-Italic.ttf in Resources */,
+				49D0D558FD9F412381D4CED5 /* Satoshi-BoldItalic.ttf in Resources */,
+				6CF20E469CCE471290A92B4C /* Satoshi-MediumItalic.ttf in Resources */,
+				ED17A0111535420CA939196D /* Satoshi-LightItalic.ttf in Resources */,
+				A73992627A134797941F8AA0 /* Satoshi-BlackItalic.ttf in Resources */,
+				DF66E7FB6E6D9D8A0E7A0985 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,24 +287,35 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		41A14A3C1498462D6C7D5C29 /* [Expo] Configure project */ = {
+		1539B5B7A91127A2EC809B88 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-hoy/Pods-hoy-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBAEMKit/FBAEMKit.framework/FBAEMKit",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework/FBSDKCoreKit",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKCoreKit_Basics/FBSDKCoreKit_Basics.framework/FBSDKCoreKit_Basics",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKGamingServicesKit/FBSDKGamingServicesKit.framework/FBSDKGamingServicesKit",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework/FBSDKLoginKit",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKShareKit/FBSDKShareKit.framework/FBSDKShareKit",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
 			);
-			name = "[Expo] Configure project";
-			outputFileListPaths = (
-			);
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBAEMKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit_Basics.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKGamingServicesKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-hoy/expo-configure-project.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-hoy/Pods-hoy-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -366,35 +373,24 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-hoy/Pods-hoy-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		FC47C4CC753E4CA6055E4B63 /* [CP] Embed Pods Frameworks */ = {
+		CDBAC31007C1AB7C7EBD041C /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-hoy/Pods-hoy-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBAEMKit/FBAEMKit.framework/FBAEMKit",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework/FBSDKCoreKit",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKCoreKit_Basics/FBSDKCoreKit_Basics.framework/FBSDKCoreKit_Basics",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKGamingServicesKit/FBSDKGamingServicesKit.framework/FBSDKGamingServicesKit",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework/FBSDKLoginKit",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKShareKit/FBSDKShareKit.framework/FBSDKShareKit",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
+			inputFileListPaths = (
 			);
-			name = "[CP] Embed Pods Frameworks";
+			inputPaths = (
+			);
+			name = "[Expo] Configure project";
+			outputFileListPaths = (
+			);
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBAEMKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit_Basics.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKGamingServicesKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-hoy/Pods-hoy-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-hoy/expo-configure-project.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -404,7 +400,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				081A5050ED44272B6619C459 /* ExpoModulesProvider.swift in Sources */,
+				86D3D2FD768872DAEAB0FD31 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,12 +409,13 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B12639B5825C388E11768DB2 /* Pods-hoy.debug.xcconfig */;
+			baseConfigurationReference = FA03BB6C1202802E0D106908 /* Pods-hoy.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = hoy/hoy.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L9PA57Q5W8;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -444,20 +441,18 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
-				DEVELOPMENT_TEAM = "L9PA57Q5W8";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
 			};
 			name = Debug;
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FEBDC1923A301FA48FE3323C /* Pods-hoy.release.xcconfig */;
+			baseConfigurationReference = D43A673D7C4B09C5EF2ECE39 /* Pods-hoy.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = hoy/hoy.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L9PA57Q5W8;
 				INFOPLIST_FILE = hoy/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -477,9 +472,6 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
-				DEVELOPMENT_TEAM = "L9PA57Q5W8";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
 			};
 			name = Release;
 		};
@@ -538,10 +530,7 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -596,10 +585,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

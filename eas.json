@@ -14,6 +14,10 @@
       "extends": "production",
       "android": {
         "buildType": "app-bundle"
+      },
+      "ios": {
+        "autoIncrement": true,
+        "image": "latest"
       }
     },
     "beta-local": {
@@ -22,5 +26,8 @@
         "buildType": "apk"
       }
     }
+  },
+  "cli": {
+    "appVersionSource": "remote"
   }
 }
