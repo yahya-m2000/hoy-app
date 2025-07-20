@@ -15,11 +15,12 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 // @ts-ignore
 import { debounce } from "lodash";
-import { COUNTRIES } from "@core/utils/data/countries";
+import { COUNTRIES, getCountryByCity } from "@core/utils/data/countries";
 
 // App context and hooks
 import { useTheme } from "@core/hooks/useTheme";
 import { useSearchForm } from "@features/search/hooks";
+import { useTrendingCities } from "@features/properties/hooks/useTrendingCities";
 
 // Components
 import {
@@ -72,22 +73,6 @@ const searchLocations = async (query: string): Promise<LocationResult[]> => {
   return unique.slice(0, 20);
 };
 
-// Popular destinations: pick the first city from the top N countries for variety
-const getPopularDestinations = (): LocationResult[] => {
-  const topCountries = COUNTRIES.slice(0, 10); // Adjust as needed
-  const cities: LocationResult[] = [];
-  topCountries.forEach((country) => {
-    country.cities.slice(0, 2).forEach((city) => {
-      cities.push({
-        city,
-        country: country.name,
-        fullName: `${city}, ${country.name}`,
-      });
-    });
-  });
-  return cities;
-};
-
 interface SearchLocationModalProps {
   visible: boolean;
   onClose: () => void;
@@ -106,72 +91,145 @@ export default function SearchLocationModal({
   const { updateSearchState, searchState } = useSearchForm();
   const insets = useSafeAreaInsets();
 
+  // Trending cities hook
+  const {
+    trendingCities,
+    loading: loadingTrending,
+    error: trendingError,
+    refetch: refetchTrendingCities,
+  } = useTrendingCities();
+
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [locations, setLocations] = useState<LocationResult[]>(
-    getPopularDestinations()
-  );
+  // Use trending cities for initial locations
+  const [locations, setLocations] = useState<LocationResult[]>([]);
+
+  // Sync locations with trending cities when no search query
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setLocations(
+        trendingCities
+          .filter((c) => c.city)
+          .map((c) => {
+            let country = c.country;
+            if (!country) {
+              const found = getCountryByCity(c.city);
+              country = found ? found.name : "";
+            }
+            return {
+              city: c.city,
+              country: country || "",
+              fullName: `${c.city}${country ? ", " + country : ""}`,
+            };
+          })
+      );
+    }
+  }, [trendingCities, searchQuery]);
 
   // Create a debounced search function with proper cleanup
-  const performSearch = React.useCallback((query: string) => {
-    const searchFn = async () => {
-      if (!query.trim()) {
-        setLocations(getPopularDestinations());
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        console.log(`Performing location search for: "${query}"`);
-        const results = await searchLocations(query);
-        console.log(`Got ${results.length} location results`);
-
-        if (results.length === 0) {
-          // If no results, try with a more general search
-          console.log("No results found, trying with more general search");
-          const generalResults = await searchLocations(query.split(" ")[0]);
-          if (generalResults.length > 0) {
-            setLocations(generalResults);
-          } else {
-            // If still no results, fallback to popular destinations
-            setLocations(getPopularDestinations().slice(0, 3));
-          }
-        } else {
-          setLocations(results);
+  const performSearch = React.useCallback(
+    (query: string) => {
+      const searchFn = async () => {
+        if (!query.trim()) {
+          setLocations(
+            trendingCities
+              .filter((c) => c.city)
+              .map((c) => {
+                let country = c.country;
+                if (!country) {
+                  const found = getCountryByCity(c.city);
+                  country = found ? found.name : "";
+                }
+                return {
+                  city: c.city,
+                  country: country || "",
+                  fullName: `${c.city}${country ? ", " + country : ""}`,
+                };
+              })
+          );
+          setIsLoading(false);
+          return;
         }
-      } catch (error) {
-        console.error("Error searching locations:", error);
-        // Fallback to popular destinations if search fails
-        setLocations(getPopularDestinations());
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    // Use debounce to prevent too many API calls
-    debounce(searchFn, 500)();
-  }, []);
+        try {
+          const results = await searchLocations(query);
+          if (results.length === 0) {
+            // fallback to trending cities if no results
+            setLocations(
+              trendingCities
+                .filter((c) => c.city)
+                .map((c) => {
+                  let country = c.country;
+                  if (!country) {
+                    const found = getCountryByCity(c.city);
+                    country = found ? found.name : "";
+                  }
+                  return {
+                    city: c.city,
+                    country: country || "",
+                    fullName: `${c.city}${country ? ", " + country : ""}`,
+                  };
+                })
+                .slice(0, 3)
+            );
+          } else {
+            setLocations(results);
+          }
+        } catch (error) {
+          setLocations(
+            trendingCities
+              .filter((c) => c.city)
+              .map((c) => {
+                let country = c.country;
+                if (!country) {
+                  const found = getCountryByCity(c.city);
+                  country = found ? found.name : "";
+                }
+                return {
+                  city: c.city,
+                  country: country || "",
+                  fullName: `${c.city}${country ? ", " + country : ""}`,
+                };
+              })
+          );
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      debounce(searchFn, 500)();
+    },
+    [trendingCities]
+  );
 
   // Effect to trigger search when query changes
   useEffect(() => {
     if (searchQuery.trim().length < 2) {
-      setLocations(getPopularDestinations());
+      setLocations(
+        trendingCities
+          .filter((c) => c.city)
+          .map((c) => {
+            let country = c.country;
+            if (!country) {
+              const found = getCountryByCity(c.city);
+              country = found ? found.name : "";
+            }
+            return {
+              city: c.city,
+              country: country || "",
+              fullName: `${c.city}${country ? ", " + country : ""}`,
+            };
+          })
+      );
       setIsLoading(false);
       return;
     }
-
     setIsLoading(true);
-
-    // Create a timeout to avoid too many API calls
     const timer = setTimeout(() => {
       performSearch(searchQuery);
     }, 300);
-
-    // Cleanup function
     return () => {
       clearTimeout(timer);
     };
-  }, [searchQuery, performSearch]);
+  }, [searchQuery, performSearch, trendingCities]);
 
   const handleLocationSelect = (location: LocationResult) => {
     const locationString =
@@ -285,7 +343,7 @@ export default function SearchLocationModal({
           </Container>
 
           {/* Loading indicator */}
-          {isLoading && (
+          {(isLoading || loadingTrending) && (
             <Container
               flexDirection="row"
               alignItems="center"
@@ -302,9 +360,21 @@ export default function SearchLocationModal({
               </Text>
             </Container>
           )}
-
+          {/* Error state for trending cities */}
+          {!searchQuery && trendingError && (
+            <Container alignItems="center" paddingVertical="md">
+              <Text color="error">
+                {t("search.trendingCitiesError") ||
+                  "Could not load trending cities."}
+              </Text>
+              <Button
+                title={t("search.retry") || "Retry"}
+                onPress={refetchTrendingCities}
+              />
+            </Container>
+          )}
           {/* Popular destinations header */}
-          {!searchQuery && (
+          {!searchQuery && !loadingTrending && !trendingError && (
             <Container
               paddingHorizontal="lg"
               paddingTop="md"

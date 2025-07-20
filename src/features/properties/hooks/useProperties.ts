@@ -214,6 +214,7 @@ export function useFeaturedProperties(): PropertiesHookReturn {
  * Used on the search results page
  */
 export function useProperties(params: SearchParams = {}): PropertiesHookReturn {
+  console.log('useProperties hook called with params:', params);
   const [properties, setProperties] = useState<PropertyType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -284,28 +285,14 @@ export function useProperties(params: SearchParams = {}): PropertiesHookReturn {
     }
     return query;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    params.location,
-    params.city,
-    params.country,
-    params.propertyType,
-    params.guests,
-    params.minPrice,
-    params.maxPrice,
-    params.startDate,
-    params.endDate,
-    params.amenities,
-    params.rooms,
-    params.sort,
-  ]);
+  }, [params]);
 
   // Function to fetch properties based on search params
   const fetchProperties = useCallback(async (): Promise<void> => {
     setLoading(true);
     setError(null);
     try {
-      console.log("Fetching properties with params:", searchQuery);
-
+      console.log('Fetching properties for searchQuery:', searchQuery);
       // Special logging for top-rated searches
       if (params.sort?.field === "rating" && params.sort?.order === "desc") {
         console.log(

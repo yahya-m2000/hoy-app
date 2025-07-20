@@ -17,7 +17,7 @@ export const COUNTRIES: Country[] = [
       'Hargeisa',
       'Berbera',
       'Burao',
-      'Borama',
+      'Boorama',
       'Erigavo',
       'Las Anod',
       'Zeila',

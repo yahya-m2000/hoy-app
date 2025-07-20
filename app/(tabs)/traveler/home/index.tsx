@@ -16,12 +16,16 @@ import { useRouter } from "expo-router";
 import { useAuth, useToast, useLocation } from "src/core/context";
 import { useTheme } from "src/core/hooks/useTheme";
 import { useCurrentUser } from "src/features/user/hooks";
+import { useTrendingCities } from "src/features/properties/hooks/useTrendingCities";
+import { useProperties } from "src/features/properties/hooks/useProperties";
 
 // Base components
 import { Container, Text, Button, AnimatedContainer } from "@shared/components";
 
 // Module components
 import { HorizontalListingsCarousel } from "@modules/properties";
+import PropertyCardSkeleton from "@shared/components/feedback/Loading/PropertyCardSkeleton";
+import { PropertyCard } from "src/features/properties/components/cards/PropertyCard";
 
 // Utils
 import { userUtils } from "@shared/utils";
@@ -218,6 +222,25 @@ const DebugLocation = () => {
   );
 };
 
+function HorizontalListingsCarouselWithData({
+  city,
+  onStatusChange,
+}: {
+  city: string;
+  onStatusChange: (status: "loading" | "success" | "error") => void;
+}) {
+  const { properties, loading, error } = useProperties({ city });
+  return (
+    <HorizontalListingsCarousel
+      city={city}
+      properties={properties}
+      loading={loading}
+      error={error}
+      onStatusChange={onStatusChange}
+    />
+  );
+}
+
 export default function HomeScreen() {
   const { theme, isDark } = useTheme();
   const { isAuthenticated } = useAuth();
@@ -241,30 +264,38 @@ export default function HomeScreen() {
   const router = useRouter();
 
   // Track status of each carousel
-  const [carouselStatus, setCarouselStatus] = React.useState({
-    ny: "loading",
-    sav: "loading",
-    bk: "loading",
-  });
+  const [carouselStatus, setCarouselStatus] = React.useState<{
+    [city: string]: "loading" | "success" | "error";
+  }>({});
   const [retryKey, setRetryKey] = React.useState(0);
 
   const handleStatusChange = (
-    key: "ny" | "sav" | "bk",
+    city: string,
     status: "loading" | "success" | "error"
   ) => {
-    setCarouselStatus((prev) => ({ ...prev, [key]: status }));
+    setCarouselStatus((prev) => ({ ...prev, [city]: status }));
   };
-
-  const allError =
-    carouselStatus.ny === "error" &&
-    carouselStatus.sav === "error" &&
-    carouselStatus.bk === "error";
 
   // Helper: are all carousels loading?
   const allLoading =
-    carouselStatus.ny === "loading" &&
-    carouselStatus.sav === "loading" &&
-    carouselStatus.bk === "loading";
+    Object.keys(carouselStatus).length > 0 &&
+    Object.values(carouselStatus).every((status) => status === "loading");
+
+  // Helper: are all carousels error?
+  const allError =
+    Object.keys(carouselStatus).length > 0 &&
+    Object.values(carouselStatus).every((status) => status === "error");
+
+  // Trending cities
+  const {
+    trendingCities,
+    loading: loadingCities,
+    error: trendingCitiesError,
+    refetch: refetchTrendingCities,
+  } = useTrendingCities();
+  const cityNames = trendingCities.map((c) => c.city);
+  // const { cityPropertiesMap, loadingMap, errorMap } =
+  //   useCityPropertiesMap(cityNames);
 
   // Handle sign in button press
   const handleSignInPress = () => {
@@ -299,6 +330,8 @@ export default function HomeScreen() {
     );
   }
 
+  // Debug: log trendingCities before rendering carousels
+  console.log("trendingCities at render:", trendingCities);
   return (
     <Container
       flex={1}
@@ -404,24 +437,39 @@ export default function HomeScreen() {
           </Container>
         )}
 
-        {/* Content Section */}
-        <Container>
-          <HorizontalListingsCarousel
-            key={`ha-${retryKey}`}
-            city="Hargeisa"
-            onStatusChange={(status) => handleStatusChange("ny", status)}
-          />
-          <HorizontalListingsCarousel
-            key={`bo-${retryKey}`}
-            city="Boorama"
-            onStatusChange={(status) => handleStatusChange("sav", status)}
-          />
-          <HorizontalListingsCarousel
-            key={`bu-${retryKey}`}
-            city="Burco"
-            onStatusChange={(status) => handleStatusChange("bk", status)}
-          />
-        </Container>
+        {/* Dynamic Carousels for Top Trending Cities or Skeletons */}
+        {loadingCities || trendingCities.length === 0
+          ? // Show up to 10 carousel skeletons, each with 4 PropertyCardSkeletons in a horizontal scroll
+            Array.from({ length: 10 }).map((_, idx) => (
+              <ScrollView
+                key={`carousel-skeleton-${idx}`}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={{ marginBottom: 24 }}
+                contentContainerStyle={{ paddingHorizontal: spacing.md }}
+              >
+                {Array.from({ length: 4 }).map((_, cardIdx) => (
+                  <Container
+                    key={`carousel-skeleton-${idx}-card-${cardIdx}`}
+                    style={{ marginRight: spacing.md }}
+                  >
+                    <PropertyCardSkeleton variant="large" />
+                  </Container>
+                ))}
+              </ScrollView>
+            ))
+          : trendingCities
+              .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+              .slice(0, 10)
+              .map((city, idx) => (
+                <HorizontalListingsCarouselWithData
+                  key={`carousel-${city.city}-${idx}`}
+                  city={city.city}
+                  onStatusChange={(status) =>
+                    handleStatusChange(city.city, status)
+                  }
+                />
+              ))}
       </ScrollView>
     </Container>
   );
