@@ -33,7 +33,13 @@
         "NSUserNotificationUsageDescription": "This app would like to send you notifications about bookings, messages, and important updates.",
         "NSFaceIDUsageDescription": "This app uses Face ID to securely autofill your login credentials.",
         "NSRemindersFullAccessUsageDescription": "Allow $(PRODUCT_NAME) to access your reminders",
-        "NSRemindersUsageDescription": "Allow $(PRODUCT_NAME) to access your reminders"
+        "NSRemindersUsageDescription": "Allow $(PRODUCT_NAME) to access your reminders",
+        "NSSMSSendUsageDescription": "This app needs permission to send SMS messages for verification and sharing properties.",
+        "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app uses your location to show nearby properties and provide relevant services even when the app is in the background.",
+        "NSLocationAlwaysUsageDescription": "This app uses your location to show nearby properties and provide relevant services even when the app is in the background.",
+        "UIBackgroundModes": ["remote-notification", "location"],
+        "CFBundleAllowMixedLocalizations": true
       }
     },
     "android": {
@@ -49,14 +55,31 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.ym2000.hoy",
-      "permissions": ["USE_BIOMETRIC", "USE_FINGERPRINT"]
+      "permissions": [
+        "USE_BIOMETRIC",
+        "USE_FINGERPRINT",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "FOREGROUND_SERVICE",
+        "VIBRATE",
+        "RECEIVE_BOOT_COMPLETED",
+        "com.google.android.gms.permission.AD_ID",
+        "com.google.android.c2dm.permission.RECEIVE",
+        "com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"
+      ],
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro",
       "output": "server"
     },
-    "assetBundlePatterns": ["assets/fonts/*"],
+    "assetBundlePatterns": [
+      "assets/fonts/*"
+    ],
     "extra": {
       "environment": "production",
       "minApiCallInterval": 10000,
@@ -129,7 +152,31 @@
       ],
       "expo-localization",
       "expo-web-browser",
-      "expo-router"
+      "expo-router",
+      "expo-checkbox",
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID for secure authentication."
+        }
+      ],
+      "expo-sms",
+      "expo-store-review",
+      [
+        "expo-tracking-transparency",
+        {
+          "userTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#ffffff",
+          "defaultChannel": "default",
+          "enableBackgroundRemoteNotifications": true
+        }
+      ]
     ],
     "owner": "y-m2000"
   }
