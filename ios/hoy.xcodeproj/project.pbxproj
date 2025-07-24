@@ -7,49 +7,49 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0761413019514884B72F54B7 /* Satoshi-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 118342FBF28C43C0A6539400 /* Satoshi-Regular.ttf */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		190CC65CA33A25924A8C1B1F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C3903B17588DEE4CC9A9EA13 /* PrivacyInfo.xcprivacy */; };
-		1F912E237B5F4324B95212A6 /* Satoshi-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E13A1238D50F4FD6B6D30DBE /* Satoshi-Medium.ttf */; };
-		24E8B052DEBD418D8DE358D1 /* Satoshi-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2B46725308D0493095BCD5F7 /* Satoshi-Bold.ttf */; };
-		382ED5617EAD4279988DBAC4 /* Satoshi-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4E289068B034B27A92DAAE1 /* Satoshi-Black.ttf */; };
+		1A07D8759DD5485DB92DAD0C /* Satoshi-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B44A40297310426DB2304E0A /* Satoshi-BlackItalic.ttf */; };
+		253A465AD9B6440996832D00 /* Satoshi-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 30385C5F7DB54895899EEF80 /* Satoshi-LightItalic.ttf */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		5043AB6B74933162FB90660B /* libPods-hoy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CE4E2C1211F682364658365 /* libPods-hoy.a */; };
-		6302A7A5463440C6857FA755 /* Satoshi-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D0C5A5E8D92F4F798E7A5CDA /* Satoshi-Light.ttf */; };
-		6A0DEF755585450C9F949C15 /* Satoshi-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 591DEDD1EFEB4F39B19720B8 /* Satoshi-BoldItalic.ttf */; };
-		B78CEC0E06AC49E8AB94E36F /* Satoshi-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 460FCE2D4F1941F7A69935BC /* Satoshi-BlackItalic.ttf */; };
+		49A3691F6BA7338F0C0C0B2B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 23516CC47B6F776B1C9A3DA3 /* PrivacyInfo.xcprivacy */; };
+		5A68137E49D847AC81AF5B83 /* Satoshi-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CF76023763A845B6AE431A8B /* Satoshi-Black.ttf */; };
+		714BC1B226564A7887B4880E /* Satoshi-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0E19B784F5814D19A962B3AD /* Satoshi-Italic.ttf */; };
+		84FB6EB33CCE46038D0248E8 /* Satoshi-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 284D0CC4DC004DFBBE173202 /* Satoshi-Bold.ttf */; };
+		963119EAC22B42518FCC47AC /* Satoshi-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 020D034660A44554BF81A72C /* Satoshi-Medium.ttf */; };
+		B0F3A2331F8F4927A9B6AE59 /* Satoshi-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F39F478BDC0E48EDB8D98ED3 /* Satoshi-BoldItalic.ttf */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		C1C14AFA3D8D4CCCA4FA134A /* Satoshi-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 31E5412CDBFA4364B28132FF /* Satoshi-LightItalic.ttf */; };
-		DAE310272146D7DD58342446 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2323A8F76CBE385A1175D57 /* ExpoModulesProvider.swift */; };
-		EC961B6F128740ECAAB51D05 /* Satoshi-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 358DFB719AD940E6911C1EE1 /* Satoshi-Regular.ttf */; };
-		EC9A7DF8299E43EDB1FF2CCA /* Satoshi-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ACCA9A51E95B4B709E79C659 /* Satoshi-MediumItalic.ttf */; };
+		BD5D3BD854F6C61DC0477F52 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FD9B8E09301A48569DF56B /* ExpoModulesProvider.swift */; };
+		BEFB7C9FFDB60F3A0736AB9F /* libPods-hoy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2EBD161C09A35EA6AF25418 /* libPods-hoy.a */; };
+		D5F71DB5101547B0B4AE1252 /* Satoshi-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EE2C0CB3CE6D4499B8A8B700 /* Satoshi-MediumItalic.ttf */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
-		F6BCCB1C16044CE8AA339F8D /* Satoshi-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A81731854E2E433AA37BEC0D /* Satoshi-Italic.ttf */; };
+		F4D28955220E45349CE001EA /* Satoshi-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9F3A082C57FC4940858572D6 /* Satoshi-Light.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		020D034660A44554BF81A72C /* Satoshi-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Medium.ttf"; path = "../assets/fonts/Satoshi-Medium.ttf"; sourceTree = "<group>"; };
+		0E19B784F5814D19A962B3AD /* Satoshi-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Italic.ttf"; path = "../assets/fonts/Satoshi-Italic.ttf"; sourceTree = "<group>"; };
+		118342FBF28C43C0A6539400 /* Satoshi-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Regular.ttf"; path = "../assets/fonts/Satoshi-Regular.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* hoy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hoy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = hoy/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = hoy/Info.plist; sourceTree = "<group>"; };
-		2B46725308D0493095BCD5F7 /* Satoshi-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Bold.ttf"; path = "../assets/fonts/Satoshi-Bold.ttf"; sourceTree = "<group>"; };
-		31E5412CDBFA4364B28132FF /* Satoshi-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-LightItalic.ttf"; path = "../assets/fonts/Satoshi-LightItalic.ttf"; sourceTree = "<group>"; };
-		358DFB719AD940E6911C1EE1 /* Satoshi-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Regular.ttf"; path = "../assets/fonts/Satoshi-Regular.ttf"; sourceTree = "<group>"; };
-		460FCE2D4F1941F7A69935BC /* Satoshi-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-BlackItalic.ttf"; path = "../assets/fonts/Satoshi-BlackItalic.ttf"; sourceTree = "<group>"; };
-		591DEDD1EFEB4F39B19720B8 /* Satoshi-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-BoldItalic.ttf"; path = "../assets/fonts/Satoshi-BoldItalic.ttf"; sourceTree = "<group>"; };
-		5CE4E2C1211F682364658365 /* libPods-hoy.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hoy.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A81731854E2E433AA37BEC0D /* Satoshi-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Italic.ttf"; path = "../assets/fonts/Satoshi-Italic.ttf"; sourceTree = "<group>"; };
+		23516CC47B6F776B1C9A3DA3 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = hoy/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		284D0CC4DC004DFBBE173202 /* Satoshi-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Bold.ttf"; path = "../assets/fonts/Satoshi-Bold.ttf"; sourceTree = "<group>"; };
+		30385C5F7DB54895899EEF80 /* Satoshi-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-LightItalic.ttf"; path = "../assets/fonts/Satoshi-LightItalic.ttf"; sourceTree = "<group>"; };
+		55A993FE87ED7997BB63F098 /* Pods-hoy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoy.release.xcconfig"; path = "Target Support Files/Pods-hoy/Pods-hoy.release.xcconfig"; sourceTree = "<group>"; };
+		8E94035F48CDD980A972B385 /* Pods-hoy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoy.debug.xcconfig"; path = "Target Support Files/Pods-hoy/Pods-hoy.debug.xcconfig"; sourceTree = "<group>"; };
+		9F3A082C57FC4940858572D6 /* Satoshi-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Light.ttf"; path = "../assets/fonts/Satoshi-Light.ttf"; sourceTree = "<group>"; };
+		A2EBD161C09A35EA6AF25418 /* libPods-hoy.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hoy.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = hoy/SplashScreen.storyboard; sourceTree = "<group>"; };
-		ACCA9A51E95B4B709E79C659 /* Satoshi-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-MediumItalic.ttf"; path = "../assets/fonts/Satoshi-MediumItalic.ttf"; sourceTree = "<group>"; };
-		B4E289068B034B27A92DAAE1 /* Satoshi-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Black.ttf"; path = "../assets/fonts/Satoshi-Black.ttf"; sourceTree = "<group>"; };
+		B2FD9B8E09301A48569DF56B /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-hoy/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		B44A40297310426DB2304E0A /* Satoshi-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-BlackItalic.ttf"; path = "../assets/fonts/Satoshi-BlackItalic.ttf"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		BB57F2358574DA78516E64B8 /* Pods-hoy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoy.debug.xcconfig"; path = "Target Support Files/Pods-hoy/Pods-hoy.debug.xcconfig"; sourceTree = "<group>"; };
-		C0F1632215FF2F86B6CEACF6 /* Pods-hoy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoy.release.xcconfig"; path = "Target Support Files/Pods-hoy/Pods-hoy.release.xcconfig"; sourceTree = "<group>"; };
-		C3903B17588DEE4CC9A9EA13 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = hoy/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		D0C5A5E8D92F4F798E7A5CDA /* Satoshi-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Light.ttf"; path = "../assets/fonts/Satoshi-Light.ttf"; sourceTree = "<group>"; };
-		E13A1238D50F4FD6B6D30DBE /* Satoshi-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Medium.ttf"; path = "../assets/fonts/Satoshi-Medium.ttf"; sourceTree = "<group>"; };
+		CF76023763A845B6AE431A8B /* Satoshi-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Black.ttf"; path = "../assets/fonts/Satoshi-Black.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		EE2C0CB3CE6D4499B8A8B700 /* Satoshi-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-MediumItalic.ttf"; path = "../assets/fonts/Satoshi-MediumItalic.ttf"; sourceTree = "<group>"; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = hoy/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* hoy-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "hoy-Bridging-Header.h"; path = "hoy/hoy-Bridging-Header.h"; sourceTree = "<group>"; };
-		F2323A8F76CBE385A1175D57 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-hoy/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		F39F478BDC0E48EDB8D98ED3 /* Satoshi-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-BoldItalic.ttf"; path = "../assets/fonts/Satoshi-BoldItalic.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,20 +57,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5043AB6B74933162FB90660B /* libPods-hoy.a in Frameworks */,
+				BEFB7C9FFDB60F3A0736AB9F /* libPods-hoy.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		11F53B44A273C53862AAE010 /* Pods */ = {
+		0DD6215A852CB229DD0754BD /* hoy */ = {
 			isa = PBXGroup;
 			children = (
-				BB57F2358574DA78516E64B8 /* Pods-hoy.debug.xcconfig */,
-				C0F1632215FF2F86B6CEACF6 /* Pods-hoy.release.xcconfig */,
+				B2FD9B8E09301A48569DF56B /* ExpoModulesProvider.swift */,
 			);
-			path = Pods;
+			name = hoy;
 			sourceTree = "<group>";
 		};
 		13B07FAE1A68108700A75B9A /* hoy */ = {
@@ -82,35 +81,27 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				C3903B17588DEE4CC9A9EA13 /* PrivacyInfo.xcprivacy */,
+				23516CC47B6F776B1C9A3DA3 /* PrivacyInfo.xcprivacy */,
 			);
 			name = hoy;
-			sourceTree = "<group>";
-		};
-		14E1D991A65C46A7BFAAF42D /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				358DFB719AD940E6911C1EE1 /* Satoshi-Regular.ttf */,
-				2B46725308D0493095BCD5F7 /* Satoshi-Bold.ttf */,
-				E13A1238D50F4FD6B6D30DBE /* Satoshi-Medium.ttf */,
-				D0C5A5E8D92F4F798E7A5CDA /* Satoshi-Light.ttf */,
-				B4E289068B034B27A92DAAE1 /* Satoshi-Black.ttf */,
-				A81731854E2E433AA37BEC0D /* Satoshi-Italic.ttf */,
-				591DEDD1EFEB4F39B19720B8 /* Satoshi-BoldItalic.ttf */,
-				ACCA9A51E95B4B709E79C659 /* Satoshi-MediumItalic.ttf */,
-				31E5412CDBFA4364B28132FF /* Satoshi-LightItalic.ttf */,
-				460FCE2D4F1941F7A69935BC /* Satoshi-BlackItalic.ttf */,
-			);
-			name = Resources;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				5CE4E2C1211F682364658365 /* libPods-hoy.a */,
+				A2EBD161C09A35EA6AF25418 /* libPods-hoy.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4F75D8CE1B34BE8C16A80A69 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8E94035F48CDD980A972B385 /* Pods-hoy.debug.xcconfig */,
+				55A993FE87ED7997BB63F098 /* Pods-hoy.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -127,9 +118,9 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				14E1D991A65C46A7BFAAF42D /* Resources */,
-				11F53B44A273C53862AAE010 /* Pods */,
-				FA48D51F10349725B1D6308B /* ExpoModulesProviders */,
+				EB8B55232D4B4ED290407D82 /* Resources */,
+				4F75D8CE1B34BE8C16A80A69 /* Pods */,
+				AB2144DDB43A5499B578100A /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -144,12 +135,12 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		ABD8B65089C2781E021A5F4D /* hoy */ = {
+		AB2144DDB43A5499B578100A /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				F2323A8F76CBE385A1175D57 /* ExpoModulesProvider.swift */,
+				0DD6215A852CB229DD0754BD /* hoy */,
 			);
-			name = hoy;
+			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
@@ -161,12 +152,21 @@
 			path = hoy/Supporting;
 			sourceTree = "<group>";
 		};
-		FA48D51F10349725B1D6308B /* ExpoModulesProviders */ = {
+		EB8B55232D4B4ED290407D82 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				ABD8B65089C2781E021A5F4D /* hoy */,
+				118342FBF28C43C0A6539400 /* Satoshi-Regular.ttf */,
+				284D0CC4DC004DFBBE173202 /* Satoshi-Bold.ttf */,
+				020D034660A44554BF81A72C /* Satoshi-Medium.ttf */,
+				9F3A082C57FC4940858572D6 /* Satoshi-Light.ttf */,
+				CF76023763A845B6AE431A8B /* Satoshi-Black.ttf */,
+				0E19B784F5814D19A962B3AD /* Satoshi-Italic.ttf */,
+				F39F478BDC0E48EDB8D98ED3 /* Satoshi-BoldItalic.ttf */,
+				EE2C0CB3CE6D4499B8A8B700 /* Satoshi-MediumItalic.ttf */,
+				30385C5F7DB54895899EEF80 /* Satoshi-LightItalic.ttf */,
+				B44A40297310426DB2304E0A /* Satoshi-BlackItalic.ttf */,
 			);
-			name = ExpoModulesProviders;
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,13 +177,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "hoy" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				C78053FC61F746FBB33E14F4 /* [Expo] Configure project */,
+				9E2FCBCC305226B5298E75F7 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				FD305C8DB5066CF10515548D /* [CP] Embed Pods Frameworks */,
+				C51DACB07E2CDB93FE128BDA /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -233,17 +233,17 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				EC961B6F128740ECAAB51D05 /* Satoshi-Regular.ttf in Resources */,
-				24E8B052DEBD418D8DE358D1 /* Satoshi-Bold.ttf in Resources */,
-				1F912E237B5F4324B95212A6 /* Satoshi-Medium.ttf in Resources */,
-				6302A7A5463440C6857FA755 /* Satoshi-Light.ttf in Resources */,
-				382ED5617EAD4279988DBAC4 /* Satoshi-Black.ttf in Resources */,
-				F6BCCB1C16044CE8AA339F8D /* Satoshi-Italic.ttf in Resources */,
-				6A0DEF755585450C9F949C15 /* Satoshi-BoldItalic.ttf in Resources */,
-				EC9A7DF8299E43EDB1FF2CCA /* Satoshi-MediumItalic.ttf in Resources */,
-				C1C14AFA3D8D4CCCA4FA134A /* Satoshi-LightItalic.ttf in Resources */,
-				B78CEC0E06AC49E8AB94E36F /* Satoshi-BlackItalic.ttf in Resources */,
-				190CC65CA33A25924A8C1B1F /* PrivacyInfo.xcprivacy in Resources */,
+				0761413019514884B72F54B7 /* Satoshi-Regular.ttf in Resources */,
+				84FB6EB33CCE46038D0248E8 /* Satoshi-Bold.ttf in Resources */,
+				963119EAC22B42518FCC47AC /* Satoshi-Medium.ttf in Resources */,
+				F4D28955220E45349CE001EA /* Satoshi-Light.ttf in Resources */,
+				5A68137E49D847AC81AF5B83 /* Satoshi-Black.ttf in Resources */,
+				714BC1B226564A7887B4880E /* Satoshi-Italic.ttf in Resources */,
+				B0F3A2331F8F4927A9B6AE59 /* Satoshi-BoldItalic.ttf in Resources */,
+				D5F71DB5101547B0B4AE1252 /* Satoshi-MediumItalic.ttf in Resources */,
+				253A465AD9B6440996832D00 /* Satoshi-LightItalic.ttf in Resources */,
+				1A07D8759DD5485DB92DAD0C /* Satoshi-BlackItalic.ttf in Resources */,
+				49A3691F6BA7338F0C0C0B2B /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,7 +363,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-hoy/Pods-hoy-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C78053FC61F746FBB33E14F4 /* [Expo] Configure project */ = {
+		9E2FCBCC305226B5298E75F7 /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -382,7 +382,7 @@
 			shellPath = /bin/sh;
 			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-hoy/expo-configure-project.sh\"\n";
 		};
-		FD305C8DB5066CF10515548D /* [CP] Embed Pods Frameworks */ = {
+		C51DACB07E2CDB93FE128BDA /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -420,7 +420,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				DAE310272146D7DD58342446 /* ExpoModulesProvider.swift in Sources */,
+				BD5D3BD854F6C61DC0477F52 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -429,7 +429,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BB57F2358574DA78516E64B8 /* Pods-hoy.debug.xcconfig */;
+			baseConfigurationReference = 8E94035F48CDD980A972B385 /* Pods-hoy.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -466,7 +466,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C0F1632215FF2F86B6CEACF6 /* Pods-hoy.release.xcconfig */;
+			baseConfigurationReference = 55A993FE87ED7997BB63F098 /* Pods-hoy.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
