@@ -6,7 +6,7 @@
 
 import React from "react";
 import { GuestStep, PaymentStep, ConfirmationStep } from "../steps";
-import type { ReservationStepProps } from "../types/reservationTypes";
+import type { ReservationStepProps } from "../../../types/reservation.types";
 import { RESERVATION_STEPS } from "../constants/reservationConstants";
 
 interface ReservationStepRendererProps extends ReservationStepProps {

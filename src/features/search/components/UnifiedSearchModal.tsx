@@ -127,7 +127,7 @@ export default function UnifiedSearchModal({
 
     // 1. City matches
     COUNTRIES.forEach((c) => {
-      c.cities.forEach((city) => {
+      c.cities?.forEach((city) => {
         if (city.toLowerCase().includes(lower)) {
           results.push({
             city,
@@ -140,7 +140,7 @@ export default function UnifiedSearchModal({
 
     // 2. State matches
     COUNTRIES.forEach((c) => {
-      c.states.forEach((state) => {
+      c.states?.forEach((state) => {
         if (state.toLowerCase().includes(lower)) {
           results.push({
             city: state,

@@ -3,7 +3,28 @@
  * Helper functions for calendar operations and date management
  */
 
-import { CalendarDay, CalendarMonth, Booking } from "../types/calendar";
+import { CalendarDay ,CalendarMonth, CalendarBooking } from "src/core/types/calendar.types";
+import { Booking } from "src/core";
+
+/**
+ * Convert a regular Booking to CalendarBooking
+ */
+const convertToCalendarBooking = (booking: Booking): CalendarBooking => ({
+  id: booking._id,
+  propertyId: booking.propertyId,
+  guest: {
+    id: booking.guestId,
+    firstName: 'Guest', // Default since Booking doesn't have guest name
+    lastName: '',
+    avatar: undefined, // Not available in Booking interface
+    email: '', // Not available in Booking interface
+  },
+  checkIn: booking.checkIn,
+  checkOut: booking.checkOut,
+  status: (booking.status as "confirmed" | "pending" | "cancelled") || "pending",
+  totalAmount: booking.totalAmount,
+  currency: booking.currency
+});
 
 /**
  * Generate calendar days for a specific month
@@ -33,7 +54,7 @@ export const generateCalendarMonth = (
       isAvailable: !booking && !isPastDate(currentDate),
       price: basePrice,
       currency,
-      booking,
+      booking: booking ? convertToCalendarBooking(booking) : undefined,
       isWeekend,
     };
 
@@ -265,7 +286,7 @@ export const generateCalendarDays = (
       isAvailable: !booking && !isPastDate(currentDate),
       price: isWeekend ? calculateWeekendPrice(basePrice) : basePrice,
       currency,
-      booking,
+      booking: booking ? convertToCalendarBooking(booking) : undefined,
       isWeekend,
     };
 

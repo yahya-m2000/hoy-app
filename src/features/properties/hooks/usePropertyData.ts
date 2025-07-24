@@ -39,7 +39,10 @@ export const usePropertyData = (propertyId?: string) => {
           description: "A sample property description",
           type: "apartment",
           propertyType: "entire_place",
-          status: "active",
+          status: "published",
+          guestAccessType: "entire_place",
+          hostType: "individual",
+          tags: ["Modern", "Cozy"],
           address: {
             street: "123 Sample St",
             city: "Sample City",
@@ -58,6 +61,14 @@ export const usePropertyData = (propertyId?: string) => {
             period: "night",
           },
           currency: "USD",
+          weekdayPrice: 100,
+          weekendPrice: 120,
+          discounts: {
+            newListingPromo: false,
+            lastMinuteDiscount: false,
+            weeklyDiscount: { enabled: false, percentage: 0 },
+            monthlyDiscount: { enabled: false, percentage: 0 }
+          },
           images: ["https://example.com/image1.jpg"],
           amenities: ["WiFi", "Kitchen"],
           maxGuests: 4,

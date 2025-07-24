@@ -67,7 +67,7 @@ export default function DashboardStats({ data, loading }: DashboardStatsProps) {
         </Text>
         <View style={styles.statsGrid}>
           {[1, 2, 3, 4].map((i) => (
-            <BaseCard key={i} style={[styles.statBaseCard, { opacity: 0.6 }]}>
+            <BaseCard key={i} style={{...styles.statBaseCard, opacity: 0.6}}>
               <View style={styles.statContent}>
                 <View
                   style={[

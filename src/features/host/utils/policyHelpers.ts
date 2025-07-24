@@ -1,4 +1,4 @@
-import type { ICancellationPolicy } from "@shared/types";
+import type { ICancellationPolicy } from "src/core";
 
 export const getCancellationTypeTitle = (
   policyType: ICancellationPolicy["policyType"]

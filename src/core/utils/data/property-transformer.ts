@@ -38,7 +38,18 @@ export const transformPropertyData = (apiProperty: any): PropertyType => {
       title: apiProperty.title || apiProperty.name || "Untitled Property",
       description: apiProperty.description || "",
       type: apiProperty.type || "apartment",
-      status: apiProperty.status || "active",
+      status: apiProperty.status || "published",
+      guestAccessType: apiProperty.guestAccessType || "entire_place",
+      hostType: apiProperty.hostType || "individual",
+      tags: apiProperty.tags || [],
+      weekdayPrice: apiProperty.weekdayPrice || apiProperty.price?.amount || apiProperty.price || 0,
+      weekendPrice: apiProperty.weekendPrice || apiProperty.price?.amount || apiProperty.price || 0,
+      discounts: apiProperty.discounts || {
+        newListingPromo: false,
+        lastMinuteDiscount: false,
+        weeklyDiscount: { enabled: false, percentage: 0 },
+        monthlyDiscount: { enabled: false, percentage: 0 },
+      },
       price: apiProperty.price
         ? typeof apiProperty.price === "object"
           ? apiProperty.price
@@ -105,7 +116,18 @@ export const transformPropertyData = (apiProperty: any): PropertyType => {
       type: "apartment",
       propertyType: "apartment",
       description: "No description available",
-      status: "active" as const,
+      status: "published" as const,
+      guestAccessType: "entire_place",
+      hostType: "individual",
+      tags: [],
+      weekdayPrice: 0,
+      weekendPrice: 0,
+      discounts: {
+        newListingPromo: false,
+        lastMinuteDiscount: false,
+        weeklyDiscount: { enabled: false, percentage: 0 },
+        monthlyDiscount: { enabled: false, percentage: 0 },
+      },
       address: {
         street: "",
         city: "",

@@ -7,7 +7,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { host } from "@core/api/services";
 
-import { CalendarUpdateRequest, CalendarSettings } from "@core/types";
+import { CalendarUpdateRequest, CalendarSettings } from "@core/types/calendar.types";
 
 // Query keys
 const CALENDAR_KEYS = {

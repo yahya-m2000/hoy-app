@@ -56,15 +56,17 @@ export * as dateUtils from "./date";
 // Font utilities (design system)
 export * as fontUtils from "../design/fonts";
 
+// Event emitter exports (always available)
+export { eventEmitter, AppEvents } from './sys/event-emitter';
+
+// Policy helpers (always available since used in production modals)
+export { getCancellationTypeTitle, getCancellationTypeDescription } from '../../features/host/utils/policyHelpers';
+
 // Development-only helpers (excluded from production bundle)
 // They are dynamically required so tree-shaking can drop them in release builds
 if (__DEV__) {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   Object.assign(exports, require("../auth/debug-tokens"));
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  Object.assign(exports, require("./sys/event-emitter"));
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   Object.assign(exports, require("../../test/mocks/mockData"));
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  Object.assign(exports, require("../../features/host/utils/policyHelpers"));
 }

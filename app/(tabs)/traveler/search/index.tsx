@@ -26,7 +26,7 @@ import { SearchForm, RecentSearches } from "src/features/search/components";
 import {
   RecentSearchManager,
   type RecentSearch,
-} from "src/features/search/recent/RecentSearchManager";
+} from "src/features/search/utils/RecentSearchManager";
 
 // Utility to break a location string into { city, state, country }
 const parseLocation = (

@@ -7,7 +7,7 @@ import { Text, Button } from "@shared/components";
 import { spacing } from "@core/design";
 import { useHostSetup, useHostSetupForm } from "../hooks";
 import {
-  SetupProgress,
+  LegacySetupProgress,
   CancellationPolicyForm,
   HouseRulesForm,
   SafetyInformationForm,
@@ -205,7 +205,7 @@ export const HostSetupScreen: React.FC = () => {
       </ScrollView>
 
       {/* Progress Dots - positioned above footer */}
-      <SetupProgress currentStep={currentStep} totalSteps={totalSteps} />
+      <LegacySetupProgress currentStep={currentStep} totalSteps={totalSteps} />
 
       {/* Footer */}
       <View

@@ -53,7 +53,7 @@ const searchLocations = async (query: string): Promise<LocationResult[]> => {
 
   // Only city matches
   COUNTRIES.forEach((c) => {
-    c.cities.forEach((city) => {
+    c.cities?.forEach((city) => {
       if (city.toLowerCase().includes(lower)) {
         results.push({
           city,

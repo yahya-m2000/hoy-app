@@ -1,5 +1,5 @@
 export { HostSetupStepper } from "./HostSetupStepper";
-export { SetupProgress, NewSetupProgress } from "./SetupProgress";
+export { SetupProgress, NewSetupProgress, LegacySetupProgress } from "./SetupProgress";
 export { CancellationPolicyForm } from "./CancellationPolicyForm";
 export { HouseRulesForm } from "./HouseRulesForm";
 export { SafetyInformationForm } from "./SafetyInformationForm";

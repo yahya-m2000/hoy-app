@@ -65,7 +65,7 @@ const PreferenceCard: React.FC<PreferenceCardProps> = ({
         </Container>
 
         <Container flex={1}>
-          <Text variant="h3" color="primary" marginBottom="xs">
+          <Text variant="h3" color="primary" marginBottom="sm">
             {title}
           </Text>
           <Text variant="body" color="secondary" style={{ lineHeight: 18 }}>
@@ -291,6 +291,13 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
     onChange({
       ...data,
       notifications: {
+        email: true,
+        push: true,
+        sms: false,
+        bookingRequests: true,
+        messages: true,
+        reviews: true,
+        payments: true,
         ...data.notifications,
         [field]: value,
       },
@@ -372,7 +379,7 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
             justifyContent="space-between"
           >
             <Container flex={1}>
-              <Text variant="subtitle" color="primary" marginBottom="xs">
+              <Text variant="subtitle" color="primary" marginBottom="sm">
                 {t("host.preferences.instantBooking.enable")}
               </Text>
               <Text

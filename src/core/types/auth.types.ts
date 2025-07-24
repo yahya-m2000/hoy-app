@@ -223,7 +223,7 @@ export interface RegistrationFormState {
   selectedCountry: {
     name: string;
     code: string;
-    flag: string;
+    flag?: string;
   };
   /** Modal visibility states */
   countryModalVisible: boolean;

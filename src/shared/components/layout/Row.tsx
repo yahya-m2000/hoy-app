@@ -40,7 +40,7 @@ const Row: React.FC<RowProps> = ({
         // Only add marginRight if the child is a host component (e.g., 'View', 'Text')
         if (idx < childrenArray.length - 1 && typeof child.type === "string") {
           return React.cloneElement(child as React.ReactElement<any>, {
-            style: [child.props.style, { marginRight: gap }],
+            style: [(child as any).props?.style, { marginRight: gap }],
           });
         }
         return child;

@@ -25,7 +25,7 @@ import {
   getModalTitle,
 } from "../utils";
 import { ReservationStepRenderer } from "../components";
-import type { ReservationModalProps } from "../types";
+import type { ReservationModalProps } from "../../../types/reservation.types";
 import { RESERVATION_STEPS, BUTTON_TEXTS, ERROR_MESSAGES } from "../constants";
 
 // Import existing DateSelectionModal

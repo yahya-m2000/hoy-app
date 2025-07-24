@@ -135,7 +135,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isUpcoming }) => {
 
         {/* Status Badge */}
         <BookingStatusBadge
-          status={booking.status}
+          status={booking.status || "pending"}
           type="booking"
           size="small"
         />

@@ -210,21 +210,23 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
           </Container>
         )}
 
-        <Container
-          position="absolute"
-          bottom={0}
-          right={0}
-          width={32}
-          height={32}
-          borderRadius="circle"
-          backgroundColor={theme.colors.primary}
-          justifyContent="center"
-          alignItems="center"
-          borderWidth={2}
-          borderColor="white"
+        <View
+          style={{
+            position: "absolute",
+            bottom: 0,
+            right: 0,
+            width: 32,
+            height: 32,
+            borderRadius: 16,
+            backgroundColor: theme.colors.primary,
+            justifyContent: "center",
+            alignItems: "center",
+            borderWidth: 2,
+            borderColor: "white",
+          }}
         >
           <Icon name="camera" size={16} color="white" />
-        </Container>
+        </View>
       </TouchableOpacity>
 
       <Container marginTop="md" alignItems="center">
@@ -496,11 +498,11 @@ export const HostProfileStep: React.FC<HostProfileStepProps> = ({
             </Container>
 
             <Container flex={1}>
-              <Text variant="h3" color="primary" marginBottom="xs">
+              <Text variant="h3" color="primary" marginBottom="sm">
                 {t("host.profile.preview.hostName")}
               </Text>
               {data.location && (
-                <Text variant="body" color="secondary" marginBottom="xs">
+                <Text variant="body" color="secondary" marginBottom="sm">
                   {data.location}
                 </Text>
               )}
@@ -578,7 +580,7 @@ export const HostProfileStep: React.FC<HostProfileStepProps> = ({
         >
           <Container flexDirection="row" alignItems="center" marginBottom="sm">
             <Icon
-              name="lightbulb-outline"
+              name="bulb-outline"
               size={20}
               color={theme.colors.primary}
             />

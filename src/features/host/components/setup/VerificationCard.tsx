@@ -12,6 +12,7 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { useTranslation } from "react-i18next";
+import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@core/hooks";
 import {
   Container,
@@ -35,7 +36,7 @@ interface VerificationCardProps {
   status: VerificationStatus;
   title: string;
   subtitle: string;
-  icon: string;
+  icon: keyof typeof Ionicons.glyphMap;
   onVerify?: () => void;
   onResend?: () => void;
   onUpload?: () => void;
@@ -169,11 +170,11 @@ export const VerificationCard: React.FC<VerificationCardProps> = ({
             <Button
               title={t("host.setup.verification.submitCode")}
               variant="primary"
-              size="sm"
+              size="small"
               onPress={handleCodeSubmit}
               loading={isSubmittingCode}
               disabled={!code.trim() || isSubmittingCode || disabled}
-              style={[styles.actionButton, { flex: 1 }]}
+              style={{...styles.actionButton, flex: 1}}
             />
 
             {canResend && (
@@ -186,10 +187,10 @@ export const VerificationCard: React.FC<VerificationCardProps> = ({
                     : t("host.setup.verification.resend")
                 }
                 variant="outline"
-                size="sm"
-                onPress={onResend}
+                size="small"
+                onPress={onResend || (() => {})}
                 disabled={resendCountdown > 0 || isLoading || disabled}
-                style={[styles.actionButton, { flex: 1 }]}
+                style={{...styles.actionButton, flex: 1}}
               />
             )}
           </Container>
@@ -205,7 +206,7 @@ export const VerificationCard: React.FC<VerificationCardProps> = ({
             : t("host.setup.verification.sendCode")
         }
         variant="primary"
-        size="sm"
+        size="small"
         onPress={handleVerify}
         loading={isLoading}
         disabled={isLoading || disabled}

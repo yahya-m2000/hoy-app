@@ -7,6 +7,5 @@ export * from "./steps";
 // Export new modular components
 export * from "./hooks";
 export * from "./utils";
-export * from "./types";
 export * from "./constants";
 export * from "./components";

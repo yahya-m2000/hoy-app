@@ -17,7 +17,7 @@ export const PropertyList: React.FC<PropertyListProps> = ({
       <View style={styles.propertyCard}>
         <PropertyCard
           _id={item._id}
-          name={item.name || item.title}
+          name={item.name || item.title || "Untitled Property"}
           price={
             typeof item.price === "object" ? item.price.amount : item.price
           }

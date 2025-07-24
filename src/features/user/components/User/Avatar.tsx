@@ -8,16 +8,16 @@ import React from "react";
 
 // React Native
 import { View, Image, StyleSheet } from "react-native";
-import { Text } from "src/shared/components/ui/Text";
+import { Text } from "@shared/components";
 
 // Context
 import { useTheme } from "src/core/hooks/useTheme";
 
 // Constants
-import { radius } from "@shared/constants/radius";
+import { radius } from "@core/design";
 
 // Types
-import { AvatarProps } from "./User.types";
+import { AvatarProps } from "../../types/user.types";
 
 const Avatar: React.FC<AvatarProps> = ({
   size = "md",

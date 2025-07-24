@@ -23,6 +23,7 @@ import {
 } from "@core/api/circuit-breaker";
 import { eventEmitter, AppEvents } from "@core/utils/sys/event-emitter";
 import { logger } from "@core/utils/sys/log";
+import { useTheme } from "@core/hooks";
 
 interface CircuitBreakerMonitorProps {
   visible?: boolean;
@@ -33,6 +34,7 @@ export const CircuitBreakerMonitor: React.FC<CircuitBreakerMonitorProps> = ({
   visible = true,
   onClose,
 }) => {
+  const { theme } = useTheme();
   const [metrics, setMetrics] = useState<
     Array<CircuitBreakerMetrics & { endpoint: string }>
   >([]);

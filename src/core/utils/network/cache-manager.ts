@@ -11,10 +11,10 @@ import { eventEmitter, AppEvents } from "src/core/utils/sys/event-emitter";
 import { logger } from "../sys/log";
 
 let SecureStore: typeof import('expo-secure-store') | undefined;
-let AsyncStorage: typeof import('@react-native-async-storage/async-storage') | undefined;
+let AsyncStorage: typeof import('@react-native-async-storage/async-storage').default | undefined;
 if (Platform.OS !== 'web' && typeof navigator !== 'undefined') {
   SecureStore = require('expo-secure-store');
-  AsyncStorage = require('@react-native-async-storage/async-storage');
+  AsyncStorage = require('@react-native-async-storage/async-storage').default;
 }
 
 /**
@@ -26,7 +26,9 @@ export const resetAllAppData = async (): Promise<boolean> => {
     logger.log("🧨 EXECUTING FULL APP DATA RESET");
 
     // 1. Clear all AsyncStorage
-    await AsyncStorage?.clear();
+    if (AsyncStorage) {
+      await AsyncStorage.clear();
+    }
     logger.log("✅ AsyncStorage cleared");
 
     // 2. Clear SecureStore (for platforms that support it)
@@ -49,7 +51,9 @@ export const resetAllAppData = async (): Promise<boolean> => {
     }
 
     // 3. Set a marker to indicate fresh state
-    await AsyncStorage?.setItem("appResetTimestamp", Date.now().toString());
+    if (AsyncStorage) {
+      await AsyncStorage.setItem("appResetTimestamp", Date.now().toString());
+    }
 
     // 4. Notify the app about the reset
     eventEmitter.emit(AppEvents.AUTH_LOGOUT_COMPLETE);

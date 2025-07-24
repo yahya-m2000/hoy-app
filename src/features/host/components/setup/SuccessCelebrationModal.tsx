@@ -156,7 +156,7 @@ export const SuccessCelebrationModal: React.FC<
                     ]}
                   >
                     <Icon
-                      name={feature.icon}
+                      name={feature.icon as any}
                       size={iconSize.md}
                       color={theme.colors.primary}
                     />

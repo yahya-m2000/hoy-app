@@ -435,7 +435,7 @@ export interface CalendarData {
 /**
  * Review creation request (moved from review types)
  */
-export interface ReviewRequest {
+export interface ReservationReviewRequest {
   propertyId: string;
   reservationId: string;
   ratings: {

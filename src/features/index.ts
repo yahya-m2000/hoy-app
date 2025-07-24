@@ -8,7 +8,7 @@
 
 // Re-export modules individually to avoid conflicts
 export * as Properties from "./properties";
-export * as Booking from "./traveler/booking";
+export * as Booking from "./booking";
 export * as Search from "./search";
 export * as Auth from "./auth";
 export * as Account from "./account";

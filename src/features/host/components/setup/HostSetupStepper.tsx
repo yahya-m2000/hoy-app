@@ -10,7 +10,7 @@ import { CancellationPolicyForm } from "./CancellationPolicyForm";
 import { HouseRulesForm } from "./HouseRulesForm";
 import { SafetyInformationForm } from "./SafetyInformationForm";
 import { PropertyInformationForm } from "./PropertyInformationForm";
-import { SetupProgress } from "./SetupProgress";
+import { LegacySetupProgress } from "./SetupProgress";
 
 export interface HostSetupStepperProps {
   onComplete?: () => void;
@@ -199,7 +199,7 @@ export const HostSetupStepper: React.FC<HostSetupStepperProps> = ({
       headerSubtitle={t(currentStepData.subtitle)}
     >
       {/* Progress Indicator */}
-      <SetupProgress
+      <LegacySetupProgress
         currentStep={currentStep}
         totalSteps={SETUP_STEPS.length}
       />

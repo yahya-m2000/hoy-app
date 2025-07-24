@@ -48,6 +48,10 @@ export * from './property.types';
 // Export reservation types (now includes form types from features/properties) 
 export * from './reservation.types';
 
+// Calendar types - full types are in calendar.types.ts
+
+// CalendarSettings type is defined in calendar.types.ts
+
 // Export review types (now includes simple review types from features/properties)
 export * from './review.types';
 
@@ -94,7 +98,7 @@ export type {
   WiFiInfo,
   PropertyInformation,
   HostPolicies,
-  HostSetupStep,
+  HostSetupStepConfig as HostSetupStep,
   SetupFormData,
   SetupProgress,
   HostPoliciesResponse,

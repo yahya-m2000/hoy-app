@@ -4,7 +4,11 @@
  * Provides local storage for chat data to enable offline functionality
  * and improve performance by reducing API calls.
  */
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Platform } from 'react-native';
+let AsyncStorage: typeof import('@react-native-async-storage/async-storage').default | undefined;
+if (Platform.OS !== 'web' && typeof navigator !== 'undefined') {
+  AsyncStorage = require('@react-native-async-storage/async-storage').default;
+}
 import { ChatConversation, ChatMessage } from "@core/types/chat.types";
 import { logger } from "@core/utils/sys/log";
 
@@ -31,10 +35,12 @@ export const saveConversations = async (
       conversations,
       timestamp: Date.now(),
     };
-    await AsyncStorage.setItem(
-      STORAGE_KEYS.CONVERSATIONS,
-      JSON.stringify(data)
-    );
+    if (AsyncStorage) {
+      await AsyncStorage.setItem(
+        STORAGE_KEYS.CONVERSATIONS,
+        JSON.stringify(data)
+      );
+    }
     logger.debug(
       `Saved ${conversations.length} conversations to persistent storage`
     );
@@ -53,6 +59,7 @@ export const loadConversations = async (): Promise<
   ChatConversation[] | null
 > => {
   try {
+    if (!AsyncStorage) return null;
     const data = await AsyncStorage.getItem(STORAGE_KEYS.CONVERSATIONS);
     if (!data) return null;
 
@@ -89,7 +96,9 @@ export const saveConversation = async (
       conversation,
       timestamp: Date.now(),
     };
-    await AsyncStorage.setItem(key, JSON.stringify(data));
+    if (AsyncStorage) {
+      await AsyncStorage.setItem(key, JSON.stringify(data));
+    }
     logger.debug(
       `Saved conversation ${conversation.id} to persistent storage`
     );
@@ -124,6 +133,7 @@ export const loadConversation = async (
 ): Promise<ChatConversation | null> => {
   try {
     const key = `${STORAGE_KEYS.CONVERSATION_PREFIX}${conversationId}`;
+    if (!AsyncStorage) return null;
     const data = await AsyncStorage.getItem(key);
     if (!data) return null;
 
@@ -161,7 +171,9 @@ export const saveMessages = async (
       messages,
       timestamp: Date.now(),
     };
-    await AsyncStorage.setItem(key, JSON.stringify(data));
+    if (AsyncStorage) {
+      await AsyncStorage.setItem(key, JSON.stringify(data));
+    }
     logger.debug(
       `Saved ${messages.length} messages for conversation ${conversationId} to persistent storage`
     );
@@ -181,6 +193,7 @@ export const loadMessages = async (
 ): Promise<ChatMessage[] | null> => {
   try {
     const key = `${STORAGE_KEYS.MESSAGES_PREFIX}${conversationId}`;
+    if (!AsyncStorage) return null;
     const data = await AsyncStorage.getItem(key);
     if (!data) return null;
 
@@ -255,7 +268,9 @@ export const saveUnreadCount = async (count: number): Promise<void> => {
       count,
       timestamp: Date.now(),
     };
-    await AsyncStorage.setItem(STORAGE_KEYS.UNREAD_COUNT, JSON.stringify(data));
+    if (AsyncStorage) {
+      await AsyncStorage.setItem(STORAGE_KEYS.UNREAD_COUNT, JSON.stringify(data));
+    }
     logger.debug(`Saved unread count (${count}) to persistent storage`);
   } catch (error) {
     logger.error("Error saving unread count to persistent storage:", error);
@@ -267,6 +282,7 @@ export const saveUnreadCount = async (count: number): Promise<void> => {
  */
 export const loadUnreadCount = async (): Promise<number | null> => {
   try {
+    if (!AsyncStorage) return null;
     const data = await AsyncStorage.getItem(STORAGE_KEYS.UNREAD_COUNT);
     if (!data) return null;
 
@@ -296,10 +312,12 @@ export const loadUnreadCount = async (): Promise<number | null> => {
  */
 export const saveLastSyncTime = async (timestamp: number): Promise<void> => {
   try {
-    await AsyncStorage.setItem(
-      STORAGE_KEYS.LAST_SYNC_TIME,
-      JSON.stringify(timestamp)
-    );
+    if (AsyncStorage) {
+      await AsyncStorage.setItem(
+        STORAGE_KEYS.LAST_SYNC_TIME,
+        JSON.stringify(timestamp)
+      );
+    }
     logger.debug(
       `Saved last sync time (${new Date(
         timestamp
@@ -318,6 +336,7 @@ export const saveLastSyncTime = async (timestamp: number): Promise<void> => {
  */
 export const loadLastSyncTime = async (): Promise<number | null> => {
   try {
+    if (!AsyncStorage) return null;
     const data = await AsyncStorage.getItem(STORAGE_KEYS.LAST_SYNC_TIME);
     if (!data) return null;
 
@@ -343,6 +362,7 @@ export const loadLastSyncTime = async (): Promise<number | null> => {
 export const clearChatStorage = async (): Promise<void> => {
   try {
     // Get all keys
+    if (!AsyncStorage) return;
     const allKeys = await AsyncStorage.getAllKeys();
 
     // Filter chat-related keys
@@ -356,7 +376,7 @@ export const clearChatStorage = async (): Promise<void> => {
     );
 
     // Remove all chat-related keys
-    if (chatKeys.length > 0) {
+    if (chatKeys.length > 0 && AsyncStorage) {
       await AsyncStorage.multiRemove(chatKeys);
       logger.info(`Cleared ${chatKeys.length} chat storage items`);
     }
@@ -371,6 +391,7 @@ export const clearChatStorage = async (): Promise<void> => {
 export const cleanupExpiredCache = async (): Promise<void> => {
   try {
     // Get all keys
+    if (!AsyncStorage) return;
     const allKeys = await AsyncStorage.getAllKeys();
 
     // Filter chat-related keys
@@ -386,7 +407,7 @@ export const cleanupExpiredCache = async (): Promise<void> => {
     const expiredKeys: string[] = [];
 
     for (const key of chatKeys) {
-      const data = await AsyncStorage.getItem(key);
+      const data = AsyncStorage ? await AsyncStorage.getItem(key) : null;
       if (data) {
         try {
           const parsedData = JSON.parse(data);
@@ -404,7 +425,7 @@ export const cleanupExpiredCache = async (): Promise<void> => {
     }
 
     // Remove expired keys
-    if (expiredKeys.length > 0) {
+    if (expiredKeys.length > 0 && AsyncStorage) {
       await AsyncStorage.multiRemove(expiredKeys);
       logger.info(
         `Removed ${expiredKeys.length} expired chat cache entries`

@@ -6,7 +6,11 @@
  * appears to be data contamination between users.
  */
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Platform } from 'react-native';
+let AsyncStorage: typeof import('@react-native-async-storage/async-storage').default | undefined;
+if (Platform.OS !== 'web' && typeof navigator !== 'undefined') {
+  AsyncStorage = require('@react-native-async-storage/async-storage').default;
+}
 import { clearUserData } from "../../auth/clear-user-data";
 import { QueryClient } from "@tanstack/react-query";
 import { logger } from "../sys/log";
@@ -44,11 +48,11 @@ export const resetAppState = async (): Promise<void> => {
 
     // 3. Clear ALL async storage (except critical app settings)
     try {
-      const keys = await AsyncStorage.getAllKeys();
+      const keys = AsyncStorage ? await AsyncStorage.getAllKeys() : [];
       const preserveKeys = ["language", "appVersion", "onboardingCompleted"];
       const keysToRemove = keys.filter((key) => !preserveKeys.includes(key));
 
-      if (keysToRemove.length > 0) {
+      if (keysToRemove.length > 0 && AsyncStorage) {
         await AsyncStorage.multiRemove(keysToRemove);
         logger.log(`Removed ${keysToRemove.length} keys from storage`);
       }
@@ -57,7 +61,7 @@ export const resetAppState = async (): Promise<void> => {
     }
 
     // 4. Set a flag so the app knows a reset happened
-    await AsyncStorage.setItem("appStateReset", Date.now().toString());
+    if (AsyncStorage) await AsyncStorage.setItem("appStateReset", Date.now().toString());
 
     logger.log("✅ APP STATE RESET COMPLETE");
 
@@ -75,7 +79,7 @@ export const resetAppState = async (): Promise<void> => {
  */
 export const wasAppStateReset = async (): Promise<boolean> => {
   try {
-    const resetTime = await AsyncStorage.getItem("appStateReset");
+    const resetTime = AsyncStorage ? await AsyncStorage.getItem("appStateReset") : null;
     if (!resetTime) return false;
 
     const resetTimestamp = parseInt(resetTime, 10);

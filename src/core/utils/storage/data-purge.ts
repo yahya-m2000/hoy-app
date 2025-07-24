@@ -8,10 +8,10 @@
 
 import { Platform } from 'react-native';
 let SecureStore: typeof import('expo-secure-store') | undefined;
-let AsyncStorage: typeof import('@react-native-async-storage/async-storage') | undefined;
+let AsyncStorage: typeof import('@react-native-async-storage/async-storage').default | undefined;
 if (Platform.OS !== 'web' && typeof navigator !== 'undefined') {
   SecureStore = require('expo-secure-store');
-  AsyncStorage = require('@react-native-async-storage/async-storage');
+  AsyncStorage = require('@react-native-async-storage/async-storage').default;
 }
 import { getTokenFromStorage } from "../../auth/storage";
 import { logger } from "../sys/log";
@@ -82,7 +82,7 @@ export const purgeNonEssentialData = async (): Promise<void> => {
     ];
 
     // Remove non-essential data
-    await safeMultiRemove(AsyncStorage, nonEssentialKeys);
+    if (AsyncStorage) await safeMultiRemove(AsyncStorage, nonEssentialKeys);
 
     logger.debug("Non-essential data purged successfully", {
       purgedKeys: nonEssentialKeys.length
@@ -102,7 +102,7 @@ export const purgeNonEssentialData = async (): Promise<void> => {
  */
 export const getStorageStats = async () => {
   try {
-    const keys = await AsyncStorage.getAllKeys();
+    const keys = AsyncStorage ? await AsyncStorage.getAllKeys() : [];
     const isAuthenticated = await checkAuthenticationStatus();
     
     return {
@@ -155,7 +155,7 @@ export const purgeUserData = async (): Promise<boolean> => {
     }
 
     // Get all AsyncStorage keys
-    const allKeys = await AsyncStorage.getAllKeys();
+    const allKeys = AsyncStorage ? await AsyncStorage.getAllKeys() : [];
     logger.debug("AsyncStorage keys found", { count: allKeys.length }, {
       module: "DataPurge"
     });
@@ -176,7 +176,7 @@ export const purgeUserData = async (): Promise<boolean> => {
     // Remove critical auth tokens individually for better error handling
     for (const key of CRITICAL_AUTH_KEYS) {
       try {
-        await AsyncStorage.removeItem(key);
+        if (AsyncStorage) await AsyncStorage.removeItem(key);
       } catch (err) {
         logger.warn("Failed to remove critical auth key", { key, error: err }, {
           module: "DataPurge"
@@ -190,7 +190,7 @@ export const purgeUserData = async (): Promise<boolean> => {
 
     // Remove remaining keys in batch
     try {
-      await safeMultiRemove(AsyncStorage, keysToRemove);
+      if (AsyncStorage) await safeMultiRemove(AsyncStorage, keysToRemove);
       logger.debug("AsyncStorage keys removed", { count: keysToRemove.length }, {
         module: "DataPurge"
       });
@@ -201,7 +201,7 @@ export const purgeUserData = async (): Promise<boolean> => {
       
       // Try emergency clear if batch removal fails
       try {
-        await AsyncStorage.clear();
+        if (AsyncStorage) await AsyncStorage.clear();
         logger.warn("Emergency AsyncStorage clear executed", undefined, {
           module: "DataPurge"
         });
@@ -216,7 +216,9 @@ export const purgeUserData = async (): Promise<boolean> => {
     try {
       for (const key of CRITICAL_AUTH_KEYS) {
         try {
-          await SecureStore.deleteItemAsync(key);
+          if (SecureStore) {
+            await SecureStore.deleteItemAsync(key);
+          }
         } catch (err) {
           // SecureStore might not have the key, which is fine
         }
@@ -273,7 +275,7 @@ export const verifyPurgeSuccess = async (): Promise<boolean> => {
   try {
     // Check if critical auth tokens are gone
     for (const key of CRITICAL_AUTH_KEYS) {
-      const value = await AsyncStorage.getItem(key);
+      const value = AsyncStorage ? await AsyncStorage.getItem(key) : null;
       if (value) {
         logger.warn("Purge verification failed: token still present", { key }, {
           module: "DataPurge"

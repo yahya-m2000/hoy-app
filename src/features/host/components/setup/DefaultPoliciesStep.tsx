@@ -59,14 +59,14 @@ const PolicyTypeCard: React.FC<PolicyTypeCardProps> = ({
           ? theme.colors.gray[700]
           : theme.colors.gray[200]
       }
-      style={[
-        styles.policyCard,
-        isSelected && {
-          backgroundColor: isDark
-            ? theme.colors.gray[800]
-            : theme.colors.primary + "10",
-        },
-      ]}
+      // style={[
+      //   styles.policyCard,
+      //   isSelected && {
+      //     backgroundColor: isDark
+      //       ? theme.colors.gray[800]
+      //       : theme.colors.primary + "10",
+      //   },
+      // ]}
     >
       <Container flexDirection="row" alignItems="flex-start" marginBottom="md">
         <Container flex={1}>
@@ -179,7 +179,7 @@ const HouseRuleToggle: React.FC<HouseRuleToggleProps> = ({
       </Container>
 
       <Container flex={1}>
-        <Text variant="subtitle" color="primary" marginBottom="xs">
+        <Text variant="subtitle" color="primary" marginBottom="sm">
           {title}
         </Text>
         <Text
@@ -295,8 +295,20 @@ export const DefaultPoliciesStep: React.FC<DefaultPoliciesStepProps> = ({
   };
 
   const currentPolicy = data.cancellationPolicy?.type || "moderate";
-  const currentHouseRules = data.houseRules || {};
-  const currentCheckInPrefs = data.checkInPreferences || {};
+  const currentHouseRules = data.houseRules || {
+    checkInTime: "",
+    checkOutTime: "",
+    smokingAllowed: false,
+    petsAllowed: false,
+    partiesAllowed: false,
+    quietHours: { enabled: false, start: "", end: "" },
+    additionalRules: [],
+  } as HostHouseRules;
+  const currentCheckInPrefs = data.checkInPreferences || {
+    selfCheckIn: false,
+    keyPickup: false,
+    meetAndGreet: false,
+  } as CheckInPreferences;
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>

@@ -417,10 +417,10 @@ export default function BookingConfirmationModal({
       guests: formData.guests,
       paymentMethod: formData.paymentMethod,
       status:
-        "bookingStatus" in result
+        result && "bookingStatus" in result
           ? result.bookingStatus
-          : "status" in result
-          ? result.status
+          : result && "status" in result
+          ? (result as any).status
           : "confirmed",
       cleaningFee: priceDetails?.cleaningFee || 0,
       serviceFee: priceDetails?.serviceFee || 0,
