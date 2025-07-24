@@ -1,5 +1,5 @@
 PODS:
-  - A0Auth0 (5.0.0-beta.3):
+  - A0Auth0 (5.0.0-beta.4):
     - Auth0 (= 2.10)
     - DoubleConversion
     - glog
@@ -43,7 +43,7 @@ PODS:
     - ExpoModulesCore
   - EXNotifications (0.31.4):
     - ExpoModulesCore
-  - Expo (53.0.19):
+  - Expo (53.0.20):
     - DoubleConversion
     - ExpoModulesCore
     - glog
@@ -335,9 +335,9 @@ PODS:
     - ExpoModulesCore
   - ExpoHaptics (14.1.4):
     - ExpoModulesCore
-  - ExpoHead (5.1.3):
+  - ExpoHead (5.1.4):
     - ExpoModulesCore
-  - ExpoImage (2.3.2):
+  - ExpoImage (2.4.0):
     - ExpoModulesCore
     - libavif/libdav1d
     - SDWebImage (~> 5.21.0)
@@ -352,6 +352,8 @@ PODS:
     - ExpoModulesCore
   - ExpoLinking (7.1.7):
     - ExpoModulesCore
+  - ExpoLocalAuthentication (16.0.5):
+    - ExpoModulesCore
   - ExpoLocalization (16.1.6):
     - ExpoModulesCore
   - ExpoLocation (18.1.6):
@@ -361,7 +363,7 @@ PODS:
   - ExpoMediaLibrary (17.1.7):
     - ExpoModulesCore
     - React-Core
-  - ExpoModulesCore (2.4.2):
+  - ExpoModulesCore (2.5.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -394,11 +396,17 @@ PODS:
     - ExpoModulesCore
   - ExpoSharing (13.1.5):
     - ExpoModulesCore
+  - ExpoSMS (13.1.4):
+    - ExpoModulesCore
   - ExpoSplashScreen (0.30.10):
+    - ExpoModulesCore
+  - ExpoStoreReview (8.1.5):
     - ExpoModulesCore
   - ExpoSymbols (0.4.5):
     - ExpoModulesCore
   - ExpoSystemUI (5.0.10):
+    - ExpoModulesCore
+  - ExpoTrackingTransparency (5.2.4):
     - ExpoModulesCore
   - ExpoWebBrowser (14.2.0):
     - ExpoModulesCore
@@ -443,6 +451,32 @@ PODS:
   - libwebp/sharpyuv (1.5.0)
   - libwebp/webp (1.5.0):
     - libwebp/sharpyuv
+  - lottie-ios (4.5.0)
+  - lottie-react-native (7.2.2):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - lottie-ios (= 4.5.0)
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -1782,7 +1816,7 @@ PODS:
     - FBSDKGamingServicesKit (~> 18.0)
     - FBSDKShareKit (~> 18.0)
     - React-Core
-  - react-native-keyboard-controller (1.17.5):
+  - react-native-keyboard-controller (1.18.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1797,7 +1831,7 @@ PODS:
     - React-hermes
     - React-ImageManager
     - React-jsi
-    - react-native-keyboard-controller/common (= 1.17.5)
+    - react-native-keyboard-controller/common (= 1.18.0)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-renderercss
@@ -1807,7 +1841,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-keyboard-controller/common (1.17.5):
+  - react-native-keyboard-controller/common (1.18.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2302,6 +2336,30 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNCPicker (2.11.1):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RNGestureHandler (2.24.0):
     - DoubleConversion
     - glog
@@ -2563,6 +2621,95 @@ PODS:
     - SDWebImage/Core (~> 5.17)
   - SimpleKeychain (1.2.0)
   - SocketRocket (0.7.1)
+  - Stripe (24.12.1):
+    - StripeApplePay (= 24.12.1)
+    - StripeCore (= 24.12.1)
+    - StripePayments (= 24.12.1)
+    - StripePaymentsUI (= 24.12.1)
+    - StripeUICore (= 24.12.1)
+  - stripe-react-native (0.45.0):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Stripe (~> 24.12.0)
+    - stripe-react-native/NewArch (= 0.45.0)
+    - StripeApplePay (~> 24.12.0)
+    - StripeFinancialConnections (~> 24.12.0)
+    - StripePayments (~> 24.12.0)
+    - StripePaymentSheet (~> 24.12.0)
+    - StripePaymentsUI (~> 24.12.0)
+    - Yoga
+  - stripe-react-native/NewArch (0.45.0):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Stripe (~> 24.12.0)
+    - StripeApplePay (~> 24.12.0)
+    - StripeFinancialConnections (~> 24.12.0)
+    - StripePayments (~> 24.12.0)
+    - StripePaymentSheet (~> 24.12.0)
+    - StripePaymentsUI (~> 24.12.0)
+    - Yoga
+  - StripeApplePay (24.12.1):
+    - StripeCore (= 24.12.1)
+  - StripeCore (24.12.1)
+  - StripeFinancialConnections (24.12.1):
+    - StripeCore (= 24.12.1)
+    - StripeUICore (= 24.12.1)
+  - StripePayments (24.12.1):
+    - StripeCore (= 24.12.1)
+    - StripePayments/Stripe3DS2 (= 24.12.1)
+  - StripePayments/Stripe3DS2 (24.12.1):
+    - StripeCore (= 24.12.1)
+  - StripePaymentSheet (24.12.1):
+    - StripeApplePay (= 24.12.1)
+    - StripeCore (= 24.12.1)
+    - StripePayments (= 24.12.1)
+    - StripePaymentsUI (= 24.12.1)
+  - StripePaymentsUI (24.12.1):
+    - StripeCore (= 24.12.1)
+    - StripePayments (= 24.12.1)
+    - StripeUICore (= 24.12.1)
+  - StripeUICore (24.12.1):
+    - StripeCore (= 24.12.1)
   - Yoga (0.0.0)
   - ZXingObjC/Core (3.6.9)
   - ZXingObjC/OneD (3.6.9):
@@ -2604,6 +2751,7 @@ DEPENDENCIES:
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - ExpoLinearGradient (from `../node_modules/expo-linear-gradient/ios`)
   - ExpoLinking (from `../node_modules/expo-linking/ios`)
+  - ExpoLocalAuthentication (from `../node_modules/expo-local-authentication/ios`)
   - ExpoLocalization (from `../node_modules/expo-localization/ios`)
   - ExpoLocation (from `../node_modules/expo-location/ios`)
   - ExpoMaps (from `../node_modules/expo-maps/ios`)
@@ -2613,9 +2761,12 @@ DEPENDENCIES:
   - ExpoSecureStore (from `../node_modules/expo-secure-store/ios`)
   - ExpoSensors (from `../node_modules/expo-sensors/ios`)
   - ExpoSharing (from `../node_modules/expo-sharing/ios`)
+  - ExpoSMS (from `../node_modules/expo-sms/ios`)
   - ExpoSplashScreen (from `../node_modules/expo-splash-screen/ios`)
+  - ExpoStoreReview (from `../node_modules/expo-store-review/ios`)
   - ExpoSymbols (from `../node_modules/expo-symbols/ios`)
   - ExpoSystemUI (from `../node_modules/expo-system-ui/ios`)
+  - ExpoTrackingTransparency (from `../node_modules/expo-tracking-transparency/ios`)
   - ExpoWebBrowser (from `../node_modules/expo-web-browser/ios`)
   - EXUpdatesInterface (from `../node_modules/expo-updates-interface/ios`)
   - fast_float (from `../node_modules/react-native/third-party-podspecs/fast_float.podspec`)
@@ -2623,6 +2774,7 @@ DEPENDENCIES:
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
+  - lottie-react-native (from `../node_modules/lottie-react-native`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCT-Folly/Fabric (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTDeprecation (from `../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
@@ -2694,10 +2846,12 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
+  - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
+  - "stripe-react-native (from `../node_modules/@stripe/stripe-react-native`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -2713,12 +2867,21 @@ SPEC REPOS:
     - libavif
     - libdav1d
     - libwebp
+    - lottie-ios
     - SDWebImage
     - SDWebImageAVIFCoder
     - SDWebImageSVGCoder
     - SDWebImageWebPCoder
     - SimpleKeychain
     - SocketRocket
+    - Stripe
+    - StripeApplePay
+    - StripeCore
+    - StripeFinancialConnections
+    - StripePayments
+    - StripePaymentSheet
+    - StripePaymentsUI
+    - StripeUICore
     - ZXingObjC
 
 EXTERNAL SOURCES:
@@ -2788,6 +2951,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-linear-gradient/ios"
   ExpoLinking:
     :path: "../node_modules/expo-linking/ios"
+  ExpoLocalAuthentication:
+    :path: "../node_modules/expo-local-authentication/ios"
   ExpoLocalization:
     :path: "../node_modules/expo-localization/ios"
   ExpoLocation:
@@ -2806,12 +2971,18 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-sensors/ios"
   ExpoSharing:
     :path: "../node_modules/expo-sharing/ios"
+  ExpoSMS:
+    :path: "../node_modules/expo-sms/ios"
   ExpoSplashScreen:
     :path: "../node_modules/expo-splash-screen/ios"
+  ExpoStoreReview:
+    :path: "../node_modules/expo-store-review/ios"
   ExpoSymbols:
     :path: "../node_modules/expo-symbols/ios"
   ExpoSystemUI:
     :path: "../node_modules/expo-system-ui/ios"
+  ExpoTrackingTransparency:
+    :path: "../node_modules/expo-tracking-transparency/ios"
   ExpoWebBrowser:
     :path: "../node_modules/expo-web-browser/ios"
   EXUpdatesInterface:
@@ -2827,6 +2998,8 @@ EXTERNAL SOURCES:
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
     :tag: hermes-2025-06-04-RNv0.79.3-7f9a871eefeb2c3852365ee80f0b6733ec12ac3b
+  lottie-react-native:
+    :path: "../node_modules/lottie-react-native"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTDeprecation:
@@ -2965,6 +3138,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCMaskedView:
     :path: "../node_modules/@react-native-masked-view/masked-view"
+  RNCPicker:
+    :path: "../node_modules/@react-native-picker/picker"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -2973,11 +3148,13 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
+  stripe-react-native:
+    :path: "../node_modules/@stripe/stripe-react-native"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  A0Auth0: 7205b7e87edc2a4eec7076b48408d690b6d538ea
+  A0Auth0: f1fa42e969eab3bb07beaf338859b7610f1fdc04
   Auth0: 2876d0c36857422eda9cb580a6cc896c7d14cb36
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
@@ -2987,7 +3164,7 @@ SPEC CHECKSUMS:
   EXJSONUtils: 1d3e4590438c3ee593684186007028a14b3686cd
   EXManifests: f4cc4a62ee4f1c8a9cf2bb79d325eac6cb9f5684
   EXNotifications: d0a50a5490845c702f2c605e94533ae5ddf1aadb
-  Expo: 6e2b482fa24909b52b80ba00271e6d7742c1ef9f
+  Expo: 666a397fcb608d72b019e16ba139b74e93e0b7d7
   expo-dev-client: f1b99dfea0c9174d2e4ec96c2c5461587dda1e86
   expo-dev-launcher: 27e8eba58d52b2f471b0c4001b0535a1c0b5610d
   expo-dev-menu: 2868212810f6651bc5c30e72c636ef64de31ec6b
@@ -3005,24 +3182,28 @@ SPEC CHECKSUMS:
   ExpoFileSystem: 9681caebda23fa1b38a12a9c68b2bade7072ce20
   ExpoFont: 091a47eeaa1b30b0b760aa1d0a2e7814e8bf6fe6
   ExpoHaptics: 68c215e070f660e0a29c45dcda4f60eeff08aefb
-  ExpoHead: 9929511f8f28f2b41294c39fa66760ac74742078
-  ExpoImage: 3ad41dfaa6d33e72ee1b7e2cead5f678fad8dd02
+  ExpoHead: 7c1893efc8dc79570bdcbdadce175723f4c037ec
+  ExpoImage: 04ffc79f9a0391573b77efbc549d59c655caa5a8
   ExpoImagePicker: d2fff488a0738343a3cc21e98544ee9feafaa0e6
   ExpoKeepAwake: e8dedc115d9f6f24b153ccd2d1d8efcdfd68a527
   ExpoLinearGradient: ce334cff9859da4635c1d8eff6e291b11b04ccbb
   ExpoLinking: 343a89ea864a851831fd4495e8aea01cf0f6a36f
+  ExpoLocalAuthentication: 78f74d187ee51126e1a789d73fee32d6d7e60f1f
   ExpoLocalization: 677e45c2536bf918119962f78d7ffeeea317e07d
   ExpoLocation: 6ca806fc40d02be589782f1ca72fd7c220408c90
   ExpoMaps: 96144f3fae459bf09a5e6431a7968561d88eb5be
   ExpoMediaLibrary: 68f0c81280fe7efef3588ab498dae313b85932e9
-  ExpoModulesCore: 33476f0f608d791bbaf263af22a00d3b8877f6bc
+  ExpoModulesCore: 16f74d8df26d7e4b6bf7eb3d0effaf0f15df7b80
   ExpoNetwork: 9fdbef259f313a1ba7ede5fa977ee3dfed6fe653
   ExpoSecureStore: 3148869ad24ab94f9e0c5777c7941d7a37d60399
   ExpoSensors: a997847b03472f79eabb7989446088bd8f791657
   ExpoSharing: 04b346bdd7c8ea1fa87047ac7bba65c37bde4f51
+  ExpoSMS: de195632beeb7ef00556750da10da667596d8967
   ExpoSplashScreen: 6f9213be0c60f2756a2f8220c36f4b90c55e3dbd
+  ExpoStoreReview: bed43bea90a5876a6a480504f95fea1521dacaa7
   ExpoSymbols: bd4e20b0b6a9dbacc31dd7c861e0d6d01b56e1f2
   ExpoSystemUI: ecb2b2e8ee9468295e7c33fa10eb4e73e581389a
+  ExpoTrackingTransparency: 843029c42d70de59bb0503f6fc747b9d2fe67f7b
   ExpoWebBrowser: eeb47f52e85b2686b56178749675cf90d0822f86
   EXUpdatesInterface: 64f35449b8ef89ce08cdd8952a4d119b5de6821d
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
@@ -3040,6 +3221,8 @@ SPEC CHECKSUMS:
   libavif: 84bbb62fb232c3018d6f1bab79beea87e35de7b7
   libdav1d: 23581a4d8ec811ff171ed5e2e05cd27bad64c39f
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
+  lottie-ios: a881093fab623c467d3bce374367755c272bdd59
+  lottie-react-native: 2ed3839d12e44b5946a901687e9ab00ee9bc3232
   RCT-Folly: 36fe2295e44b10d831836cc0d1daec5f8abcf809
   RCTDeprecation: 5f638f65935e273753b1f31a365db6a8d6dc53b5
   RCTRequired: 8b46a520ea9071e2bc47d474aa9ca31b4a935bd8
@@ -3072,7 +3255,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 5b4959cbd91e7e8fae42ab0f4b7c25b86fd139a1
   React-microtasksnativemodule: 1695ab137281dd03de967b7bbeb4e392601f6432
   react-native-fbsdk-next: 1baeeacf0ecdeb839cca16ca75cb16a9bbbf8e03
-  react-native-keyboard-controller: 4ac5ca3831062121a3d644466694abbc19ace9ff
+  react-native-keyboard-controller: cbfaf2023da77da7daad84fe7f7f6ef949e8523b
   react-native-netinfo: f0a9899081c185db1de5bb2fdc1c88c202a059ac
   react-native-safe-area-context: 00d03dc688ba86664be66f9e3f203fc7d747d899
   react-native-webview: cde150463e7caa49b316b0ed1871e7ef8193bef4
@@ -3109,6 +3292,7 @@ SPEC CHECKSUMS:
   ReactCommon: 41137f7e87cf7fd1c041a7124dfa3d0d48aa43f3
   RNCAsyncStorage: c1bbcf629d7206d1e19310827848b98d68a4cbaf
   RNCMaskedView: 3e8d6bf9764b519d077986413882959eafceffbc
+  RNCPicker: 620d3d6cad22e5279fbcb365f58b3f5da1935198
   RNGestureHandler: ccf4105b125002bd88e39d2a1f2b7e6001bcdf34
   RNReanimated: 8b24b49fc13fce9a6e1729ccff645a63d2b7a6d1
   RNScreens: c2e3cc506212228c607b4785b315205e28acbf0f
@@ -3119,6 +3303,15 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
   SimpleKeychain: 768cf43ae778b1c21816e94dddf01bb8ee96a075
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
+  Stripe: 6a37e0d27872cb2c878d404676bd90cc3d7bf04b
+  stripe-react-native: f0f5e0459e777e2ddc27374ee683f8ab710fccdf
+  StripeApplePay: 3caeb241c08f79b5f11024a96409317b50347e71
+  StripeCore: fba9a10801900090b54a4384b85384e55643cbf6
+  StripeFinancialConnections: 9eab846f1c0dc98ab14e3611e1a8436c026bea5c
+  StripePayments: 83c1b5d7b782d23030b606427726a793fee5d169
+  StripePaymentSheet: b0c28bbb9b0704cdacd54facb84654d841202cec
+  StripePaymentsUI: 9b84384e81adc9c24f599f1a8991fb52c767fc62
+  StripeUICore: 186f245526e86ab02578abcc6bb6d27cc34084c6
   Yoga: adb397651e1c00672c12e9495babca70777e411e
   ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 

@@ -7,49 +7,49 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0550517011BFD7D54E8FB8B4 /* libPods-hoy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D008F76C586FEEF65C92866 /* libPods-hoy.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		1DF806228480484D9BCCFE21 /* Satoshi-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FB16EEA3C67E414B9A680859 /* Satoshi-Regular.ttf */; };
-		272DA2B56365431EB5E4CF53 /* Satoshi-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37C9DC699151473A9F66CCF3 /* Satoshi-Bold.ttf */; };
+		190CC65CA33A25924A8C1B1F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C3903B17588DEE4CC9A9EA13 /* PrivacyInfo.xcprivacy */; };
+		1F912E237B5F4324B95212A6 /* Satoshi-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E13A1238D50F4FD6B6D30DBE /* Satoshi-Medium.ttf */; };
+		24E8B052DEBD418D8DE358D1 /* Satoshi-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2B46725308D0493095BCD5F7 /* Satoshi-Bold.ttf */; };
+		382ED5617EAD4279988DBAC4 /* Satoshi-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4E289068B034B27A92DAAE1 /* Satoshi-Black.ttf */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		49D0D558FD9F412381D4CED5 /* Satoshi-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 80C4A8F94A0C4EB7A135C9D0 /* Satoshi-BoldItalic.ttf */; };
-		673BF2C1DBB841E98AADA0F4 /* Satoshi-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0029BAA8625C42B79E7B782E /* Satoshi-Medium.ttf */; };
-		6CF20E469CCE471290A92B4C /* Satoshi-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 43D297F63BBC4843A2FAFBFF /* Satoshi-MediumItalic.ttf */; };
-		86501A392BD0468A83FA53CF /* Satoshi-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E5B8361DA78145D498BE01F1 /* Satoshi-Light.ttf */; };
-		86D3D2FD768872DAEAB0FD31 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F46164693643B49C5C7A27 /* ExpoModulesProvider.swift */; };
-		A73992627A134797941F8AA0 /* Satoshi-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 113CA11D697B49CA87344670 /* Satoshi-BlackItalic.ttf */; };
+		5043AB6B74933162FB90660B /* libPods-hoy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CE4E2C1211F682364658365 /* libPods-hoy.a */; };
+		6302A7A5463440C6857FA755 /* Satoshi-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D0C5A5E8D92F4F798E7A5CDA /* Satoshi-Light.ttf */; };
+		6A0DEF755585450C9F949C15 /* Satoshi-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 591DEDD1EFEB4F39B19720B8 /* Satoshi-BoldItalic.ttf */; };
+		B78CEC0E06AC49E8AB94E36F /* Satoshi-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 460FCE2D4F1941F7A69935BC /* Satoshi-BlackItalic.ttf */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		DE608FA258A241EFA2155C8C /* Satoshi-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AB27B4B00F9243B38945B577 /* Satoshi-Italic.ttf */; };
-		DF66E7FB6E6D9D8A0E7A0985 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 5A8BE342E68340AEF75EAFEA /* PrivacyInfo.xcprivacy */; };
-		ED17A0111535420CA939196D /* Satoshi-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4A03CF66DBA549F3954D3256 /* Satoshi-LightItalic.ttf */; };
+		C1C14AFA3D8D4CCCA4FA134A /* Satoshi-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 31E5412CDBFA4364B28132FF /* Satoshi-LightItalic.ttf */; };
+		DAE310272146D7DD58342446 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2323A8F76CBE385A1175D57 /* ExpoModulesProvider.swift */; };
+		EC961B6F128740ECAAB51D05 /* Satoshi-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 358DFB719AD940E6911C1EE1 /* Satoshi-Regular.ttf */; };
+		EC9A7DF8299E43EDB1FF2CCA /* Satoshi-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ACCA9A51E95B4B709E79C659 /* Satoshi-MediumItalic.ttf */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
-		FC28845A77884F848D4DE33D /* Satoshi-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6B0A5B984329412CB71C278E /* Satoshi-Black.ttf */; };
+		F6BCCB1C16044CE8AA339F8D /* Satoshi-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A81731854E2E433AA37BEC0D /* Satoshi-Italic.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0029BAA8625C42B79E7B782E /* Satoshi-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Medium.ttf"; path = "../assets/fonts/Satoshi-Medium.ttf"; sourceTree = "<group>"; };
-		113CA11D697B49CA87344670 /* Satoshi-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-BlackItalic.ttf"; path = "../assets/fonts/Satoshi-BlackItalic.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* hoy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hoy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = hoy/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = hoy/Info.plist; sourceTree = "<group>"; };
-		37C9DC699151473A9F66CCF3 /* Satoshi-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Bold.ttf"; path = "../assets/fonts/Satoshi-Bold.ttf"; sourceTree = "<group>"; };
-		43D297F63BBC4843A2FAFBFF /* Satoshi-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-MediumItalic.ttf"; path = "../assets/fonts/Satoshi-MediumItalic.ttf"; sourceTree = "<group>"; };
-		4A03CF66DBA549F3954D3256 /* Satoshi-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-LightItalic.ttf"; path = "../assets/fonts/Satoshi-LightItalic.ttf"; sourceTree = "<group>"; };
-		5A8BE342E68340AEF75EAFEA /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = hoy/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		6B0A5B984329412CB71C278E /* Satoshi-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Black.ttf"; path = "../assets/fonts/Satoshi-Black.ttf"; sourceTree = "<group>"; };
-		80C4A8F94A0C4EB7A135C9D0 /* Satoshi-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-BoldItalic.ttf"; path = "../assets/fonts/Satoshi-BoldItalic.ttf"; sourceTree = "<group>"; };
-		9D008F76C586FEEF65C92866 /* libPods-hoy.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hoy.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A0F46164693643B49C5C7A27 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-hoy/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		2B46725308D0493095BCD5F7 /* Satoshi-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Bold.ttf"; path = "../assets/fonts/Satoshi-Bold.ttf"; sourceTree = "<group>"; };
+		31E5412CDBFA4364B28132FF /* Satoshi-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-LightItalic.ttf"; path = "../assets/fonts/Satoshi-LightItalic.ttf"; sourceTree = "<group>"; };
+		358DFB719AD940E6911C1EE1 /* Satoshi-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Regular.ttf"; path = "../assets/fonts/Satoshi-Regular.ttf"; sourceTree = "<group>"; };
+		460FCE2D4F1941F7A69935BC /* Satoshi-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-BlackItalic.ttf"; path = "../assets/fonts/Satoshi-BlackItalic.ttf"; sourceTree = "<group>"; };
+		591DEDD1EFEB4F39B19720B8 /* Satoshi-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-BoldItalic.ttf"; path = "../assets/fonts/Satoshi-BoldItalic.ttf"; sourceTree = "<group>"; };
+		5CE4E2C1211F682364658365 /* libPods-hoy.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hoy.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A81731854E2E433AA37BEC0D /* Satoshi-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Italic.ttf"; path = "../assets/fonts/Satoshi-Italic.ttf"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = hoy/SplashScreen.storyboard; sourceTree = "<group>"; };
-		AB27B4B00F9243B38945B577 /* Satoshi-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Italic.ttf"; path = "../assets/fonts/Satoshi-Italic.ttf"; sourceTree = "<group>"; };
+		ACCA9A51E95B4B709E79C659 /* Satoshi-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-MediumItalic.ttf"; path = "../assets/fonts/Satoshi-MediumItalic.ttf"; sourceTree = "<group>"; };
+		B4E289068B034B27A92DAAE1 /* Satoshi-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Black.ttf"; path = "../assets/fonts/Satoshi-Black.ttf"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		D43A673D7C4B09C5EF2ECE39 /* Pods-hoy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoy.release.xcconfig"; path = "Target Support Files/Pods-hoy/Pods-hoy.release.xcconfig"; sourceTree = "<group>"; };
-		E5B8361DA78145D498BE01F1 /* Satoshi-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Light.ttf"; path = "../assets/fonts/Satoshi-Light.ttf"; sourceTree = "<group>"; };
+		BB57F2358574DA78516E64B8 /* Pods-hoy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoy.debug.xcconfig"; path = "Target Support Files/Pods-hoy/Pods-hoy.debug.xcconfig"; sourceTree = "<group>"; };
+		C0F1632215FF2F86B6CEACF6 /* Pods-hoy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoy.release.xcconfig"; path = "Target Support Files/Pods-hoy/Pods-hoy.release.xcconfig"; sourceTree = "<group>"; };
+		C3903B17588DEE4CC9A9EA13 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = hoy/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		D0C5A5E8D92F4F798E7A5CDA /* Satoshi-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Light.ttf"; path = "../assets/fonts/Satoshi-Light.ttf"; sourceTree = "<group>"; };
+		E13A1238D50F4FD6B6D30DBE /* Satoshi-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Medium.ttf"; path = "../assets/fonts/Satoshi-Medium.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = hoy/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* hoy-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "hoy-Bridging-Header.h"; path = "hoy/hoy-Bridging-Header.h"; sourceTree = "<group>"; };
-		FA03BB6C1202802E0D106908 /* Pods-hoy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoy.debug.xcconfig"; path = "Target Support Files/Pods-hoy/Pods-hoy.debug.xcconfig"; sourceTree = "<group>"; };
-		FB16EEA3C67E414B9A680859 /* Satoshi-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Regular.ttf"; path = "../assets/fonts/Satoshi-Regular.ttf"; sourceTree = "<group>"; };
+		F2323A8F76CBE385A1175D57 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-hoy/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,13 +57,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0550517011BFD7D54E8FB8B4 /* libPods-hoy.a in Frameworks */,
+				5043AB6B74933162FB90660B /* libPods-hoy.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		11F53B44A273C53862AAE010 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BB57F2358574DA78516E64B8 /* Pods-hoy.debug.xcconfig */,
+				C0F1632215FF2F86B6CEACF6 /* Pods-hoy.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* hoy */ = {
 			isa = PBXGroup;
 			children = (
@@ -73,26 +82,35 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				5A8BE342E68340AEF75EAFEA /* PrivacyInfo.xcprivacy */,
+				C3903B17588DEE4CC9A9EA13 /* PrivacyInfo.xcprivacy */,
 			);
 			name = hoy;
+			sourceTree = "<group>";
+		};
+		14E1D991A65C46A7BFAAF42D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				358DFB719AD940E6911C1EE1 /* Satoshi-Regular.ttf */,
+				2B46725308D0493095BCD5F7 /* Satoshi-Bold.ttf */,
+				E13A1238D50F4FD6B6D30DBE /* Satoshi-Medium.ttf */,
+				D0C5A5E8D92F4F798E7A5CDA /* Satoshi-Light.ttf */,
+				B4E289068B034B27A92DAAE1 /* Satoshi-Black.ttf */,
+				A81731854E2E433AA37BEC0D /* Satoshi-Italic.ttf */,
+				591DEDD1EFEB4F39B19720B8 /* Satoshi-BoldItalic.ttf */,
+				ACCA9A51E95B4B709E79C659 /* Satoshi-MediumItalic.ttf */,
+				31E5412CDBFA4364B28132FF /* Satoshi-LightItalic.ttf */,
+				460FCE2D4F1941F7A69935BC /* Satoshi-BlackItalic.ttf */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				9D008F76C586FEEF65C92866 /* libPods-hoy.a */,
+				5CE4E2C1211F682364658365 /* libPods-hoy.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		68721377275F05B7CAD55C8B /* ExpoModulesProviders */ = {
-			isa = PBXGroup;
-			children = (
-				AEC0013790AF76E4BB0370AB /* hoy */,
-			);
-			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -109,9 +127,9 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				9753A79CC02C4D91A09A28E2 /* Resources */,
-				FBA619CA5D1B80DB1A565956 /* Pods */,
-				68721377275F05B7CAD55C8B /* ExpoModulesProviders */,
+				14E1D991A65C46A7BFAAF42D /* Resources */,
+				11F53B44A273C53862AAE010 /* Pods */,
+				FA48D51F10349725B1D6308B /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -126,27 +144,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9753A79CC02C4D91A09A28E2 /* Resources */ = {
+		ABD8B65089C2781E021A5F4D /* hoy */ = {
 			isa = PBXGroup;
 			children = (
-				FB16EEA3C67E414B9A680859 /* Satoshi-Regular.ttf */,
-				37C9DC699151473A9F66CCF3 /* Satoshi-Bold.ttf */,
-				0029BAA8625C42B79E7B782E /* Satoshi-Medium.ttf */,
-				E5B8361DA78145D498BE01F1 /* Satoshi-Light.ttf */,
-				6B0A5B984329412CB71C278E /* Satoshi-Black.ttf */,
-				AB27B4B00F9243B38945B577 /* Satoshi-Italic.ttf */,
-				80C4A8F94A0C4EB7A135C9D0 /* Satoshi-BoldItalic.ttf */,
-				43D297F63BBC4843A2FAFBFF /* Satoshi-MediumItalic.ttf */,
-				4A03CF66DBA549F3954D3256 /* Satoshi-LightItalic.ttf */,
-				113CA11D697B49CA87344670 /* Satoshi-BlackItalic.ttf */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
-		AEC0013790AF76E4BB0370AB /* hoy */ = {
-			isa = PBXGroup;
-			children = (
-				A0F46164693643B49C5C7A27 /* ExpoModulesProvider.swift */,
+				F2323A8F76CBE385A1175D57 /* ExpoModulesProvider.swift */,
 			);
 			name = hoy;
 			sourceTree = "<group>";
@@ -160,13 +161,12 @@
 			path = hoy/Supporting;
 			sourceTree = "<group>";
 		};
-		FBA619CA5D1B80DB1A565956 /* Pods */ = {
+		FA48D51F10349725B1D6308B /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				FA03BB6C1202802E0D106908 /* Pods-hoy.debug.xcconfig */,
-				D43A673D7C4B09C5EF2ECE39 /* Pods-hoy.release.xcconfig */,
+				ABD8B65089C2781E021A5F4D /* hoy */,
 			);
-			path = Pods;
+			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,13 +177,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "hoy" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				CDBAC31007C1AB7C7EBD041C /* [Expo] Configure project */,
+				C78053FC61F746FBB33E14F4 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				1539B5B7A91127A2EC809B88 /* [CP] Embed Pods Frameworks */,
+				FD305C8DB5066CF10515548D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -233,17 +233,17 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				1DF806228480484D9BCCFE21 /* Satoshi-Regular.ttf in Resources */,
-				272DA2B56365431EB5E4CF53 /* Satoshi-Bold.ttf in Resources */,
-				673BF2C1DBB841E98AADA0F4 /* Satoshi-Medium.ttf in Resources */,
-				86501A392BD0468A83FA53CF /* Satoshi-Light.ttf in Resources */,
-				FC28845A77884F848D4DE33D /* Satoshi-Black.ttf in Resources */,
-				DE608FA258A241EFA2155C8C /* Satoshi-Italic.ttf in Resources */,
-				49D0D558FD9F412381D4CED5 /* Satoshi-BoldItalic.ttf in Resources */,
-				6CF20E469CCE471290A92B4C /* Satoshi-MediumItalic.ttf in Resources */,
-				ED17A0111535420CA939196D /* Satoshi-LightItalic.ttf in Resources */,
-				A73992627A134797941F8AA0 /* Satoshi-BlackItalic.ttf in Resources */,
-				DF66E7FB6E6D9D8A0E7A0985 /* PrivacyInfo.xcprivacy in Resources */,
+				EC961B6F128740ECAAB51D05 /* Satoshi-Regular.ttf in Resources */,
+				24E8B052DEBD418D8DE358D1 /* Satoshi-Bold.ttf in Resources */,
+				1F912E237B5F4324B95212A6 /* Satoshi-Medium.ttf in Resources */,
+				6302A7A5463440C6857FA755 /* Satoshi-Light.ttf in Resources */,
+				382ED5617EAD4279988DBAC4 /* Satoshi-Black.ttf in Resources */,
+				F6BCCB1C16044CE8AA339F8D /* Satoshi-Italic.ttf in Resources */,
+				6A0DEF755585450C9F949C15 /* Satoshi-BoldItalic.ttf in Resources */,
+				EC9A7DF8299E43EDB1FF2CCA /* Satoshi-MediumItalic.ttf in Resources */,
+				C1C14AFA3D8D4CCCA4FA134A /* Satoshi-LightItalic.ttf in Resources */,
+				B78CEC0E06AC49E8AB94E36F /* Satoshi-BlackItalic.ttf in Resources */,
+				190CC65CA33A25924A8C1B1F /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,7 +287,102 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		1539B5B7A91127A2EC809B88 /* [CP] Embed Pods Frameworks */ = {
+		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-hoy/Pods-hoy-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/Auth0/Auth0.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EXApplication/ExpoApplication_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/EXConstants.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/ExpoConstants_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EXNotifications/ExpoNotifications_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoDevice/ExpoDevice_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoFileSystem/ExpoFileSystem_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoLocalization/ExpoLocalization_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoMediaLibrary/ExpoMediaLibrary_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoSystemUI/ExpoSystemUI_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RCT-Folly/RCT-Folly_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage/RNCAsyncStorage_resources.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RNSVG/RNSVGFilters.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React-Core_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/React-cxxreact_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/Stripe/StripeBundle.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/StripeCore/StripeCoreBundle.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/StripeFinancialConnections/StripeFinancialConnectionsBundle.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/StripePaymentSheet/StripePaymentSheetBundle.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/StripePayments/StripePaymentsBundle.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/StripePayments/Stripe3DS2.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/StripePaymentsUI/StripePaymentsUIBundle.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/StripeUICore/StripeUICoreBundle.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/boost/boost_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-launcher/EXDevLauncher.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-menu/EXDevMenu.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/glog/glog_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/lottie-ios/LottiePrivacyInfo.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/lottie-react-native/Lottie_React_Native_Privacy.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Auth0.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoApplication_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXConstants.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoConstants_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoNotifications_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoDevice_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoFileSystem_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoLocalization_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoMediaLibrary_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoSystemUI_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RCT-Folly_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNCAsyncStorage_resources.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNSVGFilters.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-Core_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-cxxreact_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SDWebImage.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/StripeBundle.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/StripeCoreBundle.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/StripeFinancialConnectionsBundle.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/StripePaymentSheetBundle.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/StripePaymentsBundle.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Stripe3DS2.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/StripePaymentsUIBundle.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/StripeUICoreBundle.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/boost_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevLauncher.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevMenu.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/glog_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/LottiePrivacyInfo.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lottie_React_Native_Privacy.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-hoy/Pods-hoy-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C78053FC61F746FBB33E14F4 /* [Expo] Configure project */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[Expo] Configure project";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-hoy/expo-configure-project.sh\"\n";
+		};
+		FD305C8DB5066CF10515548D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -317,81 +412,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-hoy/Pods-hoy-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-hoy/Pods-hoy-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/Auth0/Auth0.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/EXApplication/ExpoApplication_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/EXConstants.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/ExpoConstants_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/EXNotifications/ExpoNotifications_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoDevice/ExpoDevice_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoFileSystem/ExpoFileSystem_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoLocalization/ExpoLocalization_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoMediaLibrary/ExpoMediaLibrary_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoSystemUI/ExpoSystemUI_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/RCT-Folly/RCT-Folly_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage/RNCAsyncStorage_resources.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/RNSVG/RNSVGFilters.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React-Core_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/React-cxxreact_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/boost/boost_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-launcher/EXDevLauncher.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-menu/EXDevMenu.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/glog/glog_privacy.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Auth0.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoApplication_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXConstants.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoConstants_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoNotifications_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoDevice_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoFileSystem_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoLocalization_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoMediaLibrary_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoSystemUI_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RCT-Folly_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNCAsyncStorage_resources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNSVGFilters.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-Core_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-cxxreact_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SDWebImage.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/boost_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevLauncher.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevMenu.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/glog_privacy.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-hoy/Pods-hoy-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		CDBAC31007C1AB7C7EBD041C /* [Expo] Configure project */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[Expo] Configure project";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-hoy/expo-configure-project.sh\"\n";
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -400,7 +420,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				86D3D2FD768872DAEAB0FD31 /* ExpoModulesProvider.swift in Sources */,
+				DAE310272146D7DD58342446 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,17 +429,13 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FA03BB6C1202802E0D106908 /* Pods-hoy.debug.xcconfig */;
+			baseConfigurationReference = BB57F2358574DA78516E64B8 /* Pods-hoy.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = hoy/hoy.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = L9PA57Q5W8;
+				DEVELOPMENT_TEAM = L9PA57Q5W8;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -440,8 +456,6 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ym2000.hoy;
 				PRODUCT_NAME = hoy;
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "*[expo] com.ym2000.hoy AppStore 2025-07-17T11:07:55.216Z";
 				SWIFT_OBJC_BRIDGING_HEADER = "hoy/hoy-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -452,17 +466,13 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D43A673D7C4B09C5EF2ECE39 /* Pods-hoy.release.xcconfig */;
+			baseConfigurationReference = C0F1632215FF2F86B6CEACF6 /* Pods-hoy.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = hoy/hoy.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = L9PA57Q5W8;
+				DEVELOPMENT_TEAM = L9PA57Q5W8;
 				INFOPLIST_FILE = hoy/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -478,8 +488,6 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ym2000.hoy;
 				PRODUCT_NAME = hoy;
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "*[expo] com.ym2000.hoy AppStore 2025-07-17T11:07:55.216Z";
 				SWIFT_OBJC_BRIDGING_HEADER = "hoy/hoy-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

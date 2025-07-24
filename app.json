@@ -77,9 +77,7 @@
       "bundler": "metro",
       "output": "server"
     },
-    "assetBundlePatterns": [
-      "assets/fonts/*"
-    ],
+    "assetBundlePatterns": ["assets/fonts/*"],
     "extra": {
       "environment": "production",
       "minApiCallInterval": 10000,
@@ -117,7 +115,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/splash-icon-light",
+          "image": "./assets/splash-icon.png",
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
           "imageWidth": 200
@@ -153,15 +151,12 @@
       "expo-localization",
       "expo-web-browser",
       "expo-router",
-      "expo-checkbox",
       [
         "expo-local-authentication",
         {
           "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID for secure authentication."
         }
       ],
-      "expo-sms",
-      "expo-store-review",
       [
         "expo-tracking-transparency",
         {
