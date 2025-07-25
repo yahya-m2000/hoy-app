@@ -1,0 +1,119 @@
+{
+  "location": {
+    "title": "Location Access",
+    "description": "This app needs access to your location to provide location-based services.",
+    "granted": "Location permission granted",
+    "denied": "Location permission denied",
+    "blocked": "Location permission is blocked",
+    "unavailable": "Location services are unavailable",
+    "disabled": "Location services are disabled",
+    "prompt": "Enable location services to continue",
+    "rationale": "We need location access to show you nearby properties and help hosts find you.",
+    "settingsPrompt": "Please enable location access in Settings to continue",
+    "preciseLocation": "Allow precise location for better accuracy"
+  },
+  "camera": {
+    "title": "Camera Access",
+    "description": "This app needs access to your camera to take photos.",
+    "granted": "Camera permission granted",
+    "denied": "Camera permission denied",
+    "blocked": "Camera permission is blocked",
+    "unavailable": "Camera is unavailable",
+    "prompt": "Enable camera access to take photos",
+    "rationale": "We need camera access to let you take photos of your property or profile.",
+    "settingsPrompt": "Please enable camera access in Settings to take photos"
+  },
+  "photos": {
+    "title": "Photo Library Access",
+    "description": "This app needs access to your photo library to select images.",
+    "granted": "Photo library permission granted",
+    "denied": "Photo library permission denied",
+    "blocked": "Photo library permission is blocked",
+    "unavailable": "Photo library is unavailable",
+    "prompt": "Enable photo library access to select images",
+    "rationale": "We need photo library access to let you select photos for your property or profile.",
+    "settingsPrompt": "Please enable photo library access in Settings to select photos",
+    "limitedAccess": "Limited photo access granted",
+    "selectMore": "Select more photos"
+  },
+  "microphone": {
+    "title": "Microphone Access",
+    "description": "This app needs access to your microphone for voice messages.",
+    "granted": "Microphone permission granted",
+    "denied": "Microphone permission denied",
+    "blocked": "Microphone permission is blocked",
+    "unavailable": "Microphone is unavailable",
+    "prompt": "Enable microphone access for voice messages",
+    "rationale": "We need microphone access to record voice messages.",
+    "settingsPrompt": "Please enable microphone access in Settings for voice messaging"
+  },
+  "notifications": {
+    "title": "Notification Access",
+    "description": "This app would like to send you notifications.",
+    "granted": "Notification permission granted",
+    "denied": "Notification permission denied",
+    "blocked": "Notification permission is blocked",
+    "unavailable": "Notifications are unavailable",
+    "prompt": "Enable notifications to stay updated",
+    "rationale": "We'll send you important updates about your bookings and messages.",
+    "settingsPrompt": "Please enable notifications in Settings to receive updates",
+    "pushUnavailable": "Push notifications are unavailable"
+  },
+  "contacts": {
+    "title": "Contacts Access",
+    "description": "This app needs access to your contacts to help you invite friends.",
+    "granted": "Contacts permission granted",
+    "denied": "Contacts permission denied",
+    "blocked": "Contacts permission is blocked",
+    "unavailable": "Contacts are unavailable",
+    "prompt": "Enable contacts access to invite friends",
+    "rationale": "We can help you invite friends from your contacts.",
+    "settingsPrompt": "Please enable contacts access in Settings to invite friends"
+  },
+  "storage": {
+    "title": "Storage Access",
+    "description": "This app needs access to your device storage.",
+    "granted": "Storage permission granted",
+    "denied": "Storage permission denied",
+    "blocked": "Storage permission is blocked",
+    "unavailable": "Storage is unavailable",
+    "prompt": "Enable storage access to save files",
+    "rationale": "We need storage access to save photos and documents.",
+    "settingsPrompt": "Please enable storage access in Settings"
+  },
+  "calendar": {
+    "title": "Calendar Access",
+    "description": "This app needs access to your calendar to manage bookings.",
+    "granted": "Calendar permission granted",
+    "denied": "Calendar permission denied",
+    "blocked": "Calendar permission is blocked",
+    "unavailable": "Calendar is unavailable",
+    "prompt": "Enable calendar access to manage your bookings",
+    "rationale": "We can add your bookings to your calendar automatically.",
+    "settingsPrompt": "Please enable calendar access in Settings"
+  },
+  "biometrics": {
+    "title": "Biometric Authentication",
+    "description": "Use your fingerprint or face to secure your account.",
+    "available": "Biometric authentication is available",
+    "unavailable": "Biometric authentication is unavailable",
+    "notEnrolled": "No biometric data enrolled",
+    "prompt": "Use biometric authentication for secure login",
+    "enabled": "Biometric authentication enabled",
+    "disabled": "Biometric authentication disabled",
+    "failed": "Biometric authentication failed",
+    "lockout": "Too many failed attempts, please try again later"
+  },
+  "actions": {
+    "allow": "Allow",
+    "deny": "Don't Allow",
+    "askAgain": "Ask Next Time",
+    "openSettings": "Open Settings",
+    "notNow": "Not Now",
+    "later": "Maybe Later",
+    "enable": "Enable",
+    "disable": "Disable",
+    "grant": "Grant Permission",
+    "revoke": "Revoke Permission"
+  }
+}

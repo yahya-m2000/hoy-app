@@ -1,0 +1,49 @@
+{
+  "title": "Host Agreement",
+  "subtitle": "Review and accept the terms and policies required to host on our platform",
+  "progress": "Progress: {{completed}}/{{total}}",
+  "allRequiredCompleted": "All required agreements have been accepted. You can proceed to the next step.",
+  "requiredRemaining": "Please accept the required terms and privacy policy to continue.",
+  "terms": {
+    "title": "Terms of Service",
+    "subtitle": "The legal agreement governing your use of our platform as a host",
+    "status": {
+      "pending": "Not accepted",
+      "accepted": "Accepted"
+    },
+    "viewDocument": "View Terms",
+    "accept": "Accept Terms",
+    "accepted": "Terms Accepted",
+    "helpText": "The Terms of Service outline your rights and responsibilities as a host on our platform."
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "subtitle": "How we collect, use, and protect your personal information",
+    "status": {
+      "pending": "Not accepted",
+      "accepted": "Accepted"
+    },
+    "viewDocument": "View Privacy Policy",
+    "accept": "Accept Privacy Policy",
+    "accepted": "Privacy Policy Accepted",
+    "helpText": "Our Privacy Policy explains how we handle your personal data and protect your privacy."
+  },
+  "guarantee": {
+    "title": "Host Guarantee",
+    "subtitle": "Optional protection program for property damage and liability",
+    "status": {
+      "pending": "Not accepted",
+      "accepted": "Accepted",
+      "optional": "Optional"
+    },
+    "viewDocument": "View Host Guarantee",
+    "accept": "Accept Host Guarantee",
+    "accepted": "Host Guarantee Accepted",
+    "helpText": "The Host Guarantee provides additional protection for your property and liability coverage.",
+    "optionalNote": "This is optional but recommended for additional protection."
+  },
+  "legalNotice": "Legal Notice",
+  "legalNoticeText": "By accepting these agreements, you confirm that you have read, understood, and agree to be bound by these terms. These agreements may be updated from time to time, and continued use of our platform constitutes acceptance of any changes.",
+  "cannotOpenDocument": "Cannot open document. Please try again later.",
+  "documentError": "Error opening document. Please check your internet connection."
+}

@@ -1,0 +1,30 @@
+{
+  "greetings": {
+    "hello": "Hello",
+    "discoverAmazingPlaces": "Discover amazing places to stay"
+  },
+  "hosting": {
+    "individualHost": "Individual Host",
+    "businessHost": "Business Host",
+    "organizationHost": "Organization Host",
+    "monthlyPotential": "Monthly Potential",
+    "analytics": "Analytics"
+  },
+  "property": {
+    "perNight": "per night",
+    "night": "night",
+    "whatThisPlaceOffers": "What this place offers",
+    "showAll": "Show All",
+    "meetYourHost": "Meet Your Host"
+  },
+  "location": {
+    "in": "in"
+  },
+  "auth": {
+    "signIn": "Sign In"
+  },
+  "errors": {
+    "cannotConnect": "Cannot connect. Please check your internet connection.",
+    "pleaseTryAgainLater": "Please try again later."
+  }
+}

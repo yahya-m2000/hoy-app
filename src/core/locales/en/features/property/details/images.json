@@ -1,0 +1,55 @@
+{
+  "title": "Photos",
+  "description": "Add high-quality photos to showcase your property.",
+  "actions": {
+    "addPhotos": "Add Photos",
+    "chooseFromLibrary": "Choose from your photo library",
+    "chooseMethod": "How would you like to add photos?",
+    "camera": "Take Photo",
+    "photoLibrary": "Photo Library",
+    "upload": "Upload Photos",
+    "dragDrop": "Drag and drop photos here",
+    "reorderPhotos": "Reorder Photos",
+    "setCoverPhoto": "Set as Cover Photo",
+    "deletePhoto": "Delete Photo"
+  },
+  "permissions": {
+    "permissionRequired": "Permission Required",
+    "cameraRollPermission": "We need access to your photo library to add images.",
+    "cameraPermission": "We need access to your camera to take photos."
+  },
+  "errors": {
+    "uploadError": "Failed to upload images. Please try again.",
+    "pickError": "Failed to pick images. Please try again.",
+    "cameraError": "Failed to take photo. Please try again.",
+    "photoSizeLimit": "Photo size must be less than 10MB",
+    "unsupportedFormat": "Unsupported image format",
+    "uploadFailed": "Upload failed"
+  },
+  "status": {
+    "photosAdded": "{{count}} photos added",
+    "uploadingPhotos": "Uploading photos...",
+    "uploadComplete": "Upload complete"
+  },
+  "guidelines": {
+    "tipTitle": "Photo Tips",
+    "tipContent": "High-quality photos help guests get a better sense of your property and increase bookings. Use natural lighting and show off your best features.",
+    "tips": [
+      "Use natural lighting when possible",
+      "Show off your best features",
+      "Include different areas of your space",
+      "Keep photos current and accurate"
+    ]
+  },
+  "requirements": {
+    "minRequired": "Minimum 5 photos required",
+    "photoLimit": "Maximum 20 photos allowed",
+    "photoQuality": "Photo Quality",
+    "photoQualityHelp": "High-quality photos increase booking rates"
+  },
+  "labels": {
+    "main": "Main",
+    "coverPhoto": "Cover Photo",
+    "more": "more"
+  }
+}

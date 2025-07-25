@@ -1,0 +1,7 @@
+{
+  "permissionGranted": "Location permission granted",
+  "permissionDenied": "Location permission denied",
+  "servicesDisabled": "Location services are disabled",
+  "locationUpdated": "Location updated successfully",
+  "noAddressFound": "No address found for this location"
+}

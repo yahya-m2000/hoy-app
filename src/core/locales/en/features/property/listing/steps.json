@@ -1,0 +1,91 @@
+{
+  "intro": {
+    "title": "Welcome to Hosting!",
+    "description": "Start your journey as a host. We'll guide you through the steps to list your property.",
+    "benefit1": "Reach guests from around the world",
+    "benefit2": "Earn extra income on your terms",
+    "benefit3": "Enjoy secure, protected bookings",
+    "infoTitle": "How it works",
+    "infoText": "You'll provide details about your property, set your preferences, and publish your listing. You can edit everything later!"
+  },
+  "verification": {
+    "title": "Verify Your Account",
+    "subtitle": "Complete verification to ensure guest safety and trust"
+  },
+  "agreement": {
+    "title": "Accept Terms & Policies",
+    "subtitle": "Review and accept our terms of service and policies"
+  },
+  "preferences": {
+    "title": "Host Preferences",
+    "subtitle": "Set your response time and booking preferences"
+  },
+  "profile": {
+    "title": "Complete Your Profile",
+    "subtitle": "Tell guests about yourself and what makes you a great host"
+  },
+  "review": {
+    "title": "Review & Publish",
+    "description": "Take a final look before publishing your listing",
+    "editSection": "Edit",
+    "allSet": "Everything looks good!",
+    "publishNow": "Publish Now",
+    "saveDraft": "Save as Draft",
+    "overview": "Property Overview",
+    "noName": "Untitled Property",
+    "bed": "bed",
+    "beds": "beds",
+    "bath": "bath",
+    "baths": "baths",
+    "guest": "guest",
+    "guests": "guests",
+    "perNight": "per night",
+    "amenities": "Amenities",
+    "photos": "Photos",
+    "main": "Main",
+    "more": "more",
+    "readyTo": "Ready to {{action}}?",
+    "update": "update",
+    "publish": "publish",
+    "updateMessage": "Your property listing will be updated with the new information.",
+    "publishMessage": "Your property will be reviewed and published within 24 hours. You can edit these details anytime after publishing.",
+    "sectionTitles": {
+      "basicInfo": "Basic Information",
+      "location": "Location",
+      "details": "Property Details",
+      "amenities": "Amenities",
+      "photos": "Photos",
+      "title": "Title & Description",
+      "pricing": "Pricing",
+      "discounts": "Discounts",
+      "policies": "Policies",
+      "hostInfo": "Host Information"
+    },
+    "published": "Your property has been published",
+    "draft": "Your property has been saved as a draft",
+    "addAnother": "Add Another Property",
+    "publishedMessage": "Your property is now live and visible to guests. You can edit it anytime from your dashboard.",
+    "draftMessage": "Your property has been saved as a draft. You can continue editing it later."
+  },
+  "success": {
+    "congratulations": "Congratulations!",
+    "draftSaved": "Draft Saved!",
+    "publishedMessage": "Your property has been published successfully and is now visible to guests.",
+    "draftMessage": "Your property has been saved as a draft. You can continue editing it later."
+  },
+  "draftSelection": {
+    "continueYourListing": "Continue Your Listing",
+    "savedProperties": "You have saved properties in progress. Choose one to continue or start fresh.",
+    "createNew": "Create New Property",
+    "yourDrafts": "Your Drafts ({{count}})",
+    "justStarted": "Just started",
+    "step1": "About Your Place",
+    "step2": "Make It Stand Out",
+    "step3": "Finish Up",
+    "inProgress": "In Progress",
+    "progress": "Step {{step}}: {{stepName}}",
+    "propertyInCity": "Property in {{city}}",
+    "listingOfType": "{{type}} Listing",
+    "lastEdited": "Last edited {{time}}"
+  }
+}

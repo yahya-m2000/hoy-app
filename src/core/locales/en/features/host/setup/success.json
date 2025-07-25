@@ -1,0 +1,19 @@
+{
+  "title": "Welcome to Hosting!",
+  "subtitle": "Congratulations! You've successfully completed your host setup and are ready to start welcoming guests.",
+  "featuresUnlocked": "Features Now Available",
+  "features": {
+    "listings": "Create Listings",
+    "listingsDesc": "Add your properties and start accepting bookings",
+    "calendar": "Manage Calendar",
+    "calendarDesc": "Set availability and block dates as needed",
+    "messaging": "Guest Communication",
+    "messagingDesc": "Chat with guests before and during their stay",
+    "insights": "Performance Analytics",
+    "insightsDesc": "Track your earnings and booking performance"
+  },
+  "nextSteps": "What's Next?",
+  "nextStepsDesc": "Ready to start your hosting journey? You can add your first property or explore your new host dashboard.",
+  "addProperty": "Add Your First Property",
+  "exploreDashboard": "Explore Host Dashboard"
+}

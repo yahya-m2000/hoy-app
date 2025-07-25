@@ -1,0 +1,68 @@
+{
+  "reservation": {
+    "whoIsComing": "Who's coming?",
+    "selectGuestCount": "Select the number of guests for your stay",
+    "selectedDates": "Selected Dates",
+    "selectDates": "Select dates",
+    "nights": "nights",
+    "editDates": "Tap to edit",
+    "guestSummary": "Guest Summary",
+    "guests": "guests",
+    "pets": "pets",
+    "editGuests": "Tap to edit",
+    "guestInformation": "Guest Information",
+    "maxGuests": "Maximum",
+    "totalGuests": "Total Guests",
+    "people": "people"
+  },
+  "payment": {
+    "paymentMethod": "Payment Method",
+    "selectPaymentMethod": "Choose how you'd like to pay for your stay",
+    "choosePaymentMethod": "Choose Payment Method",
+    "paymentMethodDescription": "Select your preferred payment option",
+    "securePayment": "Secure Payment",
+    "paymentSecurity": "Your payment information is encrypted and secure",
+    "paymentMethodNotSelected": "Not selected",
+    "zaadPaymentPending": "Zaad Payment Pending",
+    "zaadPaymentPendingMessage": "Complete your payment to confirm booking",
+    "payNowWithZaad": "Pay Now with Zaad"
+  },
+  "guests": {
+    "adults": "Adults",
+    "adultsDescription": "Ages 13 or above",
+    "children": "Children",
+    "childrenDescription": "Ages 2-12",
+    "infants": "Infants",
+    "infantsDescription": "Under 2",
+    "petsDescription": "Bringing a service animal?",
+    "maxGuestsReached": "Maximum number of guests reached",
+    "maxInfantsReached": "Maximum number of infants reached",
+    "maxPetsReached": "Maximum number of pets reached"
+  },
+  "availability": {
+    "noDatesSelected": "No dates selected yet",
+    "loadingAvailability": "Loading availability...",
+    "checkingAvailability": "Checking availability...",
+    "datesNotAvailable": "Selected dates are not available"
+  },
+  "details": {
+    "bookingDetails": "Booking Details",
+    "bookingDetailsDescription": "Review your reservation details before confirming",
+    "dates": "Dates",
+    "guestDetails": "Guest Details",
+    "confirmReservation": "Confirm Reservation"
+  },
+  "pricing": {
+    "priceBreakdown": "Price Breakdown",
+    "priceBreakdownDescription": "Detailed breakdown of your total cost",
+    "basePrice": "Base Price",
+    "cleaningFee": "Cleaning fee",
+    "serviceFee": "Service fee",
+    "taxes": "Taxes",
+    "total": "Total"
+  },
+  "counts": {
+    "many": "reservations",
+    "one": "reservation"
+  }
+}

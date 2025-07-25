@@ -1,0 +1,67 @@
+{
+  "signUp": "Sign Up",
+  "signIn": "Sign In",
+  "createAccount": "Create Account",
+  "alreadyHaveAccount": "Already have an account?",
+  "dontHaveAccount": "Don't have an account?",
+  "noAccount": "Don't have an account?",
+  "forgotPassword": "Forgot password?",
+  "orContinueWith": "or continue with",
+  "fields": {
+    "legalName": "Legal Name",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email Address",
+    "phoneNumber": "Phone Number",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "address": "Address",
+    "country": "Country",
+    "city": "City",
+    "profilePicture": "Profile Picture"
+  },
+  "helpers": {
+    "firstNameHelper": "Enter your legal first name as it appears on your ID",
+    "lastNameHelper": "Enter your legal last name as it appears on your ID",
+    "emailHelper": "We'll use this email to send you booking confirmations",
+    "phoneHelper": "For booking confirmations and host communication",
+    "phoneNumberHelper": "We'll use this for booking confirmations and host communication",
+    "countryHelper": "Select your country of residence",
+    "cityHelper": "Select your city",
+    "profilePictureHelper": "Optional: Add a photo to help hosts recognize you",
+    "passwordHelper": "Must be at least 8 characters with letters and numbers",
+    "confirmPasswordHelper": "Re-enter your password to confirm",
+    "ssoPasswordOptional": "Optional: Set a password for your account",
+    "ssoPasswordHelper": "Optional: Set a password to enable traditional login and account linking"
+  },
+  "placeholders": {
+    "selectCountry": "Select Country",
+    "selectCity": "Select City",
+    "selectCountryCode": "Select Country Code",
+    "searchCountry": "Search countries...",
+    "searchCity": "Search cities...",
+    "selectCountryFirst": "Select country first",
+    "passwordOptional": "Password (optional)"
+  },
+  "validation": {
+    "emailInvalid": "Please enter a valid email address",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "passwordComplexity": "Password must contain uppercase, lowercase, number and special character",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "firstNameRequired": "First name is required",
+    "lastNameRequired": "Last name is required",
+    "phoneRequired": "Phone number is required",
+    "phoneInvalid": "Please enter a valid phone number",
+    "countryRequired": "Please select your country",
+    "cityRequired": "Please select your city",
+    "passwordRequired": "Password is required",
+    "invalidPassword": "Invalid password. Please try again."
+  },
+  "sections": {
+    "contactDetails": "Contact Details",
+    "address": "Address",
+    "profilePicture": "Profile Picture",
+    "legal": "Legal",
+    "passwordManager": "Password Manager"
+  }
+}

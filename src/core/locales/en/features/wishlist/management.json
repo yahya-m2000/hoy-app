@@ -1,0 +1,32 @@
+{
+  "title": "Wishlist",
+  "sections": {
+    "collections": "Collections",
+    "properties": "Properties"
+  },
+  "loading": {
+    "loadingCollections": "Loading your collections...",
+    "loadingCollection": "Loading collection..."
+  },
+  "auth": {
+    "signInToViewWishlist": "Log in to view your wishlist",
+    "signInToViewWishlistMessage": "Save your favorite properties to view them later"
+  },
+  "empty": {
+    "createFirstWishlist": "Create your first wishlist",
+    "createFirstWishlistMessage": "As you search, tap the heart icon to save your favorite places to a wishlist",
+    "noCollectionsFound": "No collections found",
+    "noCollectionsMessage": "Start exploring to find and save properties to your wishlist",
+    "noPropertiesSaved": "No properties saved",
+    "noPropertiesSavedMessage": "Start exploring to find and save properties to this collection"
+  },
+  "actions": {
+    "createWishlist": "Create Wishlist",
+    "retry": "Retry",
+    "startExploring": "Start exploring"
+  },
+  "errors": {
+    "errorLoadingCollections": "Error loading collections",
+    "errorLoadingCollection": "Error loading collection"
+  }
+}

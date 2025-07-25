@@ -1,0 +1,39 @@
+{
+  "providers": {
+    "google": "Continue with Google",
+    "facebook": "Continue with Facebook", 
+    "apple": "Continue with Apple"
+  },
+  "sso": {
+    "loginWithAuth0": "Continue with SSO",
+    "auth0LoginSuccess": "Login successful",
+    "auth0LoginFailed": "Login failed. Please try again.",
+    "ssoSignupRequired": "Please complete your registration",
+    "ssoSignupInfo": "We've prefilled your information from your social account. Please complete the remaining fields."
+  },
+  "accountLinking": {
+    "accountLinkingRequired": "Account linking required",
+    "accountLinking": "Account Linking",
+    "accountLinkingTitle": "Link Your Account",
+    "accountLinkingDescription": "We found an existing account with email {{email}}. Would you like to link your {{newProvider}} account to it?",
+    "existingAccount": "Existing Account",
+    "connectedProviders": "Connected Providers",
+    "verifyPassword": "Verify Your Password",
+    "verifyPasswordDescription": "Please enter your password to confirm this is your account and link your {{newProvider}} account.",
+    "linkAccount": "Link Account",
+    "accountLinkedSuccessfully": "Account linked successfully!",
+    "accountLinkingFailed": "Account linking failed. Please try again."
+  },
+  "avatar": {
+    "selectPhoto": "Select Photo",
+    "takePhoto": "Take Photo",
+    "removePhoto": "Remove Photo",
+    "cameraPermissionDenied": "Camera permission denied",
+    "photoLibraryPermissionDenied": "Photo library permission denied"
+  },
+  "passwordManager": {
+    "savePrompt": "Your device will offer to save this password securely",
+    "autofillHint": "Use Face ID/Touch ID or your device's password manager to autofill credentials",
+    "biometricHint": "Enable biometric authentication in your device settings for secure autofill"
+  }
+}

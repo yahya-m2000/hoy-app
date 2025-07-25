@@ -1,0 +1,13 @@
+{
+  "terms": {
+    "termsAndConditions": "Terms and Conditions",
+    "privacyPolicy": "Privacy Policy",
+    "termsAgreement": "By creating an account, you agree to our:",
+    "agreeToTerms": "I agree to the Terms and Conditions",
+    "termsHelper": "You must agree to our terms to continue"
+  },
+  "messages": {
+    "registrationSuccess": "Account created successfully!",
+    "registrationFailed": "Registration failed. Please try again."
+  }
+}
