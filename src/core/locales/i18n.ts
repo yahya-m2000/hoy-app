@@ -28,9 +28,9 @@ const getAsyncStorage = () => {
 
 // Import translations
 import en from "./en";
-import fr from "./fr/translation.json";
-import ar from "./ar/translation.json";
-import so from "./so";
+// import fr from "./fr/translation.json";
+// import ar from "./ar/translation.json";
+// import so from "./so";
 import { logger } from "../utils/sys/log";
 
 const LANGUAGE_STORAGE_KEY = "hoy_language";
@@ -84,9 +84,9 @@ const initI18n = async () => {
       .init({
         resources: {
           en: { translation: en },
-          fr: { translation: fr },
-          ar: { translation: ar },
-          so: { translation: so },
+          // fr: { translation: fr },
+          // ar: { translation: ar },
+          // so: { translation: so },
         },
         fallbackLng: "en",
         debug: false,

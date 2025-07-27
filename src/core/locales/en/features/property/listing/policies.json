@@ -1,0 +1,14 @@
+{
+  "cancellationPolicy": {
+    "title": "Cancellation Policy",
+    "description": "Moderate - Full refund 5 days before arrival"
+  },
+  "houseRules": {
+    "title": "House Rules",
+    "description": "Check-in: 3:00 PM, Check-out: 11:00 AM"
+  },
+  "safetyInfo": {
+    "title": "Safety Information",
+    "description": "Standard safety features included"
+  }
+}

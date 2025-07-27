@@ -1,4 +1,17 @@
-{ "feedback": {
+{
+  "__DEPRECATED__": {
+    "notice": "This file is DEPRECATED as of 2025-01-26",
+    "migration": {
+      "reason": "Translation structure has been migrated to a new modular organization for better maintainability",
+      "newLocation": "src/core/locales/en/ui/feedback/",
+      "migrationMapping": {
+        "feedback.*": "ui.feedback.*"
+      },
+      "instructions": "Update your code to use the new translation keys from ui.feedback.* instead of feedback.*",
+      "doNotUse": "DO NOT use translations from this file - they are maintained only for backwards compatibility"
+    }
+  },
+  "feedback": {
   "title": "Give Feedback",
   "selectType": "What type of feedback would you like to share?",
   "selectTypeDescription": "Choose the category that best describes your feedback",

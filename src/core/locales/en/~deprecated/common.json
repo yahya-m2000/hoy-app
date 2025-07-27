@@ -1,4 +1,17 @@
-{ "common": {
+{
+  "__DEPRECATED__": {
+    "notice": "This file is DEPRECATED as of 2025-01-26",
+    "migration": {
+      "reason": "Translation structure has been migrated to a new modular organization for better maintainability",
+      "newLocation": "src/core/locales/en/common/",
+      "migrationMapping": {
+        "common.*": "common.*"
+      },
+      "instructions": "Update your code to use the new translation keys from the modular common.* structure instead of this single file",
+      "doNotUse": "DO NOT use translations from this file - they are maintained only for backwards compatibility"
+    }
+  },
+  "common": {
   "test": "test",
   "clear": "Clear",
   "loading": "Loading...",

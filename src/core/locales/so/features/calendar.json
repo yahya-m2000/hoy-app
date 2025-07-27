@@ -1,0 +1,76 @@
+{
+  "title": "Jadwalka",
+  "selectProperty": "Dooro Hanti",
+  "noProperties": "Laguma helin hanti",
+  "addPropertiesToStart": "Kudar hanti si aad u bilowdo.",
+  "daysSelected": "{{count}} maalmood la doortay",
+  "editMode": "Qaabka Wax ka beddelka",
+  "viewModeToggle": "Isbeddel Qaabka Daawashada",
+  "navigation": {
+    "backToYearView": "← Daawo Sanadka"
+  },
+  "loading": {
+    "theme": "Waa la raadinayaa theme...",
+    "calendar": "Waa la raadinayaa jadwalka...",
+    "invalidDate": "Taariikh aan saxnayn la bixiyay",
+    "noData": "Ma jiraan xog jadwal ah",
+    "noMonth": "Bil ma jiro"
+  },
+  "error": {
+    "navigationOptions": "Qalad ayaa ka dhacay dejinta ikhtiyaarada navigation",
+    "invalidMonth": "Bil aan sax ahayn ayaa la bixiyay"
+  },
+  "editItem1": "Shayga 1",
+  "editItem2": "Shayga 2", 
+  "editItem3": "Shayga 3",
+  "viewMode": {
+    "year": "Sanad",
+    "month": "Bil"
+  },
+  "months": {
+    "january": "Jannaayo",
+    "february": "Febraayo",
+    "march": "Maarso",
+    "april": "Abriil",
+    "may": "Maajo",
+    "june": "Juun",
+    "july": "Luulyo",
+    "august": "Agoosto",
+    "september": "Sebtembar",
+    "october": "Oktoobar",
+    "november": "Nofembar",
+    "december": "Desembar"
+  },
+  "monthsShort": {
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "Mar",
+    "apr": "Abr",
+    "may": "May",
+    "jun": "Jun",
+    "jul": "Lul",
+    "aug": "Ago",
+    "sep": "Seb",
+    "oct": "Okt",
+    "nov": "Nof",
+    "dec": "Des"
+  },
+  "weekdays": {
+    "sunday": "Axad",
+    "monday": "Isniin",
+    "tuesday": "Talaado",
+    "wednesday": "Arbaco",
+    "thursday": "Khamiis",
+    "friday": "Jimco",
+    "saturday": "Sabti"
+  },
+  "weekdaysShort": {
+    "sun": "A",
+    "mon": "I",
+    "tue": "T",
+    "wed": "A",
+    "thu": "K",
+    "fri": "J",
+    "sat": "S"
+  }
+}

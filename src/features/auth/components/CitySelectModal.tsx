@@ -25,7 +25,7 @@ const CitySelectModal: React.FC<CitySelectModalProps> = ({
     <Screen
       backgroundColor="background"
       header={{
-        title: t("auth.city"),
+        title: t("features.auth.forms.fields.city"),
         left: {
           icon: "close",
           onPress: onClose,

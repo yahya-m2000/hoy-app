@@ -1,4 +1,18 @@
 {
+  "property": {
+    "errors": {
+      "propertyTypeRequired": "Please select a property type",
+      "guestAccessRequired": "Please select guest access type",
+      "streetRequired": "Street address is required",
+      "cityRequired": "City is required", 
+      "countryRequired": "Country is required",
+      "coordinatesRequired": "Location coordinates are required",
+      "descriptionRequired": "Property description is required",
+      "descriptionMinLength": "Description must be at least 50 characters",
+      "weekdayPriceRequired": "Please set a weekday price",
+      "weekendPriceRequired": "Please set a weekend price"
+    }
+  },
   "propertyTypeRequired": "Please select a property type",
   "guestAccessRequired": "Please select guest access type",
   "streetRequired": "Street address is required",
@@ -23,5 +37,7 @@
   "maxTags": "Maximum 10 tags allowed",
   "invalidCoordinates": "Please enter valid coordinates",
   "latitudeRange": "Latitude must be between -90 and 90",
-  "longitudeRange": "Longitude must be between -180 and 180"
+  "longitudeRange": "Longitude must be between -180 and 180",
+  "invalidLatitude": "Latitude must be between -90 and 90",
+  "invalidLongitude": "Longitude must be between -180 and 180"
 }

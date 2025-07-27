@@ -1,4 +1,26 @@
-{"host": {
+{
+  "__DEPRECATED__": {
+    "notice": "This file is DEPRECATED as of 2025-01-26",
+    "migration": {
+      "reason": "Translation structure has been migrated to a new modular organization for better maintainability",
+      "newLocation": "src/core/locales/en/features/host/",
+      "migrationMapping": {
+        "host.dashboard.*": "features.host.dashboard.*",
+        "host.setup.*": "features.host.setup.*",
+        "host.policies.*": "features.host.setup.policies.*",
+        "host.preferences.*": "features.host.setup.preferences.*",
+        "host.profile.*": "features.host.setup.profile.*",
+        "host.verification.*": "features.host.setup.verification.*",
+        "host.agreement.*": "features.host.setup.agreement.*",
+        "host.today.*": "features.host.dashboard.*",
+        "host.listings.*": "features.host.listings.*",
+        "host.errors.*": "features.host.setup.errors.*"
+      },
+      "instructions": "Update your code to use the new translation keys from features.host.* instead of host.*",
+      "doNotUse": "DO NOT use translations from this file - they are maintained only for backwards compatibility"
+    }
+  },
+  "host": {
     "dashboard": {
       "title": "Today",
       "overview": "Overview",

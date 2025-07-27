@@ -461,7 +461,7 @@ export const useHostSetupNew = (): UseHostSetupNewReturn => {
         });
         
         if (!allStepsValid) {
-          throw new Error(t('host.errors.incompleteSetup'));
+          throw new Error(t('system.errors.validation.missingRequired'));
         }
       }
       
@@ -476,7 +476,7 @@ export const useHostSetupNew = (): UseHostSetupNewReturn => {
         });
         
         if (!response.success) {
-          throw new Error(response.message || t('host.errors.setupFailed'));
+          throw new Error(response.message || t('system.errors.data.saveFailed'));
         }
       } catch (err: any) {
         // If user is already a host, that's fine - just log it
@@ -496,7 +496,7 @@ export const useHostSetupNew = (): UseHostSetupNewReturn => {
       setStepStatus(completedStatus);
       
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : t('host.errors.setupFailed');
+      const errorMessage = err instanceof Error ? err.message : t('system.errors.data.saveFailed');
       setError(errorMessage);
       throw err;
     } finally {

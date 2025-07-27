@@ -33,10 +33,10 @@ export const FiltersBar: React.FC<FiltersBarProps> = ({
   const { t } = useTranslation();
 
   const filterOptions = [
-    { id: "all", label: t("search.filters.all") },
-    { id: "price", label: t("search.filters.price") },
-    { id: "rating", label: t("search.filters.rating") },
-    { id: "newest", label: t("search.filters.newest") },
+    { id: "all", label: t("features.search.filters.all") },
+    { id: "price", label: t("features.search.filters.price") },
+    { id: "rating", label: t("features.search.filters.rating") },
+    { id: "newest", label: t("features.search.filters.newest") },
   ];
 
   const renderFilterOption = ({

@@ -21,7 +21,12 @@
     "monthlyPotential": "Monthly Potential",
     "analytics": "Analytics",
     "individual": "Individual",
-    "business": "Business"
+    "business": "Business",
+    "in": "in",
+    "individualHost": "Individual Host",
+    "businessHost": "Business Host", 
+    "organizationHost": "Organization Host",
+    "whatsapp": "WhatsApp"
   },
   "fields": {
     "name": "Property Name",
@@ -64,7 +69,7 @@
     "checkIn": "Check-in"
   },
   "defaults": {
-    "defaultName": "Property",
+    "defaultName": "Property", 
     "noName": "Untitled Property",
     "noDescriptionAvailable": "No description available."
   }

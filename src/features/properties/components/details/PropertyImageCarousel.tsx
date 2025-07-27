@@ -63,28 +63,28 @@ const PropertyImageCarousel: React.FC<PropertyImageCarouselProps> = ({
     if (property.propertyType) {
       switch (property.propertyType.toLowerCase()) {
         case "apartment":
-          return t("property.entireApartment");
+          return t("features.property.details.types.entireApartment");
         case "room":
-          return t("property.privateRoom");
+          return t("features.property.details.types.privateRoom");
         case "house":
-          return t("property.entireHouse");
+          return t("features.property.details.types.entireHouse");
         case "villa":
-          return t("property.entireVilla");
+          return t("features.property.details.types.entireVilla");
         case "condo":
-          return t("property.entireCondo");
+          return t("features.property.details.types.entireCondo");
         default:
-          return t("property.entireProperty", {
+          return t("features.property.details.types.entireProperty", {
             type: property.propertyType.toLowerCase(),
           });
       }
     }
     // Fallback to using the main type if propertyType is not available
     if (property.type) {
-      return t("property.entireProperty", {
+      return t("features.property.details.types.entireProperty", {
         type: property.type,
       });
     }
-    return t("property.entirePlace");
+    return t("features.property.details.types.entirePlace");
   };
 
   // Prefer explicit images prop if provided and non-empty; otherwise fallback to property.images

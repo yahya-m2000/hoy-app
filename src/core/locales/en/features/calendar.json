@@ -1,6 +1,25 @@
-{ "calendar": { 
+{
+  "title": "Calendar",
   "selectProperty": "Select Property",
+  "noProperties": "No properties found",
+  "addPropertiesToStart": "Add a property to get started.",
   "daysSelected": "{{count}} days selected",
+  "editMode": "Edit Mode",
+  "viewModeToggle": "Toggle View Mode",
+  "navigation": {
+    "backToYearView": "← Year View"
+  },
+  "loading": {
+    "theme": "Loading theme...",
+    "calendar": "Loading calendar...",
+    "invalidDate": "Invalid date provided",
+    "noData": "No calendar data available",
+    "noMonth": "No month"
+  },
+  "error": {
+    "navigationOptions": "Error setting navigation options",
+    "invalidMonth": "Invalid month provided"
+  },
   "editItem1": "Item 1",
   "editItem2": "Item 2",
   "editItem3": "Item 3",
@@ -8,9 +27,6 @@
     "year": "Year",
     "month": "Month"
   },
-  "title": "Calendar",
-  "editMode": "Edit Mode",
-  "viewModeToggle": "Toggle View Mode",
   "months": {
     "january": "January",
     "february": "February",
@@ -56,21 +72,5 @@
     "thu": "T",
     "fri": "F",
     "sat": "S"
-  },
-  "error": {
-    "navigationOptions": "Error setting navigation options",
-    "invalidMonth": "Invalid month provided"
-  },
-  "navigation": {
-    "backToYearView": "← Year View"
-  },
-  "loading": {
-    "theme": "Loading theme...",
-    "calendar": "Loading calendar...",
-    "invalidDate": "Invalid date provided",
-    "noData": "No calendar data available",
-    "noMonth": "No month"
-  },
-  "noProperties": "No properties found",
-  "addPropertiesToStart": "Add a property to get started."
-} }
+  }
+}

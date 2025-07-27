@@ -65,7 +65,7 @@ export const DateSelectionStep: React.FC<DateSelectionStepProps> = ({
             },
           ]}
         >
-          {t("reservation.preSelectedDates")}
+          {t("features.booking.flow.preSelectedDates")}
         </Text>
         <Text
           style={[

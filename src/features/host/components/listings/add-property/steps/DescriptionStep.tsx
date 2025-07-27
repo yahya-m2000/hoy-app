@@ -35,14 +35,14 @@ export default function DescriptionStep({
       >
         <Container paddingBottom="xxl">
           <StepHeader
-            title={t("property.steps.description.title")}
-            description={t("property.steps.description.description")}
+            title={t("features.property.listing.steps.description.title")}
+            description={t("features.property.listing.steps.description.description")}
           />
 
           <Container marginBottom="lg">
             <Container marginBottom="sm">
               <Text variant="label" color="onBackground">
-                {t("property.steps.description.label")} *
+                {t("features.property.listing.steps.description.label")} *
               </Text>
             </Container>
             <Input
@@ -54,7 +54,7 @@ export default function DescriptionStep({
               multiline
               numberOfLines={8}
               maxLength={maxLength}
-              placeholder={t("property.steps.description.placeholder")}
+              placeholder={t("features.property.listing.steps.description.placeholder")}
               style={{ minHeight: 120 }}
             />
             <Container
@@ -65,7 +65,7 @@ export default function DescriptionStep({
               <Container>
                 {characterCount > 0 && characterCount < minLength && (
                   <Text variant="caption" style={{ color: "#FFA500" }}>
-                    {t("property.steps.description.minLengthWarning", {
+                    {t("features.property.listing.forms.validation.minLengthWarning", {
                       min: minLength,
                       remaining: minLength - characterCount,
                     })}
@@ -88,8 +88,8 @@ export default function DescriptionStep({
           </Container>
 
           <InfoBox
-            title={t("property.steps.description.tipTitle")}
-            content={t("property.steps.description.tipContent")}
+            title={t("features.property.listing.steps.description.tipTitle")}
+            content={t("features.property.listing.steps.description.tipContent")}
             icon="bulb"
             variant="tip"
           />

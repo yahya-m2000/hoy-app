@@ -105,24 +105,24 @@ export const ThemeSetting: React.FC<ThemeSettingProps> = ({
 
       <Container marginBottom="xl">
         <ThemeOption
-          title={t("profile.themeSystem")}
-          subtitle={t("profile.themeSystemDesc")}
+          title={t("features.account.profile.themeSystem")}
+          subtitle={t("features.account.profile.themeSystemDesc")}
           icon="phone-portrait-outline"
           isSelected={mode === "system"}
           onPress={() => handleThemeSelect("system")}
         />
 
         <ThemeOption
-          title={t("profile.themeLight")}
-          subtitle={t("profile.themeLightDesc")}
+          title={t("features.account.profile.themeLight")}
+          subtitle={t("features.account.profile.themeLightDesc")}
           icon="sunny-outline"
           isSelected={mode === "light"}
           onPress={() => handleThemeSelect("light")}
         />
 
         <ThemeOption
-          title={t("profile.themeDark")}
-          subtitle={t("profile.themeDarkDesc")}
+          title={t("features.account.profile.themeDark")}
+          subtitle={t("features.account.profile.themeDarkDesc")}
           icon="moon-outline"
           isSelected={mode === "dark"}
           onPress={() => handleThemeSelect("dark")}

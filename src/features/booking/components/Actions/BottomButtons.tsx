@@ -39,7 +39,7 @@ const BottomButtons: React.FC<BottomButtonsProps> = ({ bookingId }) => {
         onPress={handleViewBooking}
       >
         <Text style={[styles.viewButtonText, { color: theme.colors.primary }]}>
-          {t("booking.viewBookingDetails")}
+          {t("features.booking.actions.viewBookingDetails")}
         </Text>
       </TouchableOpacity>
 

@@ -17,5 +17,6 @@
   },
   "searchPlaceholder": "Search amenities",
   "noAmenitiesSelected": "No amenities selected",
-  "selectAtLeastOne": "Please select at least one amenity"
+  "selectAtLeastOne": "Please select at least one amenity",
+  "showLess": "Show Less"
 }

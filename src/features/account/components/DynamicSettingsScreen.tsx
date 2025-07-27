@@ -79,7 +79,7 @@ export function DynamicSettingsScreen({
     setShowCurrencyModal(false);
     showToast({
       type: "success",
-      message: t("profile.currencyChanged", { currency: selectedCurrency }),
+      message: t("features.profile.currencyChanged", { currency: selectedCurrency }),
     });
   };
 

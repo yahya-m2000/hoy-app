@@ -33,7 +33,7 @@ const CountrySelectModal: React.FC<CountrySelectModalProps> = ({
     <Screen
       backgroundColor="background"
       header={{
-        title: t("auth.country"),
+        title: t("features.auth.forms.fields.country"),
         left: {
           icon: "close",
           onPress: onClose,

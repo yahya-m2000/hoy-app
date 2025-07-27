@@ -118,5 +118,21 @@
   "tbd": "To Be Determined",
   "tba": "To Be Announced",
   "comingSoon": "Coming Soon",
-  "featureNotAvailable": "{{feature}} is not available yet"
+  "featureNotAvailable": "{{feature}} is not available yet",
+  "collection": "Collection",
+  "addedToCollection": "Added to collection",
+  "removedFromCollection": "Removed from collection",
+  "signInRequired": "Sign In Required",
+  "signInRequiredMessage": "Please sign in to continue",
+  "removedFromWishlist": "Removed from wishlist",
+  "favorites": "Favorites",
+  "failedToRemoveFromWishlist": "Failed to remove from wishlist",
+  "unknown": "Unknown",
+  "host": "Host",
+  "loading": "Loading",
+  "property": "Property",
+  "addedToCollectionWithName": "Added to {{name}}",
+  "removedFromCollectionWithName": "Removed from {{name}}",
+  "switchingToHost": "Switching to Host Mode",
+  "switchingToTraveler": "Switching to Traveler Mode"
 }

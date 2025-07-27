@@ -499,7 +499,7 @@ const PropertyDetailsScreen = () => {
         alignItems="center"
       >
         <Text variant="body" color="primary">
-          {t("property.errors.notFound")}
+          {t("system.errors.data.dataNotFound")}
         </Text>
       </Container>
     );
@@ -515,7 +515,7 @@ const PropertyDetailsScreen = () => {
         loading={!isValidProperty && !!initialProperty}
         error={
           !isValidProperty && !initialProperty
-            ? t("property.errors.notFound")
+            ? t("system.errors.data.dataNotFound")
             : null
         }
         style={{ paddingBottom: 80 }}
@@ -570,7 +570,7 @@ const PropertyDetailsScreen = () => {
           <SectionDivider />
           <PropertyDescription
             description={
-              property?.description || t("property.noDescriptionAvailable")
+              property?.description || t("features.property.details.common.defaults.noDescriptionAvailable")
             }
           />
           <SectionDivider />
@@ -592,26 +592,26 @@ const PropertyDetailsScreen = () => {
           <Container>
             <PolicyNavigationItem
               icon="calendar-outline"
-              title={t("property.common.availability")}
-              subtitle={t("property.common.checkAvailableDates")}
+              title={t("features.property.details.policies.availability")}
+              subtitle={t("features.property.details.policies.checkAvailableDates")}
               onPress={() => openModal("availability")}
             />
             <PolicyNavigationItem
               icon="close-circle-outline"
-              title={t("property.pricing.cancellationPolicy")}
-              subtitle={t("property.pricing.moderateCancellationPolicy")}
+              title={t("features.property.details.policies.cancellationPolicy")}
+              subtitle={t("features.property.details.policies.moderateCancellationPolicy")}
               onPress={() => openModal("cancellation")}
             />
             <PolicyNavigationItem
               icon="home-outline"
-              title={t("property.pricing.houseRules")}
-              subtitle={t("property.common.checkinAfter")}
+              title={t("features.property.details.policies.houseRules")}
+              subtitle={t("features.property.details.policies.checkinAfter")}
               onPress={() => openModal("houseRules")}
             />
             <PolicyNavigationItem
               icon="shield-outline"
-              title={t("property.details.safetyAndProperty")}
-              subtitle={t("property.details.safetyInformation")}
+              title={t("features.property.details.policies.safetyAndProperty")}
+              subtitle={t("features.property.details.policies.safetyInformation")}
               onPress={() => openModal("safety")}
             />
           </Container>

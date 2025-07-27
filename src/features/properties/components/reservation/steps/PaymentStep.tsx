@@ -68,11 +68,11 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
       {/* Header Section */}
       <Container marginBottom="xl">
         <Text variant="h4" weight="bold" style={{ marginBottom: 8 }}>
-          {t("reservation.paymentMethod", "Payment Method")}
+          {t("features.booking.flow.paymentMethod", "Payment Method")}
         </Text>
         <Text variant="body">
           {t(
-            "reservation.selectPaymentMethod",
+            "features.booking.flow.selectPaymentMethod",
             "Choose how you'd like to pay for your stay"
           )}
         </Text>
@@ -88,7 +88,7 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
               weight="semibold"
               style={{ textTransform: "uppercase", letterSpacing: 0.5 }}
             >
-              {t("reservation.selectedDates", "Selected Dates")}
+              {t("features.booking.flow.selectedDates", "Selected Dates")}
             </Text>
           </Container>
 
@@ -102,7 +102,7 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
                 <Text variant="body" weight="semibold">
                   {startDate && endDate
                     ? `${formatDate(startDate)} - ${formatDate(endDate)}`
-                    : t("reservation.selectDates", "Select dates")}
+                    : t("features.booking.flow.selectDates", "Select dates")}
                 </Text>
                 <Container
                   flexDirection="row"
@@ -111,7 +111,7 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
                 >
                   <Icon name="calendar" size={14} />
                   <Text variant="caption" style={{ marginLeft: 6 }}>
-                    {t("reservation.editDates", "Tap to edit")}
+                    {t("features.booking.flow.editDates", "Tap to edit")}
                   </Text>
                 </Container>
               </Container>
@@ -130,7 +130,7 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
               weight="semibold"
               style={{ textTransform: "uppercase", letterSpacing: 0.5 }}
             >
-              {t("reservation.guestSummary", "Guest Summary")}
+              {t("features.booking.flow.guestSummary", "Guest Summary")}
             </Text>
           </Container>
 
@@ -145,8 +145,8 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
             >
               <Container style={{ flex: 1 }}>
                 <Text variant="body" weight="semibold">
-                  {adults + childrenCount} {t("reservation.guests", "guests")}
-                  {pets > 0 && `, ${pets} ${t("reservation.pets", "pets")}`}
+                  {adults + childrenCount} {t("features.booking.flow.guests", "guests")}
+                  {pets > 0 && `, ${pets} ${t("features.booking.flow.pets", "pets")}`}
                 </Text>
                 <Container
                   flexDirection="row"
@@ -155,7 +155,7 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
                 >
                   <Icon name="people" size={14} />
                   <Text variant="caption" style={{ marginLeft: 6 }}>
-                    {t("reservation.editGuests", "Tap to edit")}
+                    {t("features.booking.flow.editGuests", "Tap to edit")}
                   </Text>
                 </Container>
               </Container>
@@ -171,11 +171,11 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
       <Container>
         <Container marginBottom="lg">
           <Text variant="h6" weight="semibold">
-            {t("reservation.choosePaymentMethod", "Choose Payment Method")}
+            {t("features.booking.flow.choosePaymentMethod", "Choose Payment Method")}
           </Text>
           <Text variant="caption" style={{ marginTop: 4 }}>
             {t(
-              "reservation.paymentMethodDescription",
+              "features.booking.flow.paymentMethodDescription",
               "Select your preferred payment option"
             )}
           </Text>
@@ -204,7 +204,7 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
               color={theme.colors.success}
               style={{ textTransform: "uppercase", letterSpacing: 0.5 }}
             >
-              {t("reservation.securePayment", "Secure Payment")}
+              {t("features.booking.flow.securePayment", "Secure Payment")}
             </Text>
             <Text
               variant="caption"
@@ -212,7 +212,7 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
               style={{ marginTop: 2 }}
             >
               {t(
-                "reservation.paymentSecurity",
+                "features.booking.flow.paymentSecurity",
                 "Your payment information is encrypted and secure"
               )}
             </Text>

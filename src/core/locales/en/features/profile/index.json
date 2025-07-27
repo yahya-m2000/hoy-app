@@ -1,0 +1,64 @@
+{
+  "personalInfo": "Personal Information",
+  "personalInfoDesc": "Manage your account details",
+  "signOut": "Sign Out",
+  "account": "Account",
+  "language": "Language",
+  "currency": "Currency",
+  "currencyDesc": "Select your preferred currency",
+  "currencyChanged": "Currency changed to {{currency}}",
+  "languageDesc": "Choose your language",
+  "currentLanguage": "Current Language",
+  "selectLanguage": "Select Language",
+  "theme": "Theme",
+  "themeDesc": "Appearance settings",
+  "switchToTraveler": "Switch to Traveler Mode",
+  "switchToHost": "Switch to Host Mode",
+  "hostModeDesc": "Toggle between host and traveler modes",
+  "preferences": "Preferences",
+  "helpCenter": "Help Center",
+  "helpCenterDesc": "Get help and find answers",
+  "giveFeedback": "Give Feedback",
+  "giveFeedbackDesc": "Share your thoughts with us",
+  "resetApp": "Reset App Data",
+  "resetAppDesc": "Fix issues by clearing cached data",
+  "termsOfService": "Terms of Service",
+  "termsOfServiceDesc": "Read our terms and conditions",
+  "support": "Support",
+  "signIn": "Sign In",
+  "createProfile": "Create profile",
+  "getStarted": "Get Started",
+  "currencyInfo": {
+    "title": "Currency Settings",
+    "description": "Choose your preferred currency for pricing display"
+  },
+  "languageInfo": {
+    "title": "Language Settings", 
+    "description": "Select your preferred language"
+  },
+  "personalInfoForm": {
+    "title": "Personal Information",
+    "description": "Update your personal details",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "phone": "Phone Number",
+    "city": "City",
+    "country": "Country"
+  },
+  "helpCenterInfo": {
+    "title": "Help Center",
+    "description": "Find answers to common questions"
+  },
+  "feedbackInfo": {
+    "title": "Feedback",
+    "description": "Help us improve the app"
+  },
+  "termsInfo": {
+    "title": "Terms of Service",
+    "description": "Read our terms and conditions"
+  },
+  "themeInfo": {
+    "title": "Theme Settings",
+    "description": "Customize your app appearance"
+  }
+}

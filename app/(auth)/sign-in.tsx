@@ -43,9 +43,9 @@ export default function SignInScreen() {
   // Form validation for login form
   const validateLoginForm = () => {
     if (!email.trim())
-      return t("validation.required", { field: t("auth.email") });
+      return t("validation.required", { field: t("features.auth.forms.fields.email") });
     if (!password)
-      return t("validation.required", { field: t("auth.password") });
+      return t("validation.required", { field: t("features.auth.forms.fields.password") });
     return "";
   };
 
@@ -61,7 +61,7 @@ export default function SignInScreen() {
 
       showToast({
         type: "success",
-        message: t("auth.auth0LoginSuccess"),
+        message: t("features.auth.social.sso.auth0LoginSuccess"),
       });
 
       router.back();
@@ -82,7 +82,7 @@ export default function SignInScreen() {
         // Only log and set error for actual errors
         console.error("Auth0 login error:", err);
         setError(
-          err instanceof Error ? err.message : t("auth.auth0LoginFailed")
+          err instanceof Error ? err.message : t("features.auth.social.sso.auth0LoginFailed")
         );
       }
     } finally {
@@ -116,7 +116,7 @@ export default function SignInScreen() {
     } catch (err) {
       console.error("Login error:", err);
       setError(
-        err instanceof Error ? err.message : t("auth.validation.emailInvalid")
+        err instanceof Error ? err.message : t("features.auth.forms.validation.emailInvalid")
       );
     } finally {
       setLoading(false);
@@ -126,7 +126,7 @@ export default function SignInScreen() {
   return (
     <Container flex={1}>
       <Header
-        title={t("auth.signIn")}
+        title={t("features.auth.forms.signIn")}
         left={{
           icon: "chevron-back-outline",
           onPress: () => router.back(),
@@ -151,10 +151,10 @@ export default function SignInScreen() {
                 align="center"
                 style={{ marginBottom: 8 }}
               >
-                Welcome Back!
+                {t("features.auth.forms.welcomeBack")}
               </Text>
               <Text variant="body" color="secondary" align="center">
-                Sign in to your account to continue
+                {t("features.auth.forms.signInToContinue")}
               </Text>
             </Container>
 
@@ -175,16 +175,16 @@ export default function SignInScreen() {
             <Container marginBottom="xl">
               <Container marginBottom="md">
                 <Text variant="h6" color="primary">
-                  Sign In with Email
+                  {t("features.auth.forms.signInWithEmail")}
                 </Text>
               </Container>
 
               <Container marginBottom="md">
                 <Input
-                  label={t("auth.email")}
+                  label={t("features.auth.forms.fields.email")}
                   value={email}
                   onChangeText={setEmail}
-                  placeholder={t("auth.email")}
+                  placeholder={t("features.auth.forms.fields.email")}
                   keyboardType="email-address"
                   autoCapitalize="none"
                   textContentType="emailAddress"
@@ -192,16 +192,16 @@ export default function SignInScreen() {
                   style={{ marginBottom: 8 }}
                 />
                 <Text variant="caption" color="secondary">
-                  {t("auth.emailHelper")}
+                  {t("features.auth.forms.helpers.emailHelper")}
                 </Text>
               </Container>
 
               <Container marginBottom="lg">
                 <Input
-                  label={t("auth.password")}
+                  label={t("features.auth.forms.fields.password")}
                   value={password}
                   onChangeText={setPassword}
-                  placeholder={t("auth.password")}
+                  placeholder={t("features.auth.forms.fields.password")}
                   secureTextEntry={!showPassword}
                   autoCapitalize="none"
                   rightIcon={showPassword ? "eye-off" : "eye"}
@@ -211,19 +211,19 @@ export default function SignInScreen() {
                   autoComplete="password"
                 />
                 <Text variant="caption" color="secondary">
-                  {t("auth.passwordHelper")}
+                  {t("features.auth.forms.helpers.passwordHelper")}
                 </Text>
                 <Text
                   variant="caption"
                   color="secondary"
                   style={{ marginTop: 4, fontStyle: "italic" }}
                 >
-                  {t("auth.passwordManager.autofillHint")}
+                  {t("features.auth.social.passwordManager.autofillHint")}
                 </Text>
               </Container>
 
               <Button
-                title={t("auth.signIn")}
+                title={t("features.auth.forms.signIn")}
                 onPress={handleLogin}
                 loading={loading}
                 variant="primary"
@@ -231,7 +231,7 @@ export default function SignInScreen() {
               />
 
               <Button
-                title={t("auth.createAccount")}
+                title={t("features.auth.forms.createAccount")}
                 variant="ghost"
                 onPress={() => router.push("/(auth)/sign-up")}
                 style={{ alignSelf: "center" }}

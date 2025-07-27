@@ -141,7 +141,7 @@ function CalendarScreenInner() {
   const handleMonthPress = useCallback(
     (month: Date) => {
       if (!month || !(month instanceof Date) || isNaN(month.getTime())) {
-        console.warn(t("calendar.error.invalidMonth"), month);
+        console.warn(t("features.calendar.error.invalidMonth"), month);
         return; // Safety check
       }
 
@@ -193,7 +193,7 @@ function CalendarScreenInner() {
               numberOfLines={1}
               style={{ maxWidth: 160, marginLeft: 4 }}
             >
-              {selectedProperty?.name || t("calendar.selectProperty")}
+              {selectedProperty?.name || t("features.calendar.selectProperty")}
             </Text>
             <Icon
               name="chevron-down"
@@ -210,7 +210,7 @@ function CalendarScreenInner() {
         | "calendar-outline"
         | "grid-outline",
       onPress: handleViewToggle,
-      accessibilityLabel: t("calendar.viewModeToggle"),
+      accessibilityLabel: t("features.calendar.viewModeToggle"),
       showDivider: false,
     },
     showDivider: true,
@@ -314,8 +314,8 @@ export default function CalendarScreen() {
   return (
     <WithSetupCheck
       promptVariant="default"
-      promptTitle={t("host.setup.calendarPromptTitle")}
-      promptMessage={t("host.setup.calendarPromptMessage")}
+      promptTitle={t("features.host.setup.main.calendarPromptTitle")}
+      promptMessage={t("features.host.setup.main.calendarPromptMessage")}
     >
       <CalendarScreenInner />
     </WithSetupCheck>

@@ -1,0 +1,12 @@
+{
+  "bedroom": "bedroom",
+  "bedrooms": "bedrooms", 
+  "bath": "bath",
+  "baths": "baths",
+  "guests": "guests",
+  "propertyDetails": "Property Details",
+  "propertyType": "Property Type",
+  "guestAccess": "Guest Access",
+  "hostType": "Host Type",
+  "totalBeds": "Total Beds"
+}

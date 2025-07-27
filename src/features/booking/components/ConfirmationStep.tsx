@@ -377,7 +377,7 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
               },
             ]}
           >
-            {t("reservations.total")}
+            {t("features.booking.flow.total")}
           </Text>
           <Text
             style={[
@@ -415,7 +415,7 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
             },
           ]}
         >
-          {t("reservations.paymentMethod")}
+          {t("features.booking.flow.paymentMethod")}
         </Text>
 
         <View
@@ -500,7 +500,7 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
           ) : (
             <>
               <Text style={styles.reserveButtonText}>
-                {t("reservations.confirmAndPay")}
+                {t("features.booking.flow.confirmAndPay")}
               </Text>
               <Ionicons name="checkmark" size={20} color={theme.white} />
             </>

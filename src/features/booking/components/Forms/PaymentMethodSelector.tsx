@@ -170,7 +170,7 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
               weight="semibold"
               style={{ marginBottom: spacing.sm, textAlign: "center" }}
             >
-              {t("reservation.noPaymentMethodTitle")}
+              {t("features.booking.flow.noPaymentMethodTitle")}
             </Text>
             <Text
               variant="body"
@@ -180,7 +180,7 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
                 lineHeight: 20,
               }}
             >
-              {t("reservation.noPaymentMethodDescription")}
+              {t("features.booking.flow.noPaymentMethodDescription")}
             </Text>
             <TouchableOpacity
               style={{
@@ -192,7 +192,7 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
               onPress={() => router.push("/(overlays)/account/personal-info")}
             >
               <Text variant="body" weight="semibold" color={theme.white}>
-                {t("reservation.goToProfile")}
+                {t("features.booking.flow.goToProfile")}
               </Text>
             </TouchableOpacity>
           </Container>

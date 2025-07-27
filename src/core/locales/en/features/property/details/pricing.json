@@ -8,6 +8,7 @@
   "weekendPrice": "Weekend Price",
   "pricePlaceholder": "0",
   "perNight": "per night",
+  "total": "total",
   "lowPriceWarning": "Consider setting a higher price to ensure quality guests",
   "adjustments": {
     "minusTen": "-$10",

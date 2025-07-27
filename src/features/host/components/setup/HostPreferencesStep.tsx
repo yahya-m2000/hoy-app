@@ -147,7 +147,7 @@ const OptionSelector: React.FC<OptionSelectorProps> = ({
                       color="white"
                       style={{ fontSize: 9 }}
                     >
-                      {t("host.preferences.recommended")}
+                      {t("features.host.setup.preferences.recommended")}
                     </Text>
                   </Container>
                 )}
@@ -307,19 +307,19 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
   const responseTimeOptions = [
     {
       value: "within_1_hour",
-      label: t("host.preferences.responseTime.within1Hour"),
-      description: t("host.preferences.responseTime.within1HourDesc"),
+      label: t("features.host.setup.preferences.responseTime.within1Hour"),
+      description: t("features.host.setup.preferences.responseTime.within1HourDesc"),
       recommended: true,
     },
     {
       value: "within_24_hours",
-      label: t("host.preferences.responseTime.within24Hours"),
-      description: t("host.preferences.responseTime.within24HoursDesc"),
+      label: t("features.host.setup.preferences.responseTime.within24Hours"),
+      description: t("features.host.setup.preferences.responseTime.within24HoursDesc"),
     },
     {
       value: "within_48_hours",
-      label: t("host.preferences.responseTime.within48Hours"),
-      description: t("host.preferences.responseTime.within48HoursDesc"),
+      label: t("features.host.setup.preferences.responseTime.within48Hours"),
+      description: t("features.host.setup.preferences.responseTime.within48HoursDesc"),
     },
   ];
 
@@ -337,7 +337,7 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Container paddingHorizontal="lg" paddingVertical="md">
         <Text variant="h2" color="primary" marginBottom="sm">
-          {t("host.preferences.title")}
+          {t("features.host.setup.preferences.title")}
         </Text>
 
         <Text
@@ -346,13 +346,13 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
           marginBottom="xl"
           style={{ lineHeight: 22 }}
         >
-          {t("host.preferences.subtitle")}
+          {t("features.host.setup.preferences.subtitle")}
         </Text>
 
         {/* Response Time */}
         <PreferenceCard
-          title={t("host.preferences.responseTime.title")}
-          subtitle={t("host.preferences.responseTime.subtitle")}
+          title={t("features.host.setup.preferences.responseTime.title")}
+          subtitle={t("features.host.setup.preferences.responseTime.subtitle")}
           icon="time-outline"
         >
           <OptionSelector
@@ -364,8 +364,8 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
 
         {/* Instant Booking */}
         <PreferenceCard
-          title={t("host.preferences.instantBooking.title")}
-          subtitle={t("host.preferences.instantBooking.subtitle")}
+          title={t("features.host.setup.preferences.instantBooking.title")}
+          subtitle={t("features.host.setup.preferences.instantBooking.subtitle")}
           icon="flash-outline"
         >
           <Container
@@ -380,14 +380,14 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
           >
             <Container flex={1}>
               <Text variant="subtitle" color="primary" marginBottom="sm">
-                {t("host.preferences.instantBooking.enable")}
+                {t("features.host.setup.preferences.instantBooking.enable")}
               </Text>
               <Text
                 variant="body"
                 color="secondary"
                 style={{ fontSize: 13, lineHeight: 16 }}
               >
-                {t("host.preferences.instantBooking.description")}
+                {t("features.host.setup.preferences.instantBooking.description")}
               </Text>
             </Container>
 
@@ -407,15 +407,15 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
 
         {/* Booking Settings */}
         <PreferenceCard
-          title={t("host.preferences.bookingSettings.title")}
-          subtitle={t("host.preferences.bookingSettings.subtitle")}
+          title={t("features.host.setup.preferences.bookingSettings.title")}
+          subtitle={t("features.host.setup.preferences.bookingSettings.subtitle")}
           icon="calendar-outline"
         >
           <Container style={{ gap: spacing.md }}>
             <Container flexDirection="row" style={{ gap: spacing.md }}>
               <Container flex={1}>
                 <Input
-                  label={t("host.preferences.bookingSettings.minimumNotice")}
+                  label={t("features.host.setup.preferences.bookingSettings.minimumNotice")}
                   value={data.minimumNotice?.toString() || ""}
                   onChangeText={(value) =>
                     handlePreferenceChange(
@@ -431,7 +431,7 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
               <Container flex={1}>
                 <Input
                   label={t(
-                    "host.preferences.bookingSettings.maxAdvanceBooking"
+                    "features.host.setup.preferences.bookingSettings.maxAdvanceBooking"
                   )}
                   value={data.maxAdvanceBooking?.toString() || ""}
                   onChangeText={(value) =>
@@ -451,8 +451,8 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
 
         {/* Languages */}
         <PreferenceCard
-          title={t("host.preferences.languages.title")}
-          subtitle={t("host.preferences.languages.subtitle")}
+          title={t("features.host.setup.preferences.languages.title")}
+          subtitle={t("features.host.setup.preferences.languages.subtitle")}
           icon="language-outline"
         >
           <LanguageSelector
@@ -465,13 +465,13 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
 
         {/* Currency & Timezone */}
         <PreferenceCard
-          title={t("host.preferences.locationSettings.title")}
-          subtitle={t("host.preferences.locationSettings.subtitle")}
+          title={t("features.host.setup.preferences.locationSettings.title")}
+          subtitle={t("features.host.setup.preferences.locationSettings.subtitle")}
           icon="globe-outline"
         >
           <Container style={{ gap: spacing.md }}>
             <Input
-              label={t("host.preferences.locationSettings.currency")}
+              label={t("features.host.setup.preferences.locationSettings.currency")}
               value={data.currency || ""}
               onChangeText={(value) =>
                 handlePreferenceChange("currency", value)
@@ -480,7 +480,7 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
               error={errors.currency}
             />
             <Input
-              label={t("host.preferences.locationSettings.timezone")}
+              label={t("features.host.setup.preferences.locationSettings.timezone")}
               value={data.timezone || ""}
               onChangeText={(value) =>
                 handlePreferenceChange("timezone", value)
@@ -493,8 +493,8 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
 
         {/* Notification Preferences */}
         <PreferenceCard
-          title={t("host.preferences.notifications.title")}
-          subtitle={t("host.preferences.notifications.subtitle")}
+          title={t("features.host.setup.preferences.notifications.title")}
+          subtitle={t("features.host.setup.preferences.notifications.subtitle")}
           icon="notifications-outline"
         >
           <Container style={{ gap: spacing.sm }}>
@@ -507,7 +507,7 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
               padding="md"
             >
               <Text variant="subtitle" color="primary" marginBottom="md">
-                {t("host.preferences.notifications.methods")}
+                {t("features.host.setup.preferences.notifications.methods")}
               </Text>
 
               <Container style={{ gap: spacing.sm }}>
@@ -517,7 +517,7 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
                   justifyContent="space-between"
                 >
                   <Text variant="body" color="primary">
-                    {t("host.preferences.notifications.email")}
+                    {t("features.host.setup.preferences.notifications.email")}
                   </Text>
                   <Switch
                     value={currentNotifications.email}
@@ -538,7 +538,7 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
                   justifyContent="space-between"
                 >
                   <Text variant="body" color="primary">
-                    {t("host.preferences.notifications.push")}
+                    {t("features.host.setup.preferences.notifications.push")}
                   </Text>
                   <Switch
                     value={currentNotifications.push}
@@ -559,7 +559,7 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
                   justifyContent="space-between"
                 >
                   <Text variant="body" color="primary">
-                    {t("host.preferences.notifications.sms")}
+                    {t("features.host.setup.preferences.notifications.sms")}
                   </Text>
                   <Switch
                     value={currentNotifications.sms}
@@ -585,7 +585,7 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
               padding="md"
             >
               <Text variant="subtitle" color="primary" marginBottom="md">
-                {t("host.preferences.notifications.types")}
+                {t("features.host.setup.preferences.notifications.types")}
               </Text>
 
               <Container style={{ gap: spacing.sm }}>
@@ -595,7 +595,7 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
                   justifyContent="space-between"
                 >
                   <Text variant="body" color="primary">
-                    {t("host.preferences.notifications.bookingRequests")}
+                    {t("features.host.setup.preferences.notifications.bookingRequests")}
                   </Text>
                   <Switch
                     value={currentNotifications.bookingRequests}
@@ -616,7 +616,7 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
                   justifyContent="space-between"
                 >
                   <Text variant="body" color="primary">
-                    {t("host.preferences.notifications.messages")}
+                    {t("features.host.setup.preferences.notifications.messages")}
                   </Text>
                   <Switch
                     value={currentNotifications.messages}
@@ -637,7 +637,7 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
                   justifyContent="space-between"
                 >
                   <Text variant="body" color="primary">
-                    {t("host.preferences.notifications.reviews")}
+                    {t("features.host.setup.preferences.notifications.reviews")}
                   </Text>
                   <Switch
                     value={currentNotifications.reviews}
@@ -658,7 +658,7 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
                   justifyContent="space-between"
                 >
                   <Text variant="body" color="primary">
-                    {t("host.preferences.notifications.payments")}
+                    {t("features.host.setup.preferences.notifications.payments")}
                   </Text>
                   <Switch
                     value={currentNotifications.payments}
@@ -693,11 +693,11 @@ export const HostPreferencesStep: React.FC<HostPreferencesStepProps> = ({
               color={theme.colors.primary}
             />
             <Text variant="subtitle" color="primary" marginLeft="sm">
-              {t("host.preferences.summary.title")}
+              {t("features.host.setup.preferences.summary.title")}
             </Text>
           </Container>
           <Text variant="body" color="secondary" style={{ lineHeight: 20 }}>
-            {t("host.preferences.summary.description")}
+            {t("features.host.setup.preferences.summary.description")}
           </Text>
         </Container>
       </Container>

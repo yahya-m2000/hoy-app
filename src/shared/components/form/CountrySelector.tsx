@@ -90,7 +90,7 @@ export const CountrySelector: React.FC<CountrySelectorProps> = ({
             color: theme.text?.secondary || theme.secondary,
           }}
         >
-          {label || t("auth.country")}
+          {label || t("features.auth.forms.fields.country")}
         </Text>
         <Text
           variant="body"
@@ -102,7 +102,7 @@ export const CountrySelector: React.FC<CountrySelectorProps> = ({
             fontWeight: value ? "400" : "300",
           }}
         >
-          {value || placeholder || t("auth.selectCountry")}
+          {value || placeholder || t("features.auth.forms.placeholders.selectCountry")}
         </Text>
       </TouchableOpacity>
 
@@ -138,7 +138,7 @@ export const CountrySelector: React.FC<CountrySelectorProps> = ({
             }}
           >
             <Text variant="h6" color="primary">
-              {t("auth.country")}
+              {t("features.auth.forms.fields.country")}
             </Text>
             <TouchableOpacity onPress={() => setModalVisible(false)}>
               <Text variant="body" color="primary">
@@ -149,7 +149,7 @@ export const CountrySelector: React.FC<CountrySelectorProps> = ({
 
           <Container padding="md">
             <Input
-              placeholder={t("auth.searchCountry")}
+              placeholder={t("features.auth.forms.placeholders.searchCountry")}
               value={searchQuery}
               onChangeText={setSearchQuery}
               leftIcon="search"

@@ -1,0 +1,15 @@
+{
+  "title": "Calendar Bookings",
+  "checkIn": "Check-in",
+  "checkOut": "Check-out",
+  "guest": "Guest",
+  "guests": "Guests",
+  "viewDetails": "View Details",
+  "upcoming": "Upcoming",
+  "past": "Past",
+  "cancelled": "Cancelled",
+  "confirmed": "Confirmed",
+  "pending": "Pending",
+  "noBookings": "No bookings found",
+  "bookingDetails": "Booking Details"
+}

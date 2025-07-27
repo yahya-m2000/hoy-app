@@ -1,5 +1,7 @@
 import common from "./common.json";
 import ui from "./ui.json";
+import system from "./system.json";
+import features from "./features/index";
 import auth from "./auth.json";
 import booking from "./booking.json";
 import calendar from "./calendar.json";
@@ -15,6 +17,8 @@ import property from "./property";
 export default {
   ...common,
   ...ui,
+  ...system,
+  ...features,
   ...auth,
   ...booking,
   ...calendar,

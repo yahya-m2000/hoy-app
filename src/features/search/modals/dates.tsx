@@ -179,7 +179,7 @@ export default function SearchDateModal({
     >
       <Container flex={1} backgroundColor="background">
         <Header
-          title={t("search.selectDates") || "Select dates"}
+          title={t("features.search.dates.selectDates") || "Select dates"}
           left={{
             icon: "close",
             onPress: onClose,
@@ -197,7 +197,7 @@ export default function SearchDateModal({
           >
             <Container flex={1} alignItems="center">
               <Text variant="caption" style={{ marginBottom: 4 }}>
-                {t("search.checkIn") || "Check In"}
+                {t("features.search.dates.checkIn") || "Check In"}
               </Text>
               <Text variant="body" weight="semibold">
                 {(() => {
@@ -222,7 +222,7 @@ export default function SearchDateModal({
             </Container>
             <Container flex={1} alignItems="center">
               <Text variant="caption" style={{ marginBottom: 4 }}>
-                {t("search.checkOut") || "Check Out"}
+                {t("features.search.dates.checkOut") || "Check Out"}
               </Text>
               <Text
                 variant="body"
@@ -253,8 +253,8 @@ export default function SearchDateModal({
             <Text variant="body">
               {nights}{" "}
               {nights === 1
-                ? t("search.night") || "night"
-                : t("search.nights") || "nights"}
+                ? t("features.search.dates.night") || "night"
+                : t("features.search.dates.nights") || "nights"
             </Text>
           </Container>
 
@@ -308,7 +308,7 @@ export default function SearchDateModal({
         >
           <Button
             onPress={handleApply}
-            title={t("search.apply") || "Apply"}
+            title={t("features.search.actions.apply") || "Apply"}
             variant="primary"
             disabled={!startDate || !endDate}
           />

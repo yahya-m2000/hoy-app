@@ -199,12 +199,12 @@ export const SetupProgress: React.FC<SetupProgressProps> = ({
                   }
                 >
                   {step.status === "completed"
-                    ? t("host.setup.completed")
+                    ? t("features.host.setup.main.completed")
                     : step.status === "in_progress"
-                    ? t("host.setup.inProgress")
+                    ? t("features.host.setup.main.inProgress")
                     : step.status === "error"
-                    ? t("host.setup.error")
-                    : t("host.setup.pending")}
+                    ? t("features.host.setup.main.error")
+                    : t("features.host.setup.main.pending")}
                 </Text>
               </TouchableOpacity>
             </Container>
@@ -316,7 +316,7 @@ export const NewSetupProgress: React.FC<NewSetupProgressProps> = ({
     steps.push({
       id: SetupStepType.VERIFICATION,
       status: stepStatus[SetupStepType.VERIFICATION] as StepStatus,
-      title: t("host.setup.steps.verification.title"),
+      title: t("features.host.setup.navigation.steps.verification.title"),
       icon: "shield-checkmark",
     });
   }
@@ -325,7 +325,7 @@ export const NewSetupProgress: React.FC<NewSetupProgressProps> = ({
     steps.push({
       id: SetupStepType.AGREEMENT,
       status: stepStatus[SetupStepType.AGREEMENT] as StepStatus,
-      title: t("host.setup.steps.agreement.title"),
+      title: t("features.host.setup.navigation.steps.agreement.title"),
       icon: "document-text",
     });
   }
@@ -334,7 +334,7 @@ export const NewSetupProgress: React.FC<NewSetupProgressProps> = ({
     steps.push({
       id: SetupStepType.POLICIES,
       status: stepStatus[SetupStepType.POLICIES] as StepStatus,
-      title: t("host.setup.steps.policies.title"),
+      title: t("features.host.setup.navigation.steps.policies.title"),
       icon: "settings",
     });
   }
@@ -343,7 +343,7 @@ export const NewSetupProgress: React.FC<NewSetupProgressProps> = ({
     steps.push({
       id: SetupStepType.PREFERENCES,
       status: stepStatus[SetupStepType.PREFERENCES] as StepStatus,
-      title: t("host.setup.steps.preferences.title"),
+      title: t("features.host.setup.navigation.steps.preferences.title"),
       icon: "options",
     });
   }
@@ -352,7 +352,7 @@ export const NewSetupProgress: React.FC<NewSetupProgressProps> = ({
     steps.push({
       id: SetupStepType.PROFILE,
       status: stepStatus[SetupStepType.PROFILE] as StepStatus,
-      title: t("host.setup.steps.profile.title"),
+      title: t("features.host.setup.navigation.steps.profile.title"),
       icon: "person",
     });
   }

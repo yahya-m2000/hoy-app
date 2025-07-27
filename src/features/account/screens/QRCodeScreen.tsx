@@ -120,7 +120,7 @@ const QRCodeScreen: React.FC<QRCodeScreenProps> = ({ user }) => {
             </Text>
           </Container>
           <Text size="md" color="inverse">
-            {t("qrCode.scanToViewProfile")}
+            {t("features.account.qrCode.scanToViewProfile")}
           </Text>
         </Container>
       </Container>
@@ -133,7 +133,7 @@ const QRCodeScreen: React.FC<QRCodeScreenProps> = ({ user }) => {
         backgroundColor="transparent"
       >
         <Text size="sm" color="inverse">
-          {t("qrCode.pointCameraToProfile")}
+          {t("features.account.qrCode.pointCameraToProfile")}
         </Text>
       </Container>
     </LinearGradient>

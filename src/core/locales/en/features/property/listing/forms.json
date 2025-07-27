@@ -1,16 +1,35 @@
 {
+  "types": {
+    "individual": "Individual Property",
+    "shared": "Shared Property",
+    "entirePlace": "Entire Place",
+    "entirePlaceDescription": "Guests have the whole place to themselves",
+    "privateRoom": "Private Room", 
+    "privateRoomDescription": "Guests have their own room but share some spaces",
+    "sharedSpace": "Shared Space",
+    "sharedSpaceDescription": "Guests share the space with others",
+    "entire_place": "Entire Place",
+    "entire_placeDescription": "Guests have the whole place to themselves",
+    "private_room": "Private Room", 
+    "private_roomDescription": "Guests have their own room but share some spaces",
+    "shared_space": "Shared Space",
+    "shared_spaceDescription": "Guests share the space with others"
+  },
   "sections": {
     "basicInfo": {
       "title": "Basic Information",
       "description": "Tell us about your property's basic details"
     },
     "propertyType": {
-      "title": "Property Type",
-      "description": "Select the type of property you're listing"
+      "title": "Property Type", 
+      "description": "Select the type of property you're listing",
+      "placeholder": "Select property type"
     },
     "guestAccess": {
       "title": "Guest Access",
       "description": "Choose how guests will access your property",
+      "placeholder": "Select guest access type",
+      "help": "Choose how guests will access your property",
       "types": {
         "ENTIRE": {
           "label": "Entire place",
@@ -33,7 +52,36 @@
     "details": {
       "title": "Share some basics about your place",
       "description": "You can always change these later",
-      "detailsHelp": "Accurate details help guests know what to expect"
+      "detailsHelp": "Accurate details help guests know what to expect",
+      "pricePerNight": "Price per night",
+      "pricePlaceholder": "0",
+      "bedrooms": "Bedrooms", 
+      "beds": "Beds",
+      "bathrooms": "Bathrooms",
+      "maxGuests": "Maximum guests"
+    },
+    "address": {
+      "country": "Country",
+      "countryPlaceholder": "Select your country",
+      "city": "City",
+      "cityPlaceholder": "Select your city", 
+      "street": "Street address",
+      "streetPlaceholder": "Enter street address",
+      "state": "State/Province",
+      "statePlaceholder": "Enter state or province",
+      "postalCode": "Postal code",
+      "postalCodePlaceholder": "Enter postal code",
+      "privacyTitle": "Privacy & Safety",
+      "privacyNote": "Your exact address is only shared with confirmed guests."
+    },
+    "coordinates": {
+      "title": "Property Location",
+      "help": "Pin your property's exact location on the map",
+      "latitude": "Latitude",
+      "longitude": "Longitude", 
+      "pickLocation": "Pick Location on Map",
+      "confirmLocation": "Confirm Location",
+      "selectedCoordinates": "Selected coordinates"
     },
     "title": {
       "title": "Give your property a title",
@@ -150,5 +198,10 @@
         "content": "Being transparent about safety features and potential risks helps build trust with guests and ensures compliance with local regulations."
       }
     }
+  },
+  "validation": {
+    "invalidLatitude": "Latitude must be between -90 and 90",
+    "invalidLongitude": "Longitude must be between -180 and 180",
+    "minLengthWarning": "At least {{min}} characters required"
   }
 }

@@ -67,61 +67,61 @@ export const PropertyInformationForm: React.FC<
     {
       key: "wifi",
       icon: "📶",
-      label: t("host.policies.property.amenities.wifi"),
+      label: t("features.host.setup.policies.property.amenities.wifi"),
     },
     {
       key: "parking",
       icon: "🚗",
-      label: t("host.policies.property.amenities.parking"),
+      label: t("features.host.setup.policies.property.amenities.parking"),
     },
     {
       key: "kitchen",
       icon: "🍳",
-      label: t("host.policies.property.amenities.kitchen"),
+      label: t("features.host.setup.policies.property.amenities.kitchen"),
     },
     {
       key: "washer",
       icon: "🧺",
-      label: t("host.policies.property.amenities.washer"),
+      label: t("features.host.setup.policies.property.amenities.washer"),
     },
     {
       key: "dryer",
       icon: "🌀",
-      label: t("host.policies.property.amenities.dryer"),
+      label: t("features.host.setup.policies.property.amenities.dryer"),
     },
-    { key: "ac", icon: "❄️", label: t("host.policies.property.amenities.ac") },
+    { key: "ac", icon: "❄️", label: t("features.host.setup.policies.property.amenities.ac") },
     {
       key: "heating",
       icon: "🔥",
-      label: t("host.policies.property.amenities.heating"),
+      label: t("features.host.setup.policies.property.amenities.heating"),
     },
-    { key: "tv", icon: "📺", label: t("host.policies.property.amenities.tv") },
+    { key: "tv", icon: "📺", label: t("features.host.setup.policies.property.amenities.tv") },
     {
       key: "pool",
       icon: "🏊",
-      label: t("host.policies.property.amenities.pool"),
+      label: t("features.host.setup.policies.property.amenities.pool"),
     },
     {
       key: "gym",
       icon: "💪",
-      label: t("host.policies.property.amenities.gym"),
+      label: t("features.host.setup.policies.property.amenities.gym"),
     },
     {
       key: "balcony",
       icon: "🏗️",
-      label: t("host.policies.property.amenities.balcony"),
+      label: t("features.host.setup.policies.property.amenities.balcony"),
     },
     {
       key: "garden",
       icon: "🌿",
-      label: t("host.policies.property.amenities.garden"),
+      label: t("features.host.setup.policies.property.amenities.garden"),
     },
   ];
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <Text variant="h3" style={styles.title}>
-          {t("host.policies.property.title")}
+          {t("features.host.setup.policies.property.title")}
         </Text>
 
         <Text
@@ -129,29 +129,29 @@ export const PropertyInformationForm: React.FC<
           color={theme.text.secondary}
           style={styles.subtitle}
         >
-          {t("host.policies.property.subtitle")}
+          {t("features.host.setup.policies.property.subtitle")}
         </Text>
 
         <View style={styles.form}>
           {/* WiFi Information */}
           <View style={styles.section}>
             <Text variant="h4" style={styles.sectionTitle}>
-              {t("host.policies.property.wifi.title")}
+              {t("features.host.setup.policies.property.wifi.title")}
             </Text>
 
             <Input
-              label={t("host.policies.property.wifi.network")}
+              label={t("features.host.setup.policies.property.wifi.network")}
               value={data.wifiNetwork || ""}
               onChangeText={(value) => updateField("wifiNetwork", value)}
-              placeholder={t("host.policies.property.wifi.networkPlaceholder")}
+              placeholder={t("features.host.setup.policies.property.wifi.networkPlaceholder")}
               error={errors.wifiNetwork}
             />
 
             <Input
-              label={t("host.policies.property.wifi.password")}
+              label={t("features.host.setup.policies.property.wifi.password")}
               value={data.wifiPassword || ""}
               onChangeText={(value) => updateField("wifiPassword", value)}
-              placeholder={t("host.policies.property.wifi.passwordPlaceholder")}
+              placeholder={t("features.host.setup.policies.property.wifi.passwordPlaceholder")}
               error={errors.wifiPassword}
               secureTextEntry
               textContentType="password"
@@ -162,17 +162,17 @@ export const PropertyInformationForm: React.FC<
           {/* Check-in Instructions */}
           <View style={styles.section}>
             <Text variant="h4" style={styles.sectionTitle}>
-              {t("host.policies.property.checkin.title")}
+              {t("features.host.setup.policies.property.checkin.title")}
             </Text>
 
             <Input
-              label={t("host.policies.property.checkin.instructions")}
+              label={t("features.host.setup.policies.property.checkin.instructions")}
               value={data.checkInInstructions || ""}
               onChangeText={(value) =>
                 updateField("checkInInstructions", value)
               }
               placeholder={t(
-                "host.policies.property.checkin.instructionsPlaceholder"
+                "features.host.setup.policies.property.checkin.instructionsPlaceholder"
               )}
               multiline
               numberOfLines={4}
@@ -180,11 +180,11 @@ export const PropertyInformationForm: React.FC<
             />
 
             <Input
-              label={t("host.policies.property.checkin.keyLocation")}
+              label={t("features.host.setup.policies.property.checkin.keyLocation")}
               value={data.keyLocation || ""}
               onChangeText={(value) => updateField("keyLocation", value)}
               placeholder={t(
-                "host.policies.property.checkin.keyLocationPlaceholder"
+                "features.host.setup.policies.property.checkin.keyLocationPlaceholder"
               )}
               error={errors.keyLocation}
             />
@@ -193,17 +193,17 @@ export const PropertyInformationForm: React.FC<
           {/* Parking Information */}
           <View style={styles.section}>
             <Text variant="h4" style={styles.sectionTitle}>
-              {t("host.policies.property.parking.title")}
+              {t("features.host.setup.policies.property.parking.title")}
             </Text>
 
             <Input
-              label={t("host.policies.property.parking.instructions")}
+              label={t("features.host.setup.policies.property.parking.instructions")}
               value={data.parkingInstructions || ""}
               onChangeText={(value) =>
                 updateField("parkingInstructions", value)
               }
               placeholder={t(
-                "host.policies.property.parking.instructionsPlaceholder"
+                "features.host.setup.policies.property.parking.instructionsPlaceholder"
               )}
               multiline
               numberOfLines={3}
@@ -214,7 +214,7 @@ export const PropertyInformationForm: React.FC<
           {/* Amenities */}
           <View style={styles.section}>
             <Text variant="h4" style={styles.sectionTitle}>
-              {t("host.policies.property.amenities.title")}
+              {t("features.host.setup.policies.property.amenities.title")}
             </Text>
 
             <Text
@@ -222,7 +222,7 @@ export const PropertyInformationForm: React.FC<
               color={theme.text.secondary}
               style={styles.sectionSubtitle}
             >
-              {t("host.policies.property.amenities.subtitle")}
+              {t("features.host.setup.policies.property.amenities.subtitle")}
             </Text>
             <View
               style={[
@@ -250,14 +250,14 @@ export const PropertyInformationForm: React.FC<
           {/* Additional Notes */}
           <View style={styles.section}>
             <Text variant="h4" style={styles.sectionTitle}>
-              {t("host.policies.property.notes.title")}
+              {t("features.host.setup.policies.property.notes.title")}
             </Text>
             <Input
-              label={t("host.policies.property.notes.additional")}
+              label={t("features.host.setup.policies.property.notes.additional")}
               value={data.additionalNotes || ""}
               onChangeText={(value) => updateField("additionalNotes", value)}
               placeholder={t(
-                "host.policies.property.notes.additionalPlaceholder"
+                "features.host.setup.policies.property.notes.additionalPlaceholder"
               )}
               multiline
               numberOfLines={4}

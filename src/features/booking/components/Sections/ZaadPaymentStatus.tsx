@@ -145,7 +145,7 @@ const ZaadPaymentStatus: React.FC<ZaadPaymentStatusProps> = ({ booking }) => {
               },
             ]}
           >
-            {t("booking.zaadPaymentPending")}
+            {t("features.booking.payment.zaadPaymentPending")}
           </Text>
           <Text
             style={[
@@ -157,7 +157,7 @@ const ZaadPaymentStatus: React.FC<ZaadPaymentStatusProps> = ({ booking }) => {
               },
             ]}
           >
-            {t("booking.zaadPaymentPendingMessage")}
+            {t("features.booking.payment.zaadPaymentPendingMessage")}
           </Text>
         </View>
       </View>
@@ -169,7 +169,7 @@ const ZaadPaymentStatus: React.FC<ZaadPaymentStatusProps> = ({ booking }) => {
         ]}
         onPress={handleZaadPayment}
       >
-        <Text style={styles.payButtonText}>{t("booking.payNowWithZaad")}</Text>
+        <Text style={styles.payButtonText}>{t("features.booking.payment.payNowWithZaad")}</Text>
       </TouchableOpacity>
     </View>
   );

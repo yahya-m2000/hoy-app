@@ -1,4 +1,17 @@
 {
+  "apartment": "Apartment",
+  "house": "House",
+  "villa": "Villa",
+  "condo": "Condo",
+  "townhouse": "Townhouse",
+  "bungalow": "Bungalow",
+  "cabin": "Cabin",
+  "chalet": "Chalet",
+  "cottage": "Cottage",
+  "loft": "Loft",
+  "penthouse": "Penthouse",
+  "studio": "Studio",
+  "other": "Other",
   "propertyTypes": {
     "apartment": "Apartment",
     "house": "House",
@@ -31,5 +44,11 @@
     "inactive": "Inactive",
     "draft": "Draft",
     "label": "Status:"
-  }
+  },
+  "entireApartment": "Entire apartment",
+  "privateRoom": "Private room",
+  "entireHouse": "Entire house",
+  "entireVilla": "Entire villa",
+  "entireCondo": "Entire condo",
+  "entireProperty": "Entire {{type}}"
 }

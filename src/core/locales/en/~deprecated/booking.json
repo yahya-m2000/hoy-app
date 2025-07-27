@@ -1,4 +1,18 @@
 {
+  "__DEPRECATED__": {
+    "notice": "This file is DEPRECATED as of 2025-01-26",
+    "migration": {
+      "reason": "Translation structure has been migrated to a new modular organization for better maintainability",
+      "newLocation": "src/core/locales/en/features/booking/",
+      "migrationMapping": {
+        "booking.*": "features.booking.*",
+        "reservation.*": "features.booking.flow.*",
+        "bookings.*": "features.booking.management.*"
+      },
+      "instructions": "Update your code to use the new translation keys from features.booking.* instead of booking.*",
+      "doNotUse": "DO NOT use translations from this file - they are maintained only for backwards compatibility"
+    }
+  },
   "booking": {
     "upcoming": "Upcoming",
     "past": "Past",

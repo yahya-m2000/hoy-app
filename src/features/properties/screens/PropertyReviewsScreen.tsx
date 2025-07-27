@@ -1,6 +1,8 @@
 import React from "react";
 import { Container, Text, Icon, DetailScreen } from "@shared/components";
 import { useTheme } from "@core/hooks";
+import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 // Import local components and hooks - using placeholder implementations
 const usePropertyReviews = (propertyId: string) => ({
@@ -23,20 +25,25 @@ const ReviewsSummary = ({
 }: any) => (
   <Container padding="md">
     <Text>
-      Reviews Summary: {averageRating} ({totalReviews} reviews)
+      {t("features.property.reviews.summary", {
+        rating: averageRating,
+        count: totalReviews,
+      })}
     </Text>
   </Container>
 );
 
 const ReviewCard = ({ review, averageRating }: any) => (
   <Container padding="md" marginBottom="sm" backgroundColor="surface">
-    <Text>{review.comment || "Review content"}</Text>
+    <Text>
+      {review.comment || t("features.property.reviews.defaultContent")}
+    </Text>
   </Container>
 );
 
 const EmptyReviews = () => (
   <Container alignItems="center" padding="xl">
-    <Text>No reviews yet</Text>
+    <Text>{t("features.property.reviews.noReviews")}</Text>
   </Container>
 );
 
@@ -52,6 +59,7 @@ export const PropertyReviewsScreen: React.FC<PropertyReviewsScreenProps> = ({
   propertyId,
 }) => {
   const { theme } = useTheme();
+  const { t } = useTranslation();
 
   // Fetch reviews data
   const { data: reviews, isLoading, error } = usePropertyReviews(propertyId);
@@ -63,10 +71,14 @@ export const PropertyReviewsScreen: React.FC<PropertyReviewsScreenProps> = ({
   // Loading state
   if (isLoading) {
     return (
-      <DetailScreen title="Reviews" headerVariant="solid" loading={true}>
+      <DetailScreen
+        title={t("features.property.reviews.title")}
+        headerVariant="solid"
+        loading={true}
+      >
         <Container flex={1} justifyContent="center" alignItems="center">
           <Text variant="body" color={theme.text.secondary}>
-            Loading reviews...
+            {t("features.property.reviews.loading")}
           </Text>
         </Container>
       </DetailScreen>
@@ -76,9 +88,15 @@ export const PropertyReviewsScreen: React.FC<PropertyReviewsScreenProps> = ({
   // Error state
   if (error) {
     const errorMessage =
-      typeof error === "string" ? error : "Unable to load reviews";
+      typeof error === "string"
+        ? error
+        : t("features.property.reviews.loadError");
     return (
-      <DetailScreen title="Reviews" headerVariant="solid" error={errorMessage}>
+      <DetailScreen
+        title={t("features.property.reviews.title")}
+        headerVariant="solid"
+        error={errorMessage}
+      >
         <Container
           flex={1}
           justifyContent="center"
@@ -99,7 +117,10 @@ export const PropertyReviewsScreen: React.FC<PropertyReviewsScreenProps> = ({
   }
 
   return (
-    <DetailScreen title="Reviews" headerVariant="solid">
+    <DetailScreen
+      title={t("features.property.reviews.title")}
+      headerVariant="solid"
+    >
       {/* Reviews Summary */}
       {totalReviews > 0 && (
         <ReviewsSummary

@@ -33,7 +33,7 @@ const StatusBadge: React.FC<{ status: "Active" | "Inactive" }> = ({
         style={{ marginRight: 4 }}
       />
       <Text variant="caption" weight="medium">
-        {isActive ? t("property.status.active") : t("property.status.inactive")}
+        {isActive ? t("features.property.management.status.active") : t("features.property.management.status.inactive")}
       </Text>
     </Container>
   );
@@ -73,22 +73,22 @@ export default function PropertyListItem({
 
   const handleOptionsPress = () => {
     Alert.alert(
-      t("property.options.title"),
+      t("features.property.management.options.title"),
       `Options for \"${property.name}\"`,
       [
         {
-          text: t("property.options.edit"),
+          text: t("features.property.management.options.edit"),
           onPress: () => {
             Alert.alert(
-              t("property.options.editProperty"),
+              t("features.property.management.options.editProperty"),
               "What would you like to edit?",
               [
                 {
-                  text: t("property.options.editDetails"),
+                  text: t("features.property.management.options.editDetails"),
                   onPress: onEdit,
                 },
                 {
-                  text: t("property.options.toggleStatus"),
+                  text: t("features.property.management.options.toggleStatus"),
                   onPress: handleToggleStatus,
                 },
                 {
@@ -100,7 +100,7 @@ export default function PropertyListItem({
           },
         },
         {
-          text: t("property.options.delete"),
+          text: t("features.property.management.options.delete"),
           style: "destructive",
           onPress: onDelete,
         },
@@ -117,13 +117,13 @@ export default function PropertyListItem({
 
     const isCurrentlyActive = property.isActive;
     const actionText = isCurrentlyActive
-      ? t("property.options.deactivateProperty")
-      : t("property.options.activateProperty");
+      ? t("features.property.management.options.deactivateProperty")
+      : t("features.property.management.options.activateProperty");
     const confirmMessage = isCurrentlyActive
-      ? t("property.options.deactivateConfirm")
-      : t("property.options.activateConfirm");
+      ? t("features.property.management.options.deactivateConfirm")
+      : t("features.property.management.options.activateConfirm");
     const additionalMessage = isCurrentlyActive
-      ? t("property.options.deactivateMessage")
+      ? t("features.property.management.options.deactivateMessage")
       : "";
 
     Alert.alert(
@@ -136,8 +136,8 @@ export default function PropertyListItem({
         },
         {
           text: property.isActive
-            ? t("property.options.deactivate")
-            : t("property.options.activate"),
+            ? t("features.property.management.options.deactivate")
+            : t("features.property.management.options.activate"),
           onPress: onToggleStatus,
         },
       ]
@@ -319,7 +319,7 @@ export default function PropertyListItem({
               </Text>
               <Container marginLeft="xs">
                 <Text variant="caption" color="secondary">
-                  {t("property.pricing.perNight")}
+                  {t("features.property.management.pricing.perNight")}
                 </Text>
               </Container>
             </Container>

@@ -33,7 +33,7 @@ const AuthPrompt: React.FC = () => {
           { color: isDark ? theme.white : theme.colors.gray[900] },
         ]}
       >
-        {t("booking.signInRequired")}
+        {t("features.auth.forms.signInRequired")}
       </Text>
 
       <Text
@@ -44,14 +44,14 @@ const AuthPrompt: React.FC = () => {
           },
         ]}
       >
-        {t("booking.signInToViewBookings")}
+        {t("features.auth.forms.signInToViewBookings")}
       </Text>
 
       <TouchableOpacity
         style={[styles.signInButton, { backgroundColor: theme.colors.primary }]}
         onPress={() => router.push("/(overlays)/auth")}
       >
-        <Text style={styles.signInButtonText}>{t("booking.signIn")}</Text>
+        <Text style={styles.signInButtonText}>{t("features.auth.forms.signIn")}</Text>
       </TouchableOpacity>
     </View>
   );

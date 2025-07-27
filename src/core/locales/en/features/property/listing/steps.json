@@ -1,4 +1,35 @@
 {
+  "step1": {
+    "title": "Tell us about your place"
+  },
+  "step2": {
+    "title": "Make it stand out"
+  },
+  "step3": {
+    "title": "Finish up"
+  },
+  "basicInfo": {
+    "title": "Basic Information",
+    "description": "Tell us about your property's basic details"
+  },
+  "propertyType": {
+    "title": "Property Type",
+    "description": "Select the type of property you're listing"
+  },
+  "guestAccess": {
+    "title": "Guest Access",
+    "description": "Choose how guests will access your property"
+  },
+  "location": {
+    "title": "Location Details", 
+    "description": "Provide the exact location of your property"
+  },
+  "details": {
+    "title": "Share some basics about your place",
+    "description": "You can always change these later",
+    "tipTitle": "Property Details",
+    "tipContent": "Accurate details help guests know what to expect"
+  },
   "intro": {
     "title": "Welcome to Hosting!",
     "description": "Start your journey as a host. We'll guide you through the steps to list your property.",
@@ -72,6 +103,67 @@
     "draftSaved": "Draft Saved!",
     "publishedMessage": "Your property has been published successfully and is now visible to guests.",
     "draftMessage": "Your property has been saved as a draft. You can continue editing it later."
+  },
+  "title": {
+    "title": "Give your property a title",
+    "description": "Catch guests' attention with a catchy title",
+    "label": "Title",
+    "placeholder": "e.g., Cozy Downtown Apartment",
+    "tipTitle": "Title Tips",
+    "tipContent": "A great title helps guests find and remember your property. Use descriptive, memorable words and keep it under 32 characters."
+  },
+  "tags": {
+    "title": "Choose tags that describe your place",
+    "description": "Help guests find your property"
+  },
+  "images": {
+    "title": "Property Photos",
+    "description": "Add high-quality photos to showcase your property",
+    "tipTitle": "Photo Tips",
+    "tipContent": "High-quality photos help guests get a better sense of your property and increase bookings. Use natural lighting and show off your best features."
+  },
+  "description": {
+    "title": "Describe your property",
+    "description": "Tell guests about your property and what makes it special",
+    "label": "Description",
+    "placeholder": "Describe your property, what makes it special, nearby attractions, and what guests can expect during their stay...",
+    "tipTitle": "Writing Tips",
+    "tipContent": "Be descriptive and honest. Mention unique features, nearby attractions, and any important details guests should know."
+  },
+  "pricing": {
+    "title": "Set your {{type}} price",
+    "weekday": "weekday",
+    "weekend": "weekend", 
+    "description": "Price competitively to attract more bookings",
+    "placeholder": "0",
+    "perNight": "per night",
+    "lowPriceWarning": "Consider setting a higher price to ensure quality guests",
+    "tip": "💡 Tip: Research similar properties in your area to set a competitive price",
+    "minusTen": "-$10",
+    "minusFive": "-$5", 
+    "plusFive": "+$5",
+    "plusTen": "+$10"
+  },
+  "discounts": {
+    "title": "Offer discounts to attract guests",
+    "description": "Optional: Increase bookings with strategic discounts"
+  },
+  "policies": {
+    "title": "Set Default Policies",
+    "description": "Configure your cancellation policy and house rules"
+  },
+  "hostInfo": {
+    "title": "Tell us about yourself",
+    "description": "Are you listing as an individual or business?",
+    "safetyDisclosures": {
+      "title": "Safety disclosures",
+      "weaponsOnProperty": "Are there any weapons on the property?",
+      "securityCameras": "Are there security cameras on the property?"
+    },
+    "infoBox": {
+      "title": "Safety & Legal",
+      "content": "Being transparent about safety features and potential risks helps build trust with guests and ensures compliance with local regulations."
+    }
   },
   "draftSelection": {
     "continueYourListing": "Continue Your Listing",

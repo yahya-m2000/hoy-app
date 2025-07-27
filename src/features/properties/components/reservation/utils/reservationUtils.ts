@@ -95,13 +95,13 @@ export function canProceedToNextStep(
 export function getModalTitle(step: number, t: (key: string) => string): string {
   switch (step) {
     case 1: // Guest Details
-      return t("reservation.guestDetails");
+      return t("features.booking.flow.guestDetails");
     case 2: // Payment Method
-      return t("reservation.paymentMethod");
+      return t("features.booking.flow.paymentMethod");
     case 3: // Confirmation
-      return t("reservation.confirmReservation");
+      return t("features.booking.flow.confirmReservation");
     default:
-      return t("reservation.reservation");
+      return t("features.booking.flow.reservation");
   }
 }
 

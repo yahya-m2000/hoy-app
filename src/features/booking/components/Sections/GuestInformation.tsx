@@ -33,21 +33,21 @@ const GuestInformation: React.FC<GuestInformationProps> = ({ guests }) => {
     const parts = [];
 
     // Always show adults
-    parts.push(`${guests.adults} ${t("booking.adults")}`);
+    parts.push(`${guests.adults} ${t("features.booking.guests.adults")}`);
 
     // Add children if any
     if (guests.children > 0) {
-      parts.push(`${guests.children} ${t("booking.childrenShort")}`);
+      parts.push(`${guests.children} ${t("features.booking.guests.childrenShort")}`);
     }
 
     // Add infants if any
     if (guests.infants > 0) {
-      parts.push(`${guests.infants} ${t("booking.infantsShort")}`);
+      parts.push(`${guests.infants} ${t("features.booking.guests.infantsShort")}`);
     }
 
     // Add pets if any
     if (guests.pets > 0) {
-      parts.push(`${guests.pets} ${t("booking.petsShort")}`);
+      parts.push(`${guests.pets} ${t("features.booking.guests.petsShort")}`);
     }
 
     return parts.join(", ");
@@ -69,7 +69,7 @@ const GuestInformation: React.FC<GuestInformationProps> = ({ guests }) => {
           { color: isDark ? theme.white : theme.colors.gray[900] },
         ]}
       >
-        {t("booking.guests")}
+        {t("features.booking.guests.title")}
       </Text>
 
       <View style={styles.content}>

@@ -1,4 +1,17 @@
-{ "search": {
+{
+  "__DEPRECATED__": {
+    "notice": "This file is DEPRECATED as of 2025-01-26",
+    "migration": {
+      "reason": "Translation structure has been migrated to a new modular organization for better maintainability",
+      "newLocation": "src/core/locales/en/features/search/",
+      "migrationMapping": {
+        "search.*": "features.search.*"
+      },
+      "instructions": "Update your code to use the new translation keys from features.search.* instead of search.*",
+      "doNotUse": "DO NOT use translations from this file - they are maintained only for backwards compatibility"
+    }
+  },
+  "search": {
   "title": "Search",
   "description": "Search for a property",
   "goingTo": "Going to",

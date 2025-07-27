@@ -92,7 +92,7 @@ const PropertyMap: React.FC<PropertyMapProps> = ({
       >
         <Container flex={1}>
           <Text variant="h6" weight="semibold" color="primary">
-            {t("property.location.locationTitle")}
+            {t("features.property.details.location.title")}
           </Text>
           {displayAddress && (
             <Text variant="body" color="secondary" marginTop="sm">
@@ -101,7 +101,7 @@ const PropertyMap: React.FC<PropertyMapProps> = ({
           )}
           {!isValidCoordinates && (
             <Text variant="caption" color="warning" marginTop="sm">
-              Using default location (coordinates not available)
+              {t("features.property.details.location.defaultLocation")}
             </Text>
           )}
         </Container>
@@ -122,7 +122,7 @@ const PropertyMap: React.FC<PropertyMapProps> = ({
               />
             </Container>
             <Text variant="body" weight="medium" color="primary">
-              {t("property.location.getDirections")}
+              {t("features.property.details.location.getDirections")}
             </Text>
           </Container>
         </TouchableOpacity>
@@ -196,7 +196,7 @@ const PropertyMap: React.FC<PropertyMapProps> = ({
         ) : (
           <Container flex={1} alignItems="center" justifyContent="center">
             <Text variant="body" color="secondary">
-              {t("property.mapComingSoon")}
+              {t("features.property.details.location.mapComingSoon")}
             </Text>
           </Container>
         )}
@@ -216,7 +216,7 @@ const PropertyMap: React.FC<PropertyMapProps> = ({
         </Container>
         <Container flex={1}>
           <Text variant="caption" color="secondary">
-            {t("property.location.exactLocation")}
+            {t("features.property.details.location.exactLocation")}
           </Text>
           <Text variant="body" weight="medium" color="primary">
             {coordinates.latitude.toFixed(6)},{" "}

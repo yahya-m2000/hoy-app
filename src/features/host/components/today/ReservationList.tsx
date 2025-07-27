@@ -155,19 +155,19 @@ const ReservationList: React.FC<ReservationListProps> = ({
     reservation: Reservation
   ): string | null => {
     if (categorizedReservations.currentlyHosting.includes(reservation)) {
-      return t("host.today.status.currentlyHosting");
+      return t("features.host.dashboard.status.currentlyHosting");
     } else if (categorizedReservations.checkingOut.includes(reservation)) {
-      return t("host.today.status.checkingOutToday");
+      return t("features.host.dashboard.status.checkingOutToday");
     } else if (categorizedReservations.arrivingSoon.includes(reservation)) {
-      return t("host.today.status.arrivingToday");
+      return t("features.host.dashboard.status.arrivingToday");
     } else if (categorizedReservations.upcoming.includes(reservation)) {
-      return t("host.today.status.upcoming");
+      return t("features.host.dashboard.status.upcoming");
     } else if (categorizedReservations.pending.includes(reservation)) {
-      return t("host.today.status.pendingConfirmation");
+      return t("features.host.dashboard.status.pendingConfirmation");
     } else if (categorizedReservations.cancelled.includes(reservation)) {
-      return t("host.today.status.cancelled");
+      return t("features.host.dashboard.status.cancelled");
     } else if (categorizedReservations.pendingReview.includes(reservation)) {
-      return t("host.today.status.pendingReview");
+      return t("features.host.dashboard.status.pendingReview");
     }
     return null;
   };
@@ -183,9 +183,9 @@ const ReservationList: React.FC<ReservationListProps> = ({
   if (filteredReservations.length === 0) {
     return (
       <EmptyState
-        title={t("host.today.reservations.noReservationsInCategory")}
+        title={t("features.host.dashboard.reservations.noReservationsInCategory")}
         message={t(
-          "host.today.reservations.noReservationsInCategoryMessage",
+          "features.host.dashboard.reservations.noReservationsInCategoryMessage",
           ""
         )}
         icon="calendar-outline"
@@ -228,7 +228,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
               weight="medium"
               style={{ marginRight: spacing.xs }}
             >
-              {t("host.today.reservations.viewAllReservations", {
+              {t("features.host.dashboard.reservations.viewAllReservations", {
                 count: filteredReservations.length,
               })}
             </Text>

@@ -108,7 +108,7 @@ export default function WishlistIndex() {
   if (isLoading && !isRefreshing) {
     return (
       <Container flex={1} backgroundColor="background">
-        <Header title={t("wishlist.title")} />
+        <Header title={t("features.wishlist.title")} />
         <Container flex={1} justifyContent="center" alignItems="center">
           <LoadingSpinner size="large" />
           <Container marginTop="md">
@@ -117,7 +117,7 @@ export default function WishlistIndex() {
               color="secondary"
               style={{ textAlign: "center" }}
             >
-              {t("wishlist.loadingCollections")}
+              {t("features.wishlist.loading.collections")}
             </Text>
           </Container>
         </Container>
@@ -129,14 +129,14 @@ export default function WishlistIndex() {
   if (!isAuthenticated) {
     return (
       <Container flex={1} backgroundColor="background">
-        <Header title={t("wishlist.title")} />
+        <Header title={t("features.wishlist.title")} />
         <Container flex={1} justifyContent="center" alignItems="center">
           <EmptyState
             icon="heart-outline"
-            title={t("wishlist.signInToViewWishlist")}
-            message={t("wishlist.signInToViewWishlistMessage")}
+            title={t("features.wishlist.empty.signInTitle")}
+            message={t("features.wishlist.empty.signInMessage")}
             action={{
-              label: t("auth.signIn"),
+              label: t("features.auth.forms.signIn"),
               onPress: () => router.push("/auth/login"),
             }}
           />
@@ -149,14 +149,14 @@ export default function WishlistIndex() {
   if (!isLoading && collections.length === 0) {
     return (
       <Container flex={1} backgroundColor="background">
-        <Header title={t("wishlist.title")} />
+        <Header title={t("features.wishlist.title")} />
         <Container flex={1} justifyContent="center" alignItems="center">
           <EmptyState
             icon="heart-outline"
-            title={t("wishlist.createFirstWishlist")}
-            message={t("wishlist.createFirstWishlistMessage")}
+            title={t("features.wishlist.empty.createFirstTitle")}
+            message={t("features.wishlist.empty.createFirstMessage")}
             action={{
-              label: t("wishlist.createWishlist"),
+              label: t("features.wishlist.actions.create"),
               onPress: handleCreateCollection,
             }}
           />
@@ -172,7 +172,7 @@ export default function WishlistIndex() {
 
   return (
     <Container flex={1} backgroundColor={theme.background}>
-      <Header title={t("wishlist.title")} />
+      <Header title={t("common.tabs.wishlist")} />
       <StatusBar style={isDark ? "light" : "dark"} />
 
       {/* Error Banner */}
@@ -196,7 +196,7 @@ export default function WishlistIndex() {
               </Text>
             </Container>
             <Button
-              title={t("wishlist.retry")}
+              title={t("features.wishlist.actions.retry")}
               variant="ghost"
               size="small"
               onPress={loadCollections}
@@ -239,7 +239,7 @@ export default function WishlistIndex() {
                   color={theme.text.primary}
                   style={{ marginBottom: 2 }}
                 >
-                  {t("wishlist.collections")}
+                  {t("features.wishlist.content.collections")}
                 </Text>
                 <Text
                   variant="caption"

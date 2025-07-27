@@ -97,7 +97,7 @@ export default function PastBookingsScreen() {
     return (
       <Screen
         header={{
-          title: t("bookings.pastBookings"),
+          title: t("features.booking.management.pastBookings"),
           left: {
             icon: "chevron-back-outline",
             onPress: () => router.back(),
@@ -113,7 +113,7 @@ export default function PastBookingsScreen() {
               color="secondary"
               style={{ textAlign: "center" }}
             >
-              {t("bookings.loadingPastBookings")}
+              {t("features.booking.states.loadingPastBookings")}
             </Text>
           </Container>
         </Container>
@@ -126,7 +126,7 @@ export default function PastBookingsScreen() {
     return (
       <Screen
         header={{
-          title: t("bookings.pastBookings"),
+          title: t("features.booking.management.pastBookings"),
           left: {
             icon: "chevron-back-outline",
             onPress: () => router.back(),
@@ -137,10 +137,10 @@ export default function PastBookingsScreen() {
         <Container flex={1} justifyContent="center" alignItems="center">
           <EmptyState
             icon="calendar-outline"
-            title={t("bookings.signInToViewBookings")}
-            message={t("bookings.signInToViewPastBookings")}
+            title={t("features.booking.states.signInToViewBookings")}
+            message={t("features.booking.states.signInToViewPastBookings")}
             action={{
-              label: t("auth.signIn"),
+              label: t("features.auth.forms.signIn"),
               onPress: () => router.push("/auth/login"),
             }}
           />
@@ -154,7 +154,7 @@ export default function PastBookingsScreen() {
     return (
       <Screen
         header={{
-          title: t("bookings.pastBookings"),
+          title: t("features.booking.management.pastBookings"),
           left: {
             icon: "chevron-back-outline",
             onPress: () => router.back(),
@@ -165,8 +165,8 @@ export default function PastBookingsScreen() {
         <Container flex={1} justifyContent="center" alignItems="center">
           <EmptyState
             icon="time-outline"
-            title={t("bookings.noPastBookings")}
-            message={t("bookings.noPastBookingsMessage")}
+            title={t("features.booking.states.noPastBookings")}
+            message={t("features.booking.states.noPastBookingsMessage")}
           />
         </Container>
       </Screen>
@@ -176,7 +176,7 @@ export default function PastBookingsScreen() {
   return (
     <Screen
       header={{
-        title: t("bookings.pastBookings"),
+        title: t("features.booking.management.pastBookings"),
         left: {
           icon: "chevron-back-outline",
           onPress: () => router.back(),
@@ -207,7 +207,7 @@ export default function PastBookingsScreen() {
               </Text>
             </Container>
             <Button
-              title={t("bookings.retry")}
+              title={t("features.booking.actions.retry")}
               variant="ghost"
               size="small"
               onPress={onRefresh}
@@ -232,7 +232,7 @@ export default function PastBookingsScreen() {
         >
           {/* Past Bookings Section */}
           <BookingsSection
-            title={t("bookings.past")}
+            title={t("features.booking.management.past")}
             bookings={pastBookings}
             isUpcoming={false}
             isLoading={isLoading}

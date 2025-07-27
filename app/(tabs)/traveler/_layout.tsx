@@ -189,8 +189,8 @@ const TravelerLayout = () => {
         <Tabs.Screen
           name="home"
           options={{
-            title: t("navigation.home"),
-            tabBarLabel: t("navigation.home"),
+            title: t("common.tabs.home"),
+            tabBarLabel: t("common.tabs.home"),
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <AnimatedTabIcon name="home-outline" size={size} color={color} />
@@ -200,8 +200,8 @@ const TravelerLayout = () => {
         <Tabs.Screen
           name="search"
           options={{
-            title: t("navigation.search"),
-            tabBarLabel: t("navigation.search"),
+            title: t("common.tabs.search"),
+            tabBarLabel: t("common.tabs.search"),
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <AnimatedTabIcon
@@ -215,8 +215,8 @@ const TravelerLayout = () => {
         <Tabs.Screen
           name="bookings"
           options={{
-            title: t("navigation.bookings"),
-            tabBarLabel: t("navigation.bookings"),
+            title: t("common.tabs.bookings"),
+            tabBarLabel: t("common.tabs.bookings"),
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <AnimatedTabIcon
@@ -230,8 +230,8 @@ const TravelerLayout = () => {
         <Tabs.Screen
           name="wishlist"
           options={{
-            title: t("navigation.wishlist"),
-            tabBarLabel: t("navigation.wishlist"),
+            title: t("common.tabs.wishlist"),
+            tabBarLabel: t("common.tabs.wishlist"),
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <AnimatedTabIcon name="heart-outline" size={size} color={color} />
@@ -248,8 +248,8 @@ const TravelerLayout = () => {
         <Tabs.Screen
           name="profile"
           options={{
-            title: t("navigation.profile"),
-            tabBarLabel: t("navigation.profile"),
+            title: t("common.tabs.profile"),
+            tabBarLabel: t("common.tabs.profile"),
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <AnimatedTabIcon

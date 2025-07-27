@@ -91,7 +91,7 @@ export default function SignUpScreen() {
 
           showToast({
             type: "info",
-            message: t("auth.ssoSignupInfo", {
+            message: t("features.auth.social.sso.ssoSignupInfo", {
               provider: data.provider,
             }),
           });
@@ -129,7 +129,7 @@ export default function SignUpScreen() {
 
         showToast({
           type: "info",
-          message: t("location.addressAutoFilled"),
+          message: t("system.location.addressAutoFilled"),
         });
       }
     }
@@ -177,7 +177,7 @@ export default function SignUpScreen() {
 
       showToast({
         type: "success",
-        message: t("auth.registrationSuccess"),
+        message: t("features.auth.legal.messages.registrationSuccess"),
       });
 
       router.back();
@@ -186,7 +186,7 @@ export default function SignUpScreen() {
       showToast({
         type: "error",
         message:
-          error instanceof Error ? error.message : t("auth.registrationFailed"),
+          error instanceof Error ? error.message : t("features.auth.legal.messages.registrationFailed"),
       });
     }
   };
@@ -214,7 +214,7 @@ export default function SignUpScreen() {
       >
         <Container flex={1}>
           <Header
-            title={t("auth.createAccount")}
+            title={t("features.auth.forms.createAccount")}
             left={{
               icon: "chevron-back-outline",
               onPress: () => router.back(),
@@ -245,7 +245,7 @@ export default function SignUpScreen() {
             <Container marginBottom="xl">
               <Container marginBottom="md">
                 <Text variant="h6" color="primary">
-                  {t("auth.profilePicture")}
+                  {t("features.auth.forms.fields.profilePicture")}
                 </Text>
               </Container>
               <Container style={{ alignSelf: "center", marginBottom: 8 }}>
@@ -257,7 +257,7 @@ export default function SignUpScreen() {
                 />
               </Container>
               <Text variant="caption" color="secondary" align="center">
-                {t("auth.profilePictureHelper")}
+                {t("features.auth.forms.helpers.profilePictureHelper")}
               </Text>
             </Container>
 
@@ -265,41 +265,41 @@ export default function SignUpScreen() {
             <Container marginBottom="xl">
               <Container marginBottom="md">
                 <Text variant="h6" color="primary">
-                  {t("auth.legalName")}
+                  {t("features.auth.forms.fields.legalName")}
                 </Text>
               </Container>
               <Container marginBottom="md">
                 <Input
-                  label={t("auth.firstName")}
+                  label={t("features.auth.forms.fields.firstName")}
                   value={formState.firstName}
                   onChangeText={(value) =>
                     updateRegistrationField("firstName", value)
                   }
-                  placeholder={t("auth.firstName")}
+                  placeholder={t("features.auth.forms.fields.firstName")}
                   autoCapitalize="words"
                   textContentType="givenName"
                   autoComplete="given-name"
                   style={{ marginBottom: 8 }}
                 />
                 <Text variant="caption" color="secondary">
-                  {t("auth.firstNameHelper")}
+                  {t("features.auth.forms.helpers.firstNameHelper")}
                 </Text>
               </Container>
               <Container marginBottom="md">
                 <Input
-                  label={t("auth.lastName")}
+                  label={t("features.auth.forms.fields.lastName")}
                   value={formState.lastName}
                   onChangeText={(value) =>
                     updateRegistrationField("lastName", value)
                   }
-                  placeholder={t("auth.lastName")}
+                  placeholder={t("features.auth.forms.fields.lastName")}
                   autoCapitalize="words"
                   textContentType="familyName"
                   autoComplete="family-name"
                   style={{ marginBottom: 8 }}
                 />
                 <Text variant="caption" color="secondary">
-                  {t("auth.lastNameHelper")}
+                  {t("features.auth.forms.helpers.lastNameHelper")}
                 </Text>
               </Container>
             </Container>
@@ -308,17 +308,17 @@ export default function SignUpScreen() {
             <Container marginBottom="xl">
               <Container marginBottom="md">
                 <Text variant="h6" color="primary">
-                  {t("auth.contactDetails")}
+                  {t("features.auth.forms.sections.contactDetails")}
                 </Text>
               </Container>
               <Container marginBottom="md">
                 <Input
-                  label={t("auth.email")}
+                  label={t("features.auth.forms.fields.email")}
                   value={formState.email}
                   onChangeText={(value) =>
                     updateRegistrationField("email", value)
                   }
-                  placeholder={t("auth.email")}
+                  placeholder={t("features.auth.forms.fields.email")}
                   keyboardType="email-address"
                   autoCapitalize="none"
                   textContentType="emailAddress"
@@ -326,21 +326,21 @@ export default function SignUpScreen() {
                   style={{ marginBottom: 8 }}
                 />
                 <Text variant="caption" color="secondary">
-                  {t("auth.emailHelper")}
+                  {t("features.auth.forms.helpers.emailHelper")}
                 </Text>
               </Container>
               <Container marginBottom="md">
                 <PhoneInput
-                  label={t("auth.phoneNumber")}
+                  label={t("features.auth.forms.fields.phoneNumber")}
                   value={formState.phoneNumber}
                   onChangeText={(value) =>
                     updateRegistrationField("phoneNumber", value)
                   }
-                  placeholder={t("auth.phoneNumber")}
+                  placeholder={t("features.auth.forms.fields.phoneNumber")}
                   style={{ marginBottom: 8 }}
                 />
                 <Text variant="caption" color="secondary">
-                  {t("auth.phoneNumberHelper")}
+                  {t("features.auth.forms.helpers.phoneNumberHelper")}
                 </Text>
               </Container>
             </Container>
@@ -349,7 +349,7 @@ export default function SignUpScreen() {
             <Container marginBottom="xl">
               <Container marginBottom="md">
                 <Text variant="h6" color="primary">
-                  {t("auth.address")}
+                  {t("features.auth.forms.sections.address")}
                 </Text>
               </Container>
               <Container marginBottom="md">
@@ -378,7 +378,7 @@ export default function SignUpScreen() {
                       color: theme.text?.secondary || theme.secondary,
                     }}
                   >
-                    {t("auth.country")}
+                    {t("features.auth.forms.fields.country")}
                   </Text>
                   <Text
                     variant="body"
@@ -390,7 +390,7 @@ export default function SignUpScreen() {
                       fontWeight: formState.country ? "400" : "300",
                     }}
                   >
-                    {formState.country || t("auth.selectCountry")}
+                    {formState.country || t("features.auth.forms.placeholders.selectCountry")}
                   </Text>
                 </TouchableOpacity>
                 {errors.country && (
@@ -417,7 +417,7 @@ export default function SignUpScreen() {
                     color: theme.text?.secondary || theme.secondary,
                   }}
                 >
-                  {t("auth.countryHelper")}
+                  {t("features.auth.forms.helpers.countryHelper")}
                 </Text>
               </Container>
               <Container marginBottom="md">
@@ -426,7 +426,7 @@ export default function SignUpScreen() {
                     if (!formState.country) {
                       showToast({
                         type: "error",
-                        message: "Please select a country first",
+                        message: t("features.auth.forms.placeholders.selectCountryFirst"),
                       });
                       return;
                     }
@@ -455,7 +455,7 @@ export default function SignUpScreen() {
                       color: theme.text?.secondary || theme.secondary,
                     }}
                   >
-                    {t("auth.city")}
+                    {t("features.auth.forms.fields.city")}
                   </Text>
                   <Text
                     variant="body"
@@ -469,8 +469,8 @@ export default function SignUpScreen() {
                   >
                     {formState.city ||
                       (formState.country
-                        ? t("auth.selectCity")
-                        : "Select country first")}
+                        ? t("features.auth.forms.placeholders.selectCity")
+                        : t("features.auth.forms.placeholders.selectCountryFirst"))}
                   </Text>
                 </TouchableOpacity>
                 {errors.city && (
@@ -498,8 +498,8 @@ export default function SignUpScreen() {
                   }}
                 >
                   {formState.country
-                    ? `${availableCities.length} cities available in ${formState.country}`
-                    : t("auth.cityHelper")}
+                    ? t("features.auth.forms.helpers.citiesAvailable", { count: availableCities.length, country: formState.country })
+                    : t("features.auth.forms.helpers.cityHelper")}
                 </Text>
               </Container>
             </Container>
@@ -508,7 +508,7 @@ export default function SignUpScreen() {
             <Container marginBottom="xl">
               <Container marginBottom="md">
                 <Text variant="h6" color="primary">
-                  {t("auth.password")}
+                  {t("features.auth.forms.fields.password")}
                 </Text>
                 {formState.ssoData && (
                   <Text
@@ -516,21 +516,21 @@ export default function SignUpScreen() {
                     color="secondary"
                     style={{ marginTop: 4 }}
                   >
-                    {t("auth.passwordOptional")}
+                    {t("features.auth.forms.placeholders.passwordOptional")}
                   </Text>
                 )}
               </Container>
               <Container marginBottom="md">
                 <Input
-                  label={t("auth.password")}
+                  label={t("features.auth.forms.fields.password")}
                   value={formState.password}
                   onChangeText={(value) =>
                     updateRegistrationField("password", value)
                   }
                   placeholder={
                     formState.ssoData
-                      ? t("auth.passwordOptional")
-                      : t("auth.password")
+                      ? t("features.auth.forms.placeholders.passwordOptional")
+                      : t("features.auth.forms.fields.password")
                   }
                   secureTextEntry={!showPassword}
                   autoCapitalize="none"
@@ -542,14 +542,14 @@ export default function SignUpScreen() {
                   passwordRules="minlength: 8; required: lower; required: upper; required: digit; required: [-];"
                 />
                 <Text variant="caption" color="secondary">
-                  {t("auth.passwordHelper")}
+                  {t("features.auth.forms.helpers.passwordHelper")}
                 </Text>
                 <Text
                   variant="caption"
                   color="secondary"
                   style={{ marginTop: 4, fontStyle: "italic" }}
                 >
-                  {t("auth.passwordManager.savePrompt")}
+                  {t("features.auth.social.passwordManager.savePrompt")}
                 </Text>
                 <PasswordStrengthIndicator
                   password={formState.password}
@@ -589,12 +589,12 @@ export default function SignUpScreen() {
               </Container>
               <Container marginBottom="md">
                 <Input
-                  label={t("auth.confirmPassword")}
+                  label={t("features.auth.forms.fields.confirmPassword")}
                   value={formState.confirmPassword}
                   onChangeText={(value) =>
                     updateRegistrationField("confirmPassword", value)
                   }
-                  placeholder={t("auth.confirmPassword")}
+                  placeholder={t("features.auth.forms.fields.confirmPassword")}
                   secureTextEntry={!showConfirmPassword}
                   autoCapitalize="none"
                   rightIcon={showConfirmPassword ? "eye-off" : "eye"}
@@ -607,7 +607,7 @@ export default function SignUpScreen() {
                   passwordRules="minlength: 8; required: lower; required: upper; required: digit; required: [-];"
                 />
                 <Text variant="caption" color="secondary">
-                  {t("auth.confirmPasswordHelper")}
+                  {t("features.auth.forms.helpers.confirmPasswordHelper")}
                 </Text>
               </Container>
             </Container>
@@ -651,7 +651,7 @@ export default function SignUpScreen() {
                 </Container>
                 <Container style={{ flex: 1 }}>
                   <Text variant="body" style={{ lineHeight: 22 }}>
-                    {t("auth.termsAgreement")}
+                    {t("features.auth.legal.terms.termsAgreement")}
                   </Text>
                   <Container
                     style={{
@@ -664,7 +664,7 @@ export default function SignUpScreen() {
                         color="primary"
                         style={{ textDecorationLine: "underline" }}
                       >
-                        {t("auth.termsAndConditions")}
+                        {t("features.auth.legal.terms.termsAndConditions")}
                       </Text>
                     </TouchableOpacity>
                     <Text variant="body" style={{ marginHorizontal: 4 }}>
@@ -676,7 +676,7 @@ export default function SignUpScreen() {
                         color="primary"
                         style={{ textDecorationLine: "underline" }}
                       >
-                        {t("auth.privacyPolicy")}
+                        {t("features.auth.legal.terms.privacyPolicy")}
                       </Text>
                     </TouchableOpacity>
                   </Container>
@@ -686,7 +686,7 @@ export default function SignUpScreen() {
 
             <Container marginBottom="lg">
               <Button
-                title={t("auth.createAccount")}
+                title={t("features.auth.forms.createAccount")}
                 onPress={() => {
                   console.log("Register button pressed");
                   console.log("Current form state:", formState);
@@ -700,7 +700,7 @@ export default function SignUpScreen() {
               />
 
               <Button
-                title={t("auth.alreadyHaveAccount")}
+                title={t("features.auth.forms.alreadyHaveAccount")}
                 variant="ghost"
                 onPress={() => router.push("/(auth)/sign-in")}
                 style={{ alignSelf: "center" }}

@@ -1,4 +1,19 @@
 {
+  "__DEPRECATED__": {
+    "notice": "This file is DEPRECATED as of 2025-01-26",
+    "migration": {
+      "reason": "Translation structure has been migrated to a new modular organization for better maintainability",
+      "newLocation": "src/core/locales/en/ui/",
+      "migrationMapping": {
+        "toast.*": "ui.feedback.toast.*",
+        "validation.*": "ui.forms.validation.*",
+        "navigation.*": "ui.layout.navigation.*",
+        "location.*": "ui.location.*"
+      },
+      "instructions": "Update your code to use the new translation keys from ui.* modules instead of this single file",
+      "doNotUse": "DO NOT use translations from this file - they are maintained only for backwards compatibility"
+    }
+  },
   "toast": {
     "stackedNotifications": "{{count}} notifications",
     "dismissAll": "Dismiss All",

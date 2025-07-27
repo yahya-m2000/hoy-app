@@ -1,0 +1,13 @@
+{
+  "title": "Availability Calendar",
+  "selectDates": "Select available dates",
+  "availableText": "Available",
+  "blockedText": "Blocked",
+  "unavailableText": "Unavailable",
+  "reservedText": "Reserved",
+  "manageAvailability": "Manage Availability",
+  "blockDates": "Block Dates",
+  "unblockDates": "Unblock Dates",
+  "updateSuccess": "Availability updated successfully",
+  "updateError": "Failed to update availability"
+}

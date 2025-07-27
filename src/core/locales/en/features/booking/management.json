@@ -1,4 +1,9 @@
 {
+  "title": "Bookings",
+  "upcoming": "Upcoming",
+  "past": "Past",
+  "viewAllPastBookings": "View All Past Bookings",
+  "seeCompleteHistory": "See your complete booking history",
   "lists": {
     "title": "Bookings",
     "upcoming": "Upcoming",
@@ -87,5 +92,6 @@
     "locationError": "Location not available",
     "mapsError": "Could not open maps",
     "whatsappError": "Could not open WhatsApp"
-  }
+  },
+  "many": "many"
 }

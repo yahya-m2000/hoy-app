@@ -75,7 +75,7 @@ const DebugLocation = () => {
             color={manualOverride === true ? "white" : "black"}
             weight="medium"
           >
-            {t("location.enable")}
+            {t("system.location.enable")}
           </Text>
         </TouchableOpacity>
 
@@ -97,7 +97,7 @@ const DebugLocation = () => {
             color={manualOverride === false ? "white" : "black"}
             weight="medium"
           >
-            {t("location.disable")}
+            {t("system.location.disable")}
           </Text>
         </TouchableOpacity>
 
@@ -119,7 +119,7 @@ const DebugLocation = () => {
             color={manualOverride === null ? "white" : "black"}
             weight="medium"
           >
-            {t("location.auto")}
+            {t("system.location.auto")}
           </Text>
         </TouchableOpacity>
 
@@ -215,7 +215,7 @@ const DebugLocation = () => {
             ? "..."
             : locationServicesEnabled === false
             ? "Location Disabled"
-            : t("location.locationDebug")}
+            : t("system.location.locationDebug")}
         </Text>
       </TouchableOpacity>
     </>
@@ -313,11 +313,13 @@ export default function HomeScreen() {
       >
         <Container marginBottom="md">
           <Text size="xl" weight="medium">
-            {t("home.cannotConnect")}
+            {t("features.home.content.errors.cannotConnect")}
           </Text>
         </Container>
         <Container marginBottom="lg">
-          <Text size="md">{t("home.pleaseTryAgainLater")}</Text>
+          <Text size="md">
+            {t("features.home.content.errors.pleaseTryAgainLater")}
+          </Text>
         </Container>
         <Button
           title="Retry"
@@ -331,7 +333,7 @@ export default function HomeScreen() {
   }
 
   // Debug: log trendingCities before rendering carousels
-  console.log("trendingCities at render:", trendingCities);
+  // console.log("trendingCities at render:", trendingCities);
   return (
     <Container
       flex={1}
@@ -405,7 +407,7 @@ export default function HomeScreen() {
                   color={theme.text.primary}
                   style={{ marginBottom: 2 }}
                 >
-                  {t("home.hello")},{" "}
+                  {t("features.home.content.greetings.hello")},{" "}
                   {userUtils.getGreeting(isAuthenticated, user)}
                 </Text>
                 <Text
@@ -413,13 +415,13 @@ export default function HomeScreen() {
                   color={theme.text.secondary}
                   weight="medium"
                 >
-                  {t("home.discoverAmazingPlaces")}
+                  {t("features.home.content.greetings.discoverAmazingPlaces")}
                 </Text>
               </Container>
 
               {!isAuthenticated && (
                 <Button
-                  title={t("home.signIn")}
+                  title={t("features.home.content.auth.signIn")}
                   onPress={handleSignInPress}
                   variant="outline"
                   size="small"

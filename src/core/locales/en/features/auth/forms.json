@@ -7,6 +7,9 @@
   "noAccount": "Don't have an account?",
   "forgotPassword": "Forgot password?",
   "orContinueWith": "or continue with",
+  "welcomeBack": "Welcome Back!",
+  "signInToContinue": "Sign in to your account to continue",
+  "signInWithEmail": "Sign In with Email",
   "fields": {
     "legalName": "Legal Name",
     "firstName": "First Name",
@@ -28,6 +31,7 @@
     "phoneNumberHelper": "We'll use this for booking confirmations and host communication",
     "countryHelper": "Select your country of residence",
     "cityHelper": "Select your city",
+    "citiesAvailable": "{{count}} cities available in {{country}}",
     "profilePictureHelper": "Optional: Add a photo to help hosts recognize you",
     "passwordHelper": "Must be at least 8 characters with letters and numbers",
     "confirmPasswordHelper": "Re-enter your password to confirm",

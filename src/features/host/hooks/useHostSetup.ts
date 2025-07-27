@@ -153,7 +153,7 @@ export const useHostSetupNew = (): UseHostSetupReturn => {
       
     } catch (err: any) {
       console.error('Failed to load setup data:', err);
-      setError(err.message || t('host.errors.loadSetupFailed'));
+      setError(err.message || t('system.errors.data.loadFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -272,7 +272,7 @@ export const useHostSetupNew = (): UseHostSetupReturn => {
       // Auto-save
       autoSave('verification', data);
     } catch (err: any) {
-      setError(err.message || t('host.errors.updateFailed'));
+      setError(err.message || t('system.errors.data.updateFailed'));
       throw err;
     } finally {
       setIsSaving(false);
@@ -290,7 +290,7 @@ export const useHostSetupNew = (): UseHostSetupReturn => {
       // Auto-save
       autoSave('agreement', data);
     } catch (err: any) {
-      setError(err.message || t('host.errors.updateFailed'));
+      setError(err.message || t('system.errors.data.updateFailed'));
       throw err;
     } finally {
       setIsSaving(false);
@@ -308,7 +308,7 @@ export const useHostSetupNew = (): UseHostSetupReturn => {
       // Auto-save
       autoSave('policies', data);
     } catch (err: any) {
-      setError(err.message || t('host.errors.updateFailed'));
+      setError(err.message || t('system.errors.data.updateFailed'));
       throw err;
     } finally {
       setIsSaving(false);
@@ -326,7 +326,7 @@ export const useHostSetupNew = (): UseHostSetupReturn => {
       // Auto-save
       autoSave('preferences', data);
     } catch (err: any) {
-      setError(err.message || t('host.errors.updateFailed'));
+      setError(err.message || t('system.errors.data.updateFailed'));
       throw err;
     } finally {
       setIsSaving(false);
@@ -344,7 +344,7 @@ export const useHostSetupNew = (): UseHostSetupReturn => {
       // Auto-save
       autoSave('profile', data);
     } catch (err: any) {
-      setError(err.message || t('host.errors.updateFailed'));
+      setError(err.message || t('system.errors.data.updateFailed'));
       throw err;
     } finally {
       setIsSaving(false);
@@ -367,7 +367,7 @@ export const useHostSetupNew = (): UseHostSetupReturn => {
         }
       } : null);
     } catch (err: any) {
-      setError(err.message || t('host.errors.verificationFailed'));
+      setError(err.message || t('system.errors.authentication.accountNotVerified'));
       throw err;
     } finally {
       setIsSaving(false);
@@ -388,7 +388,7 @@ export const useHostSetupNew = (): UseHostSetupReturn => {
         }
       } : null);
     } catch (err: any) {
-      setError(err.message || t('host.errors.verificationFailed'));
+      setError(err.message || t('system.errors.authentication.accountNotVerified'));
       throw err;
     } finally {
       setIsSaving(false);
@@ -410,7 +410,7 @@ export const useHostSetupNew = (): UseHostSetupReturn => {
         }
       } : null);
     } catch (err: any) {
-      setError(err.message || t('host.errors.verificationFailed'));
+      setError(err.message || t('system.errors.authentication.accountNotVerified'));
       throw err;
     } finally {
       setIsSaving(false);
@@ -431,7 +431,7 @@ export const useHostSetupNew = (): UseHostSetupReturn => {
         }
       } : null);
     } catch (err: any) {
-      setError(err.message || t('host.errors.verificationFailed'));
+      setError(err.message || t('system.errors.authentication.accountNotVerified'));
       throw err;
     } finally {
       setIsSaving(false);
@@ -452,7 +452,7 @@ export const useHostSetupNew = (): UseHostSetupReturn => {
         }
       } : null);
     } catch (err: any) {
-      setError(err.message || t('host.errors.verificationFailed'));
+      setError(err.message || t('system.errors.authentication.accountNotVerified'));
       throw err;
     } finally {
       setIsSaving(false);
@@ -476,12 +476,12 @@ export const useHostSetupNew = (): UseHostSetupReturn => {
       } : null);
       
       Alert.alert(
-        t('host.setup.success.title'),
-        t('host.setup.success.message'),
+        t('features.host.setup.success.title'),
+        t('features.host.setup.success.message'),
         [{ text: t('common.ok') }]
       );
     } catch (err: any) {
-      setError(err.message || t('host.errors.setupFailed'));
+      setError(err.message || t('features.host.setup.errors.setupFailed'));
       throw err;
     } finally {
       setIsSaving(false);
@@ -518,36 +518,36 @@ export const useHostSetupNew = (): UseHostSetupReturn => {
     switch (step) {
       case 'verification':
         if (!setupData.verification.isEmailVerified) {
-          errors.email = t('host.setup.errors.emailNotVerified');
+          errors.email = t('features.host.setup.validation.emailNotVerified');
         }
         if (!setupData.verification.isPhoneVerified) {
-          errors.phone = t('host.setup.errors.phoneNotVerified');
+          errors.phone = t('features.host.setup.validation.phoneNotVerified');
         }
         break;
       case 'agreement':
         if (!setupData.agreement.termsAccepted) {
-          errors.terms = t('host.setup.errors.termsNotAccepted');
+          errors.terms = t('features.host.setup.validation.termsNotAccepted');
         }
         if (!setupData.agreement.privacyPolicyAccepted) {
-          errors.privacy = t('host.setup.errors.privacyNotAccepted');
+          errors.privacy = t('features.host.setup.validation.privacyNotAccepted');
         }
         break;
       case 'policies':
         if (!setupData.defaultPolicies.cancellationPolicy) {
-          errors.cancellation = t('host.setup.errors.cancellationPolicyRequired');
+          errors.cancellation = t('features.host.setup.validation.cancellationPolicyRequired');
         }
         break;
       case 'preferences':
         if (!setupData.preferences.responseTime) {
-          errors.responseTime = t('host.setup.errors.responseTimeRequired');
+          errors.responseTime = t('features.host.setup.validation.responseTimeRequired');
         }
         break;
       case 'profile':
         if (!setupData.profile.bio) {
-          errors.bio = t('host.setup.errors.bioRequired');
+          errors.bio = t('features.host.setup.validation.bioRequired');
         }
         if (!setupData.profile.photo) {
-          errors.photo = t('host.setup.errors.photoRequired');
+          errors.photo = t('features.host.setup.validation.photoRequired');
         }
         break;
     }

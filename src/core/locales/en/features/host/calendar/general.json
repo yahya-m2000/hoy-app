@@ -1,0 +1,16 @@
+{
+  "calendar": "Calendar",
+  "month": "Month",
+  "week": "Week",
+  "day": "Day",
+  "today": "Today",
+  "previousMonth": "Previous Month",
+  "nextMonth": "Next Month",
+  "selectDate": "Select Date",
+  "dateRange": "Date Range",
+  "startDate": "Start Date",
+  "endDate": "End Date",
+  "applyChanges": "Apply Changes",
+  "cancel": "Cancel",
+  "save": "Save"
+}
