@@ -1,7 +1,7 @@
 {
   "general": {
-    "guest": "guest",
-    "guests": "Guests",
+    // "guest": "guest", // MOVED TO property.common
+    // "guests": "Guests", // MOVED TO property.common
     "adults": "Adults",
     "children": "Children",
     "infants": "Infants",
@@ -12,7 +12,7 @@
     "livesIn": "Lives in",
     "featured": "Featured",
     "unknown": "Unknown",
-    "modify": "Modify",
+    // "modify": "Modify", // USE features.property.listing.actions.modify
     "showAll": "Show All",
     "viewListing": "View Listing",
     "addAnother": "Add Another Property",
@@ -20,8 +20,8 @@
     "selectProperty": "Select Property",
     "monthlyPotential": "Monthly Potential",
     "analytics": "Analytics",
-    "individual": "Individual",
-    "business": "Business",
+    // "individual": "Individual", // USE features.property.listing.common.individual
+    // "business": "Business", // USE features.property.listing.common.business
     "in": "in",
     "individualHost": "Individual Host",
     "businessHost": "Business Host", 
@@ -41,7 +41,7 @@
     "listingTypePlaceholder": "Select listing type",
     "listingTypeHelp": "Individual: Entire property • Shared: Room in property",
     "bedrooms": "Bedrooms",
-    "beds": "Beds",
+    // "beds": "Beds", // MOVED TO property.common
     "bathrooms": "Bathrooms",
     "maxGuests": "Maximum Guests",
     "pricePerNight": "Price per Night",
@@ -51,8 +51,8 @@
   },
   "measurements": {
     "bedroom": "Bedroom",
-    "bath": "Bath",
-    "baths": "Baths",
+    // "bath": "Bath", // MOVED TO property.common
+    // "baths": "Baths", // MOVED TO property.common
     "totalBeds": "Total Beds",
     "totalBookings": "total bookings"
   },

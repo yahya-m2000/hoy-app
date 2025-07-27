@@ -1,3 +1,7 @@
+// This file is a duplicate of features/account/profile.json and has been commented out
+// to avoid duplication. Use features/account/profile.json instead.
+
+/*
 {
   "personalInfo": "Personal Information",
   "personalInfoDesc": "Manage your account details",
@@ -62,3 +66,7 @@
     "description": "Customize your app appearance"
   }
 }
+*/
+
+// Export empty object to maintain module structure
+{}

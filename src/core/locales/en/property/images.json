@@ -1,7 +1,7 @@
 {
     "title": "Photos",
     "description": "Add high-quality photos to showcase your property.",
-    "addPhotos": "Add Photos",
+    // "addPhotos": "Add Photos", // USE features.property.details.images.addPhotos
     "chooseFromLibrary": "Choose from your photo library",
     "chooseMethod": "How would you like to add photos?",
     "camera": "Take Photo",
@@ -15,7 +15,7 @@
     "photosAdded": "{{count}} photos added",
     "tipTitle": "Photo Tips",
     "tipContent": "High-quality photos help guests get a better sense of your property and increase bookings. Use natural lighting and show off your best features.",
-    "main": "Main",
+    // "main": "Main", // USE features.property.details.images.main
     "tips": [
       "Use natural lighting when possible",
       "Show off your best features",

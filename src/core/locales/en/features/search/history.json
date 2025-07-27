@@ -1,0 +1,9 @@
+{
+  "recentSearches": "Recent Searches",
+  "noSearches": "No recent searches yet",
+  "startSearching": "Start searching to see your search history here",
+  "clearRecentSearches": "Clear All Recent Searches",
+  "clearRecentSearchesMessage": "Are you sure you want to clear all recent searches? This action cannot be undone.",
+  "removeSearch": "Remove Search",
+  "removeSearchMessage": "Are you sure you want to remove \"{{location}}\" from your recent searches?"
+}

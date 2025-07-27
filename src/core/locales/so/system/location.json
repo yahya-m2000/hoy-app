@@ -1,0 +1,12 @@
+{
+  "permissionGranted": "Ruqsadda goobta waa la siiyay",
+  "permissionDenied": "Ruqsadda goobta waa la diiday",
+  "servicesDisabled": "Adeegyada goobta waa la joojiyay",
+  "locationUpdated": "Goobta si guul leh ayaa loo cusboonaysiiyay",
+  "noAddressFound": "Cinwaan lama helin goobtan",
+  "enable": "Daar",
+  "disable": "Jooji",
+  "auto": "Otomaatig",
+  "locationDebug": "Saxaynta Goobta",
+  "addressAutoFilled": "Cinwaanka waxaa otomaatig ah loogu buuxiyay goobta"
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Reviews",
+  "summary": "Reviews Summary: {{rating}} ({{count}} reviews)",
+  "defaultContent": "Review content",
+  "noReviews": "No reviews yet",
+  "loading": "Loading reviews...",
+  "loadError": "Unable to load reviews"
+}

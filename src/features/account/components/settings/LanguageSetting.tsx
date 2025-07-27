@@ -23,7 +23,7 @@ const LanguageDisplay: React.FC<LanguageDisplayProps> = ({
   return (
     <Container marginBottom="lg">
       <Text variant="h6" marginBottom="sm">
-        {t("features.profile.currentLanguage")}
+        {t("features.account.profile.currentLanguage")}
       </Text>
       <Container
         flexDirection="row"
@@ -94,7 +94,7 @@ export const LanguageSetting: React.FC<LanguageSettingProps> = ({
       />
 
       <Button
-        title={t("features.profile.selectLanguage")}
+        title={t("features.account.profile.selectLanguage")}
         onPress={onOpenModal}
         variant="primary"
       />

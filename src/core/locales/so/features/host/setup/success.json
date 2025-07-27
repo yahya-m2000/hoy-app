@@ -1,0 +1,19 @@
+{
+  "title": "Ku soo dhawaaw hosting!",
+  "subtitle": "Hambalyo! Si guul leh ayaad u dhammaystirtay dejinta hostingkaaga oo diyaar u tahay inaad bilaawdo soo dhaweynta martida.",
+  "featuresUnlocked": "Sifooyinka hadda la heli karo",
+  "features": {
+    "listings": "Samee listingada",
+    "listingsDesc": "Ku dar hantiyadaada oo bilow aqbalida buukinta",
+    "calendar": "Maamul kalanderka",
+    "calendarDesc": "Deji helitaanka oo xir taariikho sida loo baahan yahay",
+    "messaging": "Xiriirka martida",
+    "messagingDesc": "La hadal martida ka hor iyo inta lagu jiro joogitaankooda",
+    "insights": "Falanqaynta waxqabadka",
+    "insightsDesc": "La socod dakhligaaga iyo waxqabadka buukinta"
+  },
+  "nextSteps": "Waa maxay xigta?",
+  "nextStepsDesc": "Diyaar u tahay inaad bilowdo safarka hostingkaaga? Waxaad ku dari kartaa hantidaada ugu horreysa ama sahamiso dashboard hostingkaaga cusub.",
+  "addProperty": "Ku dar hantidaada ugu horreysa",
+  "exploreDashboard": "Sahami dashboard hosting"
+}

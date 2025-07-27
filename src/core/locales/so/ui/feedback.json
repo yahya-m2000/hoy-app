@@ -1,0 +1,119 @@
+{
+  "toast": {
+    "success": "Guul!",
+    "error": "Qalad ayaa dhacay",
+    "warning": "Digniin",
+    "info": "Macluumad",
+    "stackedNotifications": "{{count}} ogeysiis",
+    "dismissAll": "Tirtir Dhammaan",
+    "viewAll": "Eeg Dhammaan",
+    "queued": "{{count}} saf ah",
+    "skipToNext": "U bood Kan xiga",
+    "dismiss": "Tirtir",
+    "retry": "Dib u isku day",
+    "undo": "Dib u celi",
+    "details": "Faahfaahin"
+  },
+  "alerts": {
+    "confirm": "Xaqiiji",
+    "warning": "Digniin",
+    "danger": "Khatar",
+    "info": "Macluumad",
+    "success": "Guul",
+    "error": "Qalad",
+    "title": {
+      "confirm": "Fadlan Xaqiiji",
+      "warning": "Digniin",
+      "danger": "Khatar!",
+      "info": "Macluumad",
+      "success": "Guul!",
+      "error": "Qalad Dhacay"
+    },
+    "actions": {
+      "ok": "Haa",
+      "cancel": "Jooji",
+      "yes": "Haa",
+      "no": "Maya",
+      "continue": "Sii wad",
+      "abort": "Jooji",
+      "retry": "Dib u isku day",
+      "ignore": "Iska indho tir",
+      "close": "Xir",
+      "dismiss": "Tirtir"
+    }
+  },
+  "confirmations": {
+    "delete": {
+      "title": "Tirtir {{item}}?",
+      "message": "Ma hubtaa inaad rabto inaad tirtirto {{item}}kan? Ficilkan lama celin karo.",
+      "confirm": "Tirtir",
+      "cancel": "Jooji"
+    },
+    "discard": {
+      "title": "Tuurto Isbeddellada?",
+      "message": "Waxaad leedahay isbeddello aan la kaydsan. Ma hubtaa inaad rabto inaad tuunto?",
+      "confirm": "Tuur",
+      "cancel": "Sii wad Wax ka bedelka"
+    },
+    "save": {
+      "title": "Kaydi Isbeddellada?",
+      "message": "Ma jeclaan lahayd inaad kaydiso isbeddellada ka hor inta aadan bixin?",
+      "confirm": "Kaydi",
+      "discard": "Ha kaydsan",
+      "cancel": "Jooji"
+    },
+    "exit": {
+      "title": "Ka bax {{feature}}?",
+      "message": "Ma hubtaa inaad rabto inaad ka baxdo? Horumaarkaagu wuu lumi karaa.",
+      "confirm": "Ka bax",
+      "cancel": "Joog"
+    },
+    "overwrite": {
+      "title": "Dul qor {{item}}?",
+      "message": "{{item}} magacan leh ayaa horay u jiray. Ma rabaa inaad dul qorto?",
+      "confirm": "Dul qor",
+      "cancel": "Jooji"
+    },
+    "logout": {
+      "title": "Ka bax?",
+      "message": "Ma hubtaa inaad rabto inaad ka baxdo?",
+      "confirm": "Ka bax",
+      "cancel": "Jooji"
+    }
+  },
+  "loading": {
+    "default": "Raraya...",
+    "saving": "Kaydiya...",
+    "uploading": "Soo raraya...",
+    "processing": "Habeeynaya...",
+    "submitting": "Gudbinaya...",
+    "fetching": "Soo raraya xogta...",
+    "initializing": "Bilaabaya...",
+    "please_wait": "Fadlan sug...",
+    "almost_done": "Dhamaan u dhow...",
+    "finalizing": "Dhammeynaya..."
+  },
+  "empty": {
+    "noData": "Xog ma jirto",
+    "noResults": "Natiijooyiin lama helin",
+    "noItems": "{{items}} lama helin",
+    "noContent": "Macluumad la tusi karo ma jirto",
+    "emptyList": "Liiskan waa madhan yahay",
+    "emptyFolder": "Galka waa madhan yahay",
+    "noMatches": "Wax u dhigma lama helin \"{{query}}\"",
+    "tryDifferent": "Isku day eray gooni ah",
+    "createFirst": "Samee {{item}}kaaga u horreeya",
+    "getStarted": "Ku bilow {{action}}"
+  },
+  "status": {
+    "online": "Online",
+    "offline": "Offline",
+    "connected": "Ku xiran",
+    "disconnected": "La gooyay",
+    "synced": "Cusub",
+    "syncing": "Isku dubaridaya...",
+    "outdated": "Duugoobay",
+    "failed": "Rarista ayaa fashilantay",
+    "retry": "Taabo si aad dib u isku daydo"
+  }
+}

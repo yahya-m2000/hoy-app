@@ -1,0 +1,82 @@
+{
+  "title": "Doorashada Martigelinta",
+  "subtitle": "Dejiso doorashada martigelintaada si aad ugu siiso khibrad ugu fiican martidaada.",
+  "responseTime": {
+    "title": "Waqtiga Jawaabta",
+    "subtitle": "Sidee oo dhaqso ah ayaad ugu jawaabtaa fariimaha martida?",
+    "within1Hour": {
+      "title": "Saacad gudaheeda",
+      "description": "Ugu jawaab fariimaha saacad gudaheeda khibradda ugu fiican martida",
+      "recommended": "La taliyaa"
+    },
+    "within24Hours": {
+      "title": "24 saacadood gudaheeda",
+      "description": "Ugu jawaab fariimaha 24 saacadood gudaheeda"
+    },
+    "within48Hours": {
+      "title": "48 saacadood gudaheeda",
+      "description": "Ugu jawaab fariimaha 48 saacadood gudaheeda"
+    },
+    "helpText": "Waqtiyo jawaab dhaqso ah ayaa keena khibrado fiican martida iyo buukin badan."
+  },
+  "instantBooking": {
+    "title": "Buukin Degdeg ah",
+    "subtitle": "U ogolow martida inay degdeg u buukaan iyaga oo aan sugayn anshaxa",
+    "enable": "Daar Buukin Degdeg ah",
+    "description": "Martidu waxay si degdeg ah u buukin karaan hantidaada iyaga oo aan sugayn anshaxa",
+    "helpText": "Buukin degdegu wuxuu kordhin karaa buukinadaada laakiin wuxuu kaa rabaa inaad cusboonaysii kalendarkaaga."
+  },
+  "bookingSettings": {
+    "title": "Goobaha Buukinta",
+    "subtitle": "Habeynta shuruudaha buukintaada iyo diyaarnimada",
+    "minimumNotice": {
+      "title": "Ogeysiiska Ugu yar (saacado)",
+      "description": "Intee ogeysiin hore ah ayaad u baahan tahay buukinta?",
+      "helpText": "Dejiso waqtiga ugu yar ee aad u baahan tahay si aad ugu diyaargarto martida."
+    },
+    "maxAdvanceBooking": {
+      "title": "Buukinta Ugu Horreeya ee Ugu Badan (maalmood)",
+      "description": "Ilaa meeye ayay martidu hore u buukin karaan?",
+      "helpText": "Dejiso sidee hore ah oo martidu u samayn karaan kaydinta."
+    }
+  },
+  "languages": {
+    "title": "Luqadaha",
+    "subtitle": "Dooro luqadaha aad kula xidhiidhi karto martida",
+    "placeholder": "Dooro luqadaha...",
+    "helpText": "Martidu waxay kala sooci karaan martigalayaasha ku hadla luqaddooda.",
+    "selected": "{{count}} luqadood ayaa la doortay"
+  },
+  "locationSettings": {
+    "title": "Goobta & Lacagta",
+    "subtitle": "Dejiso waqti aagaaga iyo lacagta aad door biday",
+    "currency": {
+      "title": "Lacagta la Door bidayay",
+      "description": "Lacagta loogu talagalay muujinta qiimaha iyo lacag bixinta",
+      "helpText": "Doorashada lacagta ayaa loo isticmaali doonaa app-ka oo dhan."
+    },
+    "timezone": {
+      "title": "Waqti aagga",
+      "description": "Waqti aagaaga maxalliga ah ee qorsheynta",
+      "helpText": "Tani waxay caawisaa qorsheynta iyo waqtiga xidhiidhka."
+    }
+  },
+  "notifications": {
+    "title": "Ogeysiisyada",
+    "subtitle": "Dooro sida aad u rabto inaad u hesho ogeysiisyada",
+    "methods": {
+      "title": "Hababka Ogeysiiska",
+      "email": "Email",
+      "push": "Ogeysiisyo Riix",
+      "sms": "SMS"
+    },
+    "types": {
+      "title": "Noocyada Ogeysiiska",
+      "bookingRequests": "Codsiyada Buukinta",
+      "messages": "Fariimaha",
+      "reviews": "Dib-eegisyada",
+      "payments": "Lacag bixinta"
+    },
+    "helpText": "Dooro sida iyo goorta aad rabto in laguu ogeysiyo dhacdooyinka muhiimka ah."
+  }
+}

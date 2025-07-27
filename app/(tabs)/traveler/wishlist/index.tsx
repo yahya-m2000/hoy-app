@@ -108,7 +108,7 @@ export default function WishlistIndex() {
   if (isLoading && !isRefreshing) {
     return (
       <Container flex={1} backgroundColor="background">
-        <Header title={t("features.wishlist.title")} />
+        <Header title={t("common.tabs.wishlist")} />
         <Container flex={1} justifyContent="center" alignItems="center">
           <LoadingSpinner size="large" />
           <Container marginTop="md">
@@ -129,7 +129,7 @@ export default function WishlistIndex() {
   if (!isAuthenticated) {
     return (
       <Container flex={1} backgroundColor="background">
-        <Header title={t("features.wishlist.title")} />
+        <Header title={t("common.tabs.wishlist")} />
         <Container flex={1} justifyContent="center" alignItems="center">
           <EmptyState
             icon="heart-outline"
@@ -149,7 +149,7 @@ export default function WishlistIndex() {
   if (!isLoading && collections.length === 0) {
     return (
       <Container flex={1} backgroundColor="background">
-        <Header title={t("features.wishlist.title")} />
+        <Header title={t("common.tabs.wishlist")} />
         <Container flex={1} justifyContent="center" alignItems="center">
           <EmptyState
             icon="heart-outline"

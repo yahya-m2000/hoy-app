@@ -24,13 +24,13 @@ export default function SignInSection() {
     {
       id: "sign-in",
       icon: "log-in-outline",
-      title: t("features.profile.signIn", { defaultValue: "Sign In" }),
+      title: t("features.account.profile.signIn", { defaultValue: "Sign In" }),
       action: () => router.push("/(auth)/sign-in"),
     },
     {
       id: "create-profile",
       icon: "person-add-outline",
-      title: t("features.profile.createProfile", { defaultValue: "Create profile" }),
+      title: t("features.account.profile.createProfile", { defaultValue: "Create profile" }),
       action: () => router.push("/(auth)/sign-in"), // Will handle both login and register
     },
   ];
@@ -48,7 +48,7 @@ export default function SignInSection() {
           marginBottom: 8,
         }}
       >
-        {t("features.profile.getStarted", { defaultValue: "Get Started" })}
+        {t("features.account.profile.getStarted", { defaultValue: "Get Started" })}
       </Text>
 
       {/* Sign In Items Container */}

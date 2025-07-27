@@ -1,0 +1,41 @@
+{
+  "back": "Dib u noqo",
+  "next": "Xiga",
+  "previous": "Hore",
+  "forward": "Hormuud",
+  "home": "Hoy",
+  "menu": "Menu",
+  "tabs": {
+    "home": "Hoy",
+    "search": "Raadinta",
+    "bookings": "Qorsheynta",
+    "messages": "Fariimaha",
+    "profile": "Bartiilka",
+    "wishlist": "Jecelsiinta",
+    "listings": "Liisaska",
+    "properties": "Hantida",
+    "reservations": "Buukinada",
+    "settings": "Dejinta"
+  },
+  "sections": {
+    "overview": "Dulmar",
+    "details": "Faahfaahin",
+    "photos": "Sawirrada",
+    "amenities": "Adeegyada",
+    "location": "Meesha",
+    "pricing": "Qiimaha",
+    "availability": "Helitaanka",
+    "policies": "Qawaaniinta",
+    "reviews": "Diiradda",
+    "history": "Taariikhda"
+  },
+  "actions": {
+    "goBack": "Dib u noqo",
+    "goHome": "Hoy tag",
+    "goToSection": "Tag {{section}}",
+    "openMenu": "Menu fur",
+    "closeMenu": "Menu xir",
+    "switchTab": "U beddel {{tab}}",
+    "navigate": "Socod"
+  }
+}

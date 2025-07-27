@@ -1,0 +1,21 @@
+{
+  "empty": {
+    "upcoming": {
+      "title": "No upcoming bookings",
+      "message": "When you book a place to stay, you'll find your trip details here."
+    },
+    "past": {
+      "title": "No past bookings",
+      "message": "Once you complete a trip, you'll find it here along with receipts and the option to leave a review."
+    }
+  },
+  "loadingBookings": "Loading your bookings...",
+  "loadingPastBookings": "Loading past bookings...",
+  "signInToViewBookings": "Sign in to view your bookings",
+  "signInToViewBookingsMessage": "Please sign in to view your booking history",
+  "signInToViewPastBookings": "Please sign in to view your past trips",
+  "noBookingsFound": "No bookings yet",
+  "noBookingsMessage": "When you book a place to stay, you'll find your trip details here.",
+  "noPastBookings": "No past bookings",
+  "noPastBookingsMessage": "Once you complete a trip, you'll find it here along with receipts and the option to leave a review."
+}

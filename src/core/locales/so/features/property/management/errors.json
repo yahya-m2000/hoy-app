@@ -1,0 +1,11 @@
+{
+  "loadError": "Waxaa fashilmay rarista xogta hantida",
+  "saveError": "Waxaa fashilmay kaydinta xogta hantida",
+  "submitError": "Khalad ayaa ka dhacay dirista hantida. Fadlan mar kale isku day.",
+  "deleteError": "Waxaa fashilmay tirtiridda hantida",
+  "updateError": "Waxaa fashilmay cusboonaysiinta hantida",
+  "createError": "Waxaa fashilmay abuurista hantida",
+  "notFound": "Hantida lama helin",
+  "unauthorized": "Ma lihid fasax aad ku gasho hantidan",
+  "validationError": "Fadlan hubiso galitaankaaga oo mar kale isku day"
+}

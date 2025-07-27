@@ -1,9 +1,9 @@
 {
   "bedroom": "bedroom",
   "bedrooms": "bedrooms", 
-  "bath": "bath",
-  "baths": "baths",
-  "guests": "guests",
+  // "bath": "bath", // MOVED TO property.common
+  // "baths": "baths", // MOVED TO property.common
+  // "guests": "guests", // MOVED TO property.common
   "propertyDetails": "Property Details",
   "propertyType": "Property Type",
   "guestAccess": "Guest Access",

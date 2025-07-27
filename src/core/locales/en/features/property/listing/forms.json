@@ -1,6 +1,6 @@
 {
   "types": {
-    "individual": "Individual Property",
+    // "individual": "Individual Property", // USE features.property.listing.common.individual
     "shared": "Shared Property",
     "entirePlace": "Entire Place",
     "entirePlaceDescription": "Guests have the whole place to themselves",
@@ -168,7 +168,7 @@
       "title": "Set Default Policies",
       "subtitle": "Configure your cancellation policy and house rules",
       "description": "These are your default policies. You can customize them for this property.",
-      "modify": "Modify",
+      // "modify": "Modify", // USE features.property.listing.actions.modify
       "cancellationPolicy": {
         "title": "Cancellation Policy",
         "description": "Moderate - Full refund 5 days before arrival"
@@ -186,8 +186,8 @@
       "title": "Tell us about yourself",
       "subtitle": "Complete verification to ensure guest safety and trust",
       "description": "Are you listing as an individual or business?",
-      "individual": "Individual",
-      "business": "Business",
+      // "individual": "Individual", // USE features.property.listing.common.individual
+      // "business": "Business", // USE features.property.listing.common.business
       "safetyDisclosures": {
         "title": "Safety disclosures",
         "weaponsOnProperty": "Are there any weapons on the property?",

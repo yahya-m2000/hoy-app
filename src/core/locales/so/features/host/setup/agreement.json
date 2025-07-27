@@ -1,0 +1,49 @@
+{
+  "title": "Heshiiska Martigelinta",
+  "subtitle": "Dib u eeg oo aqbal shuruudaha iyo siyaasadaha loo baahan yahay si aad ugu martigaliso barnaamijkeenna",
+  "progress": "Horumar: {{completed}}/{{total}}",
+  "allRequiredCompleted": "Dhammaan heshiisyada loo baahan yahay waa la aqbalay. Waxaad u guduban kartaa tallaabooyinka xiga.",
+  "requiredRemaining": "Fadlan aqbal shuruudaha loo baahan yahay iyo siyaasadda qarsoodnida si aad u socoto.",
+  "terms": {
+    "title": "Shuruudaha Adeegga",
+    "subtitle": "Heshiiska sharciga ah ee maamula isticmaalkaaga barnaamijkeenna martigale ahaan",
+    "status": {
+      "pending": "Lama aqbalin",
+      "accepted": "La aqbalay"
+    },
+    "viewDocument": "Eeg Shuruudaha",
+    "accept": "Aqbal Shuruudaha",
+    "accepted": "Shuruudaha la Aqbalay",
+    "helpText": "Shuruudaha Adeeggu waxay qeexayaan xuquuqdaada iyo mas'uuliyadaada martigale ahaan barnaamijkeenna."
+  },
+  "privacy": {
+    "title": "Siyaasadda Qarsoodnida",
+    "subtitle": "Sida aan u ururino, u isticmaalno, una ilaalino macluumaadkaaga gaarka ah",
+    "status": {
+      "pending": "Lama aqbalin",
+      "accepted": "La aqbalay"
+    },
+    "viewDocument": "Eeg Siyaasadda Qarsoodnida",
+    "accept": "Aqbal Siyaasadda Qarsoodnida",
+    "accepted": "Siyaasadda Qarsoodnida la Aqbalay",
+    "helpText": "Siyaasaddeenna Qarsoodnidu waxay sharraxaysaa sida aan u maareynno xogahaaga gaarka ah una ilaalino qarsoodnidaada."
+  },
+  "guarantee": {
+    "title": "Dammaanadda Martigelinta",
+    "subtitle": "Barnaamij ilaalin ikhtiyaari ah ee waxyeellada hantida iyo mas'uuliyadda",
+    "status": {
+      "pending": "Lama aqbalin",
+      "accepted": "La aqbalay",
+      "optional": "Ikhtiyaari"
+    },
+    "viewDocument": "Eeg Dammaanadda Martigelinta",
+    "accept": "Aqbal Dammaanadda Martigelinta",
+    "accepted": "Dammaanadda Martigelinta la Aqbalay",
+    "helpText": "Dammaanadda Martigelintu waxay siisaa ilaalin dheeraad ah hantidaada iyo daboolista mas'uuliyadda.",
+    "optionalNote": "Tani waa ikhtiyaari laakiin waa la taliyaa ilaalin dheeraad ah."
+  },
+  "legalNotice": "Ogeysiiska Sharciga",
+  "legalNoticeText": "Markaad aqbasho heshiisyadan, waxaad xaqiijinaysaa inaad akhrisay, fahmay, oo aad ogolaatay inaad ku xidhan tahay shuruudahan. Heshiisyadan waxaa laga yaabaa in mar walba la cusboonaysiiyo, isticmaalka joogtada ah ee barnaamijkeennu wuxuu dhigayaa aqbalida isbeddel kasta.",
+  "cannotOpenDocument": "Lama furi karo dukumentiga. Fadlan mar kale isku day.",
+  "documentError": "Qalad ayaa ka dhacay furista dukumentiga. Fadlan hubi xidhiidhka internetka."
+}

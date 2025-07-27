@@ -1,0 +1,21 @@
+{
+  "empty": {
+    "upcoming": {
+      "title": "Buukin soo socda ma jiraan",
+      "message": "Marka aad buukisid meel aad ku degganaato, faahfaahinta safarkaga halkan ka heli doontaa."
+    },
+    "past": {
+      "title": "Buukin hore ma jiraan",
+      "message": "Marka aad dhammaystirto safar, halkan waad ka heli doontaa oo waxaa kaloo jiri doona ikhtiyaarka aad diiradda ku qorto."
+    }
+  },
+  "loadingBookings": "Buukinadaada raran...",
+  "loadingPastBookings": "Buukinta hore raran...",
+  "signInToViewBookings": "Soo gal si aad u aragto buukinadaada",
+  "signInToViewBookingsMessage": "Fadlan soo gal si aad u aragto taariikhda buukinadaada",
+  "signInToViewPastBookings": "Fadlan soo gal si aad u aragto safaradaada hore",
+  "noBookingsFound": "Buukin weli ma jiraan",
+  "noBookingsMessage": "Marka aad buukisid meel aad ku degganaato, faahfaahinta safarkaga halkan ka heli doontaa.",
+  "noPastBookings": "Buukin hore ma jiraan",
+  "noPastBookingsMessage": "Marka aad dhammaystirto safar, halkan waad ka heli doontaa oo waxaa kaloo jiri doona ikhtiyaarka aad diiradda ku qorto."
+}

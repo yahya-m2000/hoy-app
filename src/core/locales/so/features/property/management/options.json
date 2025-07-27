@@ -1,0 +1,18 @@
+{
+  "title": "Doorashooyinka hantida",
+  "edit": "Wax ka bedel",
+  "delete": "Tirtir",
+  "activate": "Firfircoonaysii",
+  "deactivate": "Jooji",
+  "editProperty": "Wax ka bedel hantida",
+  "editDetails": "Wax ka bedel faahfaahinta",
+  "toggleStatus": "Beddelka xaalada",
+  "activateProperty": "Firfircoonaysii hantida",
+  "deactivateProperty": "Jooji hantida",
+  "activateConfirm": "Firfircoonaysii",
+  "deactivateConfirm": "Jooji",
+  "activateMessage": "Ma hubtaa inaad doonayso inaad firfircoonaysiiso hantidan? Waxay u muuqan doontaa martida.",
+  "deactivateMessage": "Ma hubtaa inaad doonayso inaad joojiso hantidan? Mar dambe uma muuqan doonto martida.",
+  "statusUpdated": "Hantida {{action}} si guul leh",
+  "statusUpdateFailed": "Waxaa fashilmay cusboonaysiinta xaalada hantida"
+}

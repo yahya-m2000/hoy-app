@@ -129,39 +129,39 @@ export const PersonalInfoSetting: React.FC<PersonalInfoSettingProps> = ({
 
       {/* Form Fields */}
       <FormField
-        label={t("features.profile.personalInfoForm.firstName")}
+        label={t("features.account.profile.personalInfoForm.firstName")}
         value={firstName}
         onChangeText={setFirstName}
-        placeholder={t("features.profile.personalInfoForm.firstName")}
+        placeholder={t("features.account.profile.personalInfoForm.firstName")}
       />
 
       <FormField
-        label={t("features.profile.personalInfoForm.lastName")}
+        label={t("features.account.profile.personalInfoForm.lastName")}
         value={lastName}
         onChangeText={setLastName}
-        placeholder={t("features.profile.personalInfoForm.lastName")}
+        placeholder={t("features.account.profile.personalInfoForm.lastName")}
       />
 
       <FormField
-        label={t("features.profile.personalInfoForm.phone")}
+        label={t("features.account.profile.personalInfoForm.phone")}
         value={phoneNumber}
         onChangeText={setPhoneNumber}
-        placeholder={t("features.profile.personalInfoForm.phone")}
+        placeholder={t("features.account.profile.personalInfoForm.phone")}
         keyboardType="phone-pad"
       />
 
       <FormField
-        label={t("features.profile.personalInfoForm.city")}
+        label={t("features.account.profile.personalInfoForm.city")}
         value={city}
         onChangeText={setCity}
-        placeholder={t("features.profile.personalInfoForm.city")}
+        placeholder={t("features.account.profile.personalInfoForm.city")}
       />
 
       <FormField
-        label={t("features.profile.personalInfoForm.country")}
+        label={t("features.account.profile.personalInfoForm.country")}
         value={country}
         onChangeText={setCountry}
-        placeholder={t("features.profile.personalInfoForm.country")}
+        placeholder={t("features.account.profile.personalInfoForm.country")}
       />
 
       {/* Save Button */}

@@ -32,7 +32,7 @@ export const InfoSetting: React.FC<InfoSettingProps> = ({
       case "help-center":
         Alert.alert(
           t("common.comingSoon"),
-          t("common.featureNotAvailable", { feature: t("features.profile.helpCenter") }),
+          t("common.featureNotAvailable", { feature: t("features.account.profile.helpCenter") }),
           [{ text: t("common.ok") }]
         );
         break;
@@ -43,7 +43,7 @@ export const InfoSetting: React.FC<InfoSettingProps> = ({
         Alert.alert(
           t("common.comingSoon"),
           t("common.featureNotAvailable", {
-            feature: t("features.profile.termsOfService"),
+            feature: t("features.account.profile.termsOfService"),
           }),
           [{ text: t("common.ok") }]
         );

@@ -36,7 +36,7 @@
     "shared_spaceDescription": "Guests share the space with others"
   },
   "listingTypes": {
-    "individual": "Individual Property",
+    // "individual": "Individual Property", // USE features.property.listing.common.individual
     "shared": "Shared Property"
   },
   "status": {

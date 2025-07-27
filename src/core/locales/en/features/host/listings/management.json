@@ -34,5 +34,7 @@
   },
   "loading": "Loading listings...",
   "error": "Error loading listings",
-  "retry": "Retry"
+  "retry": "Retry",
+  "emptyTitle": "No listings yet",
+  "emptyMessage": "Start creating your first property listing"
 }

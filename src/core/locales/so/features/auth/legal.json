@@ -1,0 +1,13 @@
+{
+  "terms": {
+    "termsAndConditions": "Shuruudaha iyo Xaaladaha",
+    "privacyPolicy": "Siyaasadda Qarsoodnida",
+    "termsAgreement": "Markaad sameyso akoon, waxaad ogolaanaysaa:",
+    "agreeToTerms": "Waan aqbalay Shuruudaha iyo Xaaladaha",
+    "termsHelper": "Waa inaad aqbashaa shuruudaheenna si aad u socoto"
+  },
+  "messages": {
+    "registrationSuccess": "Akoonta si guul leh ayaa loo sameeyay!",
+    "registrationFailed": "Diiwaan gelinta ayaa fashilantay. Fadlan mar kale isku day."
+  }
+}

@@ -15,6 +15,7 @@ import bookingManagement from "./booking/management.json";
 import bookingErrors from "./booking/errors.json";
 import bookingPayment from "./booking/payment.json";
 import bookingActions from "./booking/actions.json";
+import bookingStates from "./booking/states.json";
 import homeContent from "./home/content.json";
 import hostCalendarAvailability from "./host/calendar/availability.json";
 import hostCalendarBookings from "./host/calendar/bookings.json";
@@ -76,7 +77,8 @@ import searchDates from "./search/dates.json";
 import searchTravelers from "./search/travelers.json";
 import wishlistManagement from "./wishlist/management.json";
 import wishlistContent from "./wishlist/content.json";
-import profileIndex from "./profile/index.json";
+import wishlistEmpty from "./wishlist/empty.json";
+// import profileIndex from "./profile/index.json"; // DEPRECATED - use account.profile instead
 
 export default {
     calendar,
@@ -100,7 +102,8 @@ export default {
       management: bookingManagement,
       errors: bookingErrors,
       payment: bookingPayment,
-      actions: bookingActions
+      actions: bookingActions,
+      states: bookingStates
     },
     home: {
       content: homeContent
@@ -185,7 +188,8 @@ export default {
     },
     wishlist: {
       management: wishlistManagement,
-      content: wishlistContent
-    },
-    profile: profileIndex
+      content: wishlistContent,
+      empty: wishlistEmpty
+    }
+    // profile: profileIndex // DEPRECATED - use features.account.profile instead
   }

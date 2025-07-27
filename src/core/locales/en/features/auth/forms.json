@@ -45,7 +45,13 @@
     "searchCountry": "Search countries...",
     "searchCity": "Search cities...",
     "selectCountryFirst": "Select country first",
-    "passwordOptional": "Password (optional)"
+    "passwordOptional": "Password (optional)",
+    "email": "Enter your email address",
+    "firstName": "Enter your first name",
+    "lastName": "Enter your last name",
+    "password": "Enter your password",
+    "confirmPassword": "Confirm your password",
+    "enterPassword": "Enter your password"
   },
   "validation": {
     "emailInvalid": "Please enter a valid email address",
@@ -67,5 +73,7 @@
     "profilePicture": "Profile Picture",
     "legal": "Legal",
     "passwordManager": "Password Manager"
-  }
+  },
+  "signInRequired": "Sign In Required",
+  "signInToViewBookings": "Please sign in to view your bookings"
 }

@@ -1,0 +1,27 @@
+{
+  "property": "Hanti",
+  "detailsTitle": "Faahfaahinta buukinta",
+  "newProperty": "Cusub",
+  "tripDetailsTitle": "Faahfaahinta safarka",
+  "contactInfoTitle": "Macluumaadka xiriirka",
+  "duration": "Muddada",
+  "contactName": "Magaca xiriirka",
+  "contactEmail": "Iimaylka xiriirka",
+  "contactPhone": "Telefoonka xiriirka",
+  "priceDetailsTitle": "Faahfaahinta qiimaha",
+  "total": "Wadarta",
+  "specialRequestsTitle": "Codsiyada gaarka ah",
+  "adult": "qof weyn",
+  "child": "caruur",
+  "infant": "dhallaan",
+  "bookedOn": "La buukiyey",
+  "checkIn": "Soo galid",
+  "checkOut": "Ka bixid", 
+  "guests": "Marti",
+  "night": "habeen",
+  "nights": "habeenno",
+  "bookingId": "ID buukinta",
+  "status": {
+    "title": "Xaalada"
+  }
+}

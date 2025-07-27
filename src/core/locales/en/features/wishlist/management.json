@@ -6,7 +6,8 @@
   },
   "loading": {
     "loadingCollections": "Loading your collections...",
-    "loadingCollection": "Loading collection..."
+    "loadingCollection": "Loading collection...",
+    "collections": "Loading your collections..."
   },
   "auth": {
     "signInToViewWishlist": "Log in to view your wishlist",
@@ -15,6 +16,10 @@
   "empty": {
     "createFirstWishlist": "Create your first wishlist",
     "createFirstWishlistMessage": "As you search, tap the heart icon to save your favorite places to a wishlist",
+    "createFirstTitle": "Create your first wishlist",
+    "createFirstMessage": "As you search, tap the heart icon to save your favorite places to a wishlist",
+    "signInTitle": "Log in to view your wishlist",
+    "signInMessage": "Save your favorite properties to view them later",
     "noCollectionsFound": "No collections found",
     "noCollectionsMessage": "Start exploring to find and save properties to your wishlist",
     "noPropertiesSaved": "No properties saved",
@@ -22,6 +27,7 @@
   },
   "actions": {
     "createWishlist": "Create Wishlist",
+    "create": "Create Wishlist",
     "retry": "Retry",
     "startExploring": "Start exploring"
   },

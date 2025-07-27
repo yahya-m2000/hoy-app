@@ -1,28 +1,28 @@
 {
-  "title": "Jadwalka",
-  "selectProperty": "Dooro Hanti",
-  "noProperties": "Laguma helin hanti",
-  "addPropertiesToStart": "Kudar hanti si aad u bilowdo.",
+  "title": "Kalander",
+  "selectProperty": "Dooro hantida",
+  "noProperties": "Hanti lama helin",
+  "addPropertiesToStart": "Ku dar hanti si aad u bilowdo.",
   "daysSelected": "{{count}} maalmood la doortay",
-  "editMode": "Qaabka Wax ka beddelka",
-  "viewModeToggle": "Isbeddel Qaabka Daawashada",
+  "editMode": "Qaabka wax ka beddelka",
+  "viewModeToggle": "Beddelka qaabka daawashada",
   "navigation": {
-    "backToYearView": "← Daawo Sanadka"
+    "backToYearView": "← Daawashada Sanadka"
   },
   "loading": {
-    "theme": "Waa la raadinayaa theme...",
-    "calendar": "Waa la raadinayaa jadwalka...",
-    "invalidDate": "Taariikh aan saxnayn la bixiyay",
-    "noData": "Ma jiraan xog jadwal ah",
-    "noMonth": "Bil ma jiro"
+    "theme": "Qaabka muuqaalka ayaa la rarayo...",
+    "calendar": "Kalandarka ayaa la rarayo...",
+    "invalidDate": "Taariikh khaldan ayaa la bixiyay",
+    "noData": "Xog kalender ma jirto",
+    "noMonth": "Bil ma jirto"
   },
   "error": {
-    "navigationOptions": "Qalad ayaa ka dhacay dejinta ikhtiyaarada navigation",
-    "invalidMonth": "Bil aan sax ahayn ayaa la bixiyay"
+    "navigationOptions": "Qalad ayaa ka dhacay dejinta doorashooyinka raadinta",
+    "invalidMonth": "Bil khaldan ayaa la bixiyay"
   },
-  "editItem1": "Shayga 1",
-  "editItem2": "Shayga 2", 
-  "editItem3": "Shayga 3",
+  "editItem1": "Shay 1",
+  "editItem2": "Shay 2",
+  "editItem3": "Shay 3",
   "viewMode": {
     "year": "Sanad",
     "month": "Bil"
@@ -35,7 +35,7 @@
     "may": "Maajo",
     "june": "Juun",
     "july": "Luulyo",
-    "august": "Agoosto",
+    "august": "Ogosto",
     "september": "Sebtembar",
     "october": "Oktoobar",
     "november": "Nofembar",
@@ -46,10 +46,10 @@
     "feb": "Feb",
     "mar": "Mar",
     "apr": "Abr",
-    "may": "May",
+    "may": "Maj",
     "jun": "Jun",
     "jul": "Lul",
-    "aug": "Ago",
+    "aug": "Ogo",
     "sep": "Seb",
     "oct": "Okt",
     "nov": "Nof",

@@ -1,0 +1,75 @@
+{
+  "title": "Raadin",
+  "description": "Raadi hanti",
+  "anyLocation": "Meel kasta",
+  "anyDates": "Taariikh kasta", 
+  "anyGuests": "Marti kasta",
+  "resultsFound": "{{count}} hanti la helay",
+  "actions": {
+    "search": "Raadi",
+    "clear": "Nadiifi",
+    "apply": "Codso",
+    "newSearch": "Raadin cusub",
+    "recentSearchRemoved": "Raadinta dhawaan la tirtiray",
+    "allRecentSearchesCleared": "Dhammaan raadinta dhawaan la tirtiray",
+    "searchingProperties": "Hantida raadinaya..."
+  },
+  "fields": {
+    "goingTo": "Tegaya",
+    "when": "Goorma",
+    "who": "Aya",
+    "where": "Xagee",
+    "checkIn": "Soo galid",
+    "checkOut": "Ka bixid",
+    "guests": "Marti",
+    "selectDates": "Dooro taariikho"
+  },
+  "travelers": {
+    "title": "Aya soo socda?",
+    "adults": "Dad waaweyn",
+    "children": "Carruur",
+    "rooms": "Qolal",
+    "guest": "marti",
+    "room": "qol",
+    "decrement": "Dhimi",
+    "increment": "Kordhi"
+  },
+  "destinations": {
+    "whereToGo": "Xagee tegaysaa?",
+    "searchDestinations": "Raadi meelaha laga tago...",
+    "popularDestinations": "Meelaha caanka ah",
+    "searchingLocations": "Goobaha raadinaya...",
+    "anyLocation": "Meel kasta"
+  },
+  "dates": {
+    "anyDates": "Taariikh kasta",
+    "nights": "habeenno",
+    "night": "habeen"
+  },
+  "placeholders": {
+    "anyGuests": "Marti kasta"
+  },
+  "actions": {
+    "search": "Raadi",
+    "clear": "Nadiifi",
+    "apply": "Codso",
+    "newSearch": "Raadin cusub",
+    "recentSearchRemoved": "Raadinta dhawaan la tirtiray",
+    "allRecentSearchesCleared": "Dhammaan raadinta dhawaan la tirtiray",
+    "searchingProperties": "Hantida raadinaya..."
+  },
+  "validation": {
+    "selectLocationFirst": "Fadlan marka hore dooro goob"
+  },
+  "history": {
+    "recentSearches": "Raadinta dhawaan",
+    "noSearches": "Weli raadin dhawaan ma jirto",
+    "startSearching": "Bilow raadinta si aad halkan uga aragto taariikhda raadintaada",
+    "clearRecentSearches": "Tirtir raadinta dhawaan",
+    "clearRecentSearchesMessage": "Tani waxay tirtiri doontaa dhammaan raadintaada dhawaan",
+    "allRecentSearchesCleared": "Dhammaan raadinta dhawaan waa la tirtiray"
+  },
+  "validation": {
+    "selectLocationFirst": "Please select a location first"
+  }
+}

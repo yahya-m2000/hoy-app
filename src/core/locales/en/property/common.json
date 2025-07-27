@@ -1,6 +1,8 @@
 {
   "guest": "guest",
-  "guests": "Guests",
+  "guests": "guests",
+  "bed": "bed",
+  "beds": "beds",
   "adults": "Adults",
   "children": "Children",
   "infants": "Infants",
@@ -43,7 +45,7 @@
   "noName": "Untitled Property",
   "noDescriptionAvailable": "No description available.",
   "unknown": "Unknown",
-  "modify": "Modify",
+  // "modify": "Modify", // USE features.property.listing.actions.modify
   "showAll": "Show All",
   "viewListing": "View Listing",
   "addAnother": "Add Another Property",
@@ -51,8 +53,8 @@
   "selectProperty": "Select Property",
   "monthlyPotential": "Monthly Potential",
   "analytics": "Analytics",
-  "individual": "Individual",
-  "business": "Business",
+  // "individual": "Individual", // USE features.property.listing.common.individual
+  // "business": "Business", // USE features.property.listing.common.business
   "bedroom": "Bedroom",
   "bath": "Bath",
   "baths": "Baths",
