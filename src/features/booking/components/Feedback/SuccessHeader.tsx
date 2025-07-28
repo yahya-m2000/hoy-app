@@ -34,7 +34,7 @@ const SuccessHeader: React.FC = () => {
           { color: isDark ? theme.white : theme.colors.gray[900] },
         ]}
       >
-        {t("booking.bookingConfirmed")}
+        {t("features.booking.confirmation.bookingConfirmed")}
       </Text>
       <Text
         style={[
@@ -44,7 +44,7 @@ const SuccessHeader: React.FC = () => {
           },
         ]}
       >
-        {t("booking.confirmationMessage")}
+        {t("features.booking.confirmation.confirmationMessage")}
       </Text>
     </View>
   );

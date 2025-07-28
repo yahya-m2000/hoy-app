@@ -1,0 +1,53 @@
+{
+  "apartment": "Apartment",
+  "house": "Guri",
+  "villa": "Villa",
+  "condo": "Condo",
+  "townhouse": "Guri magaalo",
+  "bungalow": "Bungalow",
+  "cabin": "Cabin",
+  "chalet": "Chalet",
+  "cottage": "Cottage",
+  "loft": "Loft",
+  "penthouse": "Penthouse",
+  "studio": "Studio",
+  "other": "Kale",
+  "propertyTypes": {
+    "apartment": "Apartment",
+    "house": "Guri",
+    "villa": "Villa",
+    "condo": "Condo",
+    "townhouse": "Guri magaalo",
+    "bungalow": "Bungalow",
+    "cabin": "Cabin",
+    "chalet": "Chalet",
+    "cottage": "Cottage",
+    "loft": "Loft",
+    "penthouse": "Penthouse",
+    "studio": "Studio",
+    "other": "Kale"
+  },
+  "accessTypes": {
+    "entire_place": "Meelaha oo dhan",
+    "entire_placeDescription": "Martidu meelaha oo dhan ayay u leeyihiin",
+    "private_room": "Qolka gaarka ah",
+    "private_roomDescription": "Martidu qol gaar ah ayay leeyihiin laakiin waxay wadaagaan meelaha guud",
+    "shared_space": "Meel la wadaago",
+    "shared_spaceDescription": "Martidu meelaha waxay la wadaagaan kuwa kale"
+  },
+  "listingTypes": {
+    "shared": "Hanti la wadaago"
+  },
+  "status": {
+    "active": "Firfircoon",
+    "inactive": "Ma firfircona",
+    "draft": "Qoraal",
+    "label": "Xaalada:"
+  },
+  "entireApartment": "Apartment dhammaystiran",
+  "privateRoom": "Qol gaar ah",
+  "entireHouse": "Guri dhammaystiran",
+  "entireVilla": "Villa dhammaystiran",
+  "entireCondo": "Condo dhammaystiran",
+  "entireProperty": "{{type}} dhammaystiran"
+}

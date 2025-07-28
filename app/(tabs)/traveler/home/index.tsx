@@ -5,7 +5,7 @@
  */
 
 // React Native core
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ScrollView, Image, TouchableOpacity, Platform } from "react-native";
 
 // Expo and third-party libraries
@@ -20,7 +20,18 @@ import { useTrendingCities } from "src/features/properties/hooks/useTrendingCiti
 import { useProperties } from "src/features/properties/hooks/useProperties";
 
 // Base components
-import { Container, Text, Button, AnimatedContainer } from "@shared/components";
+import {
+  Container,
+  Text,
+  Button,
+  AnimatedContainer,
+  Icon,
+  Screen,
+  Header,
+} from "@shared/components";
+
+// Services
+import { notificationService } from "@core/services/notification.service";
 
 // Module components
 import { HorizontalListingsCarousel } from "@modules/properties";
@@ -75,7 +86,7 @@ const DebugLocation = () => {
             color={manualOverride === true ? "white" : "black"}
             weight="medium"
           >
-            {t("location.enable")}
+            {t("system.location.enable")}
           </Text>
         </TouchableOpacity>
 
@@ -97,7 +108,7 @@ const DebugLocation = () => {
             color={manualOverride === false ? "white" : "black"}
             weight="medium"
           >
-            {t("location.disable")}
+            {t("system.location.disable")}
           </Text>
         </TouchableOpacity>
 
@@ -119,7 +130,7 @@ const DebugLocation = () => {
             color={manualOverride === null ? "white" : "black"}
             weight="medium"
           >
-            {t("location.auto")}
+            {t("system.location.auto")}
           </Text>
         </TouchableOpacity>
 
@@ -215,7 +226,7 @@ const DebugLocation = () => {
             ? "..."
             : locationServicesEnabled === false
             ? "Location Disabled"
-            : t("location.locationDebug")}
+            : t("system.location.locationDebug")}
         </Text>
       </TouchableOpacity>
     </>
@@ -263,6 +274,33 @@ export default function HomeScreen() {
 
   const router = useRouter();
 
+  // Notification state
+  const [notificationCount, setNotificationCount] = useState(0);
+
+  // Setup notification listeners
+  useEffect(() => {
+    const updateNotificationCount = () => {
+      setNotificationCount(notificationService.getUnreadCount());
+    };
+
+    // Update count initially
+    updateNotificationCount();
+
+    // Setup notification listeners
+    const cleanup = notificationService.setupNotificationListeners(
+      (notification) => {
+        // Update count when notification received
+        updateNotificationCount();
+      },
+      (response) => {
+        // Handle notification tap - navigate to inbox screen
+        router.push("/(tabs)/traveler/inbox");
+      }
+    );
+
+    return cleanup;
+  }, [router]);
+
   // Track status of each carousel
   const [carouselStatus, setCarouselStatus] = React.useState<{
     [city: string]: "loading" | "success" | "error";
@@ -302,6 +340,11 @@ export default function HomeScreen() {
     router.push("/(auth)/sign-in");
   };
 
+  // Handle notification bell press
+  const handleNotificationPress = () => {
+    router.push("/(tabs)/traveler/inbox");
+  };
+
   if (allError) {
     return (
       <Container
@@ -313,11 +356,13 @@ export default function HomeScreen() {
       >
         <Container marginBottom="md">
           <Text size="xl" weight="medium">
-            {t("home.cannotConnect")}
+            {t("features.home.content.errors.cannotConnect")}
           </Text>
         </Container>
         <Container marginBottom="lg">
-          <Text size="md">{t("home.pleaseTryAgainLater")}</Text>
+          <Text size="md">
+            {t("features.home.content.errors.pleaseTryAgainLater")}
+          </Text>
         </Container>
         <Button
           title="Retry"
@@ -331,30 +376,25 @@ export default function HomeScreen() {
   }
 
   // Debug: log trendingCities before rendering carousels
-  console.log("trendingCities at render:", trendingCities);
+  // console.log("trendingCities at render:", trendingCities);
   return (
-    <Container
-      flex={1}
-      backgroundColor={isDark ? theme.colors.gray[900] : theme.colors.gray[50]}
-    >
+    <Container backgroundColor={theme.background} flex={1}>
+      <Header
+        title="Hoybnb"
+        titleStyle={{ fontWeight: "900", fontSize: 24 }}
+        right={{
+          icon:
+            notificationCount > 0 ? "notifications" : "notifications-outline",
+          onPress: handleNotificationPress,
+        }}
+        showDivider={false}
+      />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.content}
         contentInsetAdjustmentBehavior="automatic"
       >
         <StatusBar style={isDark ? "light" : "dark"} />
-
-        {/* Logo Section */}
-        <Container
-          alignItems="center"
-          marginTop={Platform.OS === "android" ? "xxl" : "md"}
-        >
-          <Image
-            source={require("../../../../assets/image.png")}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-        </Container>
 
         {/* Header Section */}
         {allLoading || allError ? (
@@ -405,7 +445,7 @@ export default function HomeScreen() {
                   color={theme.text.primary}
                   style={{ marginBottom: 2 }}
                 >
-                  {t("home.hello")},{" "}
+                  {t("features.home.content.greetings.hello")},{" "}
                   {userUtils.getGreeting(isAuthenticated, user)}
                 </Text>
                 <Text
@@ -413,13 +453,13 @@ export default function HomeScreen() {
                   color={theme.text.secondary}
                   weight="medium"
                 >
-                  {t("home.discoverAmazingPlaces")}
+                  {t("features.home.content.greetings.discoverAmazingPlaces")}
                 </Text>
               </Container>
 
               {!isAuthenticated && (
                 <Button
-                  title={t("home.signIn")}
+                  title={t("features.home.content.auth.signIn")}
                   onPress={handleSignInPress}
                   variant="outline"
                   size="small"

@@ -1,0 +1,38 @@
+{
+  "title": "Jecelsiinta",
+  "sections": {
+    "collections": "Aruurinta",
+    "properties": "Hantida"
+  },
+  "loading": {
+    "loadingCollections": "Aruurintaada raran...",
+    "loadingCollection": "Aruurinta raran...",
+    "collections": "Aruurintaada raran..."
+  },
+  "auth": {
+    "signInToViewWishlist": "Soo gal si aad u aragto jecelsiintaada",
+    "signInToViewWishlistMessage": "Kaydi hantida aad jeceshahay si aad dabadeed u aragto"
+  },
+  "empty": {
+    "createFirstWishlist": "Samee jecelsiintaada ugu horreysay",
+    "createFirstWishlistMessage": "Inta aad raadinayso, garaac astaanta wadnaha si aad u kaydsato meelaha aad jeceshahay",
+    "createFirstTitle": "Samee jecelsiintaada ugu horreysay",
+    "createFirstMessage": "Inta aad raadinayso, garaac astaanta wadnaha si aad u kaydsato meelaha aad jeceshahay",
+    "signInTitle": "Soo gal si aad u aragto jecelsiintaada",
+    "signInMessage": "Kaydi hantida aad jeceshahay si aad dabadeed u aragto",
+    "noCollectionsFound": "Aruurin lama helin",
+    "noCollectionsMessage": "Bilow baaris si aad u hesho oo u kaydsato hanti jecelsiintaada",
+    "noPropertiesSaved": "Hanti lama kaydin",
+    "noPropertiesSavedMessage": "Bilow baaris si aad u hesho oo u kaydsato hanti aruurintan"
+  },
+  "actions": {
+    "createWishlist": "Jecelsiinta Samee",
+    "create": "Jecelsiinta Samee",
+    "retry": "Isku day mar kale",
+    "startExploring": "Bilow baaris"
+  },
+  "errors": {
+    "errorLoadingCollections": "Khalad ayaa ka dhacay rarista aruurinta",
+    "errorLoadingCollection": "Khalad ayaa ka dhacay rarista aruurinta"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Amenities",
+  "description": "Select the amenities your property offers",
+  "selectedCount": "{{count}} amenities selected",
+  "tipTitle": "Why add amenities?",
+  "tipContent": "Amenities help your property stand out and attract more guests. Select all that apply to your property.",
+  "popular": "Popular amenities",
+  "kitchen": "Kitchen & Dining",
+  "entertainment": "Entertainment",
+  "comfort": "Comfort",
+  "safety": "Safety & Security",
+  "categories": {
+    "essentials": "Essentials",
+    "features": "Features",
+    "location": "Location",
+    "safety": "Safety"
+  },
+  "searchPlaceholder": "Search amenities",
+  "noAmenitiesSelected": "No amenities selected",
+  "selectAtLeastOne": "Please select at least one amenity",
+  "showLess": "Show Less"
+}

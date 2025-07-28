@@ -25,16 +25,16 @@ const BookingEmptyState: React.FC<BookingEmptyStateProps> = ({
     );
   }
   const title = isUpcoming
-    ? t("bookings.empty.upcoming.title", "No upcoming bookings")
-    : t("bookings.empty.past.title", "No past bookings");
+    ? t("features.booking.states.empty.upcoming.title", "No upcoming bookings")
+    : t("features.booking.states.empty.past.title", "No past bookings");
 
   const message = isUpcoming
     ? t(
-        "bookings.empty.upcoming.message",
+        "features.booking.states.empty.upcoming.message",
         "Start exploring to book your next trip!"
       )
     : t(
-        "bookings.empty.past.message",
+        "features.booking.states.empty.past.message",
         "Your completed bookings will appear here."
       );
 

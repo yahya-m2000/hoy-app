@@ -78,7 +78,7 @@ export const SafetyInformationForm: React.FC<SafetyInformationFormProps> = ({
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
         <Text variant="h3" style={styles.title}>
-          {t("host.policies.safety.title")}
+          {t("features.host.setup.policies.safety.title")}
         </Text>
 
         <Text
@@ -86,7 +86,7 @@ export const SafetyInformationForm: React.FC<SafetyInformationFormProps> = ({
           color={theme.text.secondary}
           style={styles.subtitle}
         >
-          {t("host.policies.safety.subtitle")}
+          {t("features.host.setup.policies.safety.subtitle")}
         </Text>
 
         <View style={styles.form}>
@@ -94,7 +94,7 @@ export const SafetyInformationForm: React.FC<SafetyInformationFormProps> = ({
           <View style={styles.switchField}>
             <View style={styles.switchLabel}>
               <Text variant="label">
-                {t("host.policies.safety.smokeDetector")}
+                {t("features.host.setup.policies.safety.smokeDetector")}
               </Text>
             </View>
             <Switch
@@ -114,7 +114,7 @@ export const SafetyInformationForm: React.FC<SafetyInformationFormProps> = ({
           <View style={styles.switchField}>
             <View style={styles.switchLabel}>
               <Text variant="label">
-                {t("host.policies.safety.carbonMonoxideDetector")}
+                {t("features.host.setup.policies.safety.carbonMonoxideDetector")}
               </Text>
             </View>
             <Switch
@@ -134,7 +134,7 @@ export const SafetyInformationForm: React.FC<SafetyInformationFormProps> = ({
           <View style={styles.switchField}>
             <View style={styles.switchLabel}>
               <Text variant="label">
-                {t("host.policies.safety.fireExtinguisher")}
+                {t("features.host.setup.policies.safety.fireExtinguisher")}
               </Text>
             </View>
             <Switch
@@ -154,7 +154,7 @@ export const SafetyInformationForm: React.FC<SafetyInformationFormProps> = ({
           <View style={styles.switchField}>
             <View style={styles.switchLabel}>
               <Text variant="label">
-                {t("host.policies.safety.firstAidKit")}
+                {t("features.host.setup.policies.safety.firstAidKit")}
               </Text>
             </View>
             <Switch
@@ -175,7 +175,7 @@ export const SafetyInformationForm: React.FC<SafetyInformationFormProps> = ({
             <View style={styles.switchField}>
               <View style={styles.switchLabel}>
                 <Text variant="label">
-                  {t("host.policies.safety.securityCamera")}
+                  {t("features.host.setup.policies.safety.securityCamera")}
                 </Text>
               </View>
               <Switch
@@ -198,7 +198,7 @@ export const SafetyInformationForm: React.FC<SafetyInformationFormProps> = ({
                   color={theme.text.secondary}
                   style={styles.fieldLabel}
                 >
-                  {t("host.policies.safety.securityCameraLocation")}
+                  {t("features.host.setup.policies.safety.securityCameraLocation")}
                 </Text>
                 <Input
                   value={data.securityCamera?.location || ""}
@@ -217,7 +217,7 @@ export const SafetyInformationForm: React.FC<SafetyInformationFormProps> = ({
           <View style={styles.switchField}>
             <View style={styles.switchLabel}>
               <Text variant="label">
-                {t("host.policies.safety.weaponsOnProperty")}
+                {t("features.host.setup.policies.safety.weaponsOnProperty")}
               </Text>
             </View>
             <Switch
@@ -237,7 +237,7 @@ export const SafetyInformationForm: React.FC<SafetyInformationFormProps> = ({
           <View style={styles.switchField}>
             <View style={styles.switchLabel}>
               <Text variant="label">
-                {t("host.policies.safety.dangerousAnimals")}
+                {t("features.host.setup.policies.safety.dangerousAnimals")}
               </Text>
             </View>
             <Switch
@@ -256,7 +256,7 @@ export const SafetyInformationForm: React.FC<SafetyInformationFormProps> = ({
           {/* Additional Safety Information */}
           <View style={styles.section}>
             <Text variant="label" style={styles.label}>
-              {t("host.policies.safety.additionalSafety")}
+              {t("features.host.setup.policies.safety.additionalSafety")}
             </Text>
             {/* Existing Safety Info */}
             {data.additionalSafety && data.additionalSafety.length > 0 && (
@@ -286,13 +286,13 @@ export const SafetyInformationForm: React.FC<SafetyInformationFormProps> = ({
               <Input
                 value={newSafetyInfo}
                 onChangeText={setNewSafetyInfo}
-                placeholder={t("host.policies.safety.safetyPlaceholder")}
+                placeholder={t("features.host.setup.policies.safety.safetyPlaceholder")}
                 multiline
                 numberOfLines={3}
                 style={styles.addInfoInput}
               />
               <Button
-                title={t("host.policies.safety.addSafetyInfo")}
+                title={t("features.host.setup.policies.safety.addSafetyInfo")}
                 variant="outline"
                 onPress={addSafetyInfo}
                 disabled={!newSafetyInfo.trim()}

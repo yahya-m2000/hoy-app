@@ -42,7 +42,7 @@ const AMENITY_ICONS: Record<string, string> = {
  * Matches the design pattern of HouseRulesSection
  */
 const AmenitiesGrid: React.FC<AmenitiesGridProps> = ({
-  title = t("home.whatThisPlaceOffers"),
+  title = t("features.property.details.amenities.title"),
   amenities,
   maxVisible = 6,
 }) => {
@@ -110,8 +110,8 @@ const AmenitiesGrid: React.FC<AmenitiesGridProps> = ({
         <TouchableOpacity onPress={() => setShowAll(!showAll)}>
           <Text size="lg" weight="medium" color="primary">
             {showAll
-              ? t("property.showLess")
-              : t("property.showAll", { count: amenities.length })}
+              ? t("features.property.details.amenities.showLess")
+              : t("features.property.details.amenities.showAll", { count: amenities.length })}
           </Text>
         </TouchableOpacity>
       )}

@@ -98,8 +98,8 @@ export default function ListingsPage() {
 
   const handleTogglePropertyStatus = async (property: HostProperty) => {
     const action = property.isActive
-      ? t("property.options.deactivate")
-      : t("property.options.activate");
+      ? t("features.property.management.options.deactivate")
+      : t("features.property.management.options.activate");
     const newStatus = property.isActive ? "inactive" : "active";
 
     try {
@@ -107,11 +107,14 @@ export default function ListingsPage() {
       await host.HostPropertyService.updateStatus(property._id, newStatus);
       Alert.alert(
         t("common.success"),
-        t("property.options.statusUpdated", { action })
+        t("features.property.management.options.statusUpdated", { action })
       );
       await refresh();
     } catch (err) {
-      Alert.alert(t("common.error"), t("property.options.statusUpdateFailed"));
+      Alert.alert(
+        t("common.error"),
+        t("features.property.management.options.statusUpdateFailed")
+      );
     } finally {
       setDeletingPropertyId(null);
     }
@@ -159,12 +162,12 @@ export default function ListingsPage() {
   return (
     <WithSetupCheck
       promptVariant="card"
-      promptTitle={t("host.setup.listingsPromptTitle")}
-      promptMessage={t("host.setup.listingsPromptMessage")}
+      promptTitle={t("features.host.setup.main.listingsPromptTitle")}
+      promptMessage={t("features.host.setup.main.listingsPromptMessage")}
     >
       <Container flex={1} backgroundColor="background">
         <Header
-          title={t("navigation.listings")}
+          title={t("common.tabs.listings")}
           rightIcon="add"
           onRightPress={handleAddProperty}
         />
@@ -193,10 +196,14 @@ export default function ListingsPage() {
           ListEmptyComponent={() => (
             <EmptyState
               icon="home-outline"
-              title={t("host.listings.emptyTitle")}
-              message={error ? error : t("host.listings.emptyMessage")}
+              title={t("features.host.listings.management.emptyTitle")}
+              message={
+                error
+                  ? error
+                  : t("features.host.listings.management.emptyMessage")
+              }
               action={{
-                label: t("host.listings.addProperty"),
+                label: t("features.host.listings.management.addProperty"),
                 onPress: handleAddProperty,
               }}
             />

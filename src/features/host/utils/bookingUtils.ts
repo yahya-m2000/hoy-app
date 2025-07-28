@@ -90,10 +90,10 @@ export const handleAddToCalendar = async (
   const property = booking.propertyId as any;
   const checkInDate = new Date(booking.checkIn);
   const checkOutDate = new Date(booking.checkOut);
-  const title = t("bookings.calendarTitle", {
-    property: property?.name || t("bookings.property"),
+  const title = t("features.booking.calendar.calendarTitle", {
+    property: property?.name || t("features.booking.details.property"),
   });
-  const details = t("bookings.calendarDetails", {
+  const details = t("features.booking.calendar.calendarDetails", {
     checkIn: formatDate(checkInDate, "long"),
     checkOut: formatDate(checkOutDate, "long"),
     guests: booking.guests.adults + (booking.guests.children || 0),
@@ -103,7 +103,7 @@ export const handleAddToCalendar = async (
     // Use Apple Calendar
     const appleCalUrl = `calshow:${checkInDate.getTime() / 1000}`;
     LinkingExpo.openURL(appleCalUrl).catch(() => {
-      showToast({ message: t("bookings.calendarError"), type: "error" });
+      showToast({ message: t("features.booking.calendar.calendarError"), type: "error" });
     });
   } else {
     // Use Google Calendar
@@ -115,7 +115,7 @@ export const handleAddToCalendar = async (
       title
     )}&dates=${startDate}/${endDate}&details=${encodeURIComponent(details)}`;
     LinkingExpo.openURL(calendarUrl).catch(() => {
-      showToast({ message: t("bookings.calendarError"), type: "error" });
+      showToast({ message: t("features.booking.calendar.calendarError"), type: "error" });
     });
   }
 };
@@ -130,7 +130,7 @@ export const handleGetDirections = (
 ) => {
   const property = booking?.propertyId as any;
   if (!property?.coordinates) {
-    showToast({ message: t("bookings.locationError"), type: "error" });
+    showToast({ message: t("features.booking.location.locationError"), type: "error" });
     return;
   }
   
@@ -146,7 +146,7 @@ export const handleGetDirections = (
   }
   
   LinkingExpo.openURL(url).catch(() => {
-    showToast({ message: t("bookings.mapsError"), type: "error" });
+    showToast({ message: t("features.booking.location.mapsError"), type: "error" });
   });
 };
 
@@ -160,14 +160,14 @@ export const handleContactGuest = (
 ) => {
   const phone = booking?.contactInfo?.phone;
   if (!phone) {
-    showToast({ message: t("bookings.whatsappError"), type: "error" });
+    showToast({ message: t("features.booking.communication.whatsappError"), type: "error" });
     return;
   }
   
   // WhatsApp deep link
   const url = `https://wa.me/${phone}`;
   LinkingExpo.openURL(url).catch(() => {
-    showToast({ message: t("bookings.whatsappError"), type: "error" });
+    showToast({ message: t("features.booking.communication.whatsappError"), type: "error" });
   });
 };
 

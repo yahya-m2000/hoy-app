@@ -81,6 +81,10 @@ export function ReservationStepRenderer({
           formatDate={formatDate}
           onEditDates={onEditDates}
           onEditGuests={onEditGuests || (() => {})}
+          property={property}
+          unit={unit}
+          totalAmount={(unit?.price || property?.price || 0).toString()}
+          currency="USD"
         />
       );
 

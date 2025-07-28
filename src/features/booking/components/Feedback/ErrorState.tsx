@@ -36,7 +36,7 @@ const ErrorState: React.FC = () => {
           { color: isDark ? theme.white : theme.colors.gray[900] },
         ]}
       >
-        {t("booking.bookingNotFound")}
+        {t("features.booking.errors.bookingNotFound")}
       </Text>
       <Text
         style={[
@@ -46,7 +46,7 @@ const ErrorState: React.FC = () => {
           },
         ]}
       >
-        {t("booking.bookingNotFoundMessage")}
+        {t("features.booking.errors.bookingNotFoundMessage")}
       </Text>
       <TouchableOpacity
         style={[styles.button, { backgroundColor: theme.colors.primary }]}

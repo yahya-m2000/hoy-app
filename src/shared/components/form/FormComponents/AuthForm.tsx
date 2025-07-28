@@ -82,8 +82,8 @@ export default function AuthForm({
     <>
       {/* Email Field */}
       <AuthInput
-        label={t("auth.email")}
-        placeholder={t("auth.emailPlaceholder")}
+        label={t("features.auth.forms.fields.email")}
+        placeholder={t("features.auth.forms.placeholders.email")}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -96,8 +96,8 @@ export default function AuthForm({
         <View style={styles.nameContainer}>
           {/* First Name */}
           <AuthInput
-            label={t("auth.firstName")}
-            placeholder={t("auth.firstNamePlaceholder")}
+            label={t("features.auth.forms.fields.firstName")}
+            placeholder={t("features.auth.forms.placeholders.firstName")}
             value={firstName}
             onChangeText={setFirstName}
             editable={!loading}
@@ -106,8 +106,8 @@ export default function AuthForm({
 
           {/* Last Name */}
           <AuthInput
-            label={t("auth.lastName")}
-            placeholder={t("auth.lastNamePlaceholder")}
+            label={t("features.auth.forms.fields.lastName")}
+            placeholder={t("features.auth.forms.placeholders.lastName")}
             value={lastName}
             onChangeText={setLastName}
             editable={!loading}
@@ -118,8 +118,8 @@ export default function AuthForm({
 
       {/* Password Field */}
       <PasswordInput
-        label={t("auth.password")}
-        placeholder={t("auth.passwordPlaceholder")}
+        label={t("features.auth.forms.fields.password")}
+        placeholder={t("features.auth.forms.placeholders.password")}
         value={password}
         onChangeText={setPassword}
         showPassword={showPassword}
@@ -130,8 +130,8 @@ export default function AuthForm({
       {/* Confirm Password (Register only) */}
       {authView === "register" && (
         <PasswordInput
-          label={t("auth.confirmPassword")}
-          placeholder={t("auth.confirmPasswordPlaceholder")}
+          label={t("features.auth.forms.fields.confirmPassword")}
+          placeholder={t("features.auth.forms.placeholders.confirmPassword")}
           value={confirmPassword}
           onChangeText={setConfirmPassword}
           showPassword={showConfirmPassword}
@@ -149,7 +149,7 @@ export default function AuthForm({
           <Text
             style={[styles.forgotPasswordText, { color: theme.colors.primary }]}
           >
-            {t("auth.forgotPassword")}
+            {t("features.auth.forms.forgotPassword")}
           </Text>
         </TouchableOpacity>
       )}
@@ -170,7 +170,7 @@ export default function AuthForm({
           <ActivityIndicator color={theme.white} size="small" />
         ) : (
           <Text style={styles.submitButtonText}>
-            {authView === "login" ? t("auth.login") : t("auth.createAccount")}
+            {authView === "login" ? t("features.auth.forms.signIn") : t("features.auth.forms.createAccount")}
           </Text>
         )}
       </TouchableOpacity>

@@ -84,7 +84,7 @@ export const HouseRulesForm: React.FC<HouseRulesFormProps> = ({
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
         <Text variant="h3" style={styles.title}>
-          {t("host.policies.houseRules.title")}
+          {t("features.host.setup.policies.houseRules.title")}
         </Text>
 
         <Text
@@ -92,7 +92,7 @@ export const HouseRulesForm: React.FC<HouseRulesFormProps> = ({
           color={theme.text.secondary}
           style={styles.subtitle}
         >
-          {t("host.policies.houseRules.subtitle")}
+          {t("features.host.setup.policies.houseRules.subtitle")}
         </Text>
 
         <View style={styles.form}>
@@ -101,7 +101,7 @@ export const HouseRulesForm: React.FC<HouseRulesFormProps> = ({
             <TimeInput
               value={data.checkInTime || ""}
               onChangeText={(value) => handleInputChange("checkInTime", value)}
-              label={t("host.policies.houseRules.checkIn")}
+              label={t("features.host.setup.policies.houseRules.checkIn")}
               placeholder="15:00"
               error={errors.checkInTime}
             />
@@ -111,7 +111,7 @@ export const HouseRulesForm: React.FC<HouseRulesFormProps> = ({
             <TimeInput
               value={data.checkOutTime || ""}
               onChangeText={(value) => handleInputChange("checkOutTime", value)}
-              label={t("host.policies.houseRules.checkOut")}
+              label={t("features.host.setup.policies.houseRules.checkOut")}
               placeholder="11:00"
               error={errors.checkOutTime}
             />
@@ -120,7 +120,7 @@ export const HouseRulesForm: React.FC<HouseRulesFormProps> = ({
           <View style={styles.switchField}>
             <View style={styles.switchLabel}>
               <Text variant="label">
-                {t("host.policies.houseRules.smoking")}
+                {t("features.host.setup.policies.houseRules.smoking")}
               </Text>
             </View>
             <Switch
@@ -138,7 +138,7 @@ export const HouseRulesForm: React.FC<HouseRulesFormProps> = ({
           {/* Pets Allowed */}
           <View style={styles.switchField}>
             <View style={styles.switchLabel}>
-              <Text variant="label">{t("host.policies.houseRules.pets")}</Text>
+              <Text variant="label">{t("features.host.setup.policies.houseRules.pets")}</Text>
             </View>
             <Switch
               value={data.petsAllowed || false}
@@ -156,7 +156,7 @@ export const HouseRulesForm: React.FC<HouseRulesFormProps> = ({
           <View style={styles.switchField}>
             <View style={styles.switchLabel}>
               <Text variant="label">
-                {t("host.policies.houseRules.parties")}
+                {t("features.host.setup.policies.houseRules.parties")}
               </Text>
             </View>
             <Switch
@@ -176,7 +176,7 @@ export const HouseRulesForm: React.FC<HouseRulesFormProps> = ({
             <View style={styles.switchField}>
               <View style={styles.switchLabel}>
                 <Text variant="label">
-                  {t("host.policies.houseRules.quietHours")}
+                  {t("features.host.setup.policies.houseRules.quietHours")}
                 </Text>
               </View>
               <Switch
@@ -199,7 +199,7 @@ export const HouseRulesForm: React.FC<HouseRulesFormProps> = ({
                     onChangeText={(value) =>
                       handleQuietHoursChange("start", value)
                     }
-                    label={t("host.policies.houseRules.quietHoursStart")}
+                    label={t("features.host.setup.policies.houseRules.quietHoursStart")}
                     placeholder="22:00"
                     error={errors.quietHoursStart}
                   />
@@ -210,7 +210,7 @@ export const HouseRulesForm: React.FC<HouseRulesFormProps> = ({
                     onChangeText={(value) =>
                       handleQuietHoursChange("end", value)
                     }
-                    label={t("host.policies.houseRules.quietHoursEnd")}
+                    label={t("features.host.setup.policies.houseRules.quietHoursEnd")}
                     placeholder="08:00"
                     error={errors.quietHoursEnd}
                   />
@@ -221,7 +221,7 @@ export const HouseRulesForm: React.FC<HouseRulesFormProps> = ({
           {/* Additional Rules */}
           <View style={styles.section}>
             <Text variant="label" style={styles.label}>
-              {t("host.policies.houseRules.additionalRules")}
+              {t("features.host.setup.policies.houseRules.additionalRules")}
             </Text>
             {/* Existing Rules */}
             {data.additionalRules && data.additionalRules.length > 0 && (
@@ -251,13 +251,13 @@ export const HouseRulesForm: React.FC<HouseRulesFormProps> = ({
               <Input
                 value={newRule}
                 onChangeText={setNewRule}
-                placeholder={t("host.policies.houseRules.rulePlaceholder")}
+                placeholder={t("features.host.setup.policies.houseRules.rulePlaceholder")}
                 multiline
                 numberOfLines={2}
                 style={styles.addRuleInput}
               />
               <Button
-                title={t("host.policies.houseRules.addRule")}
+                title={t("features.host.setup.policies.houseRules.addRule")}
                 variant="outline"
                 onPress={addAdditionalRule}
                 disabled={!newRule.trim()}

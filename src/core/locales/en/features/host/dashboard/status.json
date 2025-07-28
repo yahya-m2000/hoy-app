@@ -1,0 +1,12 @@
+{
+  "currentlyHosting": "Currently hosting",
+  "checkingOutToday": "Checking out today",
+  "arrivingToday": "Arriving today",
+  "upcoming": "Confirmed",
+  "pendingConfirmation": "Pending confirmation",
+  "cancelled": "Cancelled",
+  "pendingReview": "Pending review",
+  "active": "Current guest",
+  "completed": "Completed",
+  "pending": "Pending"
+}

@@ -137,7 +137,7 @@ export const ToggleGroup: React.FC<ToggleGroupProps> = ({
                       { color: theme.colors.white },
                     ]}
                   >
-                    {t("host.setup.recommended")}
+                    {t("features.host.setup.main.recommended")}
                   </Text>
                 </Container>
               )}
@@ -217,7 +217,7 @@ export const ToggleGroup: React.FC<ToggleGroupProps> = ({
             style={styles.helpIcon}
           />
           <Text variant="caption" color="secondary" style={styles.helpText}>
-            {t("host.setup.toggleGroupHelp")}
+            {t("features.host.setup.main.toggleGroupHelp")}
           </Text>
         </Container>
       )}

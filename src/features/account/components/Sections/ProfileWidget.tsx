@@ -108,7 +108,7 @@ export default function ProfileWidget({
               if (showToast) {
                 showToast({
                   type: "error",
-                  message: err?.response?.data?.message || t("errors.generic"),
+                  message: err?.response?.data?.message || t("system.errors.generic.unknown"),
                 });
               }
             }
@@ -149,7 +149,7 @@ export default function ProfileWidget({
           >
             {user?.firstName || user?.lastName
               ? `${user.firstName || ""} ${user.lastName || ""}`.trim()
-              : t("profile.guestUser")}
+              : t("features.account.profile.guestUser")}
           </Text>
 
           <Text
@@ -157,7 +157,7 @@ export default function ProfileWidget({
             color={isDark ? theme.colors.gray[400] : theme.colors.gray[600]}
             style={{ marginBottom: 4 }}
           >
-            {user?.email || t("profile.notSignedIn")}
+            {user?.email || t("features.account.profile.notSignedIn")}
           </Text>
 
           {/* Show user role under email */}
@@ -172,8 +172,8 @@ export default function ProfileWidget({
             }}
           >
             {isHost
-              ? t("profile.hostLabel", "Host")
-              : t("profile.travelerLabel", "Traveler")}
+              ? t("features.account.profile.hostLabel", "Host")
+              : t("features.account.profile.travelerLabel", "Traveler")}
           </Text> */}
           {/* Debug button for force refresh */}
           {/* {__DEV__ && (
@@ -190,7 +190,7 @@ export default function ProfileWidget({
               variant="caption"
               color={isDark ? theme.colors.gray[500] : theme.colors.gray[500]}
             >
-              {t("profile.joinedDate", {
+              {t("features.account.profile.joinedDate", {
                 date: new Date(user.joinedDate).toLocaleDateString(),
               })}
             </Text>
@@ -259,7 +259,7 @@ export default function ProfileWidget({
                   style={{ marginRight: 12 }}
                 />
                 <Text variant="body" color="inverse" weight="semibold">
-                  {t("profile.becomeAHost")}
+                  {t("features.account.profile.becomeAHost")}
                 </Text>
               </Container>
               <Ionicons

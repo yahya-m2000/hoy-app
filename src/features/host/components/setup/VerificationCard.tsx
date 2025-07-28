@@ -102,13 +102,13 @@ export const VerificationCard: React.FC<VerificationCardProps> = ({
   const getStatusText = () => {
     switch (status) {
       case "completed":
-        return t("host.setup.verification.completed");
+        return t("features.host.setup.verification.completed");
       case "in_progress":
-        return t("host.setup.verification.inProgress");
+        return t("features.host.setup.verification.inProgress");
       case "error":
-        return t("host.setup.verification.error");
+        return t("features.host.setup.verification.error");
       default:
-        return t("host.setup.verification.pending");
+        return t("features.host.setup.verification.pending");
     }
   };
 
@@ -138,7 +138,7 @@ export const VerificationCard: React.FC<VerificationCardProps> = ({
     if (status === "completed") {
       return (
         <Button
-          title={t("host.setup.verification.verified")}
+          title={t("features.host.setup.verification.verified")}
           variant="outline"
           size="small"
           disabled={true}
@@ -154,10 +154,10 @@ export const VerificationCard: React.FC<VerificationCardProps> = ({
         <Container>
           <Container marginBottom="sm">
             <Input
-              label={t("host.setup.verification.enterCode")}
+              label={t("features.host.setup.verification.enterCode")}
               value={code}
               onChangeText={setCode}
-              placeholder={t("host.setup.verification.codePlaceholder")}
+              placeholder={t("features.host.setup.verification.codePlaceholder")}
               keyboardType="numeric"
               maxLength={6}
               autoComplete="one-time-code"
@@ -168,7 +168,7 @@ export const VerificationCard: React.FC<VerificationCardProps> = ({
 
           <Container flexDirection="row" style={{ gap: spacing.sm }}>
             <Button
-              title={t("host.setup.verification.submitCode")}
+              title={t("features.host.setup.verification.submitCode")}
               variant="primary"
               size="small"
               onPress={handleCodeSubmit}
@@ -181,10 +181,10 @@ export const VerificationCard: React.FC<VerificationCardProps> = ({
               <Button
                 title={
                   resendCountdown > 0
-                    ? t("host.setup.verification.resendIn", {
+                    ? t("features.host.setup.verification.resendIn", {
                         seconds: resendCountdown,
                       })
-                    : t("host.setup.verification.resend")
+                    : t("features.host.setup.verification.resend")
                 }
                 variant="outline"
                 size="small"
@@ -202,8 +202,8 @@ export const VerificationCard: React.FC<VerificationCardProps> = ({
       <Button
         title={
           type === "identity"
-            ? t("host.setup.verification.uploadDocument")
-            : t("host.setup.verification.sendCode")
+            ? t("features.host.setup.verification.uploadDocument")
+            : t("features.host.setup.verification.sendCode")
         }
         variant="primary"
         size="small"
@@ -299,7 +299,7 @@ export const VerificationCard: React.FC<VerificationCardProps> = ({
         >
           <LoadingSpinner size="small" />
           <Text variant="caption" color="secondary" style={styles.loadingText}>
-            {t("host.setup.verification.processing")}
+            {t("features.host.setup.verification.processing")}
           </Text>
         </Container>
       )}
@@ -311,9 +311,9 @@ export const VerificationCard: React.FC<VerificationCardProps> = ({
       {status === "pending" && (
         <Container marginTop="sm">
           <Text variant="caption" color="secondary" style={styles.helpText}>
-            {type === "email" && t("host.setup.verification.emailHelp")}
-            {type === "phone" && t("host.setup.verification.phoneHelp")}
-            {type === "identity" && t("host.setup.verification.identityHelp")}
+            {type === "email" && t("features.host.setup.verification.emailHelp")}
+            {type === "phone" && t("features.host.setup.verification.phoneHelp")}
+            {type === "identity" && t("features.host.setup.verification.identityHelp")}
           </Text>
         </Container>
       )}

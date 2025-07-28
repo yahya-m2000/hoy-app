@@ -69,7 +69,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({ booking }) => {
       if (status !== "granted") {
         Alert.alert(
           "Permission Required",
-          t("booking.calendarPermissionDenied")
+          t("features.booking.calendar.permissionDenied")
         );
         return;
       }
@@ -81,7 +81,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({ booking }) => {
         calendars.find((cal) => cal.isPrimary) || calendars[0];
 
       if (!defaultCalendar) {
-        Alert.alert("Error", t("booking.noCalendarFound"));
+        Alert.alert("Error", t("features.booking.calendar.noCalendarFound"));
         return;
       }
       const startDate = new Date(booking.checkIn);
@@ -95,10 +95,10 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({ booking }) => {
         alarms: [{ relativeOffset: -1440 }], // 1 day before
       });
 
-      Alert.alert("Success", t("booking.addedToCalendar"));
+      Alert.alert("Success", t("features.booking.calendar.addedToCalendar"));
     } catch (error) {
       console.error("Error adding to calendar:", error);
-      Alert.alert("Error", t("booking.calendarError"));
+      Alert.alert("Error", t("features.booking.calendar.calendarError"));
     }
   };
   // Open directions
@@ -131,7 +131,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({ booking }) => {
             { color: isDark ? theme.white : theme.colors.gray[900] },
           ]}
         >
-          {t("booking.shareBooking")}
+          {t("features.booking.actions.shareBooking")}
         </Text>
       </TouchableOpacity>
 
@@ -146,7 +146,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({ booking }) => {
             { color: isDark ? theme.white : theme.colors.gray[900] },
           ]}
         >
-          {t("booking.addToCalendar")}
+          {t("features.booking.actions.addToCalendar")}
         </Text>
       </TouchableOpacity>
 
@@ -161,7 +161,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({ booking }) => {
             { color: isDark ? theme.white : theme.colors.gray[900] },
           ]}
         >
-          {t("booking.directions")}
+          {t("features.booking.actions.directions")}
         </Text>
       </TouchableOpacity>
     </View>

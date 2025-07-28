@@ -1,0 +1,11 @@
+{
+  "search": "Search",
+  "newSearch": "New Search",
+  "searchingProperties": "Searching for properties...",
+  "recentSearchRemoved": "Recent search removed",
+  "allRecentSearchesCleared": "All recent searches cleared",
+  "apply": "Apply",
+  "retry": "Retry",
+  "increment": "Increase",
+  "decrement": "Decrease"
+}

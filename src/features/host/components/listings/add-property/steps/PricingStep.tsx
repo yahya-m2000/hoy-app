@@ -37,14 +37,14 @@ export default function PricingStep({
   return (
     <Container>
       <StepHeader
-        title={t(`property.steps.pricing.title`, {
+        title={t(`features.property.listing.steps.pricing.title`, {
           type: t(
             isWeekend
-              ? "property.steps.pricing.weekend"
-              : "property.steps.pricing.weekday"
+              ? "features.property.listing.steps.pricing.weekend"
+              : "features.property.listing.steps.pricing.weekday"
           ),
         })}
-        description={t("property.steps.pricing.description")}
+        description={t("features.property.listing.steps.pricing.description")}
       />
 
       <Container alignItems="center" marginVertical="xl">
@@ -62,7 +62,7 @@ export default function PricingStep({
             value={currentPrice.toString()}
             onChangeText={handlePriceInput}
             keyboardType="numeric"
-            placeholder={t("property.steps.pricing.pricePlaceholder")}
+            placeholder={t("features.property.listing.steps.pricing.placeholder")}
           />
         </View>
         <Text
@@ -70,7 +70,7 @@ export default function PricingStep({
           color="secondary"
           style={{ marginTop: spacing.xs }}
         >
-          {t("property.steps.pricing.perNight")}
+          {t("features.property.listing.steps.pricing.perNight")}
         </Text>
         {error && (
           <Text variant="caption" color="error" style={styles.errorText}>
@@ -79,32 +79,32 @@ export default function PricingStep({
         )}
         {currentPrice > 0 && currentPrice < 10 && !error && (
           <Text variant="caption" color="warning" style={styles.warningText}>
-            {t("property.steps.pricing.lowPriceWarning")}
+            {t("features.property.listing.steps.pricing.lowPriceWarning")}
           </Text>
         )}
       </Container>
 
       <View style={styles.priceControls}>
         <Button
-          title={t("property.steps.pricing.minusTen")}
+          title={t("features.property.listing.steps.pricing.minusTen")}
           variant="outline"
           onPress={() => adjustPrice(-10)}
           style={styles.priceButton}
         />
         <Button
-          title={t("property.steps.pricing.minusFive")}
+          title={t("features.property.listing.steps.pricing.minusFive")}
           variant="outline"
           onPress={() => adjustPrice(-5)}
           style={styles.priceButton}
         />
         <Button
-          title={t("property.steps.pricing.plusFive")}
+          title={t("features.property.listing.steps.pricing.plusFive")}
           variant="primary"
           onPress={() => adjustPrice(5)}
           style={styles.priceButton}
         />
         <Button
-          title={t("property.steps.pricing.plusTen")}
+          title={t("features.property.listing.steps.pricing.plusTen")}
           variant="primary"
           onPress={() => adjustPrice(10)}
           style={styles.priceButton}
@@ -118,7 +118,7 @@ export default function PricingStep({
         style={styles.tipContainer}
       >
         <Text variant="caption" color="onSurfaceVariant">
-          {t("property.steps.pricing.tip")}
+          {t("features.property.listing.steps.pricing.tip")}
         </Text>
       </Container>
     </Container>

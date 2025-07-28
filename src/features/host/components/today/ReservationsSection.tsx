@@ -194,42 +194,50 @@ const ReservationFilterSection: React.FC<ReservationFilterSectionProps> = ({
         tabs={[
           {
             key: "all",
-            label: t("host.today.filters.all"),
+            label: t("features.host.dashboard.reservations.filters.all"),
             count: tabCounts.all,
           },
           {
             key: "pending",
-            label: t("host.today.filters.pending"),
+            label: t("features.host.dashboard.reservations.filters.pending"),
             count: tabCounts.pending,
           },
           {
             key: "checkingOut",
-            label: t("host.today.filters.checkingOut"),
+            label: t(
+              "features.host.dashboard.reservations.filters.checkingOut"
+            ),
             count: tabCounts.checkingOut,
           },
           {
             key: "currentlyHosting",
-            label: t("host.today.filters.currentlyHosting"),
+            label: t(
+              "features.host.dashboard.reservations.filters.currentlyHosting"
+            ),
             count: tabCounts.currentlyHosting,
           },
           {
             key: "arrivingSoon",
-            label: t("host.today.filters.arrivingSoon"),
+            label: t(
+              "features.host.dashboard.reservations.filters.arrivingSoon"
+            ),
             count: tabCounts.arrivingSoon,
           },
           {
             key: "upcoming",
-            label: t("host.today.filters.upcoming"),
+            label: t("features.host.dashboard.reservations.filters.upcoming"),
             count: tabCounts.upcoming,
           },
           {
             key: "pendingReview",
-            label: t("host.today.filters.pendingReview"),
+            label: t(
+              "features.host.dashboard.reservations.filters.pendingReview"
+            ),
             count: tabCounts.pendingReview,
           },
           {
             key: "cancelled",
-            label: t("host.today.filters.cancelled"),
+            label: t("features.host.dashboard.reservations.filters.cancelled"),
             count: tabCounts.cancelled,
           },
         ]}
@@ -276,13 +284,13 @@ const ReservationsSection: React.FC<ReservationsSectionProps> = ({
     >
       <Container>
         <Text variant="h6" weight="bold" color={theme.text.primary}>
-          {t("host.today.reservations.title")}
+          {t("features.host.dashboard.reservations.title")}
         </Text>
         <Text variant="caption" color="secondary" weight="medium">
           {reservations.length}{" "}
           {reservations.length === 1
-            ? t("reservation.one")
-            : t("reservation.many")}
+            ? t("features.booking.management.one")
+            : t("features.booking.management.many")}
         </Text>
       </Container>
       {reservations.length > 3 && onViewAllPress && (

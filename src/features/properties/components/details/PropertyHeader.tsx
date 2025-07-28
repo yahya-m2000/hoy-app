@@ -69,7 +69,7 @@ const PropertyHeader: React.FC<PropertyHeaderProps> = ({
           </Container>
           <Container paddingTop="sm" alignItems="center">
             <Text color="secondary" size="sm">
-              {t("property.common.hostedBy", { name: host.name })}
+              {t("features.property.details.general.hostedBy", { name: host.name })}
             </Text>
           </Container>
         </Container>

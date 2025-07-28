@@ -1,0 +1,7 @@
+{
+  "title": "What amenities do you offer?",
+  "description": "Select all amenities available at your property",
+  "selectedCount": "{{count}} amenities selected",
+  "tipTitle": "Amenity Tips",
+  "tipContent": "Highlighting your property's amenities helps guests find exactly what they're looking for and can improve your booking rate."
+}

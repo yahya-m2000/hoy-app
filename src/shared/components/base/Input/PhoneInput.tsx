@@ -159,7 +159,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
           <Input
             value={getPhoneWithoutCode(value)}
             onChangeText={handlePhoneChange}
-            placeholder={placeholder || t("auth.phoneNumber")}
+            placeholder={placeholder || t("features.auth.forms.fields.phoneNumber")}
             keyboardType="phone-pad"
             disabled={disabled}
             error={error}
@@ -185,7 +185,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             }}
           >
             <Text variant="h6" color="primary">
-              {t("auth.selectCountryCode")}
+              {t("features.auth.forms.placeholders.selectCountryCode")}
             </Text>
             <TouchableOpacity onPress={() => setCountryModalVisible(false)}>
               <Text variant="body" color="primary">

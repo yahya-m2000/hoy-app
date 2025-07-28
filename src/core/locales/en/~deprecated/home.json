@@ -1,0 +1,39 @@
+{
+  "__DEPRECATED__": {
+    "notice": "This file is DEPRECATED as of 2025-01-26",
+    "migration": {
+      "reason": "Translation structure has been migrated to a new modular organization for better maintainability",
+      "newLocation": "src/core/locales/en/features/home/",
+      "migrationMapping": {
+        "home.*": "features.home.*"
+      },
+      "instructions": "Update your code to use the new translation keys from features.home.* instead of home.*",
+      "doNotUse": "DO NOT use translations from this file - they are maintained only for backwards compatibility"
+    }
+  },
+  "home": {
+  "hello": "Hello",
+  "discoverAmazingPlaces": "Discover amazing places to stay",
+  "cannotConnect": "Cannot connect. Please check your internet connection.",
+  "pleaseTryAgainLater": "Please try again later.",
+  "in": "in",
+  "signIn": "Sign In",
+  "individualHost": "Individual Host",
+  "businessHost": "Business Host",
+  "organizationHost": "Organization Host",
+  "perNight": "per night",
+  "whatThisPlaceOffers": "What this place offers",
+  "showAll": "Show All",
+  "meetYourHost": "Meet Your Host",
+  "night": "night",
+  "monthlyPotential": "Monthly Potential",
+  "analytics": "Analytics",
+  "categories": {
+    "popular": "Popular",
+    "available": "Available",
+    "topRated": "Top Rated",
+    "new": "New",
+    "featured": "Featured"
+  },
+  "noPropertiesInCategory": "No properties available in this category"
+} }

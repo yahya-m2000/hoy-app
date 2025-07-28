@@ -25,8 +25,8 @@ export default function TagsStep({ formData, updateFormData }: TagsStepProps) {
   return (
     <Container>
       <StepHeader
-        title={t("property.steps.tags.title")}
-        description={t("property.steps.tags.description")}
+        title={t("features.property.listing.steps.tags.title")}
+        description={t("features.property.listing.steps.tags.description")}
       />
 
       <View style={styles.tagsGrid}>
@@ -36,7 +36,7 @@ export default function TagsStep({ formData, updateFormData }: TagsStepProps) {
             <Button
               key={tag}
               title={t(
-                `property.tags.${tag
+                `features.property.listing.tags.${tag
                   .toLowerCase()
                   .replace(/\s+([a-z])/g, (_, letter) => letter.toUpperCase())}`
               )}

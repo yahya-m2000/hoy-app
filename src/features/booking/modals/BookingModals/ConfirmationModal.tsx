@@ -438,15 +438,15 @@ export default function BookingConfirmationModal({
   const getModalTitle = () => {
     switch (currentStep) {
       case "dates":
-        return t("reservations.selectDates") || "Select Dates";
+        return t("features.booking.flow.selectDates") || "Select Dates";
       case "guests":
-        return t("reservations.guestDetails") || "Guest Details";
+        return t("features.booking.flow.guestDetails") || "Guest Details";
       case "payment":
-        return t("reservations.paymentMethod") || "Payment Method";
+        return t("features.booking.flow.paymentMethod") || "Payment Method";
       case "confirmation":
-        return t("reservations.confirmReservation") || "Confirm Reservation";
+        return t("features.booking.flow.confirmReservation") || "Confirm Reservation";
       default:
-        return t("reservations.reservation") || "Reservation";
+        return t("features.booking.flow.reservation") || "Reservation";
     }
   };
 

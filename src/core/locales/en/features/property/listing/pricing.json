@@ -1,0 +1,12 @@
+{
+  "discounts": {
+    "newListing": {
+      "title": "New listing promotion",
+      "description": "20% off first 3 bookings"
+    },
+    "lastMinute": {
+      "title": "Last-minute discount", 
+      "description": "For bookings within 24 hours"
+    }
+  }
+}

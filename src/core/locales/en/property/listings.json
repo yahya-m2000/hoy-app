@@ -86,16 +86,16 @@
         "description": "Check all your details before publishing.",
         "overview": "Property Overview",
         "noName": "Untitled Property",
-        "bed": "bed",
-        "beds": "beds",
-        "bath": "bath",
-        "baths": "baths",
-        "guest": "guest",
-        "guests": "guests",
+        // "bed": "bed", // MOVED TO property.common
+        // "beds": "beds", // MOVED TO property.common
+        // "bath": "bath", // MOVED TO property.common
+        // "baths": "baths", // MOVED TO property.common
+        // "guest": "guest", // MOVED TO property.common
+        // "guests": "guests", // MOVED TO property.common
         "perNight": "/night",
         "amenities": "Amenities",
-        "photos": "Photos",
-        "main": "Main",
+        // "photos": "Photos", // USE features.property.details.images.title
+        // "main": "Main", // USE features.property.details.images.main
         "more": "more",
         "readyTo": "Ready to {{action}}?",
         "publish": "Publish",

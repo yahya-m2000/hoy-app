@@ -48,31 +48,31 @@ export const PolicyTypeSelector: React.FC<PolicyTypeSelectorProps> = ({
   const defaultPolicyOptions: PolicyOption[] = [
     {
       type: "flexible",
-      title: t("host.setup.policies.flexible.title"),
-      description: t("host.setup.policies.flexible.description"),
-      refundDetails: t("host.setup.policies.flexible.refundDetails"),
+      title: t("features.host.setup.policies.flexible.title"),
+      description: t("features.host.setup.policies.flexible.description"),
+      refundDetails: t("features.host.setup.policies.flexible.refundDetails"),
       icon: "checkmark-circle",
       recommended: true,
     },
     {
       type: "moderate",
-      title: t("host.setup.policies.moderate.title"),
-      description: t("host.setup.policies.moderate.description"),
-      refundDetails: t("host.setup.policies.moderate.refundDetails"),
+      title: t("features.host.setup.policies.moderate.title"),
+      description: t("features.host.setup.policies.moderate.description"),
+      refundDetails: t("features.host.setup.policies.moderate.refundDetails"),
       icon: "time-outline",
     },
     {
       type: "strict",
-      title: t("host.setup.policies.strict.title"),
-      description: t("host.setup.policies.strict.description"),
-      refundDetails: t("host.setup.policies.strict.refundDetails"),
+      title: t("features.host.setup.policies.strict.title"),
+      description: t("features.host.setup.policies.strict.description"),
+      refundDetails: t("features.host.setup.policies.strict.refundDetails"),
       icon: "ban-outline",
     },
     {
       type: "custom",
-      title: t("host.setup.policies.custom.title"),
-      description: t("host.setup.policies.custom.description"),
-      refundDetails: t("host.setup.policies.custom.refundDetails"),
+      title: t("features.host.setup.policies.custom.title"),
+      description: t("features.host.setup.policies.custom.description"),
+      refundDetails: t("features.host.setup.policies.custom.refundDetails"),
       icon: "settings-outline",
     },
   ];
@@ -122,7 +122,7 @@ export const PolicyTypeSelector: React.FC<PolicyTypeSelectorProps> = ({
               variant="caption"
               style={[styles.recommendedText, { color: theme.colors.white }]}
             >
-              {t("host.setup.policies.recommended")}
+              {t("features.host.setup.policies.recommended")}
             </Text>
           </View>
         )}
@@ -213,10 +213,10 @@ export const PolicyTypeSelector: React.FC<PolicyTypeSelectorProps> = ({
       {/* Header */}
       <Container marginBottom="lg">
         <Text variant="h5" color="primary" style={styles.sectionTitle}>
-          {t("host.setup.policies.selectCancellationPolicy")}
+          {t("features.host.setup.policies.selectCancellationPolicy")}
         </Text>
         <Text variant="body" color="secondary" style={styles.sectionSubtitle}>
-          {t("host.setup.policies.selectCancellationPolicyDescription")}
+          {t("features.host.setup.policies.selectCancellationPolicyDescription")}
         </Text>
       </Container>
 
@@ -244,7 +244,7 @@ export const PolicyTypeSelector: React.FC<PolicyTypeSelectorProps> = ({
           style={styles.helpIcon}
         />
         <Text variant="caption" color="secondary" style={styles.helpText}>
-          {t("host.setup.policies.cancellationPolicyHelp")}
+          {t("features.host.setup.policies.cancellationPolicyHelp")}
         </Text>
       </Container>
     </Container>

@@ -1,0 +1,972 @@
+{
+  "__DEPRECATED__": {
+    "notice": "This file is DEPRECATED as of 2025-01-26",
+    "migration": {
+      "reason": "Translation structure has been migrated to a new modular organization for better maintainability",
+      "newLocation": "src/core/locales/en/features/host/",
+      "migrationMapping": {
+        "host.dashboard.*": "features.host.dashboard.*",
+        "host.setup.*": "features.host.setup.*",
+        "host.policies.*": "features.host.setup.policies.*",
+        "host.preferences.*": "features.host.setup.preferences.*",
+        "host.profile.*": "features.host.setup.profile.*",
+        "host.verification.*": "features.host.setup.verification.*",
+        "host.agreement.*": "features.host.setup.agreement.*",
+        "host.today.*": "features.host.dashboard.*",
+        "host.listings.*": "features.host.listings.*",
+        "host.errors.*": "features.host.setup.errors.*"
+      },
+      "instructions": "Update your code to use the new translation keys from features.host.* instead of host.*",
+      "doNotUse": "DO NOT use translations from this file - they are maintained only for backwards compatibility"
+    }
+  },
+  "host": {
+    "dashboard": {
+      "title": "Today",
+      "overview": "Overview",
+      "metrics": {
+        "earnings": "Earnings",
+        "insights": "Rating"
+      }
+    },
+    "setup": {
+      "title": "Host Setup",
+      "welcome": "Welcome to Hosting",
+      "welcomeSubtitle": "Let's get you set up to start hosting guests",
+      "getStarted": "Get Started",
+      "calendarIcon": "📅",
+      "promptTitle": "Complete Your Host Setup",
+      "promptMessage": "Set up your hosting policies and preferences to start accepting bookings",
+      "startSetup": "Continue Setup",
+      "finish": "Finish Setup",
+      "setupComplete": "Setup Complete",
+      "setupCompleteMessage": "Your host setup is complete! You can now start accepting bookings.",
+      "cancelTitle": "Cancel Setup",
+      "cancelMessage": "Are you sure you want to cancel? You can complete setup later, but you won't be able to accept bookings until setup is finished.",
+      "cancelConfirm": "Cancel Setup",
+      "listingsPromptTitle": "Setup Required",
+      "listingsPromptMessage": "Complete your host setup to start adding and managing your properties",
+      "todayPromptTitle": "Setup Required",
+      "todayPromptMessage": "Complete your host setup to view your bookings and earnings dashboard",
+      "calendarPromptTitle": "Setup Required",
+      "calendarPromptMessage": "Complete your host setup to manage your booking calendar",
+      "profilePromptTitle": "Setup Required",
+      "profilePromptMessage": "Complete your host setup to access your host profile settings",
+ 
+      "verification": {
+        "title": "Account Verification",
+        "subtitle": "Complete verification to ensure guest safety and trust",
+        "email": {
+          "title": "Email Verification",
+          "subtitle": "Verify your email address for secure communication",
+          "status": {
+            "pending": "Not verified",
+            "inProgress": "Verifying...",
+            "completed": "Verified",
+            "failed": "Verification failed"
+          },
+          "sendCode": "Send Code",
+          "resendCode": "Resend Code",
+          "codeSent": "Code sent to {{email}}",
+          "enterCode": "Enter 6-digit code",
+          "codePlaceholder": "000000",
+          "verifyCode": "Verify Code",
+          "codeExpired": "Code expired. Please request a new one.",
+          "invalidCode": "Invalid code. Please try again.",
+          "verificationSuccess": "Email verified successfully!",
+          "helpText": "We'll send a verification code to your email address. This helps ensure secure communication with guests."
+        },
+        "phone": {
+          "title": "Phone Verification",
+          "subtitle": "Verify your phone number for urgent communications",
+          "status": {
+            "pending": "Not verified",
+            "inProgress": "Verifying...",
+            "completed": "Verified",
+            "failed": "Verification failed"
+          },
+          "sendCode": "Send SMS Code",
+          "resendCode": "Resend SMS",
+          "codeSent": "SMS sent to {{phone}}",
+          "enterCode": "Enter 6-digit SMS code",
+          "codePlaceholder": "000000",
+          "verifyCode": "Verify SMS",
+          "codeExpired": "SMS code expired. Please request a new one.",
+          "invalidCode": "Invalid SMS code. Please try again.",
+          "verificationSuccess": "Phone verified successfully!",
+          "helpText": "We'll send an SMS with a verification code. This enables urgent communication with guests if needed."
+        },
+        "identity": {
+          "title": "Identity Verification",
+          "subtitle": "Verify your identity for guest safety and trust",
+          "status": {
+            "pending": "Not verified",
+            "inProgress": "Verifying...",
+            "completed": "Verified",
+            "failed": "Verification failed"
+          },
+          "startVerification": "Start Verification",
+          "continueVerification": "Continue Verification",
+          "verificationInProgress": "Verification in progress...",
+          "verificationSuccess": "Identity verified successfully!",
+          "helpText": "Identity verification helps build trust with guests and ensures platform safety. This process is secure and confidential.",
+          "documents": {
+            "title": "Required Documents",
+            "governmentId": "Government-issued ID",
+            "passport": "Passport",
+            "driversLicense": "Driver's License",
+            "nationalId": "National ID Card"
+          },
+          "uploadDocument": "Upload Document",
+          "documentUploaded": "Document uploaded successfully",
+          "documentError": "Failed to upload document. Please try again.",
+          "privacyNote": "Your identity documents are encrypted and stored securely. We only use them for verification purposes."
+        },
+        "progress": {
+          "title": "Verification Progress",
+          "description": "Complete all verifications to proceed",
+          "allComplete": "All verifications complete!",
+          "remaining": "{{count}} verification(s) remaining"
+        }
+      },
+      "agreement": {
+        "title": "Host Agreement",
+        "subtitle": "Review and accept the terms and policies required to host on our platform",
+        "progress": "Progress: {{completed}}/{{total}}",
+        "allRequiredCompleted": "All required agreements have been accepted. You can proceed to the next step.",
+        "requiredRemaining": "Please accept the required terms and privacy policy to continue.",
+        "terms": {
+          "title": "Terms of Service",
+          "subtitle": "The legal agreement governing your use of our platform as a host",
+          "status": {
+            "pending": "Not accepted",
+            "accepted": "Accepted"
+          },
+          "viewDocument": "View Terms",
+          "accept": "Accept Terms",
+          "accepted": "Terms Accepted",
+          "helpText": "The Terms of Service outline your rights and responsibilities as a host on our platform."
+        },
+        "privacy": {
+          "title": "Privacy Policy",
+          "subtitle": "How we collect, use, and protect your personal information",
+          "status": {
+            "pending": "Not accepted",
+            "accepted": "Accepted"
+          },
+          "viewDocument": "View Privacy Policy",
+          "accept": "Accept Privacy Policy",
+          "accepted": "Privacy Policy Accepted",
+          "helpText": "Our Privacy Policy explains how we handle your personal data and protect your privacy."
+        },
+        "guarantee": {
+          "title": "Host Guarantee",
+          "subtitle": "Optional protection program for property damage and liability",
+          "status": {
+            "pending": "Not accepted",
+            "accepted": "Accepted",
+            "optional": "Optional"
+          },
+          "viewDocument": "View Host Guarantee",
+          "accept": "Accept Host Guarantee",
+          "accepted": "Host Guarantee Accepted",
+          "helpText": "The Host Guarantee provides additional protection for your property and liability coverage.",
+          "optionalNote": "This is optional but recommended for additional protection."
+        },
+        "legalNotice": "Legal Notice",
+        "legalNoticeText": "By accepting these agreements, you confirm that you have read, understood, and agree to be bound by these terms. These agreements may be updated from time to time, and continued use of our platform constitutes acceptance of any changes.",
+        "cannotOpenDocument": "Cannot open document. Please try again later.",
+        "documentError": "Error opening document. Please check your internet connection."
+      },
+      "policies": {
+        "title": "Default Policies",
+        "subtitle": "Set your default hosting policies. These will apply to all your properties unless you customize them individually.",
+        "cancellation": {
+          "title": "Cancellation Policy",
+          "subtitle": "Choose your default cancellation policy for all listings",
+          "description": "Your cancellation policy affects guest refunds and your earnings. Choose carefully as it impacts guest booking decisions.",
+          "types": {
+            "flexible": {
+              "title": "Flexible",
+              "subtitle": "Full refund if canceled at least 7 days before check-in",
+              "description": "Guests get a full refund if they cancel at least 7 days before check-in. After that, guests pay for each night they stay, plus 1 additional night.",
+              "recommended": "Recommended for new hosts",
+              "refundPolicy": "Full refund 7+ days before • Partial refund 1-6 days before • No refund day of check-in"
+            },
+            "moderate": {
+              "title": "Moderate",
+              "subtitle": "Full refund if canceled at least 5 days before check-in",
+              "description": "Guests get a full refund if they cancel at least 5 days before check-in. After that, guests pay for each night they stay, plus 1 additional night.",
+              "recommended": "Most popular choice",
+              "refundPolicy": "Full refund 5+ days before • Partial refund 1-4 days before • No refund day of check-in"
+            },
+            "strict": {
+              "title": "Strict",
+              "subtitle": "Full refund if canceled at least 14 days before check-in",
+              "description": "Guests get a full refund if they cancel at least 14 days before check-in. After that, guests pay for each night they stay, plus 1 additional night.",
+              "recommended": "For experienced hosts",
+              "refundPolicy": "Full refund 14+ days before • Partial refund 7-13 days before • No refund 1-6 days before"
+            }
+          },
+          "helpText": "Your cancellation policy affects guest refunds and your earnings. You can customize this for individual properties later."
+        },
+        "houseRules": {
+          "title": "House Rules",
+          "subtitle": "Set clear expectations for guests",
+          "description": "Set your default house rules. These will apply to all your listings unless you customize them individually.",
+          "checkInOut": {
+            "title": "Check-in & Check-out Times",
+            "checkInTime": "Check-in Time",
+            "checkOutTime": "Check-out Time",
+            "helpText": "Set standard check-in and check-out times for your properties."
+          },
+          "smoking": {
+            "title": "Smoking Allowed",
+            "subtitle": "Allow guests to smoke on your property",
+            "allowed": "Smoking allowed",
+            "notAllowed": "No smoking",
+            "helpText": "Clearly state your smoking policy to avoid misunderstandings."
+          },
+          "pets": {
+            "title": "Pets Allowed",
+            "subtitle": "Allow guests to bring pets",
+            "allowed": "Pets allowed",
+            "notAllowed": "No pets",
+            "helpText": "Specify if guests can bring pets and any restrictions."
+          },
+          "parties": {
+            "title": "Parties & Events Allowed",
+            "subtitle": "Allow guests to host parties or events",
+            "allowed": "Parties allowed",
+            "notAllowed": "No parties",
+            "helpText": "Set clear expectations about parties and events."
+          },
+          "quietHours": {
+            "title": "Quiet Hours",
+            "subtitle": "Set quiet hours for your property",
+            "enabled": "Quiet hours enabled",
+            "disabled": "No quiet hours",
+            "start": "Start Time",
+            "end": "End Time",
+            "helpText": "Set quiet hours to ensure peaceful stays for all guests."
+          },
+          "additionalRules": {
+            "title": "Additional Rules",
+            "placeholder": "Add any additional house rules...",
+            "addRule": "Add Rule",
+            "helpText": "Add any other rules specific to your properties."
+          }
+        },
+        "checkInPreferences": {
+          "title": "Check-in Preferences",
+          "description": "How would you like guests to check in to your property?",
+          "selfCheckIn": {
+            "title": "Self Check-in",
+            "subtitle": "Guests can check in without meeting you",
+            "helpText": "Guests can access your property using a key code or lockbox."
+          },
+          "keyPickup": {
+            "title": "Key Pickup Required",
+            "subtitle": "Guests must pick up keys from a specific location",
+            "helpText": "Guests will pick up keys from a designated location or person."
+          },
+          "meetAndGreet": {
+            "title": "Meet & Greet",
+            "subtitle": "You prefer to meet guests in person",
+            "helpText": "You'll meet guests in person to provide keys and orientation."
+          },
+          "instructions": {
+            "title": "Check-in Instructions",
+            "placeholder": "Provide detailed check-in instructions...",
+            "helpText": "Add specific instructions for guests about how to access your property."
+          }
+        }
+      },
+      "preferences": {
+        "title": "Host Preferences",
+        "subtitle": "Set your hosting preferences to provide the best experience for your guests.",
+        "responseTime": {
+          "title": "Response Time",
+          "subtitle": "How quickly do you typically respond to guest messages?",
+          "within1Hour": {
+            "title": "Within 1 hour",
+            "description": "Respond to messages within 1 hour for the best guest experience",
+            "recommended": "Recommended"
+          },
+          "within24Hours": {
+            "title": "Within 24 hours",
+            "description": "Respond to messages within 24 hours"
+          },
+          "within48Hours": {
+            "title": "Within 48 hours",
+            "description": "Respond to messages within 48 hours"
+          },
+          "helpText": "Faster response times lead to better guest experiences and more bookings."
+        },
+        "instantBooking": {
+          "title": "Instant Booking",
+          "subtitle": "Allow guests to book instantly without waiting for approval",
+          "enable": "Enable Instant Booking",
+          "description": "Guests can book your property immediately without waiting for approval",
+          "helpText": "Instant booking can increase your bookings but requires you to keep your calendar updated."
+        },
+        "bookingSettings": {
+          "title": "Booking Settings",
+          "subtitle": "Configure your booking requirements and availability",
+          "minimumNotice": {
+            "title": "Minimum Notice (hours)",
+            "description": "How much advance notice do you need for bookings?",
+            "helpText": "Set the minimum time you need to prepare for guests."
+          },
+          "maxAdvanceBooking": {
+            "title": "Max Advance Booking (days)",
+            "description": "How far in advance can guests book?",
+            "helpText": "Set how far in advance guests can make reservations."
+          }
+        },
+        "languages": {
+          "title": "Languages",
+          "subtitle": "Select the languages you can communicate in with guests",
+          "placeholder": "Select languages...",
+          "helpText": "Guests can filter by hosts who speak their language.",
+          "selected": "{{count}} language(s) selected"
+        },
+        "locationSettings": {
+          "title": "Location & Currency",
+          "subtitle": "Set your timezone and preferred currency",
+          "currency": {
+            "title": "Preferred Currency",
+            "description": "Currency for displaying prices and payments",
+            "helpText": "Your currency preference will be used throughout the app."
+          },
+          "timezone": {
+            "title": "Timezone",
+            "description": "Your local timezone for scheduling",
+            "helpText": "This helps with scheduling and communication timing."
+          }
+        },
+        "notifications": {
+          "title": "Notifications",
+          "subtitle": "Choose how you want to receive notifications",
+          "methods": {
+            "title": "Notification Methods",
+            "email": "Email",
+            "push": "Push Notifications",
+            "sms": "SMS"
+          },
+          "types": {
+            "title": "Notification Types",
+            "bookingRequests": "Booking Requests",
+            "messages": "Messages",
+            "reviews": "Reviews",
+            "payments": "Payments"
+          },
+          "helpText": "Choose how and when you want to be notified about important events."
+        }
+      },
+      "profile": {
+        "title": "Host Profile",
+        "subtitle": "Create a welcoming profile that helps guests get to know you better.",
+        "photo": {
+          "title": "Profile Photo",
+          "subtitle": "Add a friendly photo to help guests recognize you",
+          "add": "Add Photo",
+          "change": "Change Photo",
+          "remove": "Remove Photo",
+          "selectPhoto": "Select Photo",
+          "selectPhotoDescription": "Choose how you'd like to add your photo",
+          "camera": "Take Photo",
+          "library": "Choose from Library",
+          "permissionRequired": "Photo library permission is required",
+          "cameraPermissionRequired": "Camera permission is required",
+          "uploadError": "Failed to upload photo",
+          "cameraError": "Failed to take photo",
+          "helpText": "A clear, friendly photo helps guests feel more comfortable booking with you."
+        },
+        "bio": {
+          "title": "About You",
+          "subtitle": "Tell guests about yourself and what makes you a great host",
+          "placeholder": "Share a bit about yourself, your interests, and what you love about hosting guests...",
+          "tips": "Be authentic and welcoming",
+          "words": "words",
+          "minLength": "Bio must be at least 50 characters",
+          "helpText": "A thoughtful bio helps guests get to know you and builds trust."
+        },
+        "details": {
+          "title": "Personal Details",
+          "subtitle": "Share some basic information about yourself",
+          "location": {
+            "title": "Location",
+            "placeholder": "e.g., San Francisco, CA",
+            "helpText": "Your location helps guests understand your local knowledge."
+          },
+          "occupation": {
+            "title": "Occupation",
+            "placeholder": "e.g., Software Engineer",
+            "helpText": "Sharing your occupation helps guests relate to you."
+          }
+        },
+        "interests": {
+          "title": "Interests",
+          "subtitle": "What are you passionate about? (Select up to 10)",
+          "travel": "Travel",
+          "food": "Food & Dining",
+          "music": "Music",
+          "art": "Art & Culture",
+          "sports": "Sports",
+          "nature": "Nature",
+          "photography": "Photography",
+          "reading": "Reading",
+          "cooking": "Cooking",
+          "history": "History",
+          "culture": "Culture",
+          "business": "Business",
+          "selected": "{{count}} interest(s) selected",
+          "helpText": "Sharing your interests helps guests connect with you on a personal level."
+        },
+        "languages": {
+          "title": "Languages You Speak",
+          "subtitle": "Select languages you can communicate in",
+          "placeholder": "Select languages...",
+          "helpText": "Guests can filter by hosts who speak their language.",
+          "selected": "{{count}} language(s) selected"
+        },
+        "preview": {
+          "title": "Profile Preview",
+          "hostName": "Your Name",
+          "interests": "Interests",
+          "more": "more",
+          "memberSince": "Member since {{date}}",
+          "responseRate": "{{rate}}% response rate",
+          "responseTime": "Responds within {{time}}"
+        },
+        "tips": {
+          "title": "Profile Tips",
+          "description": "A complete profile with a photo and thoughtful bio helps guests feel more comfortable booking with you. Hosts with complete profiles get 40% more bookings."
+        }
+      },
+      "success": {
+        "title": "Welcome to Hosting!",
+        "subtitle": "Congratulations! You've successfully completed your host setup and are ready to start welcoming guests.",
+        "featuresUnlocked": "Features Now Available",
+        "features": {
+          "listings": "Create Listings",
+          "listingsDesc": "Add your properties and start accepting bookings",
+          "calendar": "Manage Calendar",
+          "calendarDesc": "Set availability and block dates as needed",
+          "messaging": "Guest Communication",
+          "messagingDesc": "Chat with guests before and during their stay",
+          "insights": "Performance Analytics",
+          "insightsDesc": "Track your earnings and booking performance"
+        },
+        "nextSteps": "What's Next?",
+        "nextStepsDesc": "Ready to start your hosting journey? You can add your first property or explore your new host dashboard.",
+        "addProperty": "Add Your First Property",
+        "exploreDashboard": "Explore Host Dashboard"
+      },
+      "navigation": {
+        "next": "Continue",
+        "back": "Back",
+        "finish": "Finish Setup",
+        "cancel": "Cancel",
+        "skip": "Skip for now",
+        "save": "Save Progress",
+        "loading": "Saving...",
+        "saved": "Progress saved"
+      },
+      "validation": {
+        "required": "This field is required",
+        "emailInvalid": "Please enter a valid email address",
+        "phoneInvalid": "Please enter a valid phone number",
+        "codeInvalid": "Please enter a valid verification code",
+        "minLength": "Must be at least {{min}} characters",
+        "maxLength": "Must be no more than {{max}} characters",
+        "minWords": "Must be at least {{min}} words",
+        "maxWords": "Must be no more than {{max}} words",
+        "invalidTime": "Please enter a valid time (HH:MM)",
+        "invalidDate": "Please enter a valid date",
+        "invalidNumber": "Please enter a valid number",
+        "invalidPercentage": "Please enter a valid percentage (0-100)",
+        "invalidCurrency": "Please enter a valid currency amount",
+        "invalidLanguage": "Please select a valid language",
+        "invalidTimezone": "Please select a valid timezone",
+        "invalidCurrencyCode": "Please select a valid currency code",
+        "photoRequired": "Please add a profile photo",
+        "bioRequired": "Please write a bio (at least 50 characters)",
+        "languagesRequired": "Please select at least one language",
+        "interestsRequired": "Please select at least one interest",
+        "verificationRequired": "Please complete all required verifications",
+        "agreementRequired": "Please accept all required agreements",
+        "policiesRequired": "Please configure your default policies",
+        "preferencesRequired": "Please set your host preferences",
+        "profileRequired": "Please complete your profile"
+      },
+      "errors": {
+        "validationError": "Please fix the following errors:",
+        "setupFailed": "Failed to complete setup. Please try again.",
+        "incompleteSetup": "Please complete all required steps before finishing setup.",
+        "verificationFailed": "Verification failed. Please try again.",
+        "codeExpired": "Verification code has expired. Please request a new one.",
+        "invalidCode": "Invalid verification code. Please try again.",
+        "emailAlreadyVerified": "This email is already verified.",
+        "phoneAlreadyVerified": "This phone number is already verified.",
+        "identityVerificationFailed": "Identity verification failed. Please try again.",
+        "documentUploadFailed": "Failed to upload document. Please try again.",
+        "agreementUpdateFailed": "Failed to update agreement. Please try again.",
+        "policiesUpdateFailed": "Failed to update policies. Please try again.",
+        "preferencesUpdateFailed": "Failed to update preferences. Please try again.",
+        "profileUpdateFailed": "Failed to update profile. Please try again.",
+        "autoSaveFailed": "Failed to save progress. Please try again.",
+        "networkError": "Network error. Please check your connection and try again.",
+        "serverError": "Server error. Please try again later.",
+        "unknownError": "An unexpected error occurred. Please try again."
+      },
+      "help": {
+        "verification": "Verification helps build trust with guests and ensures platform safety.",
+        "agreement": "These agreements protect both you and your guests.",
+        "policies": "Clear policies help set guest expectations and protect your property.",
+        "preferences": "Your preferences help us provide the best experience for you and your guests.",
+        "profile": "A complete profile helps guests feel comfortable booking with you.",
+        "autoSave": "Your progress is automatically saved. You can continue later if needed.",
+        "stepNavigation": "You can navigate between completed steps to make changes.",
+        "validation": "Please complete all required fields before proceeding to the next step."
+      }
+    },
+    "policies": {
+      "cancellation": {
+        "title": "Cancellation Policy",
+        "subtitle": "Set clear expectations for guests",
+        "description": "Choose a cancellation policy that works for your property. You can always change this later for individual listings.",
+        "flexible": {
+          "title": "Flexible",
+          "subtitle": "Guests can cancel up to 24 hours before check-in",
+          "details": "Full refund for cancellations made 24+ hours before check-in"
+        },
+        "moderate": {
+          "title": "Moderate",
+          "subtitle": "Guests can cancel up to 5 days before check-in",
+          "details": "Full refund for cancellations made 5+ days before check-in, 50% refund for cancellations made 1-4 days before"
+        },
+        "strict": {
+          "title": "Strict",
+          "subtitle": "Guests can cancel up to 14 days before check-in",
+          "details": "Full refund for cancellations made 14+ days before check-in, 50% refund for cancellations made 7-13 days before"
+        }
+      },
+      "houseRules": {
+        "title": "House Rules",
+        "subtitle": "Set clear expectations for guests",
+        "description": "Set your default house rules. These will apply to all your listings unless you customize them individually.",
+        "checkInOut": "Check-in & Check-out Times",
+        "checkInTime": "Check-in Time",
+        "checkOutTime": "Check-out Time",
+        "smoking": {
+          "title": "Smoking Allowed",
+          "subtitle": "Allow guests to smoke on your property"
+        },
+        "pets": {
+          "title": "Pets Allowed",
+          "subtitle": "Allow guests to bring pets"
+        },
+        "parties": {
+          "title": "Parties & Events Allowed",
+          "subtitle": "Allow guests to host parties or events"
+        },
+        "quietHours": {
+          "title": "Quiet Hours",
+          "subtitle": "Set quiet hours for your property",
+          "start": "Start Time",
+          "end": "End Time"
+        }
+      },
+      "checkInPreferences": {
+        "title": "Check-in Preferences",
+        "description": "How would you like guests to check in to your property?",
+        "selfCheckIn": {
+          "title": "Self Check-in",
+          "subtitle": "Guests can check in without meeting you"
+        },
+        "keyPickup": {
+          "title": "Key Pickup Required",
+          "subtitle": "Guests must pick up keys from a specific location"
+        },
+        "meetAndGreet": {
+          "title": "Meet & Greet",
+          "subtitle": "You prefer to meet guests in person"
+        }
+      },
+      "defaultPolicies": {
+        "title": "Default Policies",
+        "subtitle": "Set your default hosting policies. These will apply to all your properties unless you customize them individually."
+      },
+      "recommended": "Recommended",
+      "selected": "Selected",
+      "select": "Select",
+      "summary": {
+        "title": "Policy Summary",
+        "description": "These policies will be applied to all your listings by default. You can customize them for individual properties later."
+      }
+    },
+    "preferences": {
+      "title": "Host Preferences",
+      "subtitle": "Set your hosting preferences to provide the best experience for your guests.",
+      "recommended": "Recommended",
+      "responseTime": {
+        "title": "Response Time",
+        "subtitle": "How quickly do you typically respond to guest messages?",
+        "within1Hour": "Within 1 hour",
+        "within1HourDesc": "Respond to messages within 1 hour for the best guest experience",
+        "within24Hours": "Within 24 hours",
+        "within24HoursDesc": "Respond to messages within 24 hours",
+        "within48Hours": "Within 48 hours",
+        "within48HoursDesc": "Respond to messages within 48 hours"
+      },
+      "instantBooking": {
+        "title": "Instant Booking",
+        "subtitle": "Allow guests to book instantly without waiting for approval",
+        "enable": "Enable Instant Booking",
+        "description": "Guests can book your property immediately without waiting for approval"
+      },
+      "bookingSettings": {
+        "title": "Booking Settings",
+        "subtitle": "Configure your booking requirements and availability",
+        "minimumNotice": "Minimum Notice (hours)",
+        "maxAdvanceBooking": "Max Advance Booking (days)"
+      },
+      "languages": {
+        "title": "Languages",
+        "subtitle": "Select the languages you can communicate in with guests"
+      },
+      "locationSettings": {
+        "title": "Location & Currency",
+        "subtitle": "Set your timezone and preferred currency",
+        "currency": "Preferred Currency",
+        "timezone": "Timezone"
+      },
+      "notifications": {
+        "title": "Notifications",
+        "subtitle": "Choose how you want to receive notifications",
+        "methods": "Notification Methods",
+        "types": "Notification Types",
+        "email": "Email",
+        "push": "Push Notifications",
+        "sms": "SMS",
+        "bookingRequests": "Booking Requests",
+        "messages": "Messages",
+        "reviews": "Reviews",
+        "payments": "Payments"
+      },
+      "summary": {
+        "title": "Preferences Summary",
+        "description": "These preferences will help us provide you and your guests with the best possible experience. You can change these settings anytime."
+      }
+    },
+    "profile": {
+      "title": "Host Profile",
+      "subtitle": "Create a welcoming profile that helps guests get to know you better.",
+      "photo": {
+        "title": "Profile Photo",
+        "subtitle": "Add a friendly photo to help guests recognize you",
+        "add": "Add Photo",
+        "change": "Change Photo",
+        "remove": "Remove Photo",
+        "selectPhoto": "Select Photo",
+        "selectPhotoDescription": "Choose how you'd like to add your photo",
+        "camera": "Take Photo",
+        "library": "Choose from Library",
+        "permissionRequired": "Photo library permission is required",
+        "cameraPermissionRequired": "Camera permission is required",
+        "uploadError": "Failed to upload photo",
+        "cameraError": "Failed to take photo"
+      },
+      "bio": {
+        "title": "About You",
+        "subtitle": "Tell guests about yourself and what makes you a great host",
+        "placeholder": "Share a bit about yourself, your interests, and what you love about hosting guests...",
+        "tips": "Be authentic and welcoming",
+        "words": "words"
+      },
+      "details": {
+        "title": "Personal Details",
+        "subtitle": "Share some basic information about yourself",
+        "location": "Location",
+        "locationPlaceholder": "e.g., San Francisco, CA",
+        "occupation": "Occupation",
+        "occupationPlaceholder": "e.g., Software Engineer"
+      },
+      "interests": {
+        "title": "Interests",
+        "subtitle": "What are you passionate about? (Select up to 10)",
+        "travel": "Travel",
+        "food": "Food & Dining",
+        "music": "Music",
+        "art": "Art & Culture",
+        "sports": "Sports",
+        "nature": "Nature",
+        "photography": "Photography",
+        "reading": "Reading",
+        "cooking": "Cooking",
+        "history": "History",
+        "culture": "Culture",
+        "business": "Business"
+      },
+      "preview": {
+        "title": "Profile Preview",
+        "hostName": "Your Name",
+        "interests": "Interests",
+        "more": "more"
+      },
+      "tips": {
+        "title": "Profile Tips",
+        "description": "A complete profile with a photo and thoughtful bio helps guests feel more comfortable booking with you. Hosts with complete profiles get 40% more bookings."
+      }
+    },
+    "common": {
+      "loading": "Loading..."
+    },
+    "errors": {
+      "validationError": "Please fix the following errors:",
+      "setupFailed": "Failed to complete setup. Please try again."
+    },
+    "verification": {
+      "title": "Verify Your Account",
+      "subtitle": "Help us keep our community safe and secure by verifying your account information.",
+      "email": {
+        "title": "Email Verification",
+        "subtitle": "We'll send a verification code to your email address"
+      },
+      "phone": {
+        "title": "Phone Verification", 
+        "subtitle": "We'll send a verification code to your phone number"
+      },
+      "identity": {
+        "title": "Identity Verification",
+        "subtitle": "Upload a government-issued ID to verify your identity"
+      },
+      "verified": "Verified",
+      "pending": "Pending",
+      "notVerified": "Not Verified",
+      "completed": "Completed",
+      "verifying": "Verifying...",
+      "verify": "Verify",
+      "resend": "Resend Code",
+      "verificationCode": "Verification Code",
+      "enterCode": "Enter the 6-digit code",
+      "codeSent": "Verification code sent successfully",
+      "codeResent": "Verification code resent successfully",
+      "emailVerified": "Email verified successfully",
+      "phoneVerified": "Phone verified successfully",
+      "identityVerified": "Identity verified successfully",
+      "invalidCode": "Invalid verification code",
+      "verificationFailed": "Verification failed. Please try again.",
+      "sendFailed": "Failed to send verification code",
+      "resendFailed": "Failed to resend verification code",
+      "identityFailed": "Identity verification failed",
+      "whyVerify": "Why do we verify accounts?",
+      "whyVerifyText": "Account verification helps us maintain a trusted community by ensuring all hosts are who they say they are. This builds confidence for both hosts and guests."
+    },
+    "agreement": {
+      "title": "Host Agreement",
+      "subtitle": "Review and accept the terms and policies required to host on our platform.",
+      "terms": {
+        "title": "Terms of Service",
+        "subtitle": "The legal agreement governing your use of our platform as a host"
+      },
+      "privacy": {
+        "title": "Privacy Policy",
+        "subtitle": "How we collect, use, and protect your personal information"
+      },
+      "guarantee": {
+        "title": "Host Guarantee",
+        "subtitle": "Optional protection program for property damage and liability"
+      },
+      "viewDocument": "View Document",
+      "accept": "Accept",
+      "accepted": "Accepted",
+      "notAccepted": "Not Accepted",
+      "progress": "Progress",
+      "completed": "completed",
+      "allRequiredCompleted": "All required agreements have been accepted. You can proceed to the next step.",
+      "requiredRemaining": "Please accept the required terms and privacy policy to continue.",
+      "legalNotice": "Legal Notice",
+      "legalNoticeText": "By accepting these agreements, you confirm that you have read, understood, and agree to be bound by these terms. These agreements may be updated from time to time, and continued use of our platform constitutes acceptance of any changes.",
+      "cannotOpenDocument": "Cannot open document. Please try again later.",
+      "documentError": "Error opening document. Please check your internet connection."
+    },
+    "today": {
+      "earnings": {
+        "title": "Earnings",
+        "viewAll": "View All",
+        "nextPayout": "Next Payout",
+        "noUpcomingPayouts": "No upcoming payouts",
+        "thisWeek": "This Week",
+        "thisMonth": "This Month",
+        "lastMonth": "Last Month",
+        "yearToDate": "Year to Date",
+        "loadingEarnings": "Loading earnings..."
+      },
+      "reservations": {
+        "guestDetails": "Guest Details",
+        
+        "confirmBooking": "Confirm Booking",
+        "cancelBooking": "Cancel Booking",
+        "confirmBookingTitle": "Confirm Booking",
+        "confirmBookingMessage": "Are you sure you want to confirm this booking?",
+        "cancelBookingTitle": "Cancel Booking",
+        "cancelBookingMessage": "Are you sure you want to cancel this booking?",
+        "confirm": "Confirm",
+        "title": "Your reservations",
+        "viewAll": "View all",
+        "allReservations": "All Reservations",
+        "loading": "Loading reservations...",
+        "noReservations": "No Reservations",
+        "noReservationsSubtitle": "You don't have any reservations yet. When guests book your properties, they'll appear here.",
+        "noReservationsInCategory": "No reservations in this category",
+        "viewAllReservations": "View all {{count}} reservations",
+        "detailsTitle": "Booking Details",
+        "notFound": "Booking Not Found",
+        "notFoundMessage": "We couldn't find this booking",
+        "statusTitle": "Booking Status",
+        "reservation": "Reservation",
+        "paymentStatus": "Payment Status",
+        "tripDetailsTitle": "Trip Details",
+        "checkIn": "Check-in",
+        "checkOut": "Check-out",
+        "guests": "Guests",
+        "duration": "Duration",
+        "guestInfoTitle": "Guest Information",
+        "guestName": "Guest Name",
+        "guestEmail": "Guest Email",
+        "guestPhone": "Guest Phone",
+        "priceDetailsTitle": "Price Details",
+        "total": "Total",
+        "specialRequestsTitle": "Special Requests",
+        "addToCalendar": "Add to Calendar",
+        "getDirections": "Get Directions",
+        "contactGuest": "Contact Guest",
+        "updateStatus": "Update Status",
+        "reservationId": "Reservation ID",
+        "bookedOn": "Booked on",
+        "adult": "adult",
+        "adults": "adults",
+        "child": "child",
+        "children": "children",
+        "infant": "infant",
+        "infants": "infants",
+        "night": "night",
+        "nights": "nights"
+      },
+      "filters": {
+        "all": "All",
+        "pending": "Pending",
+        "checkingOut": "Checking out",
+        "currentlyHosting": "Currently hosting",
+        "arrivingSoon": "Arriving soon",
+        "upcoming": "Upcoming",
+        "pendingReview": "Pending review",
+        "cancelled": "Cancelled"
+      },
+      "status": {
+        "currentlyHosting": "Currently hosting",
+        "checkingOutToday": "Checking out today",
+        "arrivingToday": "Arriving today",
+        "upcoming": "Upcoming",
+        "pendingConfirmation": "Pending confirmation",
+        "cancelled": "Cancelled",
+        "pendingReview": "Pending review"
+      },
+      "activity": {
+        "title": "Today's Activity",
+        "noActivity": "No activity today",
+        "noActivitySubtitle": "When you have reservations or updates, they'll appear here"
+      },
+      "quickActions": {
+        "title": "Quick Actions",
+        "addProperty": "Add Property",
+        "viewCalendar": "View Calendar",
+        "manageBookings": "Manage Bookings",
+        "earningsReport": "Earnings Report"
+      }
+    },
+    "listings": {
+      "title": "My Listings",
+      "noListings": "No listings yet",
+      "noListingsDescription": "Start creating your first property listing",
+      "createListing": "Create Listing",
+      "draft": "Draft",
+      "active": "Active",
+      "inactive": "Inactive",
+      "published": "Published",
+      "pending": "Pending Review",
+      "rejected": "Rejected",
+      "edit": "Edit",
+      "delete": "Delete",
+      "activate": "Activate",
+      "deactivate": "Deactivate",
+      "view": "View",
+      "stats": "Statistics",
+      "bookings": "Bookings",
+      "revenue": "Revenue",
+      "rating": "Rating",
+      "reviews": "Reviews",
+      "noReviews": "No reviews yet",
+      "averageRating": "Average Rating",
+      "totalBookings": "Total Bookings",
+      "totalRevenue": "Total Revenue",
+      "lastBooking": "Last Booking",
+      "noBookings": "No bookings yet",
+      "noRevenue": "No revenue yet",
+      "loading": "Loading listings...",
+      "error": "Error loading listings",
+      "retry": "Retry",
+      "filter": {
+        "all": "All",
+        "drafts": "Drafts",
+        "active": "Active",
+        "inactive": "Inactive",
+        "published": "Published",
+        "pending": "Pending"
+      },
+      "sort": {
+        "newest": "Newest First",
+        "oldest": "Oldest First",
+        "name": "Name A-Z",
+        "nameDesc": "Name Z-A",
+        "rating": "Highest Rated",
+        "bookings": "Most Booked",
+        "revenue": "Highest Revenue"
+      },
+      "actions": {
+        "edit": "Edit Listing",
+        "delete": "Delete Listing",
+        "activate": "Activate Listing",
+        "deactivate": "Deactivate Listing",
+        "view": "View Listing",
+        "duplicate": "Duplicate Listing",
+        "preview": "Preview Listing"
+      },
+      "deleteConfirm": {
+        "title": "Delete Listing",
+        "message": "Are you sure you want to delete this listing? This action cannot be undone.",
+        "cancel": "Cancel",
+        "confirm": "Delete"
+      },
+      "statusChange": {
+        "activateConfirm": "Are you sure you want to activate this listing?",
+        "deactivateConfirm": "Are you sure you want to deactivate this listing?",
+        "success": "Listing status updated successfully",
+        "error": "Failed to update listing status"
+      }
+    },
+    "errors": {
+      "loadError": "Failed to load property data",
+      "saveError": "Failed to save property data",
+      "submitError": "Error submitting property. Please try again.",
+      "deleteError": "Failed to delete property",
+      "updateError": "Failed to update property",
+      "createError": "Failed to create property",
+      "notFound": "Property not found",
+      "unauthorized": "You don't have permission to access this property",
+      "validationError": "Please check your input and try again"
+    }
+  }}

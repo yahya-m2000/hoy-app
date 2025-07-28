@@ -49,21 +49,21 @@ export default function TitleStep({
       >
         <Container paddingBottom="xxl">
           <StepHeader
-            title={t("property.steps.title.title")}
-            description={t("property.steps.title.description")}
+            title={t("features.property.listing.steps.title.title")}
+            description={t("features.property.listing.steps.title.description")}
           />
 
           <Container marginBottom="lg">
             <Container marginBottom="sm">
               <Text variant="label" color="onBackground">
-                {t("property.steps.title.label")} *
+                {t("features.property.listing.steps.title.label")} *
               </Text>
             </Container>
             <Input
               value={formData.name}
               maxLength={maxLength}
               onChangeText={handleTextChange}
-              placeholder={t("property.steps.title.placeholder")}
+              placeholder={t("features.property.listing.steps.title.placeholder")}
               error={errors.name}
               autoCapitalize="words"
             />
@@ -91,15 +91,15 @@ export default function TitleStep({
               !errors.name && (
                 <Container marginTop="xs">
                   <Text variant="caption" style={{ color: "#FFA500" }}>
-                    {t("property.minLengthWarning", { min: 3 })}
+                    {t("features.property.listing.forms.validation.minLengthWarning", { min: 3 })}
                   </Text>
                 </Container>
               )}
           </Container>
 
           <InfoBox
-            title={t("property.steps.title.tipTitle")}
-            content={t("property.steps.title.tipContent")}
+            title={t("features.property.listing.steps.title.tipTitle")}
+            content={t("features.property.listing.steps.title.tipContent")}
             icon="bulb"
             variant="tip"
           />

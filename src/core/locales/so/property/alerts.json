@@ -1,12 +1,12 @@
 {
-    "requiredFieldsTitle": "Goobaha Laga Baahan Yahay",
-    "requiredFieldsMessage": "Fadlan buuxi dhammaan meelaha laga rabo ka hor intaadan sii socon.",
-    "saveAndExitTitle": "Kaydi oo Bax",
-    "saveAndExitMessage": "Ma rabtaa inaad kaydiso horumarkaaga ka hor intaadan bixin?",
-    "exitWithoutSaving": "Bax adigoon kaydin",
-    "saveAndExit": "Kaydi oo Bax",
+    "requiredFieldsTitle": "Goobaha loo baahan yahay",
+    "requiredFieldsMessage": "Fadlan buuxi dhammaan goobaha loo baahan yahay ka hor intaadan sii wadin.",
+    "saveAndExitTitle": "Kaydi oo bax",
+    "saveAndExitMessage": "Ma doonaysaa inaad kaydsato horumarka ka hor intaadan bixin?",
+    "exitWithoutSaving": "Ka bax iyada oo aan la kaydin",
+    "saveAndExit": "Kaydi oo bax",
     "errorTitle": "Khalad",
-    "loadError": "Xogta hantiyeedka lama soo dejin",
-    "submitError": "Dirista hantiyeedka waa ay fashilantay. Fadlan isku day mar kale.",
-    "noMeaningfulData": "Wali xog muhiim ah lama kaydin"
+    "loadError": "Waxaa fashilmay rarista xogta hantida",
+    "submitError": "Waxaa fashilmay dirista hantida. Fadlan mar kale isku day.",
+    "noMeaningfulData": "Xog macno leh oo la kaydiyo weli ma jirto"
   }

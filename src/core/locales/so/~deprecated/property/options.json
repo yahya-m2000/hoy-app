@@ -1,0 +1,18 @@
+{
+    "title": "Xulashooyinka Hantida",
+    "edit": "Beddel",
+    "delete": "Tirtir",
+    "activate": "Dhaq geli",
+    "deactivate": "Dhaq geli la'aan",
+    "editProperty": "Beddel Hanti",
+    "editDetails": "Beddel Faahfaahinta",
+    "activateProperty": "Dhaq geli Hanti",
+    "deactivateProperty": "Dhaq geli la'aan Hanti",
+    "activateConfirm": "Ma hubtaa inaad rabto inaad dhaqaajiso hantiyeedkan?",
+    "deactivateConfirm": "Ma hubtaa inaad rabto inaad joojiso hantiyeedkan?",
+    "deleteConfirm": "Ma hubtaa inaad rabto inaad tirtirto hantiyeedkan? Ficilkan lama noqon karo.",
+    "deactivateMessage": "Joojintu waxay ka qarineysaa hantiyeedkan martida balse dhammaan xogtaada way sii jiraysaa.",
+    "statusUpdated": "Hantiyeedka {{action}} si guul leh",
+    "statusUpdateFailed": "Lama {{action}} hantiyeedka. Fadlan isku day mar kale.",
+    "toggleStatus": "Beddel Xaaladda"
+  }

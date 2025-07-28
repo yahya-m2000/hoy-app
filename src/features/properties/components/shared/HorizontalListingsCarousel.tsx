@@ -67,11 +67,14 @@ export const HorizontalListingsCarousel: React.FC<
   // Categories - moved inside component to be reactive to language changes
   const CATEGORIES = useMemo(
     () => [
-      { id: "popular", label: t("home.categories.popular") },
-      { id: "available", label: t("home.categories.available") },
-      { id: "topRated", label: t("home.categories.topRated") },
-      { id: "new", label: t("home.categories.new") },
-      { id: "featured", label: t("home.categories.featured") },
+      { id: "popular", label: t("features.home.content.categories.popular") },
+      {
+        id: "available",
+        label: t("features.home.content.categories.available"),
+      },
+      { id: "topRated", label: t("features.home.content.categories.topRated") },
+      { id: "new", label: t("features.home.content.categories.new") },
+      { id: "featured", label: t("features.home.content.categories.featured") },
     ],
     [t]
   );
@@ -169,7 +172,7 @@ export const HorizontalListingsCarousel: React.FC<
         color={isDark ? theme.colors.gray[400] : theme.colors.gray[500]}
         variant="body"
       >
-        {t("home.noPropertiesInCategory")}
+        {t("features.home.content.noPropertiesInCategory")}
       </Text>
     </Container>
   );
@@ -196,7 +199,8 @@ export const HorizontalListingsCarousel: React.FC<
       >
         {/* Title */}
         <Text variant="h6" weight="medium">
-          {CATEGORIES[currentCategoryIndex].label} {t("home.in")} {city}
+          {CATEGORIES[currentCategoryIndex].label}{" "}
+          {t("features.home.content.location.in")} {city}
         </Text>
       </Container>
     );

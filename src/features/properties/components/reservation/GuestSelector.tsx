@@ -185,8 +185,8 @@ export const GuestSelector: React.FC<GuestSelectorProps> = ({
     <Container>
       <Container>
         <GuestRow
-          title={t("reservation.adults", "Adults")}
-          description={t("reservation.adultsDescription", "Ages 13 or above")}
+          title={t("features.booking.flow.adults", "Adults")}
+          description={t("features.booking.flow.adultsDescription", "Ages 13 or above")}
           value={adults}
           onDecrease={() => onChangeAdults(Math.max(1, adults - 1))}
           onIncrease={() => onChangeAdults(adults + 1)}
@@ -195,8 +195,8 @@ export const GuestSelector: React.FC<GuestSelectorProps> = ({
         />
 
         <GuestRow
-          title={t("reservation.children", "Children")}
-          description={t("reservation.childrenDescription", "Ages 2-12")}
+          title={t("features.booking.flow.children", "Children")}
+          description={t("features.booking.flow.childrenDescription", "Ages 2-12")}
           value={childrenCount}
           onDecrease={() => onChangeChildren(Math.max(0, childrenCount - 1))}
           onIncrease={() => onChangeChildren(childrenCount + 1)}
@@ -204,8 +204,8 @@ export const GuestSelector: React.FC<GuestSelectorProps> = ({
         />
 
         <GuestRow
-          title={t("reservation.infants", "Infants")}
-          description={t("reservation.infantsDescription", "Under 2")}
+          title={t("features.booking.flow.infants", "Infants")}
+          description={t("features.booking.flow.infantsDescription", "Under 2")}
           value={infants}
           onDecrease={() => onChangeInfants(Math.max(0, infants - 1))}
           onIncrease={() => onChangeInfants(infants + 1)}
@@ -213,9 +213,9 @@ export const GuestSelector: React.FC<GuestSelectorProps> = ({
         />
 
         <GuestRow
-          title={t("reservation.pets", "Pets")}
+          title={t("features.booking.flow.pets", "Pets")}
           description={t(
-            "reservation.petsDescription",
+            "features.booking.flow.petsDescription",
             "Bringing a service animal?"
           )}
           value={pets}
@@ -240,7 +240,7 @@ export const GuestSelector: React.FC<GuestSelectorProps> = ({
         >
           <Text variant="caption" color="error" weight="semibold">
             {t(
-              "reservation.maxGuestsReached",
+              "features.booking.flow.maxGuestsReached",
               `Maximum ${maxGuests} guests allowed`
             )}
           </Text>

@@ -49,7 +49,7 @@ const PropertyOverviewCard = ({ formData }: { formData: PropertyFormData }) => {
         <Container flex={1}>
           <Container marginBottom="xs">
             <Text variant="h6" weight="semibold" color="primary">
-              {formData.name || t("property.noName")}
+              {formData.name || t("features.property.listing.details.noName")}
             </Text>
           </Container>
 
@@ -127,7 +127,7 @@ const PropertyOverviewCard = ({ formData }: { formData: PropertyFormData }) => {
             </Text>
             <Container marginLeft="xs">
               <Text variant="body" color="secondary">
-                {t("property.pricing.perNight")}
+                {t("features.property.listing.pricing.perNight")}
               </Text>
             </Container>
           </Container>
@@ -154,7 +154,7 @@ const AmenitiesSection = ({ amenities }: { amenities: string[] }) => {
     >
       <Container marginBottom="md">
         <Text variant="h6" weight="semibold" color="primary">
-          {t("property.amenities")} ({amenities.length})
+          {t("features.property.listing.amenities.title")} ({amenities.length})
         </Text>
       </Container>
 
@@ -201,7 +201,7 @@ const PhotosSection = ({ images }: { images: string[] }) => {
     >
       <Container marginBottom="md">
         <Text variant="h6" weight="semibold" color="primary">
-          {t("property.images.title")} ({images.length})
+          {t("features.property.listing.images.title")} ({images.length})
         </Text>
       </Container>
 
@@ -235,7 +235,7 @@ const PhotosSection = ({ images }: { images: string[] }) => {
                 backgroundColor="success"
               >
                 <Text variant="caption" weight="semibold" color="white">
-                  {t("property.images.main")}
+                  {t("features.property.listing.images.main")}
                 </Text>
               </Container>
             )}
@@ -254,7 +254,7 @@ const PhotosSection = ({ images }: { images: string[] }) => {
             justifyContent="center"
           >
             <Text variant="caption" weight="medium" color="secondary">
-              +{remainingCount} {t("property.showAll")}
+              +{remainingCount} {t("features.property.listing.images.showAll")}
             </Text>
           </Container>
         )}
@@ -274,15 +274,15 @@ export default function ReviewStep({ formData, isEditMode }: ReviewStepProps) {
     >
       <Container paddingBottom="xxl">
         <StepHeader
-          title={t("property.steps.review.title")}
-          description={t("property.steps.review.description")}
+          title={t("features.property.listing.steps.review.title")}
+          description={t("features.property.listing.steps.review.description")}
         />
 
         {/* Property Overview */}
         <Container marginBottom="lg">
           <Container marginBottom="md">
             <Text variant="h6" weight="semibold" color="primary">
-              {t("property.steps.review.overview")}
+              {t("features.property.listing.steps.review.overview")}
             </Text>
           </Container>
           <PropertyOverviewCard formData={formData} />
@@ -293,7 +293,7 @@ export default function ReviewStep({ formData, isEditMode }: ReviewStepProps) {
           <Container marginBottom="lg">
             <Container marginBottom="md">
               <Text variant="h6" weight="semibold" color="primary">
-                {t("property.steps.description.title")}
+                {t("features.property.listing.steps.description.title")}
               </Text>
             </Container>
             <Container
@@ -321,15 +321,15 @@ export default function ReviewStep({ formData, isEditMode }: ReviewStepProps) {
         </Container>
 
         <InfoBox
-          title={t("property.steps.review.readyTo", {
+          title={t("features.property.listing.steps.review.readyTo", {
             action: isEditMode
-              ? t("property.steps.review.update")
-              : t("property.steps.review.publish"),
+              ? t("features.property.listing.steps.review.update")
+              : t("features.property.listing.steps.review.publish"),
           })}
           content={
             isEditMode
-              ? t("property.steps.review.updateMessage")
-              : t("property.steps.review.publishMessage")
+              ? t("features.property.listing.steps.review.updateMessage")
+              : t("features.property.listing.steps.review.publishMessage")
           }
         />
       </Container>

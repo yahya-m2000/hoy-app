@@ -1,0 +1,14 @@
+{
+  "familyFriendly": "Family Friendly",
+  "petFriendly": "Pet Friendly", 
+  "luxury": "Luxury",
+  "budget": "Budget",
+  "business": "Business",
+  "romantic": "Romantic",
+  "unique": "Unique",
+  "ecoFriendly": "Eco Friendly",
+  "beachfront": "Beachfront",
+  "mountainView": "Mountain View", 
+  "cityCenter": "City Center",
+  "countryside": "Countryside"
+}

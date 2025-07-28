@@ -213,7 +213,7 @@ export const DateStep: React.FC<DateStepProps> = ({
         <Text variant="body" weight="semibold">
           {startDate && endDate
             ? `${formatDate(startDate)} - ${formatDate(endDate)}`
-            : t("reservation.noDatesSelected", "No dates selected yet")}
+            : t("features.booking.flow.noDatesSelected", "No dates selected yet")}
         </Text>
       </Container>
 
@@ -228,7 +228,7 @@ export const DateStep: React.FC<DateStepProps> = ({
         >
           <ActivityIndicator size="small" color={theme.colors.primary} />
           <Text variant="caption" style={{ marginLeft: 8 }}>
-            {t("reservation.loadingAvailability", "Loading availability...")}
+            {t("features.booking.flow.loadingAvailability", "Loading availability...")}
           </Text>
         </Container>
       )}
@@ -259,7 +259,7 @@ export const DateStep: React.FC<DateStepProps> = ({
         >
           <ActivityIndicator size="small" color={theme.colors.primary} />
           <Text variant="caption" style={{ marginLeft: 8 }}>
-            {t("reservation.checkingAvailability", "Checking availability...")}
+            {t("features.booking.flow.checkingAvailability", "Checking availability...")}
           </Text>
         </Container>
       )}
@@ -280,7 +280,7 @@ export const DateStep: React.FC<DateStepProps> = ({
               style={{ marginLeft: 8 }}
             >
               {t(
-                "reservation.datesNotAvailable",
+                "features.booking.flow.datesNotAvailable",
                 "Selected dates are not available"
               )}
             </Text>

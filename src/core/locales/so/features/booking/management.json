@@ -1,0 +1,97 @@
+{
+  "title": "Buukinta",
+  "upcoming": "Soo socda",
+  "past": "Hore",
+  "viewAllPastBookings": "Arag dhammaan buukinta hore",
+  "seeCompleteHistory": "Arag taariikhda dhammaystiran ee buukintaada",
+  "lists": {
+    "title": "Buukinta",
+    "upcoming": "Soo socda",
+    "past": "Hore",
+    "pastBookings": "Buukinta hore",
+    "loadingBookings": "Buukintaada raran...",
+    "loadingPastBookings": "Buukintaada hore raran...",
+    "viewAllPastBookings": "Arag dhammaan buukinta hore",
+    "seeCompleteHistory": "Arag taariikhda dhammaystiran ee buukintaada",
+    "bookingHistory": "Taariikhda buukinta"
+  },
+  "empty": {
+    "noBookingsFound": "Buukin lama helin",
+    "noBookingsMessage": "Bilow baaris si aad u hesho oo u kaydsato hanti buukintaada",
+    "noPastBookings": "Buukin hore ma jiraan",
+    "noPastBookingsMessage": "Weli safarro ma dhammaystirin. Bilow baaris si aad u abuurto buukintaada ugu horeysa!",
+    "signInToViewBookings": "Soo gal si aad u aragto buukintaada",
+    "signInToViewBookingsMessage": "Markaad buukisid hanti, halkan ayay ka muuqan doontaa",
+    "signInToViewPastBookings": "Soo gal si aad u aragto safaradaada hore"
+  },
+  "errors": {
+    "errorLoadingBookings": "Khalad ayaa ka dhacay rarista buukinta",
+    "errorLoadingPastBookings": "Khalad ayaa ka dhacay rarista buukinta hore",
+    "retry": "Isku day mar kale"
+  },
+  "details": {
+    "detailsTitle": "Faahfaahinta buukinta",
+    "notFound": "Buukinta lama helin",
+    "notFoundMessage": "Lama rari karo faahfaahinta buukinta. Fadlan mar kale isku day.",
+    "property": "Hanti",
+    "bookingId": "ID buukinta",
+    "bookedOn": "La buukiyey",
+    "booking": "Buukin"
+  },
+  "sections": {
+    "statusTitle": "Xaalada buukinta",
+    "tripDetailsTitle": "Faahfaahinta safarka",
+    "contactInfoTitle": "Macluumaadka xiriirka",
+    "priceDetailsTitle": "Faahfaahinta qiimaha",
+    "specialRequestsTitle": "Codsiyada gaarka ah"
+  },
+  "fields": {
+    "paymentStatus": "Xaalada bixinta",
+    "checkIn": "Soo galid",
+    "checkOut": "Ka bixid",
+    "guests": "Marti",
+    "duration": "Muddada",
+    "contactName": "Magaca xiriirka",
+    "contactEmail": "Iimaylka xiriirka",
+    "contactPhone": "Telefoonka xiriirka",
+    "total": "Wadarta"
+  },
+  "cancellation": {
+    "cancelBookingTitle": "Jooji buukinta",
+    "cancelBookingMessage": "Ma hubtaa inaad doonayso inaad joojiso buukintan? Ficilkan dib looma celin karo.",
+    "keepBooking": "Hay buukinta",
+    "confirmCancel": "Jooji buukinta",
+    "cancellationComingSoon": "Sifooyinka joojinta waa soo socda"
+  },
+  "status": {
+    "title": "Xaalada",
+    "pending": "La sugayo",
+    "confirmed": "La xaqiijiyey",
+    "cancelled": "La joojiyey",
+    "completed": "La dhammeeyey",
+    "in_progress": "Socda",
+    "refunded": "La celiyey",
+    "disputed": "La khilaafay",
+    "paid": "La bixiyey",
+    "partial": "Qayb",
+    "failed": "Fashilmay"
+  },
+  "labels": {
+    "newProperty": "Cusub",
+    "adult": "qof weyn",
+    "adults": "dad waaweyn",
+    "children": "carruur",
+    "infants": "dhallaanka",
+    "child": "caruur",
+    "infant": "dhallaan",
+    "night": "habeen",
+    "nights": "habeenno"
+  },
+  "integration": {
+    "calendarError": "Lama darin karo kalanderka",
+    "locationError": "Goobta lama heli karo",
+    "mapsError": "Lama furi karo khariidadda",
+    "whatsappError": "Lama furi karo WhatsApp"
+  },
+  "many": "badan"
+}

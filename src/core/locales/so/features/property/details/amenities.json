@@ -1,0 +1,22 @@
+{
+  "title": "Adeegyada",
+  "description": "Dooro adeegyada ay hantidaadu bixiso",
+  "selectedCount": "{{count}} adeegyo la doortay",
+  "tipTitle": "Maxaa loo kordhiyaa adeegyada?",
+  "tipContent": "Adeegyadu waxay ka caawiyaan hantidaada inay mudnaato oo ay soo jiidato marti badan. Dooro kuwa oo dhan ee ku habboon hantidaada.",
+  "popular": "Adeegyada caanka ah",
+  "kitchen": "Jikada & Cunista",
+  "entertainment": "Madadaalada",
+  "comfort": "Raaxada",
+  "safety": "Badbaadada & Ammaanka",
+  "categories": {
+    "essentials": "Waxyaabaha muhiimka ah",
+    "features": "Sifooyinka",
+    "location": "Goobta",
+    "safety": "Badbaadada"
+  },
+  "searchPlaceholder": "Raadi adeegyada",
+  "noAmenitiesSelected": "Adeegyo lama dooran",
+  "selectAtLeastOne": "Fadlan dooro ugu yaraan hal adeeg",
+  "showLess": "Tusi in yar"
+}

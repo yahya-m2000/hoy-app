@@ -1,0 +1,46 @@
+{
+  "back": "Back",
+  "next": "Next",
+  "previous": "Previous",
+  "forward": "Forward",
+  "home": "Home",
+  "menu": "Menu",
+  "tabs": {
+    "home": "Home",
+    "search": "Search",
+    "bookings": "Bookings",
+    "messages": "Messages",
+    "profile": "Profile",
+    "wishlist": "Wishlist",
+    "listings": "Listings",
+    "properties": "Properties",
+    "reservations": "Reservations",
+    "settings": "Settings",
+    "inbox": "Inbox"
+  },
+  "inbox": {
+    "messages": "Messages",
+    "notifications": "Notifications"
+  },
+  "sections": {
+    "overview": "Overview",
+    "details": "Details",
+    "photos": "Photos",
+    "amenities": "Amenities",
+    "location": "Location",
+    "pricing": "Pricing",
+    "availability": "Availability",
+    "policies": "Policies",
+    "reviews": "Reviews",
+    "history": "History"
+  },
+  "actions": {
+    "goBack": "Go Back",
+    "goHome": "Go Home",
+    "goToSection": "Go to {{section}}",
+    "openMenu": "Open Menu",
+    "closeMenu": "Close Menu",
+    "switchTab": "Switch to {{tab}}",
+    "navigate": "Navigate"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "activate": "Activate",
+  "deactivate": "Deactivate", 
+  "delete": "Delete",
+  "deleteConfirm": "Are you sure you want to delete this property? This action cannot be undone.",
+  "manageAvailability": "Manage Availability",
+  "updateCalendarAndPricing": "Update calendar and pricing",
+  "viewBookings": "View Bookings"
+}

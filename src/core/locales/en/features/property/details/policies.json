@@ -1,0 +1,10 @@
+{
+  "availability": "Availability",
+  "checkAvailableDates": "Check available dates",
+  "cancellationPolicy": "Cancellation Policy",
+  "moderateCancellationPolicy": "Moderate - Full refund 5 days before arrival",
+  "houseRules": "House Rules",
+  "checkinAfter": "Check-in after 3:00 PM, Check-out before 11:00 AM",
+  "safetyAndProperty": "Safety & Property",
+  "safetyInformation": "Smoke alarm, Carbon monoxide alarm"
+}

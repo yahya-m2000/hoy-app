@@ -13,7 +13,6 @@ import errors from "./errors.json";
 import alerts from "./alerts.json";
 
 export default {
-  property: {
     common,
     location,
     details,
@@ -27,5 +26,4 @@ export default {
     listings,
     errors,
     alerts
-  }
 }; 

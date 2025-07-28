@@ -1,0 +1,89 @@
+{
+  "__DEPRECATED__": {
+    "notice": "This file is DEPRECATED as of 2025-01-26",
+    "migration": {
+      "reason": "Translation structure has been migrated to a new modular organization for better maintainability",
+      "newLocation": "src/core/locales/en/features/calendar/",
+      "migrationMapping": {
+        "calendar.*": "features.calendar.*"
+      },
+      "instructions": "Update your code to use the new translation keys from features.calendar.* instead of calendar.*",
+      "doNotUse": "DO NOT use translations from this file - they are maintained only for backwards compatibility"
+    }
+  },
+  "calendar": { 
+  "selectProperty": "Select Property",
+  "daysSelected": "{{count}} days selected",
+  "editItem1": "Item 1",
+  "editItem2": "Item 2",
+  "editItem3": "Item 3",
+  "viewMode": {
+    "year": "Year",
+    "month": "Month"
+  },
+  "title": "Calendar",
+  "editMode": "Edit Mode",
+  "viewModeToggle": "Toggle View Mode",
+  "months": {
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December"
+  },
+  "monthsShort": {
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "Mar",
+    "apr": "Apr",
+    "may": "May",
+    "jun": "Jun",
+    "jul": "Jul",
+    "aug": "Aug",
+    "sep": "Sep",
+    "oct": "Oct",
+    "nov": "Nov",
+    "dec": "Dec"
+  },
+  "weekdays": {
+    "sunday": "Sunday",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday"
+  },
+  "weekdaysShort": {
+    "sun": "S",
+    "mon": "M",
+    "tue": "T",
+    "wed": "W",
+    "thu": "T",
+    "fri": "F",
+    "sat": "S"
+  },
+  "error": {
+    "navigationOptions": "Error setting navigation options",
+    "invalidMonth": "Invalid month provided"
+  },
+  "navigation": {
+    "backToYearView": "← Year View"
+  },
+  "loading": {
+    "theme": "Loading theme...",
+    "calendar": "Loading calendar...",
+    "invalidDate": "Invalid date provided",
+    "noData": "No calendar data available",
+    "noMonth": "No month"
+  },
+  "noProperties": "No properties found",
+  "addPropertiesToStart": "Add a property to get started."
+} }

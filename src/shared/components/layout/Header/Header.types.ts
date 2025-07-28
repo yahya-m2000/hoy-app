@@ -3,6 +3,7 @@
  */
 
 import { ReactNode } from "react";
+import { TextStyle } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { BaseSectionProps } from "src/core/types/common.types";
 
@@ -22,6 +23,7 @@ export interface HeaderContent {
 
 export interface HeaderProps extends BaseSectionProps {
   title?: string;
+  titleStyle?: TextStyle;
   leftIcon?: keyof typeof Ionicons.glyphMap;
   rightIcon?: keyof typeof Ionicons.glyphMap;
   onLeftPress?: () => void;

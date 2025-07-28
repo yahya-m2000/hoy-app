@@ -9,6 +9,7 @@ import { router } from 'expo-router';
 import { useToast } from '@core/context/ToastContext';
 import { useCurrentUser } from '@features/user/hooks';
 import { createBooking } from '@core/api/services/booking';
+import { notificationService } from '@core/services/notification.service';
 import type { PropertyType } from '@core/types';
 
 export interface ReservationState {
@@ -190,6 +191,26 @@ export function useReservationState(
 
       // Create the booking using the real API
       const createdBooking = await createBooking(bookingData);
+
+      // Send ZAAD payment notification if ZAAD payment method is selected
+      if (selectedPaymentMethod?.type === 'zaad' && selectedPaymentMethod?.details?.phone) {
+        try {
+          await notificationService.sendZaadPaymentNotification({
+            hostPhone: property.host?.phoneNumber || property.contactInfo?.phone || '+252000000000',
+            zaadNumber: selectedPaymentMethod.details.phone,
+            amount: String(safePropertyPrice * calculateNights()),
+            currency: property.price?.currency || 'USD',
+            reservationId: createdBooking._id || createdBooking.id || 'unknown',
+            propertyName: property.name || property.title || 'Property',
+            checkInDate: startDate.toISOString(),
+            checkOutDate: endDate.toISOString(),
+          });
+          console.log('ZAAD payment notification sent successfully');
+        } catch (notificationError) {
+          console.error('Failed to send ZAAD payment notification:', notificationError);
+          // Don't fail the booking if notification fails
+        }
+      }
 
       // Show success message
       showToast({

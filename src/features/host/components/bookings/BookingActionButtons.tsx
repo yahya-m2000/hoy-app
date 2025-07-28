@@ -34,11 +34,11 @@ export const BookingActionButtons: React.FC<BookingActionButtonsProps> = ({
       // This would integrate with the device calendar
       // For now, show a placeholder
       Alert.alert(
-        t("booking.addToCalendar"),
+        t("features.booking.actions.addToCalendar"),
         "This will add your booking to your device calendar"
       );
     } catch (error) {
-      Alert.alert(t("common.error"), t("booking.calendarError"));
+      Alert.alert(t("common.error"), t("features.booking.calendar.calendarError"));
     }
   };
 
@@ -95,7 +95,7 @@ export const BookingActionButtons: React.FC<BookingActionButtonsProps> = ({
       onShare();
     } else {
       Alert.alert(
-        t("booking.shareBooking"),
+        t("features.booking.actions.shareBooking"),
         "This will share your booking details"
       );
     }
@@ -106,7 +106,7 @@ export const BookingActionButtons: React.FC<BookingActionButtonsProps> = ({
       onCancel();
     } else {
       Alert.alert(
-        t("booking.cancelBooking"),
+        t("features.booking.actions.cancelBooking"),
         "This will start the cancellation process"
       );
     }
@@ -117,7 +117,7 @@ export const BookingActionButtons: React.FC<BookingActionButtonsProps> = ({
       {/* Primary Actions Row */}
       <View style={styles.primaryActions}>
         <Button
-          title={t("booking.addToCalendar")}
+          title={t("features.booking.actions.addToCalendar")}
           variant="outline"
           onPress={handleAddToCalendar}
           style={styles.actionButton}
@@ -130,7 +130,7 @@ export const BookingActionButtons: React.FC<BookingActionButtonsProps> = ({
           }
         />
         <Button
-          title={t("booking.directions")}
+          title={t("features.booking.actions.directions")}
           variant="outline"
           onPress={handleGetDirections}
           style={styles.actionButton}
@@ -147,7 +147,7 @@ export const BookingActionButtons: React.FC<BookingActionButtonsProps> = ({
       <View style={styles.secondaryActions}>
         {hostPhoneNumber && (
           <Button
-            title={t("booking.whatsappContact")}
+            title={t("features.booking.actions.whatsappContact")}
             variant="outline"
             onPress={handleWhatsAppContact}
             style={styles.actionButton}
@@ -161,7 +161,7 @@ export const BookingActionButtons: React.FC<BookingActionButtonsProps> = ({
           />
         )}
         <Button
-          title={t("booking.shareBooking")}
+          title={t("features.booking.actions.shareBooking")}
           variant="outline"
           onPress={handleShare}
           style={styles.actionButton}
@@ -174,7 +174,7 @@ export const BookingActionButtons: React.FC<BookingActionButtonsProps> = ({
       {canCancel && (
         <View style={styles.cancelAction}>
           <Button
-            title={t("booking.cancelBooking")}
+            title={t("features.booking.actions.cancelBooking")}
             variant="outline"
             onPress={handleCancel}
             style={styles.cancelButton}

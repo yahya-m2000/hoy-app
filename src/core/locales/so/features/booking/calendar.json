@@ -1,0 +1,7 @@
+{
+  "calendarTitle": "{{property}} Joog",
+  "calendarDetails": "Soo galid: {{checkIn}}, Ka bixid: {{checkOut}}, Marti: {{guests}}",
+  "calendarError": "Waxaa fashilmay ku darista kalanderka",
+  "permissionDenied": "Fasaxa kalanderka la diiday",
+  "noCalendarFound": "Barnaamijka kalanderka lama helin"
+}

@@ -1,0 +1,61 @@
+{
+  "title": "Host Profile",
+  "subtitle": "Create a welcoming profile that helps guests get to know you better.",
+  "photo": {
+    "title": "Profile Photo",
+    "subtitle": "Add a friendly photo to help guests recognize you",
+    "add": "Add Photo",
+    "change": "Change Photo",
+    "remove": "Remove Photo",
+    "selectPhoto": "Select Photo",
+    "selectPhotoDescription": "Choose how you'd like to add your photo",
+    "camera": "Take Photo",
+    "library": "Choose from Library",
+    "permissionRequired": "Photo library permission is required",
+    "cameraPermissionRequired": "Camera permission is required",
+    "uploadError": "Failed to upload photo",
+    "cameraError": "Failed to take photo",
+    "helpText": "A clear, friendly photo helps guests feel more comfortable booking with you."
+  },
+  "bio": {
+    "title": "About You",
+    "subtitle": "Tell guests about yourself and what makes you a great host",
+    "placeholder": "Share a bit about yourself, your interests, and what you love about hosting guests...",
+    "tips": "Be authentic and welcoming",
+    "words": "words",
+    "minLength": "Bio must be at least 50 characters",
+    "helpText": "A thoughtful bio helps guests get to know you and builds trust."
+  },
+  "details": {
+    "title": "Personal Details",
+    "subtitle": "Share some basic information about yourself",
+    "location": {
+      "title": "Location",
+      "placeholder": "e.g., San Francisco, CA",
+      "helpText": "Your location helps guests understand your local knowledge."
+    },
+    "occupation": {
+      "title": "Occupation",
+      "placeholder": "e.g., Software Engineer",
+      "helpText": "Sharing your occupation helps guests relate to you."
+    }
+  },
+  "interests": {
+    "title": "Interests",
+    "subtitle": "What are you passionate about? (Select up to 10)",
+    "travel": "Travel",
+    "food": "Food & Dining",
+    "music": "Music",
+    "art": "Art & Culture",
+    "sports": "Sports",
+    "nature": "Nature",
+    "photography": "Photography",
+    "reading": "Reading",
+    "cooking": "Cooking",
+    "history": "History",
+    "culture": "Culture",
+    "business": "Business",
+    "selected": "{{count}} interest(s) selected",
+    "helpText": "Sharing your interests helps guests connect with you on a personal level."
+  }
+}

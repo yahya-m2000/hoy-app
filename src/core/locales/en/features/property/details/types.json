@@ -1,0 +1,54 @@
+{
+  "apartment": "Apartment",
+  "house": "House",
+  "villa": "Villa",
+  "condo": "Condo",
+  "townhouse": "Townhouse",
+  "bungalow": "Bungalow",
+  "cabin": "Cabin",
+  "chalet": "Chalet",
+  "cottage": "Cottage",
+  "loft": "Loft",
+  "penthouse": "Penthouse",
+  "studio": "Studio",
+  "other": "Other",
+  "propertyTypes": {
+    "apartment": "Apartment",
+    "house": "House",
+    "villa": "Villa",
+    "condo": "Condo",
+    "townhouse": "Townhouse",
+    "bungalow": "Bungalow",
+    "cabin": "Cabin",
+    "chalet": "Chalet",
+    "cottage": "Cottage",
+    "loft": "Loft",
+    "penthouse": "Penthouse",
+    "studio": "Studio",
+    "other": "Other"
+  },
+  "accessTypes": {
+    "entire_place": "Entire Place",
+    "entire_placeDescription": "Guests have the whole place to themselves",
+    "private_room": "Private Room",
+    "private_roomDescription": "Guests have a private room but share common areas",
+    "shared_space": "Shared Space",
+    "shared_spaceDescription": "Guests share the space with others"
+  },
+  "listingTypes": {
+    // "individual": "Individual Property", // USE features.property.listing.common.individual
+    "shared": "Shared Property"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "draft": "Draft",
+    "label": "Status:"
+  },
+  "entireApartment": "Entire apartment",
+  "privateRoom": "Private room",
+  "entireHouse": "Entire house",
+  "entireVilla": "Entire villa",
+  "entireCondo": "Entire condo",
+  "entireProperty": "Entire {{type}}"
+}

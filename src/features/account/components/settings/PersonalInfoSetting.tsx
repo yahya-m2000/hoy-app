@@ -129,39 +129,39 @@ export const PersonalInfoSetting: React.FC<PersonalInfoSettingProps> = ({
 
       {/* Form Fields */}
       <FormField
-        label={t("profile.personalInfoForm.firstName")}
+        label={t("features.account.profile.personalInfoForm.firstName")}
         value={firstName}
         onChangeText={setFirstName}
-        placeholder={t("profile.personalInfoForm.firstName")}
+        placeholder={t("features.account.profile.personalInfoForm.firstName")}
       />
 
       <FormField
-        label={t("profile.personalInfoForm.lastName")}
+        label={t("features.account.profile.personalInfoForm.lastName")}
         value={lastName}
         onChangeText={setLastName}
-        placeholder={t("profile.personalInfoForm.lastName")}
+        placeholder={t("features.account.profile.personalInfoForm.lastName")}
       />
 
       <FormField
-        label={t("profile.personalInfoForm.phone")}
+        label={t("features.account.profile.personalInfoForm.phone")}
         value={phoneNumber}
         onChangeText={setPhoneNumber}
-        placeholder={t("profile.personalInfoForm.phone")}
+        placeholder={t("features.account.profile.personalInfoForm.phone")}
         keyboardType="phone-pad"
       />
 
       <FormField
-        label={t("profile.personalInfoForm.city")}
+        label={t("features.account.profile.personalInfoForm.city")}
         value={city}
         onChangeText={setCity}
-        placeholder={t("profile.personalInfoForm.city")}
+        placeholder={t("features.account.profile.personalInfoForm.city")}
       />
 
       <FormField
-        label={t("profile.personalInfoForm.country")}
+        label={t("features.account.profile.personalInfoForm.country")}
         value={country}
         onChangeText={setCountry}
-        placeholder={t("profile.personalInfoForm.country")}
+        placeholder={t("features.account.profile.personalInfoForm.country")}
       />
 
       {/* Save Button */}

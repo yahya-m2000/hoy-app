@@ -1,0 +1,13 @@
+{
+  "title": "Kalandarka Diyaarnimada",
+  "selectDates": "Dooro taariikhyada diyaar ah",
+  "availableText": "Diyaar",
+  "blockedText": "La xiray",
+  "unavailableText": "La heli karo ma aha",
+  "reservedText": "La kaydiyay",
+  "manageAvailability": "Maamul Diyaarnimada",
+  "blockDates": "Xir Taariikhyada",
+  "unblockDates": "Fur Taariikhyada",
+  "updateSuccess": "Diyaarnimada si guul leh ayaa loo cusboonaysiiyay",
+  "updateError": "Cusboonaysiinta diyaarnimada ayaa fashilantay"
+}

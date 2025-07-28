@@ -60,44 +60,44 @@ export const validateLocationStep = (
 
   if (!formData.address?.street?.trim()) {
     errors["address.street"] = t("validation.required", {
-      field: t("property.location.street"),
+      field: t("features.property.listing.forms.sections.address.street"),
     });
   }
 
   if (!formData.address?.city?.trim()) {
     errors["address.city"] = t("validation.required", {
-      field: t("property.location.city"),
+      field: t("features.property.listing.forms.sections.address.city"),
     });
   }
 
   if (!formData.address?.state?.trim()) {
     errors["address.state"] = t("validation.required", {
-      field: t("property.location.state"),
+      field: t("features.property.listing.forms.sections.address.state"),
     });
   }
 
   if (!formData.address?.postalCode?.trim()) {
     errors["address.postalCode"] = t("validation.required", {
-      field: t("property.location.postalCode"),
+      field: t("features.property.listing.forms.sections.address.postalCode"),
     });
   }
 
   if (!formData.address?.country?.trim()) {
     errors["address.country"] = t("validation.required", {
-      field: t("property.location.country"),
+      field: t("features.property.listing.forms.sections.address.country"),
     });
   }
 
   // Required: Validate coordinates
   if (!formData.coordinates?.latitude || formData.coordinates.latitude === 0) {
     errors["coordinates.latitude"] = t("validation.required", {
-      field: t("property.location.latitude"),
+      field: t("features.property.listing.forms.sections.coordinates.latitude"),
     });
   } else if (
     formData.coordinates.latitude < -90 ||
     formData.coordinates.latitude > 90
   ) {
-    errors["coordinates.latitude"] = t("property.location.invalidLatitude");
+    errors["coordinates.latitude"] = t("features.property.listing.forms.validation.invalidLatitude");
   }
 
   if (
@@ -105,13 +105,13 @@ export const validateLocationStep = (
     formData.coordinates.longitude === 0
   ) {
     errors["coordinates.longitude"] = t("validation.required", {
-      field: t("property.location.longitude"),
+      field: t("features.property.listing.forms.sections.coordinates.longitude"),
     });
   } else if (
     formData.coordinates.longitude < -180 ||
     formData.coordinates.longitude > 180
   ) {
-    errors["coordinates.longitude"] = t("property.location.invalidLongitude");
+    errors["coordinates.longitude"] = t("features.property.listing.forms.validation.invalidLongitude");
   }
 
   return errors;
@@ -406,8 +406,8 @@ export default function LocationStep({
       >
         <Container paddingBottom="xxl">
           <StepHeader
-            title={t("property.steps.location.title")}
-            description={t("property.steps.location.description")}
+            title={t("features.property.listing.steps.location.title")}
+            description={t("features.property.listing.steps.location.description")}
           />
 
           {/* Country */}
@@ -435,7 +435,7 @@ export default function LocationStep({
                   color: currentTheme.text?.secondary || currentTheme.secondary,
                 }}
               >
-                {t("property.location.country")} *
+                {t("features.property.listing.forms.sections.address.country")} *
               </Text>
               <Text
                 variant="body"
@@ -448,7 +448,7 @@ export default function LocationStep({
                 }}
               >
                 {formData.address?.country ||
-                  t("property.location.countryPlaceholder")}
+                  t("features.property.listing.forms.sections.address.countryPlaceholder")}
               </Text>
             </TouchableOpacity>
             {errors["address.country"] && (
@@ -520,7 +520,7 @@ export default function LocationStep({
                   color: currentTheme.text?.secondary || currentTheme.secondary,
                 }}
               >
-                {t("property.location.city")} *
+                {t("features.property.listing.forms.sections.address.city")} *
               </Text>
               <Text
                 variant="body"
@@ -534,7 +534,7 @@ export default function LocationStep({
               >
                 {formData.address?.city ||
                   (formData.address?.country
-                    ? t("property.location.cityPlaceholder")
+                    ? t("features.property.listing.forms.sections.address.cityPlaceholder")
                     : "Select country first")}
               </Text>
             </TouchableOpacity>
@@ -569,7 +569,7 @@ export default function LocationStep({
           <Container marginBottom="lg" style={{ zIndex: 1 }}>
             <Container marginBottom="sm">
               <Text variant="label" color="onBackground">
-                {t("property.location.street")} *
+                {t("features.property.listing.forms.sections.address.street")} *
               </Text>
             </Container>
             <Input
@@ -577,7 +577,7 @@ export default function LocationStep({
               onChangeText={(value) =>
                 handleFieldChange("address", "street", value)
               }
-              placeholder={t("property.location.streetPlaceholder")}
+              placeholder={t("features.property.listing.forms.sections.address.streetPlaceholder")}
               error={errors["address.street"]}
               autoCapitalize="words"
               maxLength={200}
@@ -593,7 +593,7 @@ export default function LocationStep({
             <Container flex={1} marginRight="sm">
               <Container marginBottom="sm">
                 <Text variant="label" color="onBackground">
-                  {t("property.location.state")} *
+                  {t("features.property.listing.forms.sections.address.state")} *
                 </Text>
               </Container>
               <Input
@@ -601,7 +601,7 @@ export default function LocationStep({
                 onChangeText={(value) =>
                   handleFieldChange("address", "state", value)
                 }
-                placeholder={t("property.location.statePlaceholder")}
+                placeholder={t("features.property.listing.forms.sections.address.statePlaceholder")}
                 error={errors["address.state"]}
                 autoCapitalize="words"
                 maxLength={100}
@@ -611,7 +611,7 @@ export default function LocationStep({
             <Container flex={1} marginLeft="sm">
               <Container marginBottom="sm">
                 <Text variant="label" color="onBackground">
-                  {t("property.location.postalCode")} *
+                  {t("features.property.listing.forms.sections.address.postalCode")} *
                 </Text>
               </Container>
               <Input
@@ -619,7 +619,7 @@ export default function LocationStep({
                 onChangeText={(value) =>
                   handleFieldChange("address", "postalCode", value)
                 }
-                placeholder={t("property.location.postalCodePlaceholder")}
+                placeholder={t("features.property.listing.forms.sections.address.postalCodePlaceholder")}
                 error={errors["address.postalCode"]}
                 keyboardType="default"
                 maxLength={20}
@@ -631,10 +631,10 @@ export default function LocationStep({
           <Container marginBottom="lg">
             <Container marginBottom="sm">
               <Text variant="h6" color="onBackground">
-                {t("property.location.coordinates")}
+                {t("features.property.listing.forms.sections.coordinates.title")}
               </Text>
               <Text variant="body" color="onBackgroundVariant">
-                {t("property.location.coordinatesHelp")}
+                {t("features.property.listing.forms.sections.coordinates.help")}
               </Text>
             </Container>
 
@@ -740,7 +740,7 @@ export default function LocationStep({
                   color="white"
                   style={{ fontWeight: "600" }}
                 >
-                  {t("property.location.pickCoordinates")}
+                  {t("features.property.listing.forms.sections.coordinates.pickLocation")}
                 </Text>
               </TouchableOpacity>
             </Container>
@@ -852,7 +852,7 @@ export default function LocationStep({
                   <Button
                     onPress={confirmCoordinates}
                     variant="primary"
-                    title={t("property.location.confirmLocation")}
+                    title={t("features.property.listing.forms.sections.coordinates.confirmLocation")}
                   />
                 </Tab>
               </Screen>
@@ -872,7 +872,7 @@ export default function LocationStep({
                 color="onBackground"
                 style={{ marginBottom: spacing.xs, fontWeight: "600" }}
               >
-                {t("property.location.selectedCoordinates")}:
+                {t("features.property.listing.forms.sections.coordinates.selectedCoordinates")}:
               </Text>
               <Text>
                 {selectedCoordinates.latitude.toFixed(6)},
@@ -885,7 +885,7 @@ export default function LocationStep({
               <Container flex={1} marginRight="sm">
                 <Container marginBottom="sm">
                   <Text variant="label" color="onBackground">
-                    {t("property.location.latitude")} *
+                    {t("features.property.listing.forms.sections.coordinates.latitude")} *
                   </Text>
                 </Container>
                 <Input
@@ -908,7 +908,7 @@ export default function LocationStep({
               <Container flex={1} marginLeft="sm">
                 <Container marginBottom="sm">
                   <Text variant="label" color="onBackground">
-                    {t("property.location.longitude")} *
+                    {t("features.property.listing.forms.sections.coordinates.longitude")} *
                   </Text>
                 </Container>
                 <Input
@@ -938,8 +938,8 @@ export default function LocationStep({
 
           {/* Privacy Info Box */}
           <InfoBox
-            title={t("property.location.privacyTitle")}
-            content={t("property.location.privacyNote")}
+            title={t("features.property.listing.forms.sections.address.privacyTitle")}
+            content={t("features.property.listing.forms.sections.address.privacyNote")}
             icon="information-circle"
             variant="info"
           />

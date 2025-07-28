@@ -117,7 +117,7 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
     if (status !== "granted") {
       Alert.alert(
         t("common.error"),
-        t("host.profile.photo.permissionRequired")
+        t("features.host.setup.profile.photo.permissionRequired")
       );
       return false;
     }
@@ -140,7 +140,10 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
         onPhotoChange(result.assets[0].uri);
       }
     } catch (error) {
-      Alert.alert(t("common.error"), t("host.profile.photo.uploadError"));
+      Alert.alert(
+        t("common.error"),
+        t("features.host.setup.profile.photo.uploadError")
+      );
     }
   };
 
@@ -149,7 +152,7 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
     if (status !== "granted") {
       Alert.alert(
         t("common.error"),
-        t("host.profile.photo.cameraPermissionRequired")
+        t("features.host.setup.profile.photo.cameraPermissionRequired")
       );
       return;
     }
@@ -165,18 +168,27 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
         onPhotoChange(result.assets[0].uri);
       }
     } catch (error) {
-      Alert.alert(t("common.error"), t("host.profile.photo.cameraError"));
+      Alert.alert(
+        t("common.error"),
+        t("features.host.setup.profile.photo.cameraError")
+      );
     }
   };
 
   const showImagePicker = () => {
     Alert.alert(
-      t("host.profile.photo.selectPhoto"),
-      t("host.profile.photo.selectPhotoDescription"),
+      t("features.host.setup.profile.photo.selectPhoto"),
+      t("features.host.setup.profile.photo.selectPhotoDescription"),
       [
         { text: t("common.cancel"), style: "cancel" },
-        { text: t("host.profile.photo.camera"), onPress: takePhoto },
-        { text: t("host.profile.photo.library"), onPress: pickImage },
+        {
+          text: t("features.host.setup.profile.photo.camera"),
+          onPress: takePhoto,
+        },
+        {
+          text: t("features.host.setup.profile.photo.library"),
+          onPress: pickImage,
+        },
       ]
     );
   };
@@ -233,8 +245,8 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
         <Button
           title={
             photoUri
-              ? t("host.profile.photo.change")
-              : t("host.profile.photo.add")
+              ? t("features.host.setup.profile.photo.change")
+              : t("features.host.setup.profile.photo.add")
           }
           variant="outline"
           size="small"
@@ -244,7 +256,7 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
 
         {photoUri && (
           <Button
-            title={t("host.profile.photo.remove")}
+            title={t("features.host.setup.profile.photo.remove")}
             variant="ghost"
             size="small"
             onPress={onPhotoRemove}
@@ -323,18 +335,18 @@ export const HostProfileStep: React.FC<HostProfileStepProps> = ({
   };
 
   const availableInterests = [
-    t("host.profile.interests.travel"),
-    t("host.profile.interests.food"),
-    t("host.profile.interests.music"),
-    t("host.profile.interests.art"),
-    t("host.profile.interests.sports"),
-    t("host.profile.interests.nature"),
-    t("host.profile.interests.photography"),
-    t("host.profile.interests.reading"),
-    t("host.profile.interests.cooking"),
-    t("host.profile.interests.history"),
-    t("host.profile.interests.culture"),
-    t("host.profile.interests.business"),
+    t("features.host.setup.profile.interests.travel"),
+    t("features.host.setup.profile.interests.food"),
+    t("features.host.setup.profile.interests.music"),
+    t("features.host.setup.profile.interests.art"),
+    t("features.host.setup.profile.interests.sports"),
+    t("features.host.setup.profile.interests.nature"),
+    t("features.host.setup.profile.interests.photography"),
+    t("features.host.setup.profile.interests.reading"),
+    t("features.host.setup.profile.interests.cooking"),
+    t("features.host.setup.profile.interests.history"),
+    t("features.host.setup.profile.interests.culture"),
+    t("features.host.setup.profile.interests.business"),
   ];
 
   const bioWordCount = (data.bio || "")
@@ -347,7 +359,7 @@ export const HostProfileStep: React.FC<HostProfileStepProps> = ({
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Container paddingHorizontal="lg" paddingVertical="md">
         <Text variant="h2" color="primary" marginBottom="sm">
-          {t("host.profile.title")}
+          {t("features.host.setup.profile.title")}
         </Text>
 
         <Text
@@ -356,13 +368,13 @@ export const HostProfileStep: React.FC<HostProfileStepProps> = ({
           marginBottom="xl"
           style={{ lineHeight: 22 }}
         >
-          {t("host.profile.subtitle")}
+          {t("features.host.setup.profile.subtitle")}
         </Text>
 
         {/* Profile Photo */}
         <ProfileSection
-          title={t("host.profile.photo.title")}
-          subtitle={t("host.profile.photo.subtitle")}
+          title={t("features.host.setup.profile.photo.title")}
+          subtitle={t("features.host.setup.profile.photo.subtitle")}
           icon="person-circle-outline"
         >
           <PhotoUpload
@@ -374,8 +386,8 @@ export const HostProfileStep: React.FC<HostProfileStepProps> = ({
 
         {/* Bio */}
         <ProfileSection
-          title={t("host.profile.bio.title")}
-          subtitle={t("host.profile.bio.subtitle")}
+          title={t("features.host.setup.profile.bio.title")}
+          subtitle={t("features.host.setup.profile.bio.subtitle")}
           icon="document-text-outline"
           isRequired={true}
         >
@@ -383,7 +395,7 @@ export const HostProfileStep: React.FC<HostProfileStepProps> = ({
             <Input
               value={data.bio || ""}
               onChangeText={(value) => handleProfileChange("bio", value)}
-              placeholder={t("host.profile.bio.placeholder")}
+              placeholder={t("features.host.setup.profile.bio.placeholder")}
               multiline
               numberOfLines={6}
               error={errors.bio}
@@ -396,13 +408,14 @@ export const HostProfileStep: React.FC<HostProfileStepProps> = ({
               marginTop="sm"
             >
               <Text variant="caption" color="secondary">
-                {t("host.profile.bio.tips")}
+                {t("features.host.setup.profile.bio.tips")}
               </Text>
               <Text
                 variant="caption"
                 color={bioWordCount > maxWords ? "error" : "secondary"}
               >
-                {bioWordCount}/{maxWords} {t("host.profile.bio.words")}
+                {bioWordCount}/{maxWords}{" "}
+                {t("features.host.setup.profile.bio.words")}
               </Text>
             </Container>
           </Container>
@@ -410,24 +423,28 @@ export const HostProfileStep: React.FC<HostProfileStepProps> = ({
 
         {/* Location & Occupation */}
         <ProfileSection
-          title={t("host.profile.details.title")}
-          subtitle={t("host.profile.details.subtitle")}
+          title={t("features.host.setup.profile.details.title")}
+          subtitle={t("features.host.setup.profile.details.subtitle")}
           icon="location-outline"
         >
           <Container style={{ gap: spacing.md }}>
             <Input
-              label={t("host.profile.details.location")}
+              label={t("features.host.setup.profile.details.location")}
               value={data.location || ""}
               onChangeText={(value) => handleProfileChange("location", value)}
-              placeholder={t("host.profile.details.locationPlaceholder")}
+              placeholder={t(
+                "features.host.setup.profile.details.locationPlaceholder"
+              )}
               error={errors.location}
             />
 
             <Input
-              label={t("host.profile.details.occupation")}
+              label={t("features.host.setup.profile.details.occupation")}
               value={data.occupation || ""}
               onChangeText={(value) => handleProfileChange("occupation", value)}
-              placeholder={t("host.profile.details.occupationPlaceholder")}
+              placeholder={t(
+                "features.host.setup.profile.details.occupationPlaceholder"
+              )}
               error={errors.occupation}
             />
           </Container>
@@ -435,8 +452,8 @@ export const HostProfileStep: React.FC<HostProfileStepProps> = ({
 
         {/* Interests */}
         <ProfileSection
-          title={t("host.profile.interests.title")}
-          subtitle={t("host.profile.interests.subtitle")}
+          title={t("features.host.setup.profile.interests.title")}
+          subtitle={t("features.host.setup.profile.interests.subtitle")}
           icon="heart-outline"
         >
           <Container
@@ -467,7 +484,7 @@ export const HostProfileStep: React.FC<HostProfileStepProps> = ({
           <Container flexDirection="row" alignItems="center" marginBottom="md">
             <Icon name="eye-outline" size={20} color={theme.colors.primary} />
             <Text variant="h3" color="primary" marginLeft="sm">
-              {t("host.profile.preview.title")}
+              {t("features.host.setup.profile.preview.title")}
             </Text>
           </Container>
 
@@ -499,7 +516,7 @@ export const HostProfileStep: React.FC<HostProfileStepProps> = ({
 
             <Container flex={1}>
               <Text variant="h3" color="primary" marginBottom="sm">
-                {t("host.profile.preview.hostName")}
+                {t("features.host.setup.profile.preview.hostName")}
               </Text>
               {data.location && (
                 <Text variant="body" color="secondary" marginBottom="sm">
@@ -525,7 +542,7 @@ export const HostProfileStep: React.FC<HostProfileStepProps> = ({
           {data.interests && data.interests.length > 0 && (
             <Container>
               <Text variant="subtitle" color="primary" marginBottom="sm">
-                {t("host.profile.preview.interests")}
+                {t("features.host.setup.profile.preview.interests")}
               </Text>
               <Container
                 flexDirection="row"
@@ -558,7 +575,7 @@ export const HostProfileStep: React.FC<HostProfileStepProps> = ({
                   >
                     <Text variant="caption" color="secondary">
                       +{data.interests.length - 6}{" "}
-                      {t("host.profile.preview.more")}
+                      {t("features.host.setup.profile.preview.more")}
                     </Text>
                   </Container>
                 )}
@@ -579,17 +596,13 @@ export const HostProfileStep: React.FC<HostProfileStepProps> = ({
           borderColor={theme.colors.gray[200]}
         >
           <Container flexDirection="row" alignItems="center" marginBottom="sm">
-            <Icon
-              name="bulb-outline"
-              size={20}
-              color={theme.colors.primary}
-            />
+            <Icon name="bulb-outline" size={20} color={theme.colors.primary} />
             <Text variant="subtitle" color="primary" marginLeft="sm">
-              {t("host.profile.tips.title")}
+              {t("features.host.setup.profile.tips.title")}
             </Text>
           </Container>
           <Text variant="body" color="secondary" style={{ lineHeight: 20 }}>
-            {t("host.profile.tips.description")}
+            {t("features.host.setup.profile.tips.description")}
           </Text>
         </Container>
       </Container>

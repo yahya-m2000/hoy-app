@@ -28,13 +28,13 @@ export default function PropertyTypeStep({
 
   // Test direct key access
   const testKeys = [
-    "property.steps.propertyType.title",
-    "property.steps.propertyType.description",
-    "property.types.apartment",
-    "property.types.house",
-    "property.types.loft",
-    "property.types.penthouse",
-    "property.types.studio",
+    "features.property.listing.steps.propertyType.title",
+    "features.property.listing.steps.propertyType.description",
+    "features.property.types.apartment",
+    "features.property.types.house",
+    "features.property.types.loft",
+    "features.property.types.penthouse",
+    "features.property.types.studio",
   ];
 
   testKeys.forEach((key) => {
@@ -57,8 +57,8 @@ export default function PropertyTypeStep({
 
   // Test if we can access the translation object directly
   console.log("Direct access test:");
-  console.log("property.types:", i18n.t("property.types"));
-  console.log("property.types.apartment:", i18n.t("property.types.apartment"));
+  console.log("features.property.types:", i18n.t("features.property.types"));
+  console.log("features.property.types.apartment:", i18n.t("features.property.types.apartment"));
 
   // Fallback translations in case i18n is not working
   const fallbackTranslations = {
@@ -80,18 +80,18 @@ export default function PropertyTypeStep({
     <Container>
       <StepHeader
         title={getTranslation(
-          "property.steps.propertyType.title",
+          "features.property.listing.steps.propertyType.title",
           fallbackTranslations.title
         )}
         description={getTranslation(
-          "property.steps.propertyType.description",
+          "features.property.listing.steps.propertyType.description",
           fallbackTranslations.description
         )}
       />
 
       <Container marginTop="lg">
         {PROPERTY_TYPES.map((type) => {
-          const translationKey = `property.types.${type.value}`;
+          const translationKey = `features.property.types.${type.value}`;
           const fallbackText =
             fallbackTranslations[
               type.value as keyof typeof fallbackTranslations

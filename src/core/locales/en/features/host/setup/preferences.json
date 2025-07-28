@@ -1,0 +1,82 @@
+{
+  "title": "Host Preferences",
+  "subtitle": "Set your hosting preferences to provide the best experience for your guests.",
+  "responseTime": {
+    "title": "Response Time",
+    "subtitle": "How quickly do you typically respond to guest messages?",
+    "within1Hour": {
+      "title": "Within 1 hour",
+      "description": "Respond to messages within 1 hour for the best guest experience",
+      "recommended": "Recommended"
+    },
+    "within24Hours": {
+      "title": "Within 24 hours",
+      "description": "Respond to messages within 24 hours"
+    },
+    "within48Hours": {
+      "title": "Within 48 hours",
+      "description": "Respond to messages within 48 hours"
+    },
+    "helpText": "Faster response times lead to better guest experiences and more bookings."
+  },
+  "instantBooking": {
+    "title": "Instant Booking",
+    "subtitle": "Allow guests to book instantly without waiting for approval",
+    "enable": "Enable Instant Booking",
+    "description": "Guests can book your property immediately without waiting for approval",
+    "helpText": "Instant booking can increase your bookings but requires you to keep your calendar updated."
+  },
+  "bookingSettings": {
+    "title": "Booking Settings",
+    "subtitle": "Configure your booking requirements and availability",
+    "minimumNotice": {
+      "title": "Minimum Notice (hours)",
+      "description": "How much advance notice do you need for bookings?",
+      "helpText": "Set the minimum time you need to prepare for guests."
+    },
+    "maxAdvanceBooking": {
+      "title": "Max Advance Booking (days)",
+      "description": "How far in advance can guests book?",
+      "helpText": "Set how far in advance guests can make reservations."
+    }
+  },
+  "languages": {
+    "title": "Languages",
+    "subtitle": "Select the languages you can communicate in with guests",
+    "placeholder": "Select languages...",
+    "helpText": "Guests can filter by hosts who speak their language.",
+    "selected": "{{count}} language(s) selected"
+  },
+  "locationSettings": {
+    "title": "Location & Currency",
+    "subtitle": "Set your timezone and preferred currency",
+    "currency": {
+      "title": "Preferred Currency",
+      "description": "Currency for displaying prices and payments",
+      "helpText": "Your currency preference will be used throughout the app."
+    },
+    "timezone": {
+      "title": "Timezone",
+      "description": "Your local timezone for scheduling",
+      "helpText": "This helps with scheduling and communication timing."
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Choose how you want to receive notifications",
+    "methods": {
+      "title": "Notification Methods",
+      "email": "Email",
+      "push": "Push Notifications",
+      "sms": "SMS"
+    },
+    "types": {
+      "title": "Notification Types",
+      "bookingRequests": "Booking Requests",
+      "messages": "Messages",
+      "reviews": "Reviews",
+      "payments": "Payments"
+    },
+    "helpText": "Choose how and when you want to be notified about important events."
+  }
+}

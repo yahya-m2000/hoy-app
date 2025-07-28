@@ -1,0 +1,20 @@
+{
+  "validationError": "Fadlan hagaaji khaladyadan soo socda:",
+  "setupFailed": "Waxaa fashilmay dhammaystirka dejinta. Fadlan mar kale isku day.",
+  "incompleteSetup": "Fadlan dhammaystir dhammaan tallaabooyinka loo baahan yahay ka hor intaadan dhammaystirin dejinta.",
+  "verificationFailed": "Xaqiijintu waa fashilantay. Fadlan mar kale isku day.",
+  "codeExpired": "Koodka xaqiijinta waa dhacay. Fadlan mid cusub codso.",
+  "invalidCode": "Koodka xaqiijinta ma saxna. Fadlan mar kale isku day.",
+  "emailAlreadyVerified": "Iimaylkan horay loo xaqiijiyey.",
+  "phoneAlreadyVerified": "Lambarka telefoonkan horay loo xaqiijiyey.",
+  "identityVerificationFailed": "Xaqiijinta aqoonsiga waa fashilantay. Fadlan mar kale isku day.",
+  "documentUploadFailed": "Waxaa fashilmay kor u qaadista dukumeentiga. Fadlan mar kale isku day.",
+  "agreementUpdateFailed": "Waxaa fashilmay cusboonaysiinta heshiiska. Fadlan mar kale isku day.",
+  "policiesUpdateFailed": "Waxaa fashilmay cusboonaysiinta siyaasadaha. Fadlan mar kale isku day.",
+  "preferencesUpdateFailed": "Waxaa fashilmay cusboonaysiinta doorashooyinka. Fadlan mar kale isku day.",
+  "profileUpdateFailed": "Waxaa fashilmay cusboonaysiinta astaanta. Fadlan mar kale isku day.",
+  "autoSaveFailed": "Waxaa fashilmay kaydinta horumarka. Fadlan mar kale isku day.",
+  "networkError": "Khalad shabakad. Fadlan hubiso xidhiidhaaga oo mar kale isku day.",
+  "serverError": "Khalad server. Fadlan markale isku day goor dambe.",
+  "unknownError": "Khalad aan la filaneyn ayaa dhacay. Fadlan mar kale isku day."
+}

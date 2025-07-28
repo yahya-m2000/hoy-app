@@ -18,15 +18,15 @@ export default function GuestAccessStep({
   return (
     <Container>
       <StepHeader
-        title={t("property.steps.guestAccess.title")}
-        description={t("property.steps.guestAccess.description")}
+        title={t("features.property.listing.steps.guestAccess.title")}
+        description={t("features.property.listing.steps.guestAccess.description")}
       />
 
       <Container marginTop="lg">
         {GUEST_ACCESS_TYPES.map((option) => (
           <Container key={option.value} marginBottom="md">
             <Button
-              title={t(`property.types.${option.value}`)}
+              title={t(`features.property.listing.types.${option.value}`)}
               onPress={() => updateFormData({ guestAccessType: option.value })}
               variant={
                 formData.guestAccessType === option.value
@@ -40,7 +40,7 @@ export default function GuestAccessStep({
               color="secondary"
               style={{ marginLeft: spacing.sm }}
             >
-              {t(`property.types.${option.value}Description`)}
+              {t(`features.property.listing.types.${option.value}Description`)}
             </Text>
           </Container>
         ))}

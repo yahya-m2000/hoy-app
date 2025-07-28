@@ -1,0 +1,76 @@
+{
+  "title": "Xaqiijinta Akoonta",
+  "subtitle": "Dhamaystir xaqiijinta si aad u hubiso ammaanka martida iyo kalsoonida",
+  "email": {
+    "title": "Xaqiijinta Email-ka",
+    "subtitle": "Xaqiiji cinwaanka email-kaaga si xidhiidh ammaan ah loo yeesho",
+    "status": {
+      "pending": "Lama xaqiijin",
+      "inProgress": "Xaqiijinaya...",
+      "completed": "La xaqiijiyay",
+      "failed": "Xaqiijintu fashilantay"
+    },
+    "sendCode": "Dir Koodka",
+    "resendCode": "Dib u Dir Koodka",
+    "codeSent": "Koodka waxaa loo diray {{email}}",
+    "enterCode": "Geli koodka 6-tijirka ah",
+    "codePlaceholder": "000000",
+    "verifyCode": "Xaqiiji Koodka",
+    "codeExpired": "Koodku waa dhammaaday. Fadlan mid cusub codso.",
+    "invalidCode": "Kood khaldan. Fadlan mar kale isku day.",
+    "verificationSuccess": "Email-ka si guul leh ayaa loo xaqiijiyay!",
+    "helpText": "Waxaan kuu diri doonaa kood xaqiijin cinwaanka email-kaaga. Tani waxay caawisaa in xidhiidh ammaan ah la yeesho martida."
+  },
+  "phone": {
+    "title": "Xaqiijinta Telefoonka",
+    "subtitle": "Xaqiiji lambarka telefoonkaaga xidhiidhyada degdegga ah",
+    "status": {
+      "pending": "Lama xaqiijin",
+      "inProgress": "Xaqiijinaya...",
+      "completed": "La xaqiijiyay",
+      "failed": "Xaqiijintu fashilantay"
+    },
+    "sendCode": "Dir Koodka SMS",
+    "resendCode": "Dib u Dir SMS",
+    "codeSent": "SMS waxaa loo diray {{phone}}",
+    "enterCode": "Geli koodka SMS 6-tijirka ah",
+    "codePlaceholder": "000000",
+    "verifyCode": "Xaqiiji SMS",
+    "codeExpired": "Koodka SMS waa dhammaaday. Fadlan mid cusub codso.",
+    "invalidCode": "Koodka SMS khaldan. Fadlan mar kale isku day.",
+    "verificationSuccess": "Telefoonka si guul leh ayaa loo xaqiijiyay!",
+    "helpText": "Waxaan kuu diri doonaa SMS oo ay ku jirto kood xaqiijin. Tani waxay awood u siisaa xidhiidh degdeg ah martida haddii loo baahdo."
+  },
+  "identity": {
+    "title": "Xaqiijinta Aqoonsiga",
+    "subtitle": "Xaqiiji aqoonsigaaga ammaanka martida iyo kalsoonida",
+    "status": {
+      "pending": "Lama xaqiijin",
+      "inProgress": "Xaqiijinaya...",
+      "completed": "La xaqiijiyay",
+      "failed": "Xaqiijintu fashilantay"
+    },
+    "startVerification": "Bilow Xaqiijinta",
+    "continueVerification": "Sii wad Xaqiijinta",
+    "verificationInProgress": "Xaqiijintu waa socotaa...",
+    "verificationSuccess": "Aqoonsiga si guul leh ayaa loo xaqiijiyay!",
+    "helpText": "Xaqiijinta aqoonsigu wuxuu caawiyaa in kalsoni la dhiso martida una hubiso ammaanka goobta. Habkani waa mid ammaan ah oo qarsoodi ah.",
+    "documents": {
+      "title": "Dukumeentiyada Loo baahan yahay",
+      "governmentId": "Aqoonsiga Dawladda",
+      "passport": "Baasaboorka",
+      "driversLicense": "Ruqsadda Wadista",
+      "nationalId": "Kaadhka Aqoonsiga Qaranka"
+    },
+    "uploadDocument": "Soo geli Dukumentiga",
+    "documentUploaded": "Dukumentiga si guul leh ayaa loo soo geliyay",
+    "documentError": "Soo gelinta dukumentiga ayaa fashilantay. Fadlan mar kale isku day.",
+    "privacyNote": "Dukumeentiyada aqoonsigaaga waa la qariyay oo si ammaan ah ayaa loo kaydiyay. Waxaan u isticmaalnaa oo kaliya ujeedooyin xaqiijin."
+  },
+  "progress": {
+    "title": "Horumarka Xaqiijinta",
+    "description": "Dhamaystir dhammaan xaqiijinada si aad u socoto",
+    "allComplete": "Dhammaan xaqiijinada waa la dhammeeyay!",
+    "remaining": "{{count}} xaqiijin ayaa hadhay"
+  }
+}
