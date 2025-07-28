@@ -1,0 +1,21 @@
+{
+    "title": "Adeegyo",
+    "description": "Dooro adeegyada uu hantiyeedkaagu bixiyo",
+    "selectedCount": "{{count}} adeegyo ayaa la doortay",
+    "tipTitle": "Maxaa loogu daraa adeegyo?",
+    "tipContent": "Adeegyadu waxay ka dhigaan hantiyeedkaaga mid soo jiidasho leh waxayna soo jiitaan marti badan. Dooro dhammaan kuwa khuseeya hantiyeedkaaga.",
+    "popular": "Adeegyada caanka ah",
+    "kitchen": "Jikada & Cuntada",
+    "entertainment": "Madadaalo",
+    "comfort": "Raaxo",
+    "safety": "Badbaado & Amni",
+    "categories": {
+      "essentials": "Muhiim",
+      "features": "Astaamo",
+      "location": "Goobta",
+      "safety": "Badbaado"
+    },
+    "searchPlaceholder": "Raadi adeegyo",
+    "noAmenitiesSelected": "Wax adeegyo ah lama dooran",
+    "selectAtLeastOne": "Fadlan doora ugu yaraan hal adeeg"
+  }

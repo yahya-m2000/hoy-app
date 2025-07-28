@@ -62,7 +62,7 @@ const MonthThumbnailComponent: React.FC<MonthThumbnailProps> = ({
           propertyId,
           monthName: monthData?.month
             ? getTranslatedMonthName(monthData.month)
-            : t("calendar.loading.noMonth"),
+            : t("features.calendar.loading.noMonth"),
         });
         setEarnings(0);
         setBookings([]);

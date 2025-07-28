@@ -43,15 +43,15 @@ export class AccountConfigService {
       {
         id: ACCOUNT_ACTIONS["personal-info"],
         icon: "person-outline",
-        title: t("profile.personalInfo"),
-        subtitle: t("profile.personalInfoDesc"),
+        title: t("features.account.profile.personalInfo"),
+        subtitle: t("features.account.profile.personalInfoDesc"),
         action: getActionHandler("personal-info"),
       },
       {
         id: ACCOUNT_ACTIONS["payment-methods"],
         icon: "card-outline",
-        title: t("profile.paymentMethods"),
-        subtitle: t("profile.paymentMethodsDesc"),
+        title: t("features.account.profile.paymentMethods"),
+        subtitle: t("features.account.profile.paymentMethodsDesc"),
         action: getActionHandler("payment-methods"),
       },
     ];
@@ -61,14 +61,14 @@ export class AccountConfigService {
       baseItems.push({
         id: ACCOUNT_ACTIONS["host-profile"],
         icon: "business-outline",
-        title: t("host.settings.hostProfile"),
-        subtitle: t("host.settings.hostProfileDesc"),
+        title: t("features.account.settings.hostProfile"),
+        subtitle: t("features.account.settings.hostProfileDesc"),
         action: getActionHandler("host-profile"),
       });
     }
 
     return {
-      title: t("profile.profile"),
+      title: t("features.account.profile.profile"),
       items: baseItems,
     };
   };
@@ -83,20 +83,20 @@ export class AccountConfigService {
     const { t, getActionHandler } = this.dependencies;
 
     return {
-      title: t("host.settings.hostManagement"),
+      title: t("features.account.settings.hostManagement"),
       items: [
         {
           id: ACCOUNT_ACTIONS.policies,
           icon: "document-text-outline",
-          title: t("host.settings.policies"),
-          subtitle: t("host.settings.policiesDesc"),
+          title: t("features.account.settings.policies"),
+          subtitle: t("features.account.settings.policiesDesc"),
           action: getActionHandler("policies"),
         },
         {
           id: ACCOUNT_ACTIONS.properties,
           icon: "home-outline",
-          title: t("host.settings.properties"),
-          subtitle: t("host.settings.propertiesDesc"),
+          title: t("features.account.settings.properties"),
+          subtitle: t("features.account.settings.propertiesDesc"),
           action: getActionHandler("properties"),
         },
       ],
@@ -113,34 +113,34 @@ export class AccountConfigService {
     const { t, getActionHandler } = this.dependencies;
 
     return {
-      title: t("host.settings.hostTools"),
+      title: t("features.account.settings.hostTools"),
       items: [
         {
           id: ACCOUNT_ACTIONS.calendar,
           icon: "calendar-outline",
-          title: t("host.settings.calendar"),
-          subtitle: t("host.settings.calendarDesc"),
+          title: t("features.account.settings.calendar"),
+          subtitle: t("features.account.settings.calendarDesc"),
           action: getActionHandler("calendar"),
         },
         {
           id: ACCOUNT_ACTIONS.pricing,
           icon: "pricetag-outline",
-          title: t("host.settings.pricing"),
-          subtitle: t("host.settings.pricingDesc"),
+          title: t("features.account.settings.pricing"),
+          subtitle: t("features.account.settings.pricingDesc"),
           action: getActionHandler("pricing"),
         },
         {
           id: ACCOUNT_ACTIONS.payouts,
           icon: "cash-outline",
-          title: t("host.settings.payouts"),
-          subtitle: t("host.settings.payoutsDesc"),
+          title: t("features.account.settings.payouts"),
+          subtitle: t("features.account.settings.payoutsDesc"),
           action: getActionHandler("payouts"),
         },
         {
           id: ACCOUNT_ACTIONS.taxes,
           icon: "receipt-outline",
-          title: t("host.settings.taxes"),
-          subtitle: t("host.settings.taxesDesc"),
+          title: t("features.account.settings.taxes"),
+          subtitle: t("features.account.settings.taxesDesc"),
           action: getActionHandler("taxes"),
         },
       ],
@@ -157,20 +157,20 @@ export class AccountConfigService {
     const { t, getActionHandler } = this.dependencies;
 
     return {
-      title: t("profile.activity"),
+      title: t("features.account.profile.activity"),
       items: [
         {
           id: ACCOUNT_ACTIONS["booking-history"],
           icon: "time-outline",
-          title: t("profile.bookingHistory"),
-          subtitle: t("profile.bookingHistoryDesc"),
+          title: t("features.account.profile.bookingHistory"),
+          subtitle: t("features.account.profile.bookingHistoryDesc"),
           action: getActionHandler("booking-history"),
         },
         {
           id: ACCOUNT_ACTIONS.wishlist,
           icon: "heart-outline",
-          title: t("profile.wishlist"),
-          subtitle: t("profile.wishlistDesc"),
+          title: t("features.account.profile.wishlist"),
+          subtitle: t("features.account.profile.wishlistDesc"),
           action: getActionHandler("wishlist"),
         },
       ],
@@ -190,15 +190,15 @@ export class AccountConfigService {
       {
         id: ACCOUNT_ACTIONS.language,
         icon: "language-outline",
-        title: t("profile.language"),
-        subtitle: t("profile.languageDesc"),
+        title: t("features.account.profile.language"),
+        subtitle: t("features.account.profile.languageDesc"),
         action: getActionHandler("language"),
       },
       {
         id: ACCOUNT_ACTIONS.currency,
         icon: "cash-outline",
-        title: t("profile.currency"),
-        subtitle: t("profile.currencyDesc"),
+        title: t("features.account.profile.currency"),
+        subtitle: t("features.account.profile.currencyDesc"),
         action: getActionHandler("currency"),
       },
     ];
@@ -208,14 +208,14 @@ export class AccountConfigService {
       items.push({
         id: ACCOUNT_ACTIONS["host-resources"],
         icon: "school-outline",
-        title: t("host.settings.hostResources"),
-        subtitle: t("host.settings.hostResourcesDesc"),
+        title: t("features.account.settings.hostResources"),
+        subtitle: t("features.account.settings.hostResourcesDesc"),
         action: getActionHandler("host-resources"),
       });
     }
 
     return {
-      title: t("profile.preferences"),
+      title: t("features.account.profile.preferences"),
       items,
     };
   };
@@ -230,20 +230,20 @@ export class AccountConfigService {
     const { t, getActionHandler } = this.dependencies;
 
     return {
-      title: t("profile.accountSettings"),
+      title: t("features.account.profile.accountSettings"),
       items: [
         {
           id: ACCOUNT_ACTIONS.logout,
           icon: "log-out-outline",
-          title: t("profile.logout"),
-          subtitle: t("profile.logoutDesc"),
+          title: t("features.account.profile.logout"),
+          subtitle: t("features.account.profile.logoutDesc"),
           action: getActionHandler("logout"),
         },
         {
           id: ACCOUNT_ACTIONS["delete-account"],
           icon: "trash-outline",
-          title: t("profile.deleteAccount"),
-          subtitle: t("profile.deleteAccountDesc"),
+          title: t("features.account.profile.deleteAccount"),
+          subtitle: t("features.account.profile.deleteAccountDesc"),
           action: getActionHandler("delete-account"),
           isDanger: true,
         },
@@ -261,20 +261,20 @@ export class AccountConfigService {
     const { t, getActionHandler } = this.dependencies;
 
     return {
-      title: t("profile.support"),
+      title: t("features.account.profile.support"),
       items: [
         {
           id: ACCOUNT_ACTIONS.support,
           icon: "help-circle-outline",
-          title: t("profile.support"),
-          subtitle: t("profile.supportDesc"),
+          title: t("features.account.profile.support"),
+          subtitle: t("features.account.profile.supportDesc"),
           action: getActionHandler("support"),
         },
         {
           id: ACCOUNT_ACTIONS.about,
           icon: "information-circle-outline",
-          title: t("profile.about"),
-          subtitle: t("profile.aboutDesc"),
+          title: t("features.account.profile.about"),
+          subtitle: t("features.account.profile.aboutDesc"),
           action: getActionHandler("about"),
         },
       ],
@@ -292,10 +292,10 @@ export class AccountConfigService {
 
     const switchAction = isHost ? "switch-to-traveler" : "switch-to-host";
     const title = isHost 
-      ? t("host.settings.switchToTraveler")
+      ? t("features.account.settings.switchToTraveler")
       : t("traveler.switchToHost");
     const subtitle = isHost
-      ? t("host.settings.switchToTravelerDesc")
+      ? t("features.account.settings.switchToTravelerDesc")
       : t("traveler.switchToHostDesc");
 
     return {

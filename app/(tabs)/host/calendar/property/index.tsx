@@ -127,7 +127,7 @@ export default function PropertySelectionScreen() {
   return (
     <Screen
       header={{
-        title: t("calendar.selectProperty"),
+        title: t("features.calendar.selectProperty"),
         showDivider: false,
         left: {
           children: (
@@ -151,8 +151,8 @@ export default function PropertySelectionScreen() {
         {properties.length === 0 ? (
           <EmptyState
             icon="home-outline"
-            title={t("calendar.noProperties")}
-            message={t("calendar.addPropertiesToStart")}
+            title={t("features.calendar.noProperties")}
+            message={t("features.calendar.addPropertiesToStart")}
           />
         ) : (
           <FlatList

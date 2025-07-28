@@ -166,14 +166,18 @@ export default function FeedbackScreen() {
   // Handle success
   useEffect(() => {
     if (isSuccess) {
-      Alert.alert(t("feedback.success.title"), t("feedback.success.message"), [
-        {
-          text: t("common.ok"),
-          onPress: () => {
-            router.back();
+      Alert.alert(
+        t("ui.feedback.success.title"),
+        t("ui.feedback.success.message"),
+        [
+          {
+            text: t("common.ok"),
+            onPress: () => {
+              router.back();
+            },
           },
-        },
-      ]);
+        ]
+      );
     }
   }, [isSuccess, t, router]);
 
@@ -184,27 +188,27 @@ export default function FeedbackScreen() {
     switch (step) {
       case "type":
         if (!formData.type) {
-          newErrors.type = t("feedback.errors.typeRequired");
+          newErrors.type = t("system.errors.validation.missingRequired");
         }
         break;
       case "category":
         if (!formData.category) {
-          newErrors.category = t("feedback.errors.categoryRequired");
+          newErrors.category = t("system.errors.validation.missingRequired");
         }
         break;
       case "form":
         if (!formData.subject?.trim()) {
-          newErrors.subject = t("feedback.errors.subjectRequired");
+          newErrors.subject = t("system.errors.validation.missingRequired");
         } else if (formData.subject.length < 5) {
-          newErrors.subject = t("feedback.errors.subjectTooShort");
+          newErrors.subject = t("system.errors.validation.tooShort");
         }
         if (!formData.description?.trim()) {
-          newErrors.description = t("feedback.errors.descriptionRequired");
+          newErrors.description = t("system.errors.validation.missingRequired");
         } else if (formData.description.length < 10) {
-          newErrors.description = t("feedback.errors.descriptionTooShort");
+          newErrors.description = t("system.errors.validation.tooShort");
         }
         if (formData.isAnonymous && !formData.email?.trim()) {
-          newErrors.email = t("feedback.errors.emailRequiredForAnonymous");
+          newErrors.email = t("system.errors.validation.missingRequired");
         }
         break;
     }
@@ -274,10 +278,10 @@ export default function FeedbackScreen() {
   const renderTypeSelection = () => (
     <Container>
       <Text variant="h5" weight="semibold" marginBottom="md">
-        {t("feedback.selectType")}
+        {t("ui.feedback.selectType")}
       </Text>
       <Text variant="body2" color="secondary" marginBottom="lg">
-        {t("feedback.selectTypeDescription")}
+        {t("ui.feedback.selectTypeDescription")}
       </Text>
       {FEEDBACK_TYPES.map((type) => (
         <FeedbackOptionCard
@@ -298,10 +302,10 @@ export default function FeedbackScreen() {
   const renderCategorySelection = () => (
     <Container>
       <Text variant="h5" weight="semibold" marginBottom="md">
-        {t("feedback.selectCategory")}
+        {t("ui.feedback.selectCategory")}
       </Text>
       <Text variant="body2" color="secondary" marginBottom="lg">
-        {t("feedback.selectCategoryDescription")}
+        {t("ui.feedback.selectCategoryDescription")}
       </Text>
       {FEEDBACK_CATEGORIES.map((category) => (
         <FeedbackOptionCard
@@ -324,7 +328,7 @@ export default function FeedbackScreen() {
   const renderForm = () => (
     <Container>
       <Text variant="h5" weight="semibold" marginBottom="md">
-        {t("feedback.details")}
+        {t("ui.feedback.details")}
       </Text>
 
       {/* Anonymous feedback toggle */}
@@ -338,10 +342,10 @@ export default function FeedbackScreen() {
       >
         <Container flex={1}>
           <Text variant="body" weight="semibold">
-            {t("feedback.submitAnonymously")}
+            {t("ui.feedback.submitAnonymously")}
           </Text>
           <Text variant="body2" color="secondary">
-            {t("feedback.submitAnonymouslyDescription")}
+            {t("ui.feedback.submitAnonymouslyDescription")}
           </Text>
         </Container>
         <Button
@@ -358,8 +362,8 @@ export default function FeedbackScreen() {
       {formData.isAnonymous && (
         <Container marginBottom="md">
           <Input
-            label={t("feedback.email")}
-            placeholder={t("feedback.emailPlaceholder")}
+            label={t("ui.feedback.email")}
+            placeholder={t("ui.feedback.emailPlaceholder")}
             value={formData.email}
             onChangeText={(email) => setFormData({ ...formData, email })}
             keyboardType="email-address"

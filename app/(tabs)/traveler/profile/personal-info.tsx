@@ -64,7 +64,7 @@ const PersonalInfoScreen: React.FC = () => {
       console.error("Update profile error", error);
       showToast({
         type: "error",
-        message: error instanceof Error ? error.message : t("errors.generic"),
+        message: error instanceof Error ? error.message : t("system.errors.generic.unknown"),
       });
     }
   };
@@ -84,7 +84,7 @@ const PersonalInfoScreen: React.FC = () => {
   return (
     <Container flex={1} backgroundColor={theme.background}>
       <Header
-        title={t("profile.personalInfo")}
+        title={t("features.account.profile.personalInfo")}
         left={{ icon: "chevron-back-outline", onPress: () => router.back() }}
       />
       <StatusBar style={isDark ? "light" : "dark"} />
@@ -105,7 +105,7 @@ const PersonalInfoScreen: React.FC = () => {
         <Container marginBottom="xl" marginTop="md">
           <Container marginBottom="md">
             <Text variant="h6" color="primary">
-              {t("auth.profilePicture")}
+              {t("features.auth.forms.fields.profilePicture")}
             </Text>
           </Container>
           <Container style={{ alignSelf: "center", marginBottom: 8 }}>
@@ -118,7 +118,7 @@ const PersonalInfoScreen: React.FC = () => {
             />
           </Container>
           <Text variant="caption" color="secondary" align="center">
-            {t("auth.profilePictureHelper")}
+            {t("features.auth.forms.helpers.profilePictureHelper")}
           </Text>
         </Container>
 
@@ -126,33 +126,33 @@ const PersonalInfoScreen: React.FC = () => {
         <Container marginBottom="xl">
           <Container marginBottom="md">
             <Text variant="h6" color="primary">
-              {t("auth.legalName")}
+              {t("features.auth.forms.fields.legalName")}
             </Text>
           </Container>
           <Container marginBottom="md">
             <Input
-              label={t("auth.firstName")}
+              label={t("features.auth.forms.fields.firstName")}
               value={firstName}
               onChangeText={setFirstName}
-              placeholder={t("auth.firstName")}
+              placeholder={t("features.auth.forms.fields.firstName")}
               autoCapitalize="words"
               style={{ marginBottom: 8 }}
             />
             <Text variant="caption" color="secondary">
-              {t("auth.firstNameHelper")}
+              {t("features.auth.forms.helpers.firstNameHelper")}
             </Text>
           </Container>
           <Container marginBottom="md">
             <Input
-              label={t("auth.lastName")}
+              label={t("features.auth.forms.fields.lastName")}
               value={lastName}
               onChangeText={setLastName}
-              placeholder={t("auth.lastName")}
+              placeholder={t("features.auth.forms.fields.lastName")}
               autoCapitalize="words"
               style={{ marginBottom: 8 }}
             />
             <Text variant="caption" color="secondary">
-              {t("auth.lastNameHelper")}
+              {t("features.auth.forms.helpers.lastNameHelper")}
             </Text>
           </Container>
         </Container>
@@ -161,19 +161,19 @@ const PersonalInfoScreen: React.FC = () => {
         <Container marginBottom="xl">
           <Container marginBottom="md">
             <Text variant="h6" color="primary">
-              {t("auth.contactDetails")}
+              {t("features.auth.forms.sections.contactDetails")}
             </Text>
           </Container>
           <Container marginBottom="md">
             <PhoneInput
-              label={t("auth.phoneNumber")}
+              label={t("features.auth.forms.fields.phoneNumber")}
               value={phoneNumber}
               onChangeText={setPhoneNumber}
-              placeholder={t("auth.phoneNumber")}
+              placeholder={t("features.auth.forms.fields.phoneNumber")}
               style={{ marginBottom: 8 }}
             />
             <Text variant="caption" color="secondary">
-              {t("auth.phoneNumberHelper")}
+              {t("features.auth.forms.helpers.phoneNumberHelper")}
             </Text>
           </Container>
         </Container>
@@ -182,32 +182,32 @@ const PersonalInfoScreen: React.FC = () => {
         <Container marginBottom="xl">
           <Container marginBottom="md">
             <Text variant="h6" color="primary">
-              {t("auth.address")}
+              {t("features.auth.forms.sections.address")}
             </Text>
           </Container>
           <Container marginBottom="md">
             <CountrySelector
-              label={t("auth.country")}
+              label={t("features.auth.forms.fields.country")}
               value={country}
               onChangeText={setCountry}
-              placeholder={t("auth.selectCountry")}
+              placeholder={t("features.auth.forms.placeholders.selectCountry")}
               style={{ marginBottom: 8 }}
             />
             <Text variant="caption" color="secondary">
-              {t("auth.countryHelper")}
+              {t("features.auth.forms.helpers.countryHelper")}
             </Text>
           </Container>
           <Container marginBottom="md">
             <CitySelector
-              label={t("auth.city")}
+              label={t("features.auth.forms.fields.city")}
               value={city}
               onChangeText={setCity}
               country={country}
-              placeholder={t("auth.selectCity")}
+              placeholder={t("features.auth.forms.placeholders.selectCity")}
               style={{ marginBottom: 8 }}
             />
             <Text variant="caption" color="secondary">
-              {t("auth.cityHelper")}
+              {t("features.auth.forms.helpers.cityHelper")}
             </Text>
           </Container>
         </Container>

@@ -42,7 +42,7 @@ const getListingFlow = (t: any) => ({
     {
       id: 1,
       key: "about",
-      title: t("property.step1.title"),
+      title: t("features.property.listing.steps.step1.title"),
       substeps: [
         { id: "1a", component: IntroStep, key: "intro" },
         { id: "1b", component: PropertyTypeStep, key: "propertyType" },
@@ -54,7 +54,7 @@ const getListingFlow = (t: any) => ({
     {
       id: 2,
       key: "standout",
-      title: t("property.step2.title"),
+      title: t("features.property.listing.steps.step2.title"),
       substeps: [
         { id: "2a", component: AmenitiesStep, key: "amenities" },
         { id: "2b", component: ImagesStep, key: "photos" },
@@ -66,7 +66,7 @@ const getListingFlow = (t: any) => ({
     {
       id: 3,
       key: "finish",
-      title: t("property.step3.title"),
+      title: t("features.property.listing.steps.step3.title"),
       substeps: [
         { id: "3a", component: PricingStep, key: "weekdayPrice" },
         {
@@ -211,8 +211,8 @@ export default function AddPropertyScreen() {
       } catch (error) {
         console.error("Error loading drafts:", error);
         Alert.alert(
-          t("property.alerts.errorTitle"),
-          t("property.alerts.loadError")
+          t("features.property.listing.alerts.errorTitle"),
+          t("features.property.listing.alerts.loadError")
         );
         setShowDraftSelection(false);
       } finally {
@@ -313,7 +313,7 @@ export default function AddPropertyScreen() {
         formData.price > 0;
 
       if (!hasMeaningfulData) {
-        console.log(t("property.alerts.noMeaningfulData"));
+        console.log(t("features.property.listing.alerts.noMeaningfulData"));
         return;
       }
 
@@ -397,7 +397,7 @@ export default function AddPropertyScreen() {
           );
         }
         if (!formData.address.city?.trim()) {
-          validationErrors["address.city"] = t("property.errors.cityRequired");
+          validationErrors["address.city"] = t("system.errors.validation.missingRequired");
         }
         if (!formData.address.country?.trim()) {
           validationErrors["address.country"] = t(
@@ -415,16 +415,16 @@ export default function AddPropertyScreen() {
         break;
       case "details":
         if (formData.bedrooms < 1) {
-          validationErrors.bedrooms = t("property.errors.bedroomsRequired");
+          validationErrors.bedrooms = t("system.errors.validation.missingRequired");
         }
         if (formData.beds < 1) {
-          validationErrors.beds = t("property.errors.bedsRequired");
+          validationErrors.beds = t("system.errors.validation.missingRequired");
         }
         if (formData.bathrooms < 1) {
-          validationErrors.bathrooms = t("property.errors.bathroomsRequired");
+          validationErrors.bathrooms = t("system.errors.validation.missingRequired");
         }
         if (formData.maxGuests < 1) {
-          validationErrors.maxGuests = t("property.errors.maxGuestsRequired");
+          validationErrors.maxGuests = t("system.errors.validation.missingRequired");
         }
         break;
       case "amenities":
@@ -432,14 +432,14 @@ export default function AddPropertyScreen() {
         break;
       case "photos":
         if (formData.images.length === 0) {
-          validationErrors.images = t("property.errors.photosRequired");
+          validationErrors.images = t("system.errors.validation.missingRequired");
         }
         break;
       case "title":
         if (!formData.name?.trim()) {
-          validationErrors.name = t("property.errors.titleRequired");
+          validationErrors.name = t("system.errors.validation.missingRequired");
         } else if (formData.name.length < 3) {
-          validationErrors.name = t("property.errors.titleMinLength");
+          validationErrors.name = t("system.errors.validation.tooShort");
         }
         break;
       case "tags":
@@ -489,8 +489,8 @@ export default function AddPropertyScreen() {
     // Validate current step before proceeding
     if (!validateCurrentStep()) {
       Alert.alert(
-        t("property.alerts.requiredFieldsTitle"),
-        t("property.alerts.requiredFieldsMessage"),
+        t("features.property.listing.alerts.requiredFieldsTitle"),
+        t("features.property.listing.alerts.requiredFieldsMessage"),
         [{ text: t("common.ok") }]
       );
       return;
@@ -545,11 +545,11 @@ export default function AddPropertyScreen() {
 
   const handleSaveAndExit = async () => {
     Alert.alert(
-      t("property.alerts.saveAndExitTitle"),
-      t("property.alerts.saveAndExitMessage"),
+      t("features.property.listing.alerts.saveAndExitTitle"),
+      t("features.property.listing.alerts.saveAndExitMessage"),
       [
         {
-          text: t("property.alerts.exitWithoutSaving"),
+          text: t("features.property.listing.alerts.exitWithoutSaving"),
           style: "destructive",
           onPress: () => router.back(),
         },
@@ -558,7 +558,7 @@ export default function AddPropertyScreen() {
           style: "cancel",
         },
         {
-          text: t("property.alerts.saveAndExit"),
+          text: t("features.property.listing.alerts.saveAndExit"),
           onPress: async () => {
             await saveDraft();
             router.back();
@@ -606,8 +606,8 @@ export default function AddPropertyScreen() {
       setCurrentStep(-1); // Success step
     } catch (error) {
       Alert.alert(
-        t("property.alerts.errorTitle"),
-        t("property.alerts.submitError")
+        t("features.property.listing.alerts.errorTitle"),
+        t("features.property.listing.alerts.submitError")
       );
     } finally {
       setLoading(false);

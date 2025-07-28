@@ -58,7 +58,7 @@ const HostPropertyTab: React.FC<{
     <Tab>
       <Container flex={1} flexDirection="column" justifyContent="center">
         <Text variant="caption" color="secondary">
-          {t("property.monthlyPotential")}
+          {t("features.property.management.analytics.monthlyPotential")}
         </Text>
         <Text variant="h6" weight="bold">
           {formatCurrency(monthlyPotential, currency)}
@@ -66,7 +66,7 @@ const HostPropertyTab: React.FC<{
       </Container>
       <Container flexDirection="row">
         <Button
-          title={t("property.analytics")}
+          title={t("features.property.management.analytics.analytics")}
           onPress={onAnalytics}
           variant="primary"
           size="medium"
@@ -122,7 +122,7 @@ export default function HostPropertyDetailsScreen({
       name:
         `${property.host.firstName || ""} ${
           property.host.lastName || ""
-        }`.trim() || t("property.host"),
+        }`.trim() || t("features.property.management.general.host"),
       avatar: property.host.profileImage,
       totalReviews: property.host.totalReviews || 0,
       averageRating: property.host.rating || 0,
@@ -143,7 +143,7 @@ export default function HostPropertyDetailsScreen({
       name:
         typeof amenity === "string"
           ? amenity
-          : amenity.name || t("property.unknown"),
+          : amenity.name || t("features.property.management.general.unknown"),
       icon: typeof amenity === "object" ? amenity.icon : undefined,
       available:
         typeof amenity === "object" ? amenity.available !== false : true,
@@ -156,10 +156,19 @@ export default function HostPropertyDetailsScreen({
   // Property status
   const getStatus = () => {
     if (property.status === "draft")
-      return { text: t("property.draft"), color: "warning" as const };
+      return {
+        text: t("features.property.management.status.draft"),
+        color: "warning" as const,
+      };
     return property.isActive
-      ? { text: t("property.active"), color: "success" as const }
-      : { text: t("property.inactive"), color: "error" as const };
+      ? {
+          text: t("features.property.management.status.active"),
+          color: "success" as const,
+        }
+      : {
+          text: t("features.property.management.status.inactive"),
+          color: "error" as const,
+        };
   };
   const status = getStatus();
 
@@ -218,7 +227,10 @@ export default function HostPropertyDetailsScreen({
         >
           {/* Property Header */}
           <PropertyHeader
-            title={property.name || t("property.defaultName")}
+            title={
+              property.name ||
+              t("features.property.management.general.defaultName")
+            }
             host={hostInfo}
             rating={property.rating || 0}
             reviewCount={property.reviewCount || 0}
@@ -232,7 +244,7 @@ export default function HostPropertyDetailsScreen({
             marginBottom="md"
           >
             <Text variant="body" color="secondary">
-              {t("property.label")}&nbsp;
+              {t("features.property.management.general.label")}{" "}
             </Text>
             <Text variant="body" weight="medium" color={status.color}>
               {status.text}
@@ -241,13 +253,13 @@ export default function HostPropertyDetailsScreen({
               <>
                 <Container marginLeft="md">
                   <Text variant="body" color="secondary">
-                    •&nbsp;
+                    •{" "}
                   </Text>
                 </Container>
                 <Icon name="star" size={iconSize.sm} color="warning" />
                 <Container marginLeft="xs">
                   <Text variant="body" color="secondary">
-                    {t("property.featured")}
+                    {t("features.property.management.general.featured")}
                   </Text>
                 </Container>
               </>
@@ -261,10 +273,10 @@ export default function HostPropertyDetailsScreen({
               <Icon name="bed-outline" size={iconSize.md} color="secondary" />
               <Container marginLeft="xs">
                 <Text variant="body" color="secondary">
-                  {property.bedrooms}&nbsp;
+                  {property.bedrooms}{" "}
                   {property.bedrooms === 1
-                    ? t("property.bedroom")
-                    : t("property.bedrooms")}
+                    ? t("features.property.management.details.bedroom")
+                    : t("features.property.management.details.bedrooms")}
                 </Text>
               </Container>
             </Container>
@@ -278,10 +290,10 @@ export default function HostPropertyDetailsScreen({
               <Icon name="water-outline" size={iconSize.md} color="secondary" />
               <Container marginLeft="xs">
                 <Text variant="body" color="secondary">
-                  {property.bathrooms}&nbsp;
+                  {property.bathrooms}{" "}
                   {property.bathrooms === 1
-                    ? t("property.bath")
-                    : t("property.baths")}
+                    ? t("features.property.management.details.bath")
+                    : t("features.property.management.details.baths")}
                 </Text>
               </Container>
             </Container>
@@ -299,7 +311,8 @@ export default function HostPropertyDetailsScreen({
               />
               <Container marginLeft="xs">
                 <Text variant="body" color="secondary">
-                  {property.maxGuests} {t("property.guests")}
+                  {property.maxGuests}{" "}
+                  {t("features.property.management.details.guests")}
                 </Text>
               </Container>
             </Container>
@@ -311,7 +324,7 @@ export default function HostPropertyDetailsScreen({
           <Container>
             <Container marginBottom="md">
               <Text variant="h6" weight="medium">
-                {t("pricing.title")}
+                {t("features.property.management.pricing.title")}
               </Text>
             </Container>
             <Container>
@@ -321,26 +334,26 @@ export default function HostPropertyDetailsScreen({
                 marginBottom="sm"
               >
                 <Text variant="body" color="secondary">
-                  {t("property.weekdayPrice")}
+                  {t("features.property.management.pricing.weekdayPrice")}
                 </Text>
                 <Text variant="body" weight="medium">
                   {formatCurrency(
                     property.weekdayPrice || getPropertyPrice(),
                     property.currency
                   )}{" "}
-                  / {t("property.night")}
+                  / {t("features.property.management.pricing.night")}
                 </Text>
               </Container>
               <Container flexDirection="row" justifyContent="space-between">
                 <Text variant="body" color="secondary">
-                  {t("property.weekendPrice")}
+                  {t("features.property.management.pricing.weekendPrice")}
                 </Text>
                 <Text variant="body" weight="medium">
                   {formatCurrency(
                     property.weekendPrice || getPropertyPrice(),
                     property.currency
                   )}{" "}
-                  / {t("property.night")}
+                  / {t("features.property.management.pricing.night")}
                 </Text>
               </Container>
             </Container>
@@ -356,7 +369,7 @@ export default function HostPropertyDetailsScreen({
               >
                 <Container marginBottom="xs">
                   <Text variant="caption" weight="medium" color="primary">
-                    {t("property.activeDiscounts")}
+                    {t("features.property.management.pricing.activeDiscounts")}
                   </Text>
                 </Container>
                 {property.discounts.newListingPromo && (
@@ -368,7 +381,9 @@ export default function HostPropertyDetailsScreen({
                     />
                     <Container marginLeft="xs">
                       <Text variant="caption" color="secondary">
-                        {t("property.newListingDiscount")}
+                        {t(
+                          "features.property.management.pricing.newListingDiscount"
+                        )}
                       </Text>
                     </Container>
                   </Container>
@@ -386,7 +401,9 @@ export default function HostPropertyDetailsScreen({
                     />
                     <Container marginLeft="xs">
                       <Text variant="caption" color="secondary">
-                        {t("property.lastMinuteDiscount")}
+                        {t(
+                          "features.property.management.pricing.lastMinuteDiscount"
+                        )}
                       </Text>
                     </Container>
                   </Container>
@@ -414,7 +431,8 @@ export default function HostPropertyDetailsScreen({
           {/* Description */}
           <PropertyDescription
             description={
-              property.description || t("property.noDescriptionAvailable")
+              property.description ||
+              t("features.property.management.general.noDescriptionAvailable")
             }
           />
 
@@ -441,39 +459,51 @@ export default function HostPropertyDetailsScreen({
           <Container>
             <PolicyNavigationItem
               icon="calendar-outline"
-              title={t("property.manageAvailability")}
-              subtitle={t("property.updateCalendarAndPricing")}
+              title={t(
+                "features.property.management.actions.manageAvailability"
+              )}
+              subtitle={t(
+                "features.property.management.actions.updateCalendarAndPricing"
+              )}
               onPress={() => openModal("availability")}
             />
             <PolicyNavigationItem
               icon="clipboard-outline"
-              title={t("property.viewBookings")}
+              title={t("features.property.management.actions.viewBookings")}
               subtitle={`${property.reviewCount || 0} ${t(
-                "property.totalBookings"
+                "features.property.management.general.totalBookings"
               )}`}
               onPress={() => console.log("View bookings")}
             />
             <PolicyNavigationItem
               icon="close-circle-outline"
-              title={t("property.cancellationPolicy")}
+              title={t(
+                "features.property.management.policies.cancellationPolicy"
+              )}
               subtitle={
                 property.cancellationPolicy?.policyType ||
-                t("property.moderate")
+                t("features.property.management.policies.moderate")
               }
               onPress={() => openModal("cancellation")}
             />
             <PolicyNavigationItem
               icon="home-outline"
-              title={t("property.houseRules")}
-              subtitle={`${t("property.common.checkIn")}: ${
-                property.houseRules?.checkInTime?.from || "15:00"
-              } - ${property.houseRules?.checkInTime?.to || "22:00"}`}
+              title={t("features.property.management.policies.houseRules")}
+              subtitle={`${t(
+                "features.property.management.policies.checkIn"
+              )}: ${property.houseRules?.checkInTime?.from || "15:00"} - ${
+                property.houseRules?.checkInTime?.to || "22:00"
+              }`}
               onPress={() => openModal("houseRules")}
             />
             <PolicyNavigationItem
               icon="shield-outline"
-              title={t("property.safetyAndProperty")}
-              subtitle={t("property.details.safetyInformation")}
+              title={t(
+                "features.property.management.policies.safetyAndProperty"
+              )}
+              subtitle={t(
+                "features.property.management.policies.safetyInformation"
+              )}
               onPress={() => openModal("safety")}
             />
           </Container>
@@ -483,7 +513,7 @@ export default function HostPropertyDetailsScreen({
           <Container>
             <Container marginBottom="md">
               <Text variant="h6" weight="medium">
-                {t("property.propertyDetails")}
+                {t("features.property.management.details.propertyDetails")}
               </Text>
             </Container>
             <Container>
@@ -493,7 +523,7 @@ export default function HostPropertyDetailsScreen({
                 marginBottom="xs"
               >
                 <Text variant="body" color="secondary">
-                  {t("property.propertyType")}
+                  {t("features.property.management.details.propertyType")}
                 </Text>
                 <Text variant="body">{property.propertyType}</Text>
               </Container>
@@ -503,7 +533,7 @@ export default function HostPropertyDetailsScreen({
                 marginBottom="xs"
               >
                 <Text variant="body" color="secondary">
-                  {t("property.guestAccess")}
+                  {t("features.property.management.details.guestAccess")}
                 </Text>
                 <Text variant="body">
                   {property.guestAccessType
@@ -517,7 +547,7 @@ export default function HostPropertyDetailsScreen({
                 marginBottom="xs"
               >
                 <Text variant="body" color="secondary">
-                  {t("property.hostType")}
+                  {t("features.property.management.details.hostType")}
                 </Text>
                 <Text variant="body">
                   {property.hostType?.charAt(0).toUpperCase() +
@@ -526,7 +556,7 @@ export default function HostPropertyDetailsScreen({
               </Container>
               <Container flexDirection="row" justifyContent="space-between">
                 <Text variant="body" color="secondary">
-                  {t("property.totalBeds")}
+                  {t("features.property.management.details.totalBeds")}
                 </Text>
                 <Text variant="body">{property.beds}</Text>
               </Container>

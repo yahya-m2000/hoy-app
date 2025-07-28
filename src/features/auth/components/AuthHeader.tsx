@@ -27,7 +27,7 @@ export default function AuthHeader({ authView }: AuthHeaderProps) {
         },
       ]}
     >
-      {authView === "login" ? t("auth.login") : t("auth.register")}
+      {authView === "login" ? t("features.auth.forms.signIn") : t("features.auth.forms.signUp")}
     </Text>
   );
 }

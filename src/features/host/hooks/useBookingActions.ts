@@ -65,8 +65,8 @@ export const useBookingActions = () => {
 
     return new Promise((resolve) => {
       Alert.alert(
-        t("host.today.reservations.updateStatusTitle"),
-        t("host.today.reservations.updateStatusMessage", { status: newStatus }),
+        t("features.host.dashboard.reservations.updateStatusTitle"),
+        t("features.host.dashboard.reservations.updateStatusMessage", { status: newStatus }),
         [
           {
             text: t("common.cancel"),
@@ -74,19 +74,19 @@ export const useBookingActions = () => {
             onPress: () => resolve(undefined),
           },
           {
-            text: t("host.today.reservations.confirm"),
+            text: t("features.host.dashboard.reservations.confirm"),
             onPress: async () => {
               setIsUpdatingStatus(true);
               try {
                 const updated = await updateBookingStatus(booking._id, newStatus);
                 showToast({
-                  message: t("host.today.reservations.statusUpdated", { status: newStatus }),
+                  message: t("features.host.dashboard.reservations.statusUpdated", { status: newStatus }),
                   type: "success",
                 });
                 resolve(updated);
               } catch (error) {
                 showToast({
-                  message: t("host.today.reservations.statusUpdateFailed"),
+                  message: t("features.host.dashboard.reservations.statusUpdateFailed"),
                   type: "error",
                 });
                 resolve(undefined);

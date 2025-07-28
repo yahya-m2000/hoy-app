@@ -30,14 +30,14 @@ export default function AuthToggle({ authView, onToggle }: AuthToggleProps) {
         ]}
       >
         {authView === "login"
-          ? t("auth.noAccount")
-          : t("auth.alreadyHaveAccount")}
+          ? t("features.auth.forms.noAccount")
+          : t("features.auth.forms.alreadyHaveAccount")}
       </Text>
       <TouchableOpacity onPress={onToggle}>
         <Text
           style={[styles.toggleActionText, { color: theme.colors.primary }]}
         >
-          {authView === "login" ? t("auth.register") : t("auth.login")}
+          {authView === "login" ? t("features.auth.forms.signUp") : t("features.auth.forms.signIn")}
         </Text>
       </TouchableOpacity>
     </View>

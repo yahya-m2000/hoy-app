@@ -52,7 +52,7 @@ export default function AllReservationsPage() {
   if (isLoading) {
     return (
       <Screen backgroundColor="background">
-        <Header title={t("host.reservations.allReservations")} />
+        <Header title={t("features.host.dashboard.reservations.allReservations")} />
         {/* Filter Tabs - Show even when loading */}
         <ReservationFilterSection
           reservations={[]}
@@ -72,7 +72,7 @@ export default function AllReservationsPage() {
             color="secondary"
             style={{ marginTop: spacing.md }}
           >
-            {t("host.reservations.loading")}
+            {t("features.host.dashboard.reservations.loading")}
           </Text>
         </Container>
       </Screen>
@@ -84,7 +84,7 @@ export default function AllReservationsPage() {
     return (
       <Screen
         header={{
-          title: t("host.reservations.allReservations"),
+          title: t("features.host.dashboard.reservations.allReservations"),
           showDivider: false,
           left: {
             icon: "chevron-back-outline",
@@ -112,7 +112,7 @@ export default function AllReservationsPage() {
   return (
     <Screen
       header={{
-        title: t("host.reservations.allReservations"),
+        title: t("features.host.dashboard.reservations.allReservations"),
         showDivider: false,
         left: {
           icon: "chevron-back-outline",

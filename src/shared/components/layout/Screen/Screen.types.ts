@@ -1,4 +1,4 @@
-import { ViewStyle, ScrollViewProps } from "react-native";
+import { ViewStyle, ScrollViewProps, TextStyle } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 export type ScreenPadding = "none" | "small" | "medium" | "large";
@@ -15,6 +15,7 @@ export interface HeaderContent {
 export interface ScreenHeaderProps {
   variant?: HeaderVariant;
   title?: string;
+  titleStyle?: TextStyle;
   left?: HeaderContent;
   right?: HeaderContent;
   backgroundColor?: string;

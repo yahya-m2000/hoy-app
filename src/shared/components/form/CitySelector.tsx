@@ -136,7 +136,7 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
             color: theme.text?.secondary || theme.secondary,
           }}
         >
-          {label || t("auth.city")}
+          {label || t("features.auth.forms.fields.city")}
         </Text>
         <Text
           variant="body"
@@ -150,8 +150,8 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
         >
           {value ||
             (country
-              ? placeholder || t("auth.selectCity")
-              : t("auth.selectCountryFirst"))}
+              ? placeholder || t("features.auth.forms.placeholders.selectCity")
+              : t("features.auth.forms.placeholders.selectCountryFirst"))}
         </Text>
       </TouchableOpacity>
 
@@ -202,7 +202,7 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
             }}
           >
             <Text variant="h6" color="primary">
-              {t("auth.city")}
+              {t("features.auth.forms.fields.city")}
             </Text>
             <TouchableOpacity onPress={() => setModalVisible(false)}>
               <Text variant="body" color="primary">
@@ -213,7 +213,7 @@ export const CitySelector: React.FC<CitySelectorProps> = ({
 
           <Container padding="md">
             <Input
-              placeholder={t("auth.searchCity")}
+              placeholder={t("features.auth.forms.placeholders.searchCity")}
               value={searchQuery}
               onChangeText={setSearchQuery}
               leftIcon="search"

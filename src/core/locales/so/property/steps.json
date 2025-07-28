@@ -1,241 +1,241 @@
 {
     "intro": {
-      "title": "Ku soo dhawoow Martigelinta!",
-      "description": "Bilow safarkaaga martigelinta. Waxaanu ku hagi doonaa tillaabooyinka liiska hantiyeedkaaga.",
-      "benefit1": "Gaadh martida adduunka oo dhan",
-      "benefit2": "Kasbo dakhli dheeraad ah adiga oo xeerarkaaga leh",
-      "benefit3": "Ku raaxayso diiwaangelin ammaan ah oo la ilaaliyo",
-      "infoTitle": "Sida ay u shaqayso",
-      "infoText": "Waxaad bixin doontaa faahfaahinta hantiyeedkaaga, waxaad dejin doontaa doorbidkaaga, waxaadna daabici doontaa liiskaaga. Wax walba waad beddeli kartaa mar dambe!"
+      "title": "Ku soo dhawoow Martigalinta!",
+      "description": "Bilow safarkaaga martigale ahaan. Waxaan kugu hagayn doonaa tillaabooyinka liisaynta hantidaada.",
+      "benefit1": "Gaari martida dunida oo dhan",
+      "benefit2": "Kasba dakhli dheeraad ah shuruudahaaga",
+      "benefit3": "Ku raaxeyso buukinad ammaan ah oo la ilaaliyay",
+      "infoTitle": "Sida uu u shaqeeyo",
+      "infoText": "Waxaad bixin doontaa faahfaahin ku saabsan hantidaada, deji doorashadaada, dabna daabac liisaskaaga. Wax walba waxaad wax ka bedeli kartaa markale!"
     },
     "basicInfo": {
-      "title": "Macluumaad Aasaasi ah",
-      "description": "Nooga waran faahfaahinta aasaasiga ah ee hantiyeedkaaga"
+      "title": "Macluumaadka Aasaasiga ah",
+      "description": "Noo sheeg faahfaahinta aasaasiga ah ee hantidaada"
     },
     "description": {
-      "title": "Sharaxaada Hantida",
-      "description": "Sharax hantiyeedkaaga si martidu u fahmaan waxa ay filan karaan",
-      "label": "Sharaxaad",
-      "placeholder": "Sharax hantiyeedkaaga, waxa ka dhigaya mid gaar ah, meelaha u dhow, iyo waxa martidu filan karaan inta ay joogaan...",
-      "minLengthWarning": "Ugu yaraan {{min}} xaraf ayaa loo baahan yahay ({{remaining}} kale ayaa hadhay)",
-      "tipTitle": "Talooyin Qorista",
-      "tipContent": "Noqo mid faahfaahsan oo daacad ah. Sheeg astaamaha gaarka ah, meelaha u dhow, iyo faahfaahin kasta oo muhiim ah oo martidu u baahan yihiin inay ogaadaan."
+      "title": "Sharaxaadda Hantida",
+      "description": "Qeex hantidaada si aad ka caawiso martida inay fahmaan waxa ay filayaan",
+      "label": "Sharaxaadda",
+      "placeholder": "Qeex hantidaada, waxa kaga dhigaya mid gaar ah, soojiidashada u dhow, iyo waxa martidu filayaan inta ay joogaan...",
+      "minLengthWarning": "Ugu yaraan {{min}} xaraf ayaa loo baahan yahay ({{remaining}} dheeraad ah oo loo baahan yahay)",
+      "tipTitle": "Talooyinka Qoraalka",
+      "tipContent": "Noqo mid qeexa oo run sheega. Ku sheeg sifaadka gaarka ah, soojiidashada u dhow, iyo faahfaahin muhiim ah oo martidu ogaan lahaayeen."
     },
     "propertyType": {
       "title": "Nooca Hantida",
-      "description": "Dooro nooca hantiyeed ee aad liis garaynayso"
+      "description": "Dooro nooca hantida aad liisayso"
     },
     "guestAccess": {
       "title": "Gelitaanka Martida",
-      "description": "Dooro sida martidu u geli doonaan hantiyeedkaaga",
+      "description": "Dooro sida martidu u geli doonto hantidaada",
       "types": {
         "ENTIRE": {
-          "label": "Guri dhan",
-          "description": "Martidu waxay heli doonaan hantiyeedka oo dhan."
+          "label": "Meeshii oo dhan",
+          "description": "Martidu waxay leeyihiin hantida oo dhan iyaga keliya."
         },
         "PRIVATE": {
-          "label": "Qol gaar ah",
-          "description": "Martidu waxay heli doonaan qol u gaar ah balse waxay la wadaagi doonaan meelaha qaar."
+          "label": "Qolka gaarka ah",
+          "description": "Martidu waxay leeyihiin qolkooda gaarka ah laakiin waxay wadaagaan meelo qaarkood."
         },
         "SHARED": {
-          "label": "Qol la wadaago",
-          "description": "Martidu waxay seexan doonaan qol ama meel ay la wadaagaan dadka kale."
+          "label": "Qolka la wadaago",
+          "description": "Martidu waxay ku seexdaan qol ama meel lala wadaagi karo dad kale."
         }
       }
     },
     "location": {
       "title": "Faahfaahinta Goobta",
-      "description": "Bixi goobta saxda ah ee hantiyeedkaaga"
+      "description": "Siiso goobta saxda ah ee hantidaada"
     },
     "details": {
       "title": "La wadaag waxyaabaha aasaasiga ah ee meeshaada",
-      "description": "Mar walba waad beddeli kartaa kuwaan dambe",
-      "detailsHelp": "Faahfaahin sax ah waxay ka caawisaa martida inay fahmaan waxa ay filan karaan"
+      "description": "Had iyo jeer waxaad bedeli kartaa kuwan markale",
+      "detailsHelp": "Faahfaahin sax ah ayaa ka caawiya martida inay ogaadaan waxa ay filayaan"
     },
     "title": {
-      "title": "Si hantiyeedkaaga u hel cinwaan",
-      "description": "Qabso dareenka martida cinwaan soo jiidasho leh",
-      "placeholder": "tusaale, Guri raaxo leh oo bartamaha magaalada ah",
+      "title": "Sii hantidaada cinwaan",
+      "description": "Soo jiito martida cinwaan soo jiitaya",
+      "placeholder": "tusaale ahaan, Apartament kulul oo magaala dhexdeeda ah",
       "charLimit": "Ugu badnaan 32 xaraf",
-      "titleHelp": "Cinwaan wanaagsan wuxuu ka caawiyaa martida inay helaan oo xasuustaan hantiyeedkaaga",
-      "tipTitle": "Talooyin Cinwaan",
-      "tipContent": "Cinwaan wanaagsan wuxuu ka caawiyaa martida inay helaan oo xasuustaan hantiyeedkaaga. Isticmaal ereyo faahfaahsan oo xasuus mudan, kana dhig mid ka yar 32 xaraf.",
-      "label": "Cinwaan"
+      "titleHelp": "Cinwaan fiican ayaa ka caawiya martida inay helaan oo ay xusuustaan hantidaada",
+      "tipTitle": "Talooyinka Cinwaanka",
+      "tipContent": "Cinwaan fiican ayaa ka caawiya martida inay helaan oo ay xusuustaan hantidaada. Isticmaal erayo qeexaya, la xusuusto oo ka hooseeya 32 xaraf.",
+      "label": "Cinwaanka"
     },
     "tags": {
-      "title": "Dooro tags-ka qeexaya meeshaada",
-      "description": "Ka caawi martida inay helaan hantiyeedkaaga",
-      "FamilyFriendly": "Qoyska ku habboon",
-      "PetFriendly": "Xayawaan la ogol yahay",
+      "title": "Dooro calaamado qeexa meeshaada",
+      "description": "Ka caawo martida inay helaan hantidaada",
+      "FamilyFriendly": "Qoyska ugu habboon",
+      "PetFriendly": "Xayawaanka qoyska ugu habboon",
       "Luxury": "Raaxo",
-      "Budget": "Qiimo jaban",
+      "Budget": "Miisaaniyad",
       "Business": "Ganacsi",
-      "Romantic": "Jaceyl",
+      "Romantic": "Jacaylnimo",
       "Unique": "Gaar ah",
-      "EcoFriendly": "Deegaanka u roon",
-      "Beachfront": "Xeebta hore",
-      "MountainView": "Muuqaal Buureed",
-      "CityCenter": "Bartamaha Magaalada",
-      "Countryside": "Baadiyaha"
+      "EcoFriendly": "Deegaan saaxiib ah",
+      "Beachfront": "Xeebta horteed",
+      "MountainView": "Muuqaalka buurta",
+      "CityCenter": "Magaala dhexdeeda",
+      "Countryside": "Miyiga"
     },
     "images": {
       "title": "Sawirrada Hantida",
-      "description": "Ku dar sawirro tayo sare leh si aad u muujiso hantiyeedkaaga",
-      "tipTitle": "Talooyin Sawir",
-      "tipContent": "Sawirro tayo sare leh waxay ka caawiyaan martida inay si fiican u fahmaan hantiyeedkaaga waxayna kordhiyaan diiwaangelinta. Isticmaal iftiin dabiici ah oo muuji astaamaha ugu fiican."
+      "description": "Ku dar sawirro tayo sare ah si aad u muujiso hantidaada",
+      "tipTitle": "Talooyinka Sawirrada",
+      "tipContent": "Sawirro tayo sare ah ayaa ka caawiya martida inay si fiican u ogaadaan hantidaada una kordhiyaan buukinada. Isticmaal iftiinka dabiiciga ah oo muuji sifaadkaaga ugu fiican."
     },
     "pricing": {
       "title": "Deji qiimaha {{type}}",
-      "weekday": "maalinta shaqada",
-      "weekend": "maalmaha fasaxa",
-      "description": "Qiime tartan leh u deji si aad u hesho diiwaangelin badan",
-      "weekdayPrice": "Qiimaha maalinta shaqada",
-      "weekendPrice": "Qiimaha maalmaha fasaxa",
+      "weekday": "maalmaha shaqada",
+      "weekend": "dhammaadka usbuucda",
+      "description": "Qiimo tartan leh si aad u soo jiidato buukino badan",
+      "weekdayPrice": "Qiimaha Maalmaha Shaqada",
+      "weekendPrice": "Qiimaha Dhammaadka Usbuucda",
       "currency": "Lacagta",
       "pricePlaceholder": "0",
-      "perNight": "habeenkii",
-      "lowPriceWarning": "Tixgeli inaad dejiso qiime sare si aad u hesho marti tayo leh",
-      "competitiveTip": "Qiime tartan leh u deji si aad u hesho diiwaangelin badan",
-      "priceHelp": "Deji qiimo kala duwan maalmaha shaqada iyo fasaxa",
-      "currencyHelp": "Dooro lacagta aad doorbidayso",
+      "perNight": "habeen kasta",
+      "lowPriceWarning": "Ka fakir dejinta qiimo sare si aad u hubiso marti tayo leh",
+      "competitiveTip": "Qiimo tartan leh si aad u soo jiidato buukino badan",
+      "priceHelp": "Deji qiimo kala duwan maalmaha shaqada iyo dhammaadka usbuucda",
+      "currencyHelp": "Dooro lacagta aad door bidaysid",
       "minusTen": "-$10",
       "minusFive": "-$5",
       "plusFive": "+$5",
       "plusTen": "+$10",
-      "tip": "💡 Talo: Baadh hantiyaal la mid ah deegaankaaga si aad u dejiso qiime tartan leh"
+      "tip": "💡 Talo: Baadh hantiyada kula mid ah aagaaga si aad u dejiso qiimo tartan leh"
     },
     "discounts": {
-      "title": "Bixi qiimo dhimis si aad u soo jiidato martida",
-      "description": "Ikhtiyaari: Kordhi diiwaangelinta qiimo dhimis xeeladaysan",
+      "title": "Bixi dhimis si aad u soo jiidato martida",
+      "description": "Ikhtiyaari ah: Kordhi buukinada dhimis xeeldheer ah",
       "newListingPromo": {
-        "label": "Kobcinta liiska cusub",
-        "description": "20% dhimis 3-da diiwaangelin ee ugu horreeya"
+        "label": "Dhiirigelinta liisaska cusub",
+        "description": "20% dhimis 3-da buukin ee ugu horreeya"
       },
       "lastMinuteDiscount": {
-        "label": "Qiimo dhimis daqiiqad dambe",
-        "description": "Diiwaangelin lagu sameeyo 24 saac gudahood"
+        "label": "Dhimista daqiiqada u dambeysa",
+        "description": "Buukinada 24 saac gudahood"
       },
-      "weekly": "Qiimo dhimis toddobaadle ah",
-      "monthly": "Qiimo dhimis bille ah",
+      "weekly": "Dhimista usbuuciga",
+      "monthly": "Dhimista bishii",
       "percentage": "Boqolkiiba dhimista",
-      "enableWeekly": "Fur qiimo dhimis toddobaadle ah",
-      "enableMonthly": "Fur qiimo dhimis bille ah",
-      "weeklyPercentage": "Boqolkiiba dhimista toddobaadka",
-      "monthlyPercentage": "Boqolkiiba dhimista bisha",
-      "discountHelp": "Qiimo dhimistu waxay kaa caawin kartaa inaad hesho diiwaangelin badan"
+      "enableWeekly": "Daar dhimista usbuuciga",
+      "enableMonthly": "Daar dhimista bishii",
+      "weeklyPercentage": "Boqolkiiba dhimista usbuuciga",
+      "monthlyPercentage": "Boqolkiiba dhimista bishii",
+      "discountHelp": "Dhimista waxay kaa caawin kartaa inaad soo jiidato buukino badan"
     },
     "policies": {
       "title": "Deji Siyaasadaha Caadiga ah",
-      "subtitle": "Deji siyaasadda joojinta iyo xeerarka guriga",
-      "description": "Kuwani waa siyaasadahaaga caadiga ah. Waxaad u habayn kartaa hantiyeedkan.",
-      "modify": "Beddel",
+      "subtitle": "Qaabeey siyaasaddaada joojinta iyo sharciga guriga",
+      "description": "Kuwani waa siyaasadahaaga caadiga ah. Waxaad u hagaaji kartaa hantidakan.",
+      // "modify": "Modify", // USE features.property.listing.actions.modify
       "cancellationPolicy": {
         "title": "Siyaasadda Joojinta",
-        "description": "Dhexdhexaad - Lacag celin buuxda 5 maalmood ka hor imaanshaha"
+        "description": "Dhexdhexaad - Lacag celin buuxa 5 maalmood ka hor imaatinka"
       },
       "houseRules": {
-        "title": "Xeerarka Guriga",
-        "description": "Gelitaanka: 3:00 galabnimo, Bixitaanka: 11:00 subaxnimo"
+        "title": "Sharciga Guriga",
+        "description": "Galitaanka: 3:00 PM, Bixitaanka: 11:00 AM"
       },
       "safetyInfo": {
-        "title": "Macluumaadka Badbaadada",
-        "description": "Astaamo badbaado oo caadi ah ayaa ku jira"
+        "title": "Macluumaadka Ammaanka",
+        "description": "Sifaadka caadiga ah ee ammaanka ayaa ku jira"
       }
     },
     "hostInfo": {
-      "title": "Nooga waran naftaada",
-      "subtitle": "Dhamee xaqiijinta si loo hubiyo amniga iyo kalsoonida martida",
-      "description": "Ma shaqsi ayaad tahay mise ganacsi ayaad liis garaynaysaa?",
-      "individual": "Shaqsi",
-      "business": "Ganacsi",
+      "title": "Noo sheeg naftaada",
+      "subtitle": "Dhammeeyee xaqiijinta si loo hubiyo ammaanka iyo kalsoonida martida",
+      "description": "Miyaad liisaysaa qof gaar ah mise ganacsi ahaan?",
+      // "individual": "Individual", // USE features.property.listing.common.individual
+      // "business": "Business", // USE features.property.listing.common.business
       "safetyDisclosures": {
-        "title": "Shaacinta Badbaadada",
-        "weaponsOnProperty": "Ma jiraan hub ku yaal hantiyeedka?",
-        "securityCameras": "Ma jiraan kamarado amni oo hantiyeedka yaal?"
+        "title": "Shaaca ka qaadista ammaanka",
+        "weaponsOnProperty": "Miyey jiraan hub kasta oo hantida ku yaal?",
+        "securityCameras": "Miyey jiraan kamirooyinka ammaanka oo hantida ku yaal?"
       },
       "infoBox": {
-        "title": "Badbaado & Sharci",
-        "content": "Daahfurnaanta astaamaha badbaadada iyo khataraha suuragalka ah waxay dhistaa kalsooni martida waxayna xaqiijisaa u hoggaansanaanta xeerarka deegaanka."
+        "title": "Ammaanka & Shareecada",
+        "content": "Daahfurnaan ku saabsan sifaadka ammaanka iyo khatarada suurtogalka ah ayaa ka caawiya dhisida kalsoonida martida lana hubinaya ku dhaqanka qawaaniinta maxalliga ah."
       }
     },
     "verification": {
       "title": "Xaqiiji Akoonkaaga",
-      "subtitle": "Dhamee xaqiijinta si loo hubiyo amniga iyo kalsoonida martida"
+      "subtitle": "Dhammeeyee xaqiijinta si loo hubiyo ammaanka iyo kalsoonida martida"
     },
     "agreement": {
       "title": "Aqbal Shuruudaha & Siyaasadaha",
-      "subtitle": "Dib u eeg oo aqbal shuruudaha adeegga iyo siyaasadaha"
+      "subtitle": "Dib u eeg oo aqbal shuruudaheenna adeegga iyo siyaasadaha"
     },
     "preferences": {
-      "title": "Doorbidka Martigeliyaha",
-      "subtitle": "Deji waqtiga jawaabta iyo doorbidka diiwaangelinta"
+      "title": "Doorashada Martigalaha",
+      "subtitle": "Deji waqtiga jawaabkaaga iyo doorashada buukinta"
     },
     "profile": {
-      "title": "Dhamee Xogtaada",
-      "subtitle": "U sheeg martida naftaada iyo waxa kaa dhigaya martigeliye fiican"
+      "title": "Dhammeeyee Astaamtaada",
+      "subtitle": "U sheeg martida naftaada iyo waxa kaga dhigaya martigale fiican"
     },
     "review": {
       "title": "Dib u eeg & Daabac",
-      "description": "Eeg mar dambe ka hor intaadan daabicin liiskaaga",
-      "editSection": "Beddel",
-      "allSet": "Wax walba waa hagaagsan yihiin!",
-      "publishNow": "Daabac Hadda",
-      "saveDraft": "Kaydi sida Qabyo",
-      "overview": "Guudmarka Hantida",
-      "noName": "Hanti aan magac lahayn",
-      "bed": "sariir",
-      "beds": "sariiro",
-      "bath": "musqul",
-      "baths": "musqulo",
-      "guest": "marti",
-      "guests": "martida",
-      "perNight": "habeenkii",
-      "amenities": "Adeegyo",
-      "photos": "Sawirro",
-      "main": "Ugu Muhiimsan",
-      "more": "inbadan",
-      "readyTo": "Diyaar ma u tahay {{action}}?",
-      "update": "cusbooneysii",
+      "description": "Eeg mar u dambeysa ka hor intaadan daabicin liisaskaaga",
+      "editSection": "Wax ka beddel",
+      "allSet": "Wax walba waa fiican yihiin!",
+      "publishNow": "Hadda Daabac",
+      "saveDraft": "Kaydi sida Qoraal",
+      "overview": "Dulmar Hantida",
+      "noName": "Hanti aan cinwaan lahayn",
+      // "bed": "bed", // MOVED TO property.common
+      // "beds": "beds", // MOVED TO property.common
+      // "bath": "bath", // MOVED TO property.common
+      // "baths": "baths", // MOVED TO property.common
+      // "guest": "guest", // MOVED TO property.common
+      // "guests": "guests", // MOVED TO property.common
+      "perNight": "habeen kasta",
+      "amenities": "Adeegyada",
+      // "photos": "Photos", // USE features.property.details.images.title
+      // "main": "Main", // USE features.property.details.images.main
+      "more": "wax badan",
+      "readyTo": "Diyaar u tahay {{action}}?",
+      "update": "cusboonaysii",
       "publish": "daabac",
-      "updateMessage": "Liiska hantiyeedkaaga waxaa lagu cusbooneysiin doonaa xogta cusub.",
-      "publishMessage": "Hantiyeedkaaga waa la eegi doonaa waana la daabici doonaa 24 saac gudahood. Waxaad wax ka beddeli kartaa faahfaahinta mar kasta kadib daabacaadda.",
+      "updateMessage": "Liisaska hantidaada waxaa lagu cusboonaysiin doonaa macluumaadka cusub.",
+      "publishMessage": "Hantidaada waa la dib u eegi doonaa lana daabici doonaa 24 saac gudahood. Faahfaahintaan waxaad wax ka bedeli kartaa waqti kasta kadib daabacaadda.",
       "sectionTitles": {
-        "basicInfo": "Macluumaad Aasaasi ah",
+        "basicInfo": "Macluumaadka Aasaasiga ah",
         "location": "Goobta",
         "details": "Faahfaahinta Hantida",
-        "amenities": "Adeegyo",
-        "photos": "Sawirro",
-        "title": "Cinwaan & Sharaxaad",
-        "pricing": "Qiimeynta",
-        "discounts": "Qiimo Dhimis",
-        "policies": "Siyaasado",
-        "hostInfo": "Macluumaadka Martigeliyaha"
+        "amenities": "Adeegyada",
+        // "photos": "Photos", // USE features.property.details.images.title
+        "title": "Cinwaanka & Sharaxaadda",
+        "pricing": "Qiimaha",
+        "discounts": "Dhimista",
+        "policies": "Siyaasadaha",
+        "hostInfo": "Macluumaadka Martigalaha"
       },
-      "published": "Hantiyeedkaaga waa la daabacay",
-      "draft": "Hantiyeedkaaga waxaa loo kaydiyay sida qabyo",
-      "addAnother": "Ku dar Hanti Kale",
-      "publishedMessage": "Hantiyeedkaaga hadda waa nool yahay waana muuqdaa martida. Waxaad wax ka beddeli kartaa mar kasta dashboard-kaaga.",
-      "draftMessage": "Hantiyeedkaaga waxaa loo kaydiyay sida qabyo. Waxaad sii wadan kartaa wax ka beddelka mar dambe."
+      "published": "Hantidaadu waa la daabacay",
+      "draft": "Hantidaadu waxaa loo kaydiyay qoraal ahaan",
+      "addAnother": "Ku dar Hanti kale",
+      "publishedMessage": "Hantidaadu hadda waa nool tahay waana u muuqataa martida. Waxaad wax ka bedeli kartaa waqti kasta dashboard-kaaga.",
+      "draftMessage": "Hantidaadu waxaa loo kaydiyay qoraal ahaan. Waxaad sii wadi kartaa wax ka bedelka markale."
     },
     "success": {
       "congratulations": "Hambalyo!",
-      "draftSaved": "Qabyo waa la kaydiyay!",
-      "publishedMessage": "Hantiyeedkaaga si guul leh ayaa loo daabacay waana muuqdaa martida.",
-      "draftMessage": "Hantiyeedkaaga waxaa loo kaydiyay sida qabyo. Waxaad sii wadan kartaa wax ka beddelka mar dambe."
+      "draftSaved": "Qoraalka waa la kaydiyay!",
+      "publishedMessage": "Hantidaadu si guul leh ayaa loo daabacay waana u muuqataa martida.",
+      "draftMessage": "Hantidaadu waxaa loo kaydiyay qoraal ahaan. Waxaad sii wadi kartaa wax ka bedelka markale."
     },
     "draftSelection": {
-      "continueYourListing": "Sii wad Liiskaaga",
-      "savedProperties": "Waxaad leedahay hantiyaal kaydsan oo socda. Dooro mid aad sii wadato ama mid cusub bilow.",
-      "createNew": "Abuur Hanti Cusub",
-      "yourDrafts": "Qabyadaada ({{count}})",
-      "justStarted": "Waa la bilaabay",
+      "continueYourListing": "Sii wad Liisaskaaga",
+      "savedProperties": "Waxaad leedahay hantiyad la kaydiyay oo socda. Mid dooro si aad u sii waddo ama si cusub u billow.",
+      "createNew": "Samee Hanti Cusub",
+      "yourDrafts": "Qoraalladaada ({{count}})",
+      "justStarted": "Hadda la bilaabay",
       "step1": "Ku saabsan Meeshaada",
-      "step2": "Ka Dhig Mid Soo Jiidasho Leh",
-      "step3": "Dhamee",
-      "inProgress": "Wali waa socotaa",
-      "progress": "Tallaabada {{step}}: {{stepName}}",
+      "step2": "Ka dhig mid Gaar ah",
+      "step3": "Dhammeeyee",
+      "inProgress": "Socodka",
+      "progress": "Tillaaboa {{step}}: {{stepName}}",
       "propertyInCity": "Hanti ku taal {{city}}",
-      "listingOfType": "Liis {{type}} ah",
-      "lastEdited": "Waxa ugu dambeysay la beddelay {{time}}"
+      "listingOfType": "Liisaska {{type}}",
+      "lastEdited": "Markii u dambaysay ee la wax ka bedelay {{time}}"
     }
   }

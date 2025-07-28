@@ -140,7 +140,7 @@ const AccountScreen: React.FC = () => {
 
   return (
     <Container flex={1} backgroundColor={theme.background}>
-      <Header title={t("navigation.profile")} />
+      <Header title={t("common.tabs.profile")} />
       <StatusBar style={isDark ? "light" : "dark"} />
 
       <ScrollView

@@ -140,8 +140,8 @@ export default function AmenitiesStep({
     >
       <Container paddingBottom="xxl">
         <StepHeader
-          title={t("property.amenities.title")}
-          description={t("property.amenities.description")}
+          title={t("features.property.listing.amenities.title")}
+          description={t("features.property.listing.amenities.description")}
         />
 
         <Container>
@@ -171,15 +171,15 @@ export default function AmenitiesStep({
 
         <Container alignItems="center" marginVertical="lg">
           <Text variant="body" color="secondary" weight="medium">
-            {t("property.amenities.selectedCount", {
+            {t("features.property.listing.amenities.selectedCount", {
               count: formData.amenities.length,
             })}
           </Text>
         </Container>
 
         <InfoBox
-          title={t("property.amenities.tipTitle")}
-          content={t("property.amenities.tipContent")}
+          title={t("features.property.listing.amenities.tipTitle")}
+          content={t("features.property.listing.amenities.tipContent")}
           icon="bulb-outline"
           variant="tip"
         />

@@ -322,7 +322,7 @@ export default function SearchLocationModal({
     >
       <Container flex={1} backgroundColor="background">
         <Header
-          title={t("search.whereToGo") || "Where to go?"}
+          title={t("features.search.location.whereToGo") || "Where to go?"}
           left={{
             icon: "close",
             onPress: onClose,
@@ -336,7 +336,7 @@ export default function SearchLocationModal({
               value={searchQuery}
               onChangeText={setSearchQuery}
               placeholder={
-                t("search.searchDestinations") || "Search destinations..."
+                t("features.search.location.searchDestinations") || "Search destinations..."
               }
               style={{ fontSize: 16 }}
             />
@@ -356,7 +356,7 @@ export default function SearchLocationModal({
                 color={isDark ? theme.colors.gray[400] : theme.colors.gray[600]}
                 style={{ marginLeft: spacing.sm }}
               >
-                {t("search.searchingLocations") || "Searching locations..."}
+                {t("features.search.location.searchingLocations") || "Searching locations..."}
               </Text>
             </Container>
           )}
@@ -364,11 +364,11 @@ export default function SearchLocationModal({
           {!searchQuery && trendingError && (
             <Container alignItems="center" paddingVertical="md">
               <Text color="error">
-                {t("search.trendingCitiesError") ||
+                {t("features.search.location.trendingCitiesError") ||
                   "Could not load trending cities."}
               </Text>
               <Button
-                title={t("search.retry") || "Retry"}
+                title={t("features.search.actions.retry") || "Retry"}
                 onPress={refetchTrendingCities}
               />
             </Container>
@@ -385,7 +385,7 @@ export default function SearchLocationModal({
                 weight="semibold"
                 color={isDark ? theme.colors.gray[100] : theme.colors.gray[900]}
               >
-                {t("search.popularDestinations") || "Popular destinations"}
+                {t("features.search.location.popularDestinations") || "Popular destinations"}
               </Text>
             </Container>
           )}
@@ -403,7 +403,7 @@ export default function SearchLocationModal({
             ListEmptyComponent={
               <Container alignItems="center" paddingVertical="xl">
                 <Text variant="body" color="secondary">
-                  {t("search.noResultsFound") || "No results found"}
+                  {t("features.search.location.noResultsFound") || "No results found"}
                 </Text>
               </Container>
             }

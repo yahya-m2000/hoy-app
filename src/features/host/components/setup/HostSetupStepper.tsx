@@ -20,26 +20,26 @@ export interface HostSetupStepperProps {
 const SETUP_STEPS = [
   {
     id: "cancellation",
-    title: "host.policies.cancellation.title",
-    subtitle: "host.policies.cancellation.subtitle",
+    title: "features.host.setup.policies.cancellation.title",
+    subtitle: "features.host.setup.policies.cancellation.subtitle",
     icon: "calendar-outline",
   },
   {
     id: "rules",
-    title: "host.policies.houseRules.title",
-    subtitle: "host.policies.houseRules.subtitle",
+    title: "features.host.setup.policies.houseRules.title",
+    subtitle: "features.host.setup.policies.houseRules.subtitle",
     icon: "list-outline",
   },
   {
     id: "safety",
-    title: "host.policies.safety.title",
-    subtitle: "host.policies.safety.subtitle",
+    title: "features.host.setup.policies.safety.title",
+    subtitle: "features.host.setup.policies.safety.subtitle",
     icon: "shield-checkmark-outline",
   },
   {
     id: "property",
-    title: "host.policies.property.title",
-    subtitle: "host.policies.property.subtitle",
+    title: "features.host.setup.policies.property.title",
+    subtitle: "features.host.setup.policies.property.subtitle",
     icon: "home-outline",
   },
 ];
@@ -167,11 +167,11 @@ export const HostSetupStepper: React.FC<HostSetupStepperProps> = ({
     return (
       <OverlayScreen
         headerIcon="settings-outline"
-        headerTitle={t("host.setup.title")}
-        headerSubtitle={t("host.setup.subtitle")}
+        headerTitle={t("features.host.setup.main.title")}
+        headerSubtitle={t("features.host.setup.main.subtitle")}
         isLoading={true}
         loadingText={
-          isSubmitting ? t("host.setup.finish") : t("common.loading")
+          isSubmitting ? t("features.host.setup.navigation.finish") : t("common.loading")
         }
       >
         <View />
@@ -217,7 +217,7 @@ export const HostSetupStepper: React.FC<HostSetupStepperProps> = ({
 
           {currentStep === 0 && (
             <Button
-              title={t("host.setup.skip")}
+              title={t("features.host.setup.navigation.skip")}
               variant="ghost"
               onPress={handleSkip}
               style={styles.skipButton}
@@ -226,7 +226,7 @@ export const HostSetupStepper: React.FC<HostSetupStepperProps> = ({
 
           <Button
             title={
-              isLastStep ? t("host.setup.finish") : t("host.setup.continue")
+              isLastStep ? t("features.host.setup.navigation.finish") : t("features.host.setup.navigation.continue")
             }
             variant="primary"
             onPress={handleNext}

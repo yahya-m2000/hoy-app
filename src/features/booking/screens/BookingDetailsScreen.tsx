@@ -40,7 +40,7 @@ import {
   Screen,
 } from "@shared/components";
 
-import { PropertyImageContainer } from "src/features/properties/components/details";
+import { PropertyImageContainer, PropertyMap } from "src/features/properties/components/details";
 
 // Utils
 import {
@@ -183,10 +183,10 @@ export default function BookingDetailsScreen({
     const property = booking.propertyId as any;
     const checkInDate = new Date(booking.checkIn);
     const checkOutDate = new Date(booking.checkOut);
-    const title = t("bookings.calendarTitle", {
-      property: property?.name || t("bookings.property"),
+    const title = t("features.booking.calendar.calendarTitle", {
+      property: property?.name || t("features.booking.details.property"),
     });
-    const details = t("bookings.calendarDetails", {
+    const details = t("features.booking.calendar.calendarDetails", {
       checkIn: formatDate(checkInDate, "long"),
       checkOut: formatDate(checkOutDate, "long"),
       guests: booking.guests.adults + (booking.guests.children || 0),
@@ -199,7 +199,10 @@ export default function BookingDetailsScreen({
         checkOutDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
       const appleCalUrl = `calshow:${checkInDate.getTime() / 1000}`;
       LinkingExpo.openURL(appleCalUrl).catch(() => {
-        showToast({ message: t("bookings.calendarError"), type: "error" });
+        showToast({
+          message: t("features.booking.calendar.calendarError"),
+          type: "error",
+        });
       });
     } else {
       // Use Google Calendar
@@ -211,7 +214,10 @@ export default function BookingDetailsScreen({
         title
       )}&dates=${startDate}/${endDate}&details=${encodeURIComponent(details)}`;
       LinkingExpo.openURL(calendarUrl).catch(() => {
-        showToast({ message: t("bookings.calendarError"), type: "error" });
+        showToast({
+          message: t("features.booking.calendar.calendarError"),
+          type: "error",
+        });
       });
     }
   };
@@ -220,7 +226,10 @@ export default function BookingDetailsScreen({
   const handleGetDirections = () => {
     const property = booking?.propertyId as any;
     if (!property?.coordinates) {
-      showToast({ message: t("bookings.locationError"), type: "error" });
+      showToast({
+        message: t("features.booking.location.locationError"),
+        type: "error",
+      });
       return;
     }
     const { latitude, longitude } = property.coordinates;
@@ -233,7 +242,10 @@ export default function BookingDetailsScreen({
       url = `https://maps.google.com/maps?daddr=${latitude},${longitude}`;
     }
     LinkingExpo.openURL(url).catch(() => {
-      showToast({ message: t("bookings.mapsError"), type: "error" });
+      showToast({
+        message: t("features.booking.location.mapsError"),
+        type: "error",
+      });
     });
   };
 
@@ -242,24 +254,30 @@ export default function BookingDetailsScreen({
     const property = booking?.propertyId as any;
     const phone = property?.host?.phoneNumber || booking?.contactInfo?.phone;
     if (!phone) {
-      showToast({ message: t("bookings.whatsappError"), type: "error" });
+      showToast({
+        message: t("features.booking.communication.whatsappError"),
+        type: "error",
+      });
       return;
     }
     // WhatsApp deep link
     const url = `https://wa.me/${phone}`;
     LinkingExpo.openURL(url).catch(() => {
-      showToast({ message: t("bookings.whatsappError"), type: "error" });
+      showToast({
+        message: t("features.booking.communication.whatsappError"),
+        type: "error",
+      });
     });
   };
 
   // Handle cancel booking (traveler view)
   const handleCancelBooking = () => {
     Alert.alert(
-      t("bookings.cancelBookingTitle"),
-      t("bookings.cancelBookingMessage"),
+      t("features.booking.cancellation.cancelBookingTitle"),
+      t("features.booking.cancellation.cancelBookingMessage"),
       [
         {
-          text: t("bookings.keepBooking"),
+          text: t("features.booking.cancellation.keepBooking"),
           style: "cancel",
         },
         {
@@ -270,13 +288,13 @@ export default function BookingDetailsScreen({
             try {
               await cancelBookingMutation.mutateAsync(booking._id);
               showToast({
-                message: t("bookings.cancellationSuccess"),
+                message: t("features.booking.cancellation.cancellationSuccess"),
                 type: "success",
               });
               refetch();
             } catch (error) {
               showToast({
-                message: t("bookings.cancellationFailed"),
+                message: t("features.booking.cancellation.cancellationFailed"),
                 type: "error",
               });
             }
@@ -312,8 +330,8 @@ export default function BookingDetailsScreen({
   const getScreenTitle = () => {
     if (customTitle) return customTitle;
     return isHostView
-      ? t("host.today.reservations.detailsTitle")
-      : t("bookings.detailsTitle");
+      ? t("features.host.dashboard.reservations.detailsTitle")
+      : t("features.booking.details.detailsTitle");
   };
 
   // Get back navigation handler
@@ -342,13 +360,13 @@ export default function BookingDetailsScreen({
           icon="calendar-outline"
           title={
             isHostView
-              ? t("host.today.reservations.notFound")
-              : t("bookings.notFound")
+              ? t("features.host.dashboard.reservations.notFound")
+              : t("features.booking.errors.notFound")
           }
           message={
             isHostView
-              ? t("host.today.reservations.notFoundMessage")
-              : t("bookings.notFoundMessage")
+              ? t("features.host.dashboard.reservations.notFoundMessage")
+              : t("features.booking.errors.notFoundMessage")
           }
           action={{
             label: t("common.retry"),
@@ -428,7 +446,7 @@ export default function BookingDetailsScreen({
                             color={theme.colors.gray[600]}
                           >
                             {property.rating?.toFixed(1) ||
-                              t("bookings.newProperty")}
+                              t("features.booking.details.newProperty")}
                             {property.reviewCount
                               ? ` (${property.reviewCount})`
                               : ""}
@@ -448,9 +466,21 @@ export default function BookingDetailsScreen({
           </Container>
         )}
 
+        {/* Property Location Map */}
+        {property?.coordinates && (
+          <Container marginBottom="lg">
+            <PropertyMap
+              coordinates={property.coordinates}
+              propertyName={property.name}
+              address={property.address}
+              showToast={showToast}
+            />
+          </Container>
+        )}
+
         {/* Booking Status */}
         <Container marginBottom="lg">
-          <Section title={t("bookings.status.title")}>
+          <Section title={t("features.booking.details.status.title")}>
             <Container flexDirection="row" style={{ gap: 16 }}>
               <Container flex={1}>
                 <BookingStatusBadge
@@ -468,8 +498,8 @@ export default function BookingDetailsScreen({
           <Section
             title={
               isHostView
-                ? t("host.today.reservations.tripDetailsTitle")
-                : t("bookings.tripDetailsTitle")
+                ? t("features.host.dashboard.reservations.tripDetailsTitle")
+                : t("features.booking.details.tripDetailsTitle")
             }
           >
             <Container style={{ gap: 16 }}>
@@ -480,8 +510,8 @@ export default function BookingDetailsScreen({
                 <Container flex={1} marginLeft="md">
                   <Text variant="body" weight="medium">
                     {isHostView
-                      ? t("host.today.reservations.checkIn")
-                      : t("bookings.checkIn")}
+                      ? t("features.host.dashboard.reservations.checkIn")
+                      : t("features.booking.details.checkIn")}
                   </Text>
                   <Container marginTop="xs">
                     <Text variant="caption" color={theme.colors.gray[600]}>
@@ -498,8 +528,8 @@ export default function BookingDetailsScreen({
                 <Container flex={1} marginLeft="md">
                   <Text variant="body" weight="medium">
                     {isHostView
-                      ? t("host.today.reservations.checkOut")
-                      : t("bookings.checkOut")}
+                      ? t("features.host.dashboard.reservations.checkOut")
+                      : t("features.booking.details.checkOut")}
                   </Text>
                   <Container marginTop="xs">
                     <Text variant="caption" color={theme.colors.gray[600]}>
@@ -516,8 +546,8 @@ export default function BookingDetailsScreen({
                 <Container flex={1} marginLeft="md">
                   <Text variant="body" weight="medium">
                     {isHostView
-                      ? t("host.today.reservations.guests")
-                      : t("bookings.guests")}
+                      ? t("features.host.dashboard.reservations.guests")
+                      : t("features.booking.details.guests")}
                   </Text>
                   <Container marginTop="xs">
                     <Text variant="caption" color={theme.colors.gray[600]}>
@@ -525,35 +555,44 @@ export default function BookingDetailsScreen({
                         <>
                           {booking.guests.adults}{" "}
                           {booking.guests.adults === 1
-                            ? t("host.today.reservations.adult")
-                            : t("host.today.reservations.adults")}
+                            ? t("features.host.dashboard.reservations.adult")
+                            : t("features.host.dashboard.reservations.adults")}
                           {booking.guests.children
                             ? `, ${booking.guests.children} ${
                                 booking.guests.children === 1
-                                  ? t("host.today.reservations.child")
-                                  : t("host.today.reservations.children")
+                                  ? t(
+                                      "features.host.dashboard.reservations.child"
+                                    )
+                                  : t(
+                                      "features.host.dashboard.reservations.children"
+                                    )
                               }`
                             : ""}
                           {booking.guests.infants
                             ? `, ${booking.guests.infants} ${
                                 booking.guests.infants === 1
-                                  ? t("host.today.reservations.infant")
-                                  : t("host.today.reservations.infants")
+                                  ? t(
+                                      "features.host.dashboard.reservations.infant"
+                                    )
+                                  : t(
+                                      "features.host.dashboard.reservations.infants"
+                                    )
                               }`
                             : ""}
                         </>
                       ) : (
                         <>
-                          {booking.guests.adults} {t("bookings.adult")}
+                          {booking.guests.adults}{" "}
+                          {t("features.booking.details.adult")}
                           {booking.guests.adults !== 1 ? "s" : ""}
                           {booking.guests.children
                             ? `, ${booking.guests.children} ${t(
-                                "bookings.child"
+                                "features.booking.details.child"
                               )}${booking.guests.children !== 1 ? "ren" : ""}`
                             : ""}
                           {booking.guests.infants
                             ? `, ${booking.guests.infants} ${t(
-                                "bookings.infant"
+                                "features.booking.details.infant"
                               )}${booking.guests.infants !== 1 ? "s" : ""}`
                             : ""}
                         </>
@@ -570,8 +609,8 @@ export default function BookingDetailsScreen({
                 <Container flex={1} marginLeft="md">
                   <Text variant="body" weight="medium">
                     {isHostView
-                      ? t("host.today.reservations.duration")
-                      : t("bookings.duration")}
+                      ? t("features.host.dashboard.reservations.duration")
+                      : t("features.booking.details.duration")}
                   </Text>
                   <Container marginTop="xs">
                     <Text variant="caption" color={theme.colors.gray[600]}>
@@ -579,12 +618,12 @@ export default function BookingDetailsScreen({
                         <>
                           {daysCount}{" "}
                           {daysCount === 1
-                            ? t("host.today.reservations.night")
-                            : t("host.today.reservations.nights")}
+                            ? t("features.host.dashboard.reservations.night")
+                            : t("features.host.dashboard.reservations.nights")}
                         </>
                       ) : (
                         <>
-                          {daysCount} {t("bookings.night")}
+                          {daysCount} {t("features.booking.details.night")}
                           {daysCount !== 1 ? "s" : ""}
                         </>
                       )}
@@ -599,7 +638,9 @@ export default function BookingDetailsScreen({
         {/* Guest Information (Host view only) */}
         {isHostView && booking.contactInfo && (
           <Container marginBottom="lg">
-            <Section title={t("host.today.reservations.guestInfoTitle")}>
+            <Section
+              title={t("features.host.dashboard.reservations.guestInfoTitle")}
+            >
               <Container style={{ gap: 16 }}>
                 <Container flexDirection="row" alignItems="flex-start">
                   <Container width={32} alignItems="center" marginTop="sm">
@@ -607,7 +648,7 @@ export default function BookingDetailsScreen({
                   </Container>
                   <Container flex={1} marginLeft="md">
                     <Text variant="body" weight="medium">
-                      {t("host.today.reservations.guestName")}
+                      {t("features.host.dashboard.reservations.guestName")}
                     </Text>
                     <Container marginTop="xs">
                       <Text variant="caption" color={theme.colors.gray[600]}>
@@ -623,7 +664,7 @@ export default function BookingDetailsScreen({
                   </Container>
                   <Container flex={1} marginLeft="md">
                     <Text variant="body" weight="medium">
-                      {t("host.today.reservations.guestEmail")}
+                      {t("features.host.dashboard.reservations.guestEmail")}
                     </Text>
                     <Container marginTop="xs">
                       <Text variant="caption" color={theme.colors.gray[600]}>
@@ -640,7 +681,7 @@ export default function BookingDetailsScreen({
                     </Container>
                     <Container flex={1} marginLeft="md">
                       <Text variant="body" weight="medium">
-                        {t("host.today.reservations.guestPhone")}
+                        {t("features.host.dashboard.reservations.guestPhone")}
                       </Text>
                       <Container marginTop="xs">
                         <Text variant="caption" color={theme.colors.gray[600]}>
@@ -658,7 +699,7 @@ export default function BookingDetailsScreen({
         {/* Contact Information (Traveler view only) */}
         {!isHostView && booking.contactInfo && (
           <Container marginBottom="lg">
-            <Section title={t("bookings.contactInfoTitle")}>
+            <Section title={t("features.booking.details.contactInfoTitle")}>
               <Container style={{ gap: 16 }}>
                 <Container flexDirection="row" alignItems="flex-start">
                   <Container width={32} alignItems="center" marginTop="sm">
@@ -666,7 +707,7 @@ export default function BookingDetailsScreen({
                   </Container>
                   <Container flex={1} marginLeft="md">
                     <Text variant="body" weight="medium">
-                      {t("bookings.contactName")}
+                      {t("features.booking.details.contactName")}
                     </Text>
                     <Container marginTop="xs">
                       <Text variant="caption" color={theme.colors.gray[600]}>
@@ -682,7 +723,7 @@ export default function BookingDetailsScreen({
                   </Container>
                   <Container flex={1} marginLeft="md">
                     <Text variant="body" weight="medium">
-                      {t("bookings.contactEmail")}
+                      {t("features.booking.details.contactEmail")}
                     </Text>
                     <Container marginTop="xs">
                       <Text variant="caption" color={theme.colors.gray[600]}>
@@ -699,7 +740,7 @@ export default function BookingDetailsScreen({
                     </Container>
                     <Container flex={1} marginLeft="md">
                       <Text variant="body" weight="medium">
-                        {t("bookings.contactPhone")}
+                        {t("features.booking.details.contactPhone")}
                       </Text>
                       <Container marginTop="xs">
                         <Text variant="caption" color={theme.colors.gray[600]}>
@@ -719,8 +760,8 @@ export default function BookingDetailsScreen({
           <Section
             title={
               isHostView
-                ? t("host.today.reservations.priceDetailsTitle")
-                : t("bookings.priceDetailsTitle")
+                ? t("features.host.dashboard.reservations.priceDetailsTitle")
+                : t("features.booking.details.priceDetailsTitle")
             }
           >
             <Container style={{ gap: 8 }}>
@@ -736,7 +777,7 @@ export default function BookingDetailsScreen({
                       ((booking.pricing?.totalPrice ?? booking.totalAmount) ||
                         0) / daysCount
                     )}{" "}
-                    x {daysCount} {t("bookings.night")}
+                    x {daysCount} {t("features.booking.details.night")}
                     {daysCount !== 1 ? "s" : ""}
                   </Text>
                   <Text variant="body">
@@ -758,8 +799,8 @@ export default function BookingDetailsScreen({
               >
                 <Text variant="body" weight="semibold">
                   {isHostView
-                    ? t("host.today.reservations.total")
-                    : t("bookings.total")}
+                    ? t("features.host.dashboard.reservations.total")
+                    : t("features.booking.details.total")}
                 </Text>
                 <Text variant="body" weight="semibold">
                   {isHostView ? (
@@ -787,8 +828,10 @@ export default function BookingDetailsScreen({
             <Section
               title={
                 isHostView
-                  ? t("host.today.reservations.specialRequestsTitle")
-                  : t("bookings.specialRequestsTitle")
+                  ? t(
+                      "features.host.dashboard.reservations.specialRequestsTitle"
+                    )
+                  : t("features.booking.details.specialRequestsTitle")
               }
             >
               <Text variant="body" color={theme.colors.gray[700]}>
@@ -807,7 +850,9 @@ export default function BookingDetailsScreen({
                 <>
                   <Button
                     variant="primary"
-                    title={t("host.today.reservations.confirmBooking")}
+                    title={t(
+                      "features.host.dashboard.reservations.confirmBooking"
+                    )}
                     onPress={async () => {
                       if (!booking) return;
                       const updated = await handleUpdateStatus(
@@ -833,7 +878,9 @@ export default function BookingDetailsScreen({
                   />
                   <Button
                     variant="secondary"
-                    title={t("host.today.reservations.cancelBooking")}
+                    title={t(
+                      "features.host.dashboard.reservations.cancelBooking"
+                    )}
                     onPress={async () => {
                       if (!booking) return;
                       const updated = await handleUpdateStatus(
@@ -864,7 +911,7 @@ export default function BookingDetailsScreen({
                 <>
                   <Button
                     variant="primary"
-                    title={t("bookings.addToCalendar")}
+                    title={t("features.booking.actions.addToCalendar")}
                     onPress={handleAddToCalendar}
                     icon={<Icon name="calendar-outline" size={iconSize.sm} />}
                     iconPosition="left"
@@ -872,7 +919,7 @@ export default function BookingDetailsScreen({
                   {(property as any)?.coordinates && (
                     <Button
                       variant="primary"
-                      title={t("bookings.getDirections")}
+                      title={t("features.booking.actions.getDirections")}
                       onPress={handleGetDirections}
                       icon={<Icon name="navigate-outline" size={iconSize.sm} />}
                       iconPosition="left"
@@ -880,7 +927,7 @@ export default function BookingDetailsScreen({
                   )}
                   <Button
                     variant="primary"
-                    title={t("bookings.contactHost")}
+                    title={t("features.booking.actions.contactHost")}
                     onPress={handleContactHost}
                     icon={<Icon name="logo-whatsapp" size={iconSize.sm} />}
                     iconPosition="left"
@@ -890,7 +937,7 @@ export default function BookingDetailsScreen({
                       booking.bookingStatus === "pending") && (
                       <Button
                         variant="primary"
-                        title={t("bookings.cancelBooking")}
+                        title={t("features.booking.actions.cancelBooking")}
                         onPress={handleCancelBooking}
                         icon={
                           <Icon
@@ -917,8 +964,8 @@ export default function BookingDetailsScreen({
               style={{ textAlign: "center" }}
             >
               {isHostView
-                ? t("host.today.reservations.reservationId")
-                : t("bookings.bookingId")}
+                ? t("features.host.dashboard.reservations.reservationId")
+                : t("features.booking.details.bookingId")}
               : {booking._id}
             </Text>
             <Text
@@ -927,8 +974,8 @@ export default function BookingDetailsScreen({
               style={{ textAlign: "center", marginTop: 4 }}
             >
               {isHostView
-                ? t("host.today.reservations.bookedOn")
-                : t("bookings.bookedOn")}
+                ? t("features.host.dashboard.reservations.bookedOn")
+                : t("features.booking.details.bookedOn")}
               : {formatDate(booking.createdAt, "medium")}
             </Text>
           </Section>

@@ -76,7 +76,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
               color={isDark ? theme.colors.gray[300] : theme.colors.gray[600]}
               style={{ marginBottom: 2 }}
             >
-              {t("search.where")}
+              {t("features.search.location.where")}
             </Text>
             <Text
               size="md"
@@ -91,7 +91,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
               }
               numberOfLines={1}
             >
-              {location || t("search.goingTo")}
+              {location || t("features.search.location.goingTo")}
             </Text>
           </Container>
         </Container>
@@ -141,7 +141,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
               color={isDark ? theme.colors.gray[300] : theme.colors.gray[600]}
               style={{ marginBottom: 2 }}
             >
-              {t("search.when")}
+              {t("features.search.dates.when")}
             </Text>
             <Text
               size="md"
@@ -156,7 +156,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
               }
               numberOfLines={1}
             >
-              {dates || t("search.selectDates")}
+              {dates || t("features.search.dates.selectDates")}
             </Text>
           </Container>
         </Container>
@@ -200,7 +200,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
               color={isDark ? theme.colors.gray[300] : theme.colors.gray[600]}
               style={{ marginBottom: 2 }}
             >
-              {t("search.who")}
+              {t("features.search.travelers.who")}
             </Text>
             <Text
               size="md"
@@ -248,7 +248,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
           color={theme.white}
           style={{ marginLeft: 8 }}
         >
-          {t("search.search")}
+          {t("features.search.actions.search")}
         </Text>
       </TouchableOpacity>
 

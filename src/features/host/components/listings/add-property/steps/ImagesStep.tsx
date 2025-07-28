@@ -86,7 +86,7 @@ const ImageItem = ({
           backgroundColor="success"
         >
           <Text variant="caption" weight="semibold" color="white">
-            {t("property.images.main")}
+            {t("features.property.details.images.main")}
           </Text>
         </Container>
       )}
@@ -154,7 +154,7 @@ const UploadButton = ({
                 color="primary"
                 align="center"
               >
-                {t("property.images.addPhotos")}
+                {t("features.property.details.images.addPhotos")}
               </Text>
               <Text
                 variant="body"
@@ -162,7 +162,7 @@ const UploadButton = ({
                 align="center"
                 style={{ marginTop: spacing.xs }}
               >
-                {t("property.images.chooseFromLibrary")}
+                {t("features.property.details.images.chooseFromLibrary")}
               </Text>
             </Container>
           </>
@@ -187,8 +187,8 @@ export default function ImagesStep({
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
       Alert.alert(
-        t("property.permissionRequired"),
-        t("property.cameraRollPermission"),
+        t("features.property.details.images.permissionRequired"),
+        t("features.property.details.images.cameraRollPermission"),
         [{ text: t("common.ok") }]
       );
       return false;
@@ -221,7 +221,7 @@ export default function ImagesStep({
       return uploadResult.data.images.map((img) => img.imageUrl);
     } catch (error) {
       console.error("Property image upload error", error);
-      throw new Error(t("property.uploadError"));
+      throw new Error(t("features.property.details.images.uploadError"));
     }
   };
 
@@ -263,7 +263,7 @@ export default function ImagesStep({
       }
     } catch {
       setUploading(false);
-      Alert.alert(t("common.error"), t("property.pickError"));
+      Alert.alert(t("common.error"), t("features.property.details.images.pickError"));
     }
   };
 
@@ -274,8 +274,8 @@ export default function ImagesStep({
     const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
     if (cameraPermission.status !== "granted") {
       Alert.alert(
-        t("property.permissionRequired"),
-        t("property.cameraPermission"),
+        t("features.property.details.images.permissionRequired"),
+        t("features.property.details.images.cameraPermission"),
         [{ text: t("common.ok") }]
       );
       return;
@@ -312,7 +312,7 @@ export default function ImagesStep({
       }
     } catch {
       setUploading(false);
-      Alert.alert(t("common.error"), t("property.cameraError"));
+      Alert.alert(t("common.error"), t("features.property.details.images.cameraError"));
     }
   };
 
@@ -323,11 +323,11 @@ export default function ImagesStep({
 
   const showImageOptions = () => {
     Alert.alert(
-      t("property.images.addPhotos"),
-      t("property.images.chooseMethod"),
+      t("features.property.details.images.addPhotos"),
+      t("features.property.details.images.chooseMethod"),
       [
-        { text: t("property.images.camera"), onPress: takePhoto },
-        { text: t("property.images.photoLibrary"), onPress: pickImages },
+        { text: t("features.property.details.images.camera"), onPress: takePhoto },
+        { text: t("features.property.details.images.photoLibrary"), onPress: pickImages },
         { text: t("common.cancel"), style: "cancel" },
       ]
     );
@@ -350,8 +350,8 @@ export default function ImagesStep({
     >
       <Container paddingBottom="xxl">
         <StepHeader
-          title={t("property.steps.images.title")}
-          description={t("property.steps.images.description")}
+          title={t("features.property.listing.steps.images.title")}
+          description={t("features.property.listing.steps.images.description")}
         />
 
         <UploadButton onPress={showImageOptions} uploading={uploading} />
@@ -361,7 +361,7 @@ export default function ImagesStep({
           <Container marginBottom="lg">
             <Container marginBottom="md">
               <Text variant="h6" weight="semibold" color="primary">
-                {t("property.photosAdded", { count: images.length })}
+                {t("features.property.details.images.photosAdded", { count: images.length })}
               </Text>
             </Container>
 
@@ -395,8 +395,8 @@ export default function ImagesStep({
         )}
 
         <InfoBox
-          title={t("property.steps.images.tipTitle")}
-          content={t("property.steps.images.tipContent")}
+          title={t("features.property.listing.steps.images.tipTitle")}
+          content={t("features.property.listing.steps.images.tipContent")}
           icon="bulb-outline"
           variant="tip"
         />

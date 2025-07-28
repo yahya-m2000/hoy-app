@@ -61,15 +61,15 @@ const VerificationCard: React.FC<VerificationCardProps> = ({
   };
 
   const getStatusText = () => {
-    if (isVerified) return t("host.verification.verified");
-    if (isLoading) return t("host.verification.pending");
-    return t("host.verification.notVerified");
+    if (isVerified) return t("features.host.setup.verification.verified");
+    if (isLoading) return t("features.host.setup.verification.pending");
+    return t("features.host.setup.verification.notVerified");
   };
 
   const getActionText = () => {
-    if (isVerified) return t("host.verification.completed");
-    if (isLoading) return t("host.verification.verifying");
-    return t("host.verification.verify");
+    if (isVerified) return t("features.host.setup.verification.completed");
+    if (isLoading) return t("features.host.setup.verification.verifying");
+    return t("features.host.setup.verification.verify");
   };
 
   return (
@@ -133,7 +133,7 @@ const VerificationCard: React.FC<VerificationCardProps> = ({
       >
         {canResend && onResend && (
           <Button
-            title={t("host.verification.resend")}
+            title={t("features.host.setup.verification.resend")}
             variant="ghost"
             size="small"
             onPress={onResend}
@@ -189,7 +189,7 @@ export const AccountVerificationStep: React.FC<
     if (showCodeInputs.email) {
       // Verify code
       if (!verificationCodes.email.trim()) {
-        Alert.alert(t("common.error"), t("host.verification.enterCode"));
+        Alert.alert(t("common.error"), t("features.host.setup.verification.enterCode"));
         return;
       }
 
@@ -205,18 +205,18 @@ export const AccountVerificationStep: React.FC<
           setVerificationCodes((prev) => ({ ...prev, email: "" }));
           Alert.alert(
             t("common.success"),
-            t("host.verification.emailVerified")
+            t("features.host.setup.verification.emailVerified")
           );
         } else {
           Alert.alert(
             t("common.error"),
-            result.message || t("host.verification.invalidCode")
+            result.message || t("features.host.setup.verification.invalidCode")
           );
         }
       } catch (error) {
         Alert.alert(
           t("common.error"),
-          t("host.verification.verificationFailed")
+          t("features.host.setup.verification.verificationFailed")
         );
       } finally {
         setLoading("email", false);
@@ -234,15 +234,15 @@ export const AccountVerificationStep: React.FC<
             email: result.verificationId || "",
           }));
           setShowCodeInputs((prev) => ({ ...prev, email: true }));
-          Alert.alert(t("common.success"), t("host.verification.codeSent"));
+          Alert.alert(t("common.success"), t("features.host.setup.verification.codeSent"));
         } else {
           Alert.alert(
             t("common.error"),
-            result.message || t("host.verification.sendFailed")
+            result.message || t("features.host.setup.verification.sendFailed")
           );
         }
       } catch (error) {
-        Alert.alert(t("common.error"), t("host.verification.sendFailed"));
+        Alert.alert(t("common.error"), t("features.host.setup.verification.sendFailed"));
       } finally {
         setLoading("email", false);
       }
@@ -253,7 +253,7 @@ export const AccountVerificationStep: React.FC<
     if (showCodeInputs.phone) {
       // Verify code
       if (!verificationCodes.phone.trim()) {
-        Alert.alert(t("common.error"), t("host.verification.enterCode"));
+        Alert.alert(t("common.error"), t("features.host.setup.verification.enterCode"));
         return;
       }
 
@@ -269,18 +269,18 @@ export const AccountVerificationStep: React.FC<
           setVerificationCodes((prev) => ({ ...prev, phone: "" }));
           Alert.alert(
             t("common.success"),
-            t("host.verification.phoneVerified")
+            t("features.host.setup.verification.phoneVerified")
           );
         } else {
           Alert.alert(
             t("common.error"),
-            result.message || t("host.verification.invalidCode")
+            result.message || t("features.host.setup.verification.invalidCode")
           );
         }
       } catch (error) {
         Alert.alert(
           t("common.error"),
-          t("host.verification.verificationFailed")
+          t("features.host.setup.verification.verificationFailed")
         );
       } finally {
         setLoading("phone", false);
@@ -294,15 +294,15 @@ export const AccountVerificationStep: React.FC<
         );
         if (result.success) {
           setShowCodeInputs((prev) => ({ ...prev, phone: true }));
-          Alert.alert(t("common.success"), t("host.verification.codeSent"));
+          Alert.alert(t("common.success"), t("features.host.setup.verification.codeSent"));
         } else {
           Alert.alert(
             t("common.error"),
-            result.message || t("host.verification.sendFailed")
+            result.message || t("features.host.setup.verification.sendFailed")
           );
         }
       } catch (error) {
-        Alert.alert(t("common.error"), t("host.verification.sendFailed"));
+        Alert.alert(t("common.error"), t("features.host.setup.verification.sendFailed"));
       } finally {
         setLoading("phone", false);
       }
@@ -321,18 +321,18 @@ export const AccountVerificationStep: React.FC<
           setLoading("identity", false);
           Alert.alert(
             t("common.success"),
-            t("host.verification.identityVerified")
+            t("features.host.setup.verification.identityVerified")
           );
         }, 2000);
       } else {
         Alert.alert(
           t("common.error"),
-          result.message || t("host.verification.identityFailed")
+          result.message || t("features.host.setup.verification.identityFailed")
         );
         setLoading("identity", false);
       }
     } catch (error) {
-      Alert.alert(t("common.error"), t("host.verification.identityFailed"));
+      Alert.alert(t("common.error"), t("features.host.setup.verification.identityFailed"));
       setLoading("identity", false);
     }
   };
@@ -346,15 +346,15 @@ export const AccountVerificationStep: React.FC<
           : await HostSetupService.sendPhoneVerification("+1234567890");
 
       if (result.success) {
-        Alert.alert(t("common.success"), t("host.verification.codeResent"));
+        Alert.alert(t("common.success"), t("features.host.setup.verification.codeResent"));
       } else {
         Alert.alert(
           t("common.error"),
-          result.message || t("host.verification.resendFailed")
+          result.message || t("features.host.setup.verification.resendFailed")
         );
       }
     } catch (error) {
-      Alert.alert(t("common.error"), t("host.verification.resendFailed"));
+      Alert.alert(t("common.error"), t("features.host.setup.verification.resendFailed"));
     } finally {
       setLoading(type, false);
     }
@@ -364,7 +364,7 @@ export const AccountVerificationStep: React.FC<
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Container paddingHorizontal="lg" paddingVertical="md">
         <Text variant="h2" color="primary" marginBottom="sm">
-          {t("host.verification.title")}
+          {t("features.host.setup.verification.title")}
         </Text>
 
         <Text
@@ -373,14 +373,14 @@ export const AccountVerificationStep: React.FC<
           marginBottom="xl"
           style={{ lineHeight: 22 }}
         >
-          {t("host.verification.subtitle")}
+          {t("features.host.setup.verification.subtitle")}
         </Text>
 
         {/* Email Verification */}
         <VerificationCard
           type="email"
-          title={t("host.verification.email.title")}
-          subtitle={t("host.verification.email.subtitle")}
+          title={t("features.host.setup.verification.email.title")}
+          subtitle={t("features.host.setup.verification.email.subtitle")}
           icon="mail-outline"
           isVerified={data.isEmailVerified || false}
           isLoading={loadingStates.email}
@@ -395,12 +395,12 @@ export const AccountVerificationStep: React.FC<
         {showCodeInputs.email && (
           <Container marginBottom="lg" paddingHorizontal="md">
             <Input
-              label={t("host.verification.verificationCode")}
+              label={t("features.host.setup.verification.verificationCode")}
               value={verificationCodes.email}
               onChangeText={(text) =>
                 setVerificationCodes((prev) => ({ ...prev, email: text }))
               }
-              placeholder={t("host.verification.enterCode")}
+              placeholder={t("features.host.setup.verification.enterCode")}
               keyboardType="number-pad"
               maxLength={6}
               error={errors.emailCode}
@@ -411,8 +411,8 @@ export const AccountVerificationStep: React.FC<
         {/* Phone Verification */}
         <VerificationCard
           type="phone"
-          title={t("host.verification.phone.title")}
-          subtitle={t("host.verification.phone.subtitle")}
+          title={t("features.host.setup.verification.phone.title")}
+          subtitle={t("features.host.setup.verification.phone.subtitle")}
           icon="call-outline"
           isVerified={data.isPhoneVerified || false}
           isLoading={loadingStates.phone}
@@ -427,12 +427,12 @@ export const AccountVerificationStep: React.FC<
         {showCodeInputs.phone && (
           <Container marginBottom="lg" paddingHorizontal="md">
             <Input
-              label={t("host.verification.verificationCode")}
+              label={t("features.host.setup.verification.verificationCode")}
               value={verificationCodes.phone}
               onChangeText={(text) =>
                 setVerificationCodes((prev) => ({ ...prev, phone: text }))
               }
-              placeholder={t("host.verification.enterCode")}
+              placeholder={t("features.host.setup.verification.enterCode")}
               keyboardType="number-pad"
               maxLength={6}
               error={errors.phoneCode}
@@ -443,8 +443,8 @@ export const AccountVerificationStep: React.FC<
         {/* Identity Verification */}
         <VerificationCard
           type="identity"
-          title={t("host.verification.identity.title")}
-          subtitle={t("host.verification.identity.subtitle")}
+          title={t("features.host.setup.verification.identity.title")}
+          subtitle={t("features.host.setup.verification.identity.subtitle")}
           icon="person-outline"
           isVerified={data.isIdentityVerified || false}
           isLoading={loadingStates.identity}
@@ -467,11 +467,11 @@ export const AccountVerificationStep: React.FC<
               color={theme.colors.primary}
             />
             <Text variant="subtitle" color="primary" marginLeft="sm">
-              {t("host.verification.whyVerify")}
+              {t("features.host.setup.verification.whyVerify")}
             </Text>
           </Container>
           <Text variant="body" color="secondary" style={{ lineHeight: 20 }}>
-            {t("host.verification.whyVerifyText")}
+            {t("features.host.setup.verification.whyVerifyText")}
           </Text>
         </Container>
       </Container>

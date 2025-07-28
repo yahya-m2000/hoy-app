@@ -48,8 +48,8 @@ export default function SuccessStep({
         style={{ marginBottom: spacing.sm, textAlign: "center" }}
       >
         {isPublished
-          ? t("property.steps.success.congratulations")
-          : t("property.steps.success.draftSaved")}
+          ? t("features.property.listing.steps.success.congratulations")
+          : t("features.property.listing.steps.success.draftSaved")}
       </Text>
 
       <Text
@@ -58,20 +58,20 @@ export default function SuccessStep({
         style={{ marginBottom: spacing.xl, textAlign: "center" }}
       >
         {isPublished
-          ? t("property.steps.success.publishedMessage")
-          : t("property.steps.success.draftMessage")}
+          ? t("features.property.listing.steps.success.publishedMessage")
+          : t("features.property.listing.steps.success.draftMessage")}
       </Text>
 
       <Container marginTop="lg">
         <Button
-          title={t("property.common.viewListing")}
+          title={t("features.property.listing.actions.viewListing")}
           variant="primary"
           onPress={handleViewListing}
           style={{ marginBottom: spacing.md }}
         />
 
         <Button
-          title={t("property.common.addAnother")}
+          title={t("features.property.listing.actions.addAnother")}
           variant="outline"
           onPress={handleAddAnother}
           style={{ marginBottom: spacing.md }}

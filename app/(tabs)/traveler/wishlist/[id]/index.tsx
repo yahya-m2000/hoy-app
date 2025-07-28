@@ -173,7 +173,7 @@ export default function CollectionDetail() {
               color="secondary"
               style={{ textAlign: "center" }}
             >
-              {t("wishlist.loadingCollection")}
+              {t("features.wishlist.loading.loadingCollection")}
             </Text>
           </Container>
         </Container>
@@ -192,7 +192,7 @@ export default function CollectionDetail() {
         <Container flex={1} justifyContent="center" alignItems="center">
           <EmptyState
             icon="alert-circle-outline"
-            title={t("wishlist.errorLoadingCollection")}
+            title={t("features.wishlist.errors.errorLoadingCollection")}
             message={error}
             action={{
               label: t("common.retry"),
@@ -215,10 +215,10 @@ export default function CollectionDetail() {
         <Container flex={1} justifyContent="center" alignItems="center">
           <EmptyState
             icon="heart-outline"
-            title={t("wishlist.noPropertiesSaved")}
-            message={t("wishlist.noPropertiesSavedMessage")}
+            title={t("features.wishlist.empty.noPropertiesSaved")}
+            message={t("features.wishlist.empty.noPropertiesSavedMessage")}
             action={{
-              label: t("wishlist.startExploring"),
+              label: t("features.wishlist.actions.startExploring"),
               onPress: () => router.push("/traveler/search"),
             }}
           />
@@ -275,7 +275,7 @@ export default function CollectionDetail() {
                   color={theme.text.primary}
                   style={{ marginBottom: 2 }}
                 >
-                  {t("wishlist.properties")}
+                  {t("features.wishlist.content.properties")}
                 </Text>
                 <Text
                   variant="caption"

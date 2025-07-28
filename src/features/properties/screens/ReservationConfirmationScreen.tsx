@@ -109,7 +109,7 @@ export default function ReservationConfirmationScreen() {
       <DetailScreen
         title={t("common.error")}
         headerVariant="solid"
-        error={t("booking.notFoundMessage")}
+        error={t("features.booking.errors.notFoundMessage")}
       >
         <Container
           flex={1}
@@ -118,7 +118,7 @@ export default function ReservationConfirmationScreen() {
           paddingHorizontal="xl"
         >
           <Text variant="body" color="secondary">
-            {t("booking.notFoundMessage")}
+            {t("features.booking.errors.notFoundMessage")}
           </Text>
         </Container>
       </DetailScreen>
@@ -127,7 +127,7 @@ export default function ReservationConfirmationScreen() {
 
   return (
     <DetailScreen
-      title={t("booking.bookingConfirmed") + "!"}
+      title={t("features.booking.confirmation.bookingConfirmed") + "!"}
       headerVariant="solid"
     >
       <Container paddingHorizontal="lg" paddingTop="lg" style={styles.content}>
@@ -146,12 +146,12 @@ export default function ReservationConfirmationScreen() {
           </Container>
           <Container alignItems="center">
             <Text variant="h5" weight="bold" color="primary">
-              {t("booking.bookingConfirmed")}
+              {t("features.booking.confirmation.bookingConfirmed")}
             </Text>
           </Container>
           <Container alignItems="center" marginTop="xs">
             <Text variant="body" color="secondary">
-              {t("booking.confirmationMessage")}
+              {t("features.booking.confirmation.confirmationMessage")}
             </Text>
           </Container>
         </Container>
@@ -165,7 +165,7 @@ export default function ReservationConfirmationScreen() {
         >
           <Container marginBottom="md">
             <Text variant="h6" weight="semibold" color="primary">
-              {t("booking.detailsTitle")}
+              {t("features.booking.details.detailsTitle")}
             </Text>
           </Container>
 
@@ -173,7 +173,7 @@ export default function ReservationConfirmationScreen() {
           <Container marginBottom="md">
             <Container marginBottom="xs">
               <Text variant="caption" weight="medium" color="secondary">
-                {t("booking.property")}
+                {t("features.booking.details.property")}
               </Text>
             </Container>
             <Text variant="body" weight="medium" color="primary">
@@ -182,7 +182,7 @@ export default function ReservationConfirmationScreen() {
             <Text variant="caption" color="secondary">
               {property.address?.street ||
                 property.address?.city ||
-                t("property.cityPlaceholder")}
+                t("features.property.details.general.cityPlaceholder")}
             </Text>
           </Container>
 
@@ -195,7 +195,7 @@ export default function ReservationConfirmationScreen() {
             <Container flex={1}>
               <Container marginBottom="xs">
                 <Text variant="caption" weight="medium" color="secondary">
-                  {t("booking.checkIn")}
+                  {t("features.booking.details.checkIn")}
                 </Text>
               </Container>
               <Text variant="body" weight="medium" color="primary">
@@ -205,7 +205,7 @@ export default function ReservationConfirmationScreen() {
             <Container flex={1}>
               <Container marginBottom="xs">
                 <Text variant="caption" weight="medium" color="secondary">
-                  {t("booking.checkOut")}
+                  {t("features.booking.details.checkOut")}
                 </Text>
               </Container>
               <Text variant="body" weight="medium" color="primary">
@@ -223,7 +223,7 @@ export default function ReservationConfirmationScreen() {
             <Container flex={1}>
               <Container marginBottom="xs">
                 <Text variant="caption" weight="medium" color="secondary">
-                  {t("booking.guests")}
+                  {t("features.booking.details.guests")}
                 </Text>
               </Container>
               <Text variant="body" weight="medium" color="primary">
@@ -233,12 +233,14 @@ export default function ReservationConfirmationScreen() {
             <Container flex={1}>
               <Container marginBottom="xs">
                 <Text variant="caption" weight="medium" color="secondary">
-                  {t("booking.night")}
+                  {t("features.booking.details.night")}
                 </Text>
               </Container>
               <Text variant="body" weight="medium" color="primary">
                 {nights}{" "}
-                {nights === 1 ? t("booking.night") : t("booking.nights")}
+                {nights === 1
+                  ? t("features.booking.details.night")
+                  : t("features.booking.details.nights")}
               </Text>
             </Container>
           </Container>
@@ -247,7 +249,7 @@ export default function ReservationConfirmationScreen() {
           <Container>
             <Container marginBottom="xs">
               <Text variant="caption" weight="medium" color="secondary">
-                {t("booking.bookingId")}
+                {t("features.booking.details.bookingId")}
               </Text>
             </Container>
             <Text variant="body" weight="medium" color="primary">
@@ -265,14 +267,14 @@ export default function ReservationConfirmationScreen() {
         >
           <Container marginBottom="md">
             <Text variant="h6" weight="semibold" color="primary">
-              {t("booking.paymentDetails")}
+              {t("features.booking.payment.paymentDetails")}
             </Text>
           </Container>
 
           {/* Price Breakdown Caption */}
           <Container marginBottom="sm">
             <Text variant="caption" weight="medium" color="secondary">
-              {t("reservation.priceBreakdown")}
+              {t("features.booking.flow.priceBreakdown")}
             </Text>
           </Container>
 
@@ -289,7 +291,9 @@ export default function ReservationConfirmationScreen() {
                 ? property.price?.amount || 0
                 : property.price || 0}{" "}
               × {nights}{" "}
-              {nights === 1 ? t("booking.night") : t("booking.nights")}
+              {nights === 1
+                ? t("features.booking.details.night")
+                : t("features.booking.details.nights")}
             </Text>
             <Text variant="body" weight="medium" color="primary">
               $
@@ -307,7 +311,7 @@ export default function ReservationConfirmationScreen() {
             marginBottom="sm"
           >
             <Text variant="body" color="secondary">
-              {t("reservation.cleaningFee")}
+              {t("features.booking.flow.cleaningFee")}
             </Text>
             <Text variant="body" weight="medium" color="primary">
               $25
@@ -322,7 +326,7 @@ export default function ReservationConfirmationScreen() {
             marginBottom="sm"
           >
             <Text variant="body" color="secondary">
-              {t("reservation.serviceFee")}
+              {t("features.booking.flow.serviceFee")}
             </Text>
             <Text variant="body" weight="medium" color="primary">
               $
@@ -344,7 +348,7 @@ export default function ReservationConfirmationScreen() {
             marginBottom="md"
           >
             <Text variant="body" color="secondary">
-              {t("reservation.taxes")}
+              {t("features.booking.flow.taxes")}
             </Text>
             <Text variant="body" weight="medium" color="primary">
               $
@@ -371,7 +375,7 @@ export default function ReservationConfirmationScreen() {
             marginBottom="md"
           >
             <Text variant="body" weight="semibold" color="primary">
-              {t("reservation.total")}
+              {t("features.booking.flow.total")}
             </Text>
             <Text variant="body" weight="bold" color="primary">
               ${booking.totalPrice}
@@ -382,14 +386,14 @@ export default function ReservationConfirmationScreen() {
           <Container marginTop="sm">
             <Container marginBottom="xs">
               <Text variant="caption" weight="medium" color="secondary">
-                {t("reservation.paymentMethod")}
+                {t("features.booking.flow.paymentMethod")}
               </Text>
             </Container>
             <Text variant="body" weight="medium" color="primary">
               {paymentMethod?.type === "zaad"
                 ? `ZAAD (${
                     paymentMethod.details?.phone ||
-                    t("reservation.paymentMethodNotSelected")
+                    t("features.booking.flow.paymentMethodNotSelected")
                   })`
                 : paymentMethod?.details?.name
                 ? paymentMethod.details.name
@@ -403,14 +407,14 @@ export default function ReservationConfirmationScreen() {
         {/* Action Buttons */}
         <Container style={{ gap: 12 }} marginTop="lg">
           <Button
-            title={t("booking.viewBookingDetails")}
+            title={t("features.booking.actions.viewBookingDetails")}
             onPress={handleViewBooking}
             variant="primary"
             size="small"
           />
 
           <Button
-            title={t("property.view")}
+            title={t("features.property.details.actions.view")}
             onPress={handleBackToProperty}
             variant="outline"
             size="small"

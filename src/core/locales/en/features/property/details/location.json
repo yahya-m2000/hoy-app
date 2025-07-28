@@ -1,0 +1,7 @@
+{
+  "title": "Location",
+  "getDirections": "Get Directions",
+  "exactLocation": "Exact location",
+  "defaultLocation": "Using default location (coordinates not available)",
+  "mapComingSoon": "Map view coming soon"
+}

@@ -1,0 +1,119 @@
+{
+  "location": {
+    "title": "Gelitaanka Goobta",
+    "description": "App-kani wuxuu u baahan yahay gelitaan goobta si uu ugu bixiyo adeegyo ku salaysan goobta.",
+    "granted": "Ruqsadda goobta waa la siiyay",
+    "denied": "Ruqsadda goobta waa la diiday",
+    "blocked": "Ruqsadda goobta waa la xanibay",
+    "unavailable": "Adeegyada goobtu ma jiraan",
+    "disabled": "Adeegyada goobta waa la joojiyay",
+    "prompt": "Daar adeegyada goobta si aad u socoto",
+    "rationale": "Waxaan u baahanahay gelitaan goobta si aan kuugu tuso hantiyada kugu dhow oo aan ka caawino martigalayaasha inay ku helaan.",
+    "settingsPrompt": "Fadlan daar gelitaanka goobta Goobaha si aad u socoto",
+    "preciseLocation": "Ogolow goob sax ah si sax-garada u fiicnato"
+  },
+  "camera": {
+    "title": "Gelitaanka Kaamirka",
+    "description": "App-kani wuxuu u baahan yahay gelitaan kaamirakaaga si uu u qaado sawirro.",
+    "granted": "Ruqsadda kaamirka waa la siiyay",
+    "denied": "Ruqsadda kaamirka waa la diiday",
+    "blocked": "Ruqsadda kaamirka waa la xanibay",
+    "unavailable": "Kaamirku ma jiro",
+    "prompt": "Daar gelitaanka kaamirka si aad u qaadato sawirro",
+    "rationale": "Waxaan u baahanahay gelitaan kaamirka si aan kaaga ogol nahay inaad qaadato sawirro hantidaada ama astaantaada.",
+    "settingsPrompt": "Fadlan daar gelitaanka kaamirka Goobaha si aad u qaadato sawirro"
+  },
+  "photos": {
+    "title": "Gelitaanka Maktabadda Sawirrada",
+    "description": "App-kani wuxuu u baahan yahay gelitaan maktabadda sawirradaada si uu u doorto sawirro.",
+    "granted": "Ruqsadda maktabadda sawirrada waa la siiyay",
+    "denied": "Ruqsadda maktabadda sawirrada waa la diiday",
+    "blocked": "Ruqsadda maktabadda sawirrada waa la xanibay",
+    "unavailable": "Maktabadda sawirrada ma jirto",
+    "prompt": "Daar gelitaanka maktabadda sawirrada si aad u doorato sawirro",
+    "rationale": "Waxaan u baahanahay gelitaan maktabadda sawirrada si aan kaaga ogol nahay inaad doorato sawirro hantidaada ama astaantaada.",
+    "settingsPrompt": "Fadlan daar gelitaanka maktabadda sawirrada Goobaha si aad u doorato sawirro",
+    "limitedAccess": "Gelitaan xaddidan oo sawirrada ah la siiyay",
+    "selectMore": "Dooro sawirro badan"
+  },
+  "microphone": {
+    "title": "Gelitaanka Mikirofoonta",
+    "description": "App-kani wuxuu u baahan yahay gelitaan mikrofoontaada fariimaha codka.",
+    "granted": "Ruqsadda mikrofoonta waa la siiyay",
+    "denied": "Ruqsadda mikrofoonta waa la diiday",
+    "blocked": "Ruqsadda mikrofoonta waa la xanibay",
+    "unavailable": "Mikrofoonta ma jiro",
+    "prompt": "Daar gelitaanka mikrofoonta fariimaha codka",
+    "rationale": "Waxaan u baahanahay gelitaan mikrofoonta si aan u duubno fariimaha codka.",
+    "settingsPrompt": "Fadlan daar gelitaanka mikrofoonta Goobaha fariimaha codka"
+  },
+  "notifications": {
+    "title": "Gelitaanka Ogeysiisyada",
+    "description": "App-kani wuxuu jeclaan lahaa inuu kuu diro ogeysiisyo.",
+    "granted": "Ruqsadda ogeysiisyada waa la siiyay",
+    "denied": "Ruqsadda ogeysiisyada waa la diiday",
+    "blocked": "Ruqsadda ogeysiisyada waa la xanibay",
+    "unavailable": "Ogeysiisyada ma jiraan",
+    "prompt": "Daar ogeysiisyada si aad u socoto cusbooneysiinta",
+    "rationale": "Waxaan kuu diri doonaa cusbooneysiinyo muhiim ah oo ku saabsan buukinadaada iyo fariimaha.",
+    "settingsPrompt": "Fadlan daar ogeysiisyada Goobaha si aad u hesho cusbooneysiinyo",
+    "pushUnavailable": "Ogeysiisyada riixu ma jiraan"
+  },
+  "contacts": {
+    "title": "Gelitaanka Xidhiidhka",
+    "description": "App-kani wuxuu u baahan yahay gelitaan xidhiidhkaaga si uu kaaga caawiso inaad martiqaaddo saaxiibada.",
+    "granted": "Ruqsadda xidhiidhka waa la siiyay",
+    "denied": "Ruqsadda xidhiidhka waa la diiday",
+    "blocked": "Ruqsadda xidhiidhka waa la xanibay",
+    "unavailable": "Xidhiidhku ma jiro",
+    "prompt": "Daar gelitaanka xidhiidhka si aad u martiqaaddo saaxiibada",
+    "rationale": "Waxaan kaa caawin karnaa inaad martiqaaddo saaxiibada xidhiidhkaaga.",
+    "settingsPrompt": "Fadlan daar gelitaanka xidhiidhka Goobaha si aad u martiqaaddo saaxiibada"
+  },
+  "storage": {
+    "title": "Gelitaanka Kaydinta",
+    "description": "App-kani wuxuu u baahan yahay gelitaan kaydinta aaladaada.",
+    "granted": "Ruqsadda kaydinta waa la siiyay",
+    "denied": "Ruqsadda kaydinta waa la diiday",
+    "blocked": "Ruqsadda kaydinta waa la xanibay",
+    "unavailable": "Kaydinta ma jirto",
+    "prompt": "Daar gelitaanka kaydinta si aad u kaydsato faylalka",
+    "rationale": "Waxaan u baahanahay gelitaan kaydinta si aan u kaydno sawirrada iyo dukumeentiyada.",
+    "settingsPrompt": "Fadlan daar gelitaanka kaydinta Goobaha"
+  },
+  "calendar": {
+    "title": "Gelitaanka Kalandarka",
+    "description": "App-kani wuxuu u baahan yahay gelitaan kalendarkaaga si uu u maamullo buukinada.",
+    "granted": "Ruqsadda kalandarka waa la siiyay",
+    "denied": "Ruqsadda kalandarka waa la diiday",
+    "blocked": "Ruqsadda kalandarka waa la xanibay",
+    "unavailable": "Kalandarka ma jiro",
+    "prompt": "Daar gelitaanka kalandarka si aad u maamulto buukinadaada",
+    "rationale": "Waxaan ku dari karnaa buukinadaada kalendarkaaga si otomaatig ah.",
+    "settingsPrompt": "Fadlan daar gelitaanka kalandarka Goobaha"
+  },
+  "biometrics": {
+    "title": "Xaqiijinta Bayomeetrikada",
+    "description": "Isticmaal far-baadhitaankaaga ama wejigaaga si aad u ammaamiso akoonkaaga.",
+    "available": "Xaqiijinta bayomeetrikadu waa la heli karaa",
+    "unavailable": "Xaqiijinta bayomeetrikadu ma jirto",
+    "notEnrolled": "Xog bayomeetrik lama diiwaan gelin",
+    "prompt": "Isticmaal xaqiijinta bayomeetrikada gelitaan ammaan ah",
+    "enabled": "Xaqiijinta bayomeetrikada waa la daray",
+    "disabled": "Xaqiijinta bayomeetrikada waa la joojiyay",
+    "failed": "Xaqiijinta bayomeetrikada ayaa fashilantay",
+    "lockout": "Isku dayo badan oo fashilmay, fadlan mar kale isku day"
+  },
+  "actions": {
+    "allow": "Ogolow",
+    "deny": "Ha Ogolaan",
+    "askAgain": "Weydiiso Mar kale",
+    "openSettings": "Fur Goobaha",
+    "notNow": "Hadda Ma Aha",
+    "later": "Dhawaan",
+    "enable": "Daar",
+    "disable": "Jooji",
+    "grant": "Sii Ruqsadda",
+    "revoke": "Ka qaad Ruqsadda"
+  }
+}

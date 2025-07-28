@@ -208,13 +208,13 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
 
         showToast({
           type: "success",
-          message: t("location.permissionGranted"),
+          message: t("system.location.permissionGranted"),
         });
         return true;
       } else {
         showToast({
           type: "error",
-          message: t("location.permissionDenied"),
+          message: t("system.location.permissionDenied"),
         });
         return false;
       }
@@ -248,7 +248,7 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
         }));
         showToast({
           type: "error",
-          message: t("location.servicesDisabled"),
+          message: t("system.location.servicesDisabled"),
         });
         return;
       }
@@ -294,7 +294,7 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
 
         showToast({
           type: "success",
-          message: t("location.locationUpdated"),
+          message: t("system.location.locationUpdated"),
         });
       } else {
         setLocationState((prev) => ({
@@ -308,7 +308,7 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
 
         showToast({
           type: "warning",
-          message: t("location.noAddressFound"),
+          message: t("system.location.noAddressFound"),
         });
       }
     } catch (error) {

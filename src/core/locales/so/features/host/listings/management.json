@@ -1,0 +1,40 @@
+{
+  "title": "Liisaskooda",
+  "noListings": "Liisas weli ma jiraan",
+  "noListingsDescription": "Bilow abaabul liisaska hantidaada ugu horreeya",
+  "createListing": "Samee Liisas",
+  "status": {
+    "draft": "Qoraal",
+    "active": "Firfircoon",
+    "inactive": "Ma firfircoona",
+    "published": "La daabacay",
+    "pending": "Dib-eegis sugaya",
+    "rejected": "La diiday"
+  },
+  "actions": {
+    "edit": "Wax ka beddel",
+    "delete": "Tirtir",
+    "activate": "Kicin",
+    "deactivate": "Jooji",
+    "view": "Eeg"
+  },
+  "stats": {
+    "stats": "Tirakoobka",
+    "bookings": "Buukinada",
+    "revenue": "Dakhliga",
+    "rating": "Qiimaynta",
+    "reviews": "Dib-eegisyada",
+    "noReviews": "Dib-eegis weli ma jiraan",
+    "averageRating": "Celceliska Qiimaynta",
+    "totalBookings": "Wadarta Buukinada",
+    "totalRevenue": "Wadarta Dakhliga",
+    "lastBooking": "Buukinta u dambaysay",
+    "noBookings": "Buukin weli ma jiraan",
+    "noRevenue": "Dakhli weli ma jiro"
+  },
+  "loading": "Liisaska ayaa la raraya...",
+  "error": "Qalad ayaa ka dhacay rarista liisaska",
+  "retry": "Dib u isku day",
+  "emptyTitle": "Liisas weli ma jiraan",
+  "emptyMessage": "Bilow abaabul liisaska hantidaada ugu horreeya"
+}

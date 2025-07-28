@@ -29,20 +29,20 @@ export default function HostInfoStep({
   const { t } = useTranslation();
 
   const hostTypes = [
-    { label: t("property.common.individual"), value: "individual" },
-    { label: t("property.common.business"), value: "business" },
+    { label: t("features.property.listing.common.individual"), value: "individual" },
+    { label: t("features.property.listing.common.business"), value: "business" },
   ];
 
   const safetyDisclosures = [
     {
       key: "weaponsOnProperty",
       question: t(
-        "property.steps.hostInfo.safetyDisclosures.weaponsOnProperty"
+        "features.property.listing.steps.hostInfo.safetyDisclosures.weaponsOnProperty"
       ),
     },
     {
       key: "securityCameras",
-      question: t("property.steps.hostInfo.safetyDisclosures.securityCameras"),
+      question: t("features.property.listing.steps.hostInfo.safetyDisclosures.securityCameras"),
     },
   ];
 
@@ -76,8 +76,8 @@ export default function HostInfoStep({
       >
         <Container paddingBottom="xxl">
           <StepHeader
-            title={t("property.steps.hostInfo.title")}
-            description={t("property.steps.hostInfo.description")}
+            title={t("features.property.listing.steps.hostInfo.title")}
+            description={t("features.property.listing.steps.hostInfo.description")}
           />
 
           <Container marginTop="lg">
@@ -100,7 +100,7 @@ export default function HostInfoStep({
               weight="medium"
               style={{ marginBottom: spacing.md }}
             >
-              {t("property.steps.hostInfo.safetyDisclosures.title")}
+              {t("features.property.listing.steps.hostInfo.safetyDisclosures.title")}
             </Text>
 
             {safetyDisclosures.map((item) => (
@@ -122,8 +122,8 @@ export default function HostInfoStep({
           </Container>
 
           <InfoBox
-            title={t("property.steps.hostInfo.infoBox.title")}
-            content={t("property.steps.hostInfo.infoBox.content")}
+            title={t("features.property.listing.steps.hostInfo.infoBox.title")}
+            content={t("features.property.listing.steps.hostInfo.infoBox.content")}
             icon="information-circle"
             variant="info"
           />

@@ -31,21 +31,21 @@ const PropertyTab: React.FC<PropertyTabProps> = ({
             ${price}
           </Text>
           <Text variant="body" color="secondary" style={{ marginLeft: 4 }}>
-            {t("property.pricing.perNight")}
+            {t("features.property.details.pricing.perNight")}
           </Text>
         </Container>
 
         {totalPrice && totalPrice > 0 && (
           <Text variant="caption" color="primary" style={{ marginTop: 2 }}>
-            ${totalPrice} {t("property.total")}
+            ${totalPrice} {t("features.property.details.pricing.total")}
           </Text>
         )}
       </Container>
       <Button
         title={
           selectedDates?.startDate && selectedDates?.endDate
-            ? t("property.common.reserve")
-            : t("property.common.checkAvailability")
+            ? t("features.property.details.actions.reserve")
+            : t("features.property.details.actions.checkAvailability")
         }
         onPress={handleReservePress}
         variant="primary"

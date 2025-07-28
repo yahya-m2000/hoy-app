@@ -366,7 +366,7 @@ export const MonthView: React.FC<MonthViewProps> = ({
     );
     return (
       <Container flex={1} justifyContent="center" alignItems="center">
-        <Text>{t("calendar.loading.theme")}</Text>
+        <Text>{t("features.calendar.loading.theme")}</Text>
       </Container>
     );
   }
@@ -375,7 +375,7 @@ export const MonthView: React.FC<MonthViewProps> = ({
   if (isLoading) {
     return (
       <Container flex={1} justifyContent="center" alignItems="center">
-        <Text>{t("calendar.loading.calendar")}</Text>
+        <Text>{t("features.calendar.loading.calendar")}</Text>
       </Container>
     );
   }
@@ -389,7 +389,7 @@ export const MonthView: React.FC<MonthViewProps> = ({
     console.warn("MonthView: Invalid currentMonth provided", currentMonth);
     return (
       <Container flex={1} justifyContent="center" alignItems="center">
-        <Text>{t("calendar.loading.invalidDate")}</Text>
+        <Text>{t("features.calendar.loading.invalidDate")}</Text>
       </Container>
     );
   }
@@ -398,7 +398,7 @@ export const MonthView: React.FC<MonthViewProps> = ({
   if (!months || months.length === 0) {
     return (
       <Container flex={1} justifyContent="center" alignItems="center">
-        <Text>{t("calendar.loading.noData")}</Text>
+        <Text>{t("features.calendar.loading.noData")}</Text>
       </Container>
     );
   }
@@ -417,7 +417,7 @@ export const MonthView: React.FC<MonthViewProps> = ({
         >
           <TouchableOpacity onPress={onBackPress} style={{ padding: 8 }}>
             <Text color={theme.colors?.primary ?? theme.primary}>
-              {t("calendar.navigation.backToYearView")}
+              {t("features.calendar.navigation.backToYearView")}
             </Text>
           </TouchableOpacity>
           <Text variant="h6" weight="semibold">

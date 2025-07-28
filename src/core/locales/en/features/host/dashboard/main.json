@@ -1,0 +1,9 @@
+{
+  "title": "Today",
+  "overview": "Overview",
+  "loading": "Loading dashboard...",
+  "metrics": {
+    "earnings": "Earnings",
+    "insights": "Rating"
+  }
+}

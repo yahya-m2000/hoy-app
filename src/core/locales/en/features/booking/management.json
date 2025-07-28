@@ -1,0 +1,97 @@
+{
+  "title": "Bookings",
+  "upcoming": "Upcoming",
+  "past": "Past",
+  "viewAllPastBookings": "View All Past Bookings",
+  "seeCompleteHistory": "See your complete booking history",
+  "lists": {
+    "title": "Bookings",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "pastBookings": "Past Bookings",
+    "loadingBookings": "Loading your bookings...",
+    "loadingPastBookings": "Loading your past bookings...",
+    "viewAllPastBookings": "View All Past Bookings",
+    "seeCompleteHistory": "See your complete booking history",
+    "bookingHistory": "Booking History"
+  },
+  "empty": {
+    "noBookingsFound": "No bookings found",
+    "noBookingsMessage": "Start exploring to find and save properties to your bookings",
+    "noPastBookings": "No past bookings",
+    "noPastBookingsMessage": "You haven't completed any trips yet. Start exploring to create your first booking!",
+    "signInToViewBookings": "Log in to view your bookings",
+    "signInToViewBookingsMessage": "When you book a property, it will appear here",
+    "signInToViewPastBookings": "Sign in to see your past trips"
+  },
+  "errors": {
+    "errorLoadingBookings": "Error loading bookings",
+    "errorLoadingPastBookings": "Error loading past bookings",
+    "retry": "Retry"
+  },
+  "details": {
+    "detailsTitle": "Booking Details",
+    "notFound": "Booking Not Found",
+    "notFoundMessage": "Unable to load booking details. Please try again.",
+    "property": "Property",
+    "bookingId": "Booking ID",
+    "bookedOn": "Booked on",
+    "booking": "Booking"
+  },
+  "sections": {
+    "statusTitle": "Booking Status",
+    "tripDetailsTitle": "Trip Details",
+    "contactInfoTitle": "Contact Information",
+    "priceDetailsTitle": "Price Details",
+    "specialRequestsTitle": "Special Requests"
+  },
+  "fields": {
+    "paymentStatus": "Payment Status",
+    "checkIn": "Check-in",
+    "checkOut": "Check-out",
+    "guests": "Guests",
+    "duration": "Duration",
+    "contactName": "Contact Name",
+    "contactEmail": "Contact Email",
+    "contactPhone": "Contact Phone",
+    "total": "Total"
+  },
+  "cancellation": {
+    "cancelBookingTitle": "Cancel Booking",
+    "cancelBookingMessage": "Are you sure you want to cancel this booking? This action cannot be undone.",
+    "keepBooking": "Keep Booking",
+    "confirmCancel": "Cancel Booking",
+    "cancellationComingSoon": "Cancellation feature coming soon"
+  },
+  "status": {
+    "title": "Status",
+    "pending": "Pending",
+    "confirmed": "Confirmed",
+    "cancelled": "Cancelled",
+    "completed": "Completed",
+    "in_progress": "In Progress",
+    "refunded": "Refunded",
+    "disputed": "Disputed",
+    "paid": "Paid",
+    "partial": "Partial",
+    "failed": "Failed"
+  },
+  "labels": {
+    "newProperty": "New",
+    "adult": "adult",
+    "adults": "adults",
+    "children": "children",
+    "infants": "infants",
+    "child": "child",
+    "infant": "infant",
+    "night": "night",
+    "nights": "nights"
+  },
+  "integration": {
+    "calendarError": "Could not add to calendar",
+    "locationError": "Location not available",
+    "mapsError": "Could not open maps",
+    "whatsappError": "Could not open WhatsApp"
+  },
+  "many": "many"
+}

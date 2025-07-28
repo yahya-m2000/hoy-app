@@ -17,18 +17,18 @@ export default function PoliciesStep({
   const { t } = useTranslation();
   const policies = [
     {
-      title: t("property.pricing.cancellationPolicy"),
-      description: t("property.pricing.cancellationPolicyDescription"),
+      title: t("features.property.listing.policies.cancellationPolicy.title"),
+      description: t("features.property.listing.policies.cancellationPolicy.description"),
       icon: "close-circle-outline",
     },
     {
-      title: t("property.steps.policies.houseRules.title"),
-      description: t("property.steps.policies.houseRules.description"),
+      title: t("features.property.listing.policies.houseRules.title"),
+      description: t("features.property.listing.policies.houseRules.description"),
       icon: "home-outline",
     },
     {
-      title: t("property.steps.policies.safetyInfo.title"),
-      description: t("property.steps.policies.safetyInfo.description"),
+      title: t("features.property.listing.policies.safetyInfo.title"),
+      description: t("features.property.listing.policies.safetyInfo.description"),
       icon: "shield-outline",
     },
   ];
@@ -36,8 +36,8 @@ export default function PoliciesStep({
   return (
     <Container>
       <StepHeader
-        title={t("property.steps.policies.title")}
-        description={t("property.steps.policies.description")}
+        title={t("features.property.listing.steps.policies.title")}
+        description={t("features.property.listing.steps.policies.description")}
       />
 
       <Container marginTop="lg">
@@ -62,7 +62,7 @@ export default function PoliciesStep({
               </Text>
             </View>
             <Button
-              title={t("property.common.modify")}
+              title={t("features.property.listing.actions.modify")}
               variant="outline"
               size="small"
               onPress={() => {}}

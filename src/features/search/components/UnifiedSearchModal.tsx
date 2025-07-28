@@ -255,8 +255,14 @@ export default function UnifiedSearchModal({
   const handleTravelersApply = () => {
     const totalGuests = adults + children;
     const displayTravelers = `${totalGuests} ${
-      totalGuests === 1 ? t("search.guest") : t("search.guests")
-    }, ${rooms} ${rooms === 1 ? t("search.room") : t("search.rooms")}`;
+      totalGuests === 1
+        ? t("features.search.travelers.guest")
+        : t("features.search.travelers.guests")
+    }, ${rooms} ${
+      rooms === 1
+        ? t("features.search.travelers.room")
+        : t("features.search.travelers.rooms")
+    }`;
 
     updateSearchState({
       adults,
@@ -350,11 +356,11 @@ export default function UnifiedSearchModal({
   const getModalTitle = () => {
     switch (modalType) {
       case "location":
-        return t("search.whereToGo") || "Where to go?";
+        return t("features.search.location.whereToGo") || "Where to go?";
       case "dates":
-        return t("search.selectDates") || "Select dates";
+        return t("features.search.dates.selectDates") || "Select dates";
       case "travelers":
-        return t("search.travelers") || "Travelers";
+        return t("features.search.travelers.title") || "Travelers";
       default:
         return "";
     }
@@ -433,7 +439,8 @@ export default function UnifiedSearchModal({
                     : theme.colors.gray[900],
                 }}
                 placeholder={
-                  t("search.searchDestinations") || "Search destinations..."
+                  t("features.search.location.searchDestinations") ||
+                  "Search destinations..."
                 }
                 placeholderTextColor={
                   isDark ? theme.colors.gray[400] : theme.colors.gray[500]
@@ -462,7 +469,8 @@ export default function UnifiedSearchModal({
                   color="secondary"
                   style={{ marginLeft: spacing.sm }}
                 >
-                  {t("search.searchingLocations") || "Searching locations..."}
+                  {t("features.search.location.searchingLocations") ||
+                    "Searching locations..."}
                 </Text>
               </Container>
             )}
@@ -475,7 +483,8 @@ export default function UnifiedSearchModal({
                 paddingBottom="sm"
               >
                 <Text variant="body" weight="semibold">
-                  {t("search.popularDestinations") || "Popular destinations"}
+                  {t("features.search.location.popularDestinations") ||
+                    "Popular destinations"}
                 </Text>
               </Container>
             )}
@@ -626,7 +635,7 @@ export default function UnifiedSearchModal({
           <Container flex={1} paddingHorizontal="lg">
             {/* Adults Counter */}
             <Counter
-              label={t("search.adults")}
+              label={t("features.search.travelers.adults")}
               value={adults}
               onIncrement={() => setAdults(Math.min(adults + 1, 10))}
               onDecrement={() => setAdults(Math.max(adults - 1, 1))}
@@ -635,7 +644,7 @@ export default function UnifiedSearchModal({
 
             {/* Children Counter */}
             <Counter
-              label={t("search.children")}
+              label={t("features.search.travelers.children")}
               value={children}
               onIncrement={() => setChildren(Math.min(children + 1, 10))}
               onDecrement={() => setChildren(Math.max(children - 1, 0))}
@@ -643,7 +652,7 @@ export default function UnifiedSearchModal({
 
             {/* Rooms Counter */}
             <Counter
-              label={t("search.rooms")}
+              label={t("features.search.travelers.rooms")}
               value={rooms}
               onIncrement={() => setRooms(Math.min(rooms + 1, 10))}
               onDecrement={() => setRooms(Math.max(rooms - 1, 1))}
@@ -665,8 +674,13 @@ export default function UnifiedSearchModal({
                 style={{ textAlign: "center" }}
               >
                 {totalGuests}{" "}
-                {totalGuests === 1 ? t("search.guest") : t("search.guests")},{" "}
-                {rooms} {rooms === 1 ? t("search.room") : t("search.rooms")}
+                {totalGuests === 1
+                  ? t("features.search.travelers.guest")
+                  : t("features.search.travelers.guests")}
+                ,{rooms}{" "}
+                {rooms === 1
+                  ? t("features.search.travelers.room")
+                  : t("features.search.travelers.rooms")}
               </Text>
             </Container>
 

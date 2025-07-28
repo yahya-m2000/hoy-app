@@ -1,0 +1,40 @@
+{
+  "title": "Set your {{type}} price",
+  "pricing": "Pricing",
+  "weekday": "weekday",
+  "weekend": "weekend",
+  "description": "Price competitively to attract more bookings",
+  "weekdayPrice": "Weekday Price",
+  "weekendPrice": "Weekend Price",
+  "pricePlaceholder": "0",
+  "perNight": "per night",
+  "total": "total",
+  "lowPriceWarning": "Consider setting a higher price to ensure quality guests",
+  "adjustments": {
+    "minusTen": "-$10",
+    "minusFive": "-$5",
+    "plusFive": "+$5",
+    "plusTen": "+$10"
+  },
+  "tip": "💡 Tip: Research similar properties in your area to set a competitive price",
+  "discounts": {
+    "activeDiscounts": "Active Discounts",
+    "newListingDiscount": "New listing promotion (20% off first 3 bookings)",
+    "lastMinuteDiscount": "Last-minute discount (for bookings within 24 hours)",
+    "newListingDiscountDescription": "Attract early bookings with a special discount for new listings",
+    "lastMinuteDiscountDescription": "Fill empty dates with last-minute bookings"
+  },
+  "management": {
+    "manageAvailability": "Manage Availability",
+    "updateCalendarAndPricing": "Update calendar and pricing",
+    "viewBookings": "View Bookings"
+  },
+  "policies": {
+    "moderateCancellationPolicy": "Moderate Cancellation Policy",
+    "cancellationPolicy": "Cancellation Policy",
+    "cancellationPolicyDescription": "Moderate - Full refund 5 days before arrival",
+    "houseRules": "House Rules",
+    "houseRulesDescription": "Check-in: 3:00 PM, Check-out: 11:00 AM",
+    "moderate": "Moderate"
+  }
+}

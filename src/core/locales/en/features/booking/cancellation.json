@@ -1,0 +1,6 @@
+{
+  "cancelBookingTitle": "Cancel Booking",
+  "cancelBookingMessage": "Are you sure you want to cancel this booking?",
+  "cancellationSuccess": "Booking cancelled successfully",
+  "cancellationFailed": "Failed to cancel booking"
+}

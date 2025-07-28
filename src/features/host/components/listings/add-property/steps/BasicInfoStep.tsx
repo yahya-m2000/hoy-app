@@ -28,33 +28,33 @@ export const validateBasicInfoStep = (
   const errors: Record<string, string> = {};
 
   if (!formData.name?.trim()) {
-    errors.name = t("validation.required", { field: t("property.name") });
+    errors.name = t("validation.required", { field: t("features.property.listing.details.name") });
   } else if (formData.name.length < 3) {
     errors.name = t("validation.minLength", {
-      field: t("property.name"),
+      field: t("features.property.listing.details.name"),
       length: 3,
     });
   }
 
   if (!formData.propertyType) {
     errors.propertyType = t("validation.required", {
-      field: t("property.type"),
+      field: t("features.property.listing.details.type"),
     });
   }
 
   if (!formData.type) {
     errors.type = t("validation.required", {
-      field: t("property.listingType"),
+      field: t("features.property.listing.details.listingType"),
     });
   }
 
   if (!formData.description?.trim()) {
     errors.description = t("validation.required", {
-      field: t("property.description"),
+      field: t("features.property.listing.details.description"),
     });
   } else if (formData.description.length < 50) {
     errors.description = t("validation.minLength", {
-      field: t("property.description"),
+      field: t("features.property.listing.details.description"),
       length: 50,
     });
   }
@@ -73,49 +73,49 @@ export default function BasicInfoStep({
   const { theme } = useTheme();
 
   const propertyTypeOptions = PROPERTY_TYPES.map((type) => ({
-    label: t(`property.types.${type.value}`),
+    label: t(`features.property.types.${type.value}`),
     value: type.value,
   }));
 
   const typeOptions = [
-    { label: t("property.listing.individual"), value: "INDIVIDUAL" },
-    { label: t("property.listing.shared"), value: "SHARED" },
+    { label: t("features.property.listing.types.individual"), value: "INDIVIDUAL" },
+    { label: t("features.property.listing.types.shared"), value: "SHARED" },
   ];
 
   const validateField = (field: string, value: any): string | null => {
     switch (field) {
       case "name":
         if (!value?.trim())
-          return t("validation.required", { field: t("property.name") });
+          return t("validation.required", { field: t("features.property.listing.details.name") });
         if (value.length < 3)
           return t("validation.minLength", {
-            field: t("property.name"),
+            field: t("features.property.listing.details.name"),
             length: 3,
           });
         if (value.length > 100)
           return t("validation.maxLength", {
-            field: t("property.name"),
+            field: t("features.property.listing.details.name"),
             length: 100,
           });
         return null;
       case "description":
         if (!value?.trim())
-          return t("validation.required", { field: t("property.description") });
+          return t("validation.required", { field: t("features.property.listing.details.description") });
         if (value.length < 50)
           return t("validation.minLength", {
-            field: t("property.description"),
+            field: t("features.property.listing.details.description"),
             length: 50,
           });
         if (value.length > 1000)
           return t("validation.maxLength", {
-            field: t("property.description"),
+            field: t("features.property.listing.details.description"),
             length: 1000,
           });
         return null;
       case "propertyType":
       case "type":
         if (!value)
-          return t("validation.required", { field: t("property.type") });
+          return t("validation.required", { field: t("features.property.listing.details.type") });
         return null;
       default:
         return null;
@@ -148,21 +148,21 @@ export default function BasicInfoStep({
       >
         <Container paddingBottom="xxl">
           <StepHeader
-            title={t("property.steps.basicInfo.title")}
-            description={t("property.steps.basicInfo.description")}
+            title={t("features.property.listing.steps.basicInfo.title")}
+            description={t("features.property.listing.steps.basicInfo.description")}
           />
 
           {/* Property Name */}
           <Container marginBottom="lg">
             <Container marginBottom="sm">
               <Text variant="label" color="onBackground">
-                {t("property.name")} *
+                {t("features.property.listing.forms.sections.title.label")} *
               </Text>
             </Container>
             <Input
               value={formData.name}
               onChangeText={(value) => handleFieldChange("name", value)}
-              placeholder={t("property.namePlaceholder")}
+              placeholder={t("features.property.listing.forms.sections.title.placeholder")}
               error={errors.name}
               autoCapitalize="words"
               maxLength={100}
@@ -173,7 +173,7 @@ export default function BasicInfoStep({
           <Container marginBottom="lg">
             <Container marginBottom="sm">
               <Text variant="label" color="onBackground">
-                {t("property.type")} *
+                {t("features.property.listing.forms.sections.propertyType.title")} *
               </Text>
             </Container>
             <SelectInput
@@ -182,7 +182,7 @@ export default function BasicInfoStep({
                 handleFieldChange("propertyType", value)
               }
               options={propertyTypeOptions}
-              placeholder={t("property.typePlaceholder")}
+              placeholder={t("features.property.listing.forms.sections.propertyType.placeholder")}
               error={!!errors.propertyType}
             />
           </Container>
@@ -191,14 +191,14 @@ export default function BasicInfoStep({
           <Container marginBottom="lg">
             <Container marginBottom="sm">
               <Text variant="label" color="onBackground">
-                {t("property.listingType")} *
+                {t("features.property.listing.forms.sections.guestAccess.title")} *
               </Text>
             </Container>
             <SelectInput
               value={formData.type}
               onValueChange={(value) => handleFieldChange("type", value)}
               options={typeOptions}
-              placeholder={t("property.listingTypePlaceholder")}
+              placeholder={t("features.property.listing.forms.sections.guestAccess.placeholder")}
               error={!!errors.type}
             />
 
@@ -218,7 +218,7 @@ export default function BasicInfoStep({
               />
               <Container flex={1}>
                 <Text variant="caption" color="onSurfaceVariant">
-                  {t("property.listingTypeHelp")}
+                  {t("features.property.listing.forms.sections.guestAccess.help")}
                 </Text>
               </Container>
             </Container>
@@ -228,13 +228,13 @@ export default function BasicInfoStep({
           <Container marginBottom="lg">
             <Container marginBottom="sm">
               <Text variant="label" color="onBackground">
-                {t("property.description")} *
+                {t("features.property.listing.forms.sections.description.label")} *
               </Text>
             </Container>
             <Input
               value={formData.description}
               onChangeText={(value) => handleFieldChange("description", value)}
-              placeholder={t("property.descriptionPlaceholder")}
+              placeholder={t("features.property.listing.forms.sections.description.placeholder")}
               error={errors.description}
               multiline
               numberOfLines={6}
@@ -247,7 +247,7 @@ export default function BasicInfoStep({
               marginTop="xs"
             >
               <Text variant="caption" color="onBackgroundVariant">
-                {t("property.descriptionHelp")}
+                {t("features.property.listing.forms.sections.description.help")}
               </Text>
               <Text variant="caption" color="onBackgroundVariant">
                 {formData.description?.length || 0}/1000

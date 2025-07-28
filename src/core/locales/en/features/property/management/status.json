@@ -1,0 +1,8 @@
+{
+  "active": "Active",
+  "inactive": "Inactive",
+  "pending": "Pending",
+  "draft": "Draft",
+  "published": "Published",
+  "unpublished": "Unpublished"
+}

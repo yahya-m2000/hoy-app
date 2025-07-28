@@ -1,0 +1,185 @@
+{
+  "title": "Siyaasadaha Caadiga ah",
+  "subtitle": "Deji siyaasadahaaga caadiga ah ee martigalinta. Kuwan waxay khuseeyn doonaan dhammaan hantidaada illa aad gaar ahaan u hagaajiso.",
+  "cancellation": {
+    "title": "Siyaasadda Joojinta",
+    "subtitle": "Dooro siyaasaddaada caadiga ah ee joojinta dhammaan liisaska",
+    "description": "Siyaasaddaada joojintu waxay saameyn ku leedahay lacag celinta martida iyo dakhligaaga. Si taxadar leh u dooro maadaama ay saameyn ku leedahay go'aannada buukinta martida.",
+    "types": {
+      "flexible": {
+        "title": "Dabacsan",
+        "subtitle": "Lacag celin buuxa haddii la joojiyo ugu yaraan 7 maalmood ka hor galitaanka",
+        "description": "Martidu waxay helaan lacag celin buuxa haddii ay joojiyaan ugu yaraan 7 maalmood ka hor galitaanka. Ka dib taas, martidu waxay bixinayaan habeen kasta oo ay joogaan, iyo 1 habeen dheeraad ah.",
+        "recommended": "Waxaa lagu talinayaa martigalayaasha cusub",
+        "refundPolicy": "Lacag celin buuxa 7+ maalmood ka hor • Lacag celin qayb ah 1-6 maalmood ka hor • Lacag celin ma jirto maalinta galitaanka"
+      },
+      "moderate": {
+        "title": "Dhexdhexaad",
+        "subtitle": "Lacag celin buuxa haddii la joojiyo ugu yaraan 5 maalmood ka hor galitaanka",
+        "description": "Martidu waxay helaan lacag celin buuxa haddii ay joojiyaan ugu yaraan 5 maalmood ka hor galitaanka. Ka dib taas, martidu waxay bixinayaan habeen kasta oo ay joogaan, iyo 1 habeen dheeraad ah.",
+        "recommended": "Doorashada ugu caansan",
+        "refundPolicy": "Lacag celin buuxa 5+ maalmood ka hor • Lacag celin qayb ah 1-4 maalmood ka hor • Lacag celin ma jirto maalinta galitaanka"
+      },
+      "strict": {
+        "title": "Adag",
+        "subtitle": "Lacag celin buuxa haddii la joojiyo ugu yaraan 14 maalmood ka hor galitaanka",
+        "description": "Martidu waxay helaan lacag celin buuxa haddii ay joojiyaan ugu yaraan 14 maalmood ka hor galitaanka. Ka dib taas, martidu waxay bixinayaan habeen kasta oo ay joogaan, iyo 1 habeen dheeraad ah.",
+        "recommended": "Martigalayaasha khibrada leh",
+        "refundPolicy": "Lacag celin buuxa 14+ maalmood ka hor • Lacag celin qayb ah 7-13 maalmood ka hor • Lacag celin ma jirto 1-6 maalmood ka hor"
+      }
+    },
+    "helpText": "Siyaasaddaada joojintu waxay saameyn ku leedahay lacag celinta martida iyo dakhligaaga. Waxaad gaar ahaan ugu hagaaji kartaa hantiyada gaar ahaaneed markale.",
+    "customForm": {
+      "refundPeriod": "Muddada Lacag Celinta",
+      "refundPeriodHint": "Tirada maalmaha ka hor galitaanka marka lacag celinta weli suurtogal tahay",
+      "fullRefund": "Maalmaha Lacag Celinta Buuxa",
+      "fullRefundHint": "Maalmaha ka hor galitaanka marka martidu helaan 100% lacag celin",
+      "partialRefund": "Maalmaha Lacag Celinta Qayb ah", 
+      "partialRefundHint": "Maalmaha ka hor galitaanka marka martidu helaan 50% lacag celin",
+      "noRefund": "Maalmaha aan Lacag Celinta Lahayn",
+      "noRefundHint": "Maalmaha ka hor galitaanka marka lacag celin la siiyo",
+      "days": "maalmood",
+      "preview": "Horudhaca Siyaasadda",
+      "previewSubtitle": "Sidan ayay siyaasaddaada joojintu ugu muuqan doontaa martida"
+    }
+  },
+  "houseRules": {
+    "title": "Sharciga Guriga",
+    "subtitle": "Deji rajooyin cad oo loogu talagalay martida",
+    "description": "Deji sharcigaaga caadiga ah ee guriga. Kuwan waxay khuseeyn doonaan dhammaan liisaskaaga illa aad gaar ahaan u hagaajiso.",
+    "checkInOut": {
+      "title": "Waqtiyada Galitaanka & Bixitaanka",
+      "checkInTime": "Waqtiga Galitaanka",
+      "checkOutTime": "Waqtiga Bixitaanka",
+      "helpText": "Deji waqtiyada caadiga ah ee galitaanka iyo bixitaanka hantidaada."
+    },
+    "smoking": {
+      "title": "Sigaar Cabista La Oggol yahay",
+      "subtitle": "U oggolow martida inay sigaar cabaan hantidaada",
+      "allowed": "Sigaar cabista waa la oggol yahay",
+      "notAllowed": "Sigaar cabista ma aha",
+      "helpText": "Si cad u caddee siyaasaddaada sigaar cabista si looga fogaado fahmi khaldan."
+    },
+    "pets": {
+      "title": "Xayawaanka Qoyska La Oggol yahay",
+      "subtitle": "U oggolow martida inay keenaan xayawaanka qoyska",
+      "allowed": "Xayawaanka qoyska waa la oggol yahay",
+      "notAllowed": "Xayawaanka qoyska ma aha",
+      "helpText": "Qeex haddii martidu keeni karaan xayawaanka qoyska iyo xaddidaad kasta."
+    },
+    "parties": {
+      "title": "Xaflado & Dhacdooyin La Oggol yahay",
+      "subtitle": "U oggolow martida inay qabtaan xaflado ama dhacdooyin",
+      "allowed": "Xaflado waa la oggol yahay",
+      "notAllowed": "Xaflado ma aha",
+      "helpText": "Deji rajooyin cad oo ku saabsan xaflado iyo dhacdooyin."
+    },
+    "quietHours": {
+      "title": "Saacadaha Aamusnaanta",
+      "subtitle": "Deji saacadaha aamusnaanta hantidaada",
+      "enabled": "Saacadaha aamusnaanta waa la daray",
+      "disabled": "Saacado aamusnaan ma jiraan",
+      "start": "Waqtiga Bilowga",
+      "end": "Waqtiga Dhammaadka",
+      "helpText": "Deji saacadaha aamusnaanta si loo hubiyo joogitaan nabdoon oo dhammaan martida."
+    },
+    "additionalRules": {
+      "title": "Sharciyo Dheeraad ah",
+      "placeholder": "Ku dar sharciyo dheeraad ah oo guriga...",
+      "addRule": "Ku dar Sharci",
+      "helpText": "Ku dar sharciyo kale oo gaar u ah hantidaada."
+    },
+    "checkIn": "Waqtiga Galitaanka",
+    "checkOut": "Waqtiga Bixitaanka",
+    "smoking": "Sigaar Cabista La Oggol yahay",
+    "pets": "Xayawaanka Qoyska La Oggol yahay", 
+    "parties": "Xaflado & Dhacdooyin La Oggol yahay",
+    "quietHours": "Saacadaha Aamusnaanta",
+    "quietHoursStart": "Waqtiga Bilowga",
+    "quietHoursEnd": "Waqtiga Dhammaadka",
+    "rulePlaceholder": "Ku dar sharciyo dheeraad ah oo guriga..."
+  },
+  "safety": {
+    "title": "Macluumaadka Ammaanka",
+    "subtitle": "Ka caawo martida inay fahmaan waxyaabaha ammaanka ee ku jira hantidaada",
+    "smokeDetector": "Qalabka lagu ogaado qiiqa",
+    "carbonMonoxideDetector": "Qalabka lagu ogaado carbon monoxide", 
+    "fireExtinguisher": "Qalabka dab-damiska",
+    "firstAidKit": "Sanduuqa daryeelka degdegga ah",
+    "securityCamera": "Kamirka ammaanka",
+    "securityCameraLocation": "Goobta kamirka ammaanka",
+    "weaponsOnProperty": "Hubka hantida ku jira",
+    "dangerousAnimals": "Xayawaanka khatar ah",
+    "additionalSafety": "Macluumaad dheeraad ah oo ammaanka",
+    "safetyPlaceholder": "Ku dar macluumaad dheeraad ah oo ammaanka ah ee martida...",
+    "addSafetyInfo": "Ku dar Macluumaadka Ammaanka"
+  },
+  "property": {
+    "title": "Macluumaadka Hantida",
+    "subtitle": "Siiso macluumaad muhiim ah oo ku saabsan hantidaada martida",
+    "wifi": {
+      "title": "Macluumaadka WiFi",
+      "network": "Magaca Shabakkada",
+      "password": "Furaha Sirta WiFi",
+      "networkPlaceholder": "tusaale ahaan MyHome_WiFi",
+      "passwordPlaceholder": "Geli furaha sirta WiFi"
+    },
+    "checkin": {
+      "title": "Tilmaamaha Galitaanka",
+      "instructions": "Tilmaamaha Galitaanka",
+      "keyLocation": "Goobta Furahaba",
+      "instructionsPlaceholder": "Siiso tilmaamo faahfaahsan oo loogu talagalay martida sida ay u geli karaan hantidaada...",
+      "keyLocationPlaceholder": "tusaale ahaan Hoos dhirta ubaxda, koodka sanduuqa xidhka 1234"
+    },
+    "parking": {
+      "title": "Macluumaadka Isdhigga",
+      "instructions": "Tilmaamaha Isdhigga",
+      "instructionsPlaceholder": "Qeex meesha martidu isdhigi karaan iyo tilmaamo gaar ah kasta..."
+    },
+    "amenities": {
+      "title": "Adeegyada",
+      "subtitle": "Dooro adeegyada ku jira hantidaada",
+      "wifi": "WiFi",
+      "parking": "Isdhig",
+      "kitchen": "Jikada",
+      "washer": "Dharka dhaqista",
+      "dryer": "Qalajiyaha",
+      "ac": "Qabow-bixiyaha",
+      "heating": "Dirayaasha",
+      "tv": "TV",
+      "pool": "Barkadda",
+      "gym": "Jimka",
+      "balcony": "Balkaanta",
+      "garden": "Beertada"
+    },
+    "notes": {
+      "title": "Qoraalada Dheeraadka ah",
+      "additional": "Qoraalada Dheeraadka ah",
+      "additionalPlaceholder": "Ku dar macluumaad kale oo muhiim ah oo loogu talagalay martida..."
+    }
+  },
+  "checkInPreferences": {
+    "title": "Doorashada Galitaanka",
+    "description": "Sidee ayaad rabaa in martidu u galaan hantidaada?",
+    "selfCheckIn": {
+      "title": "Galitaan-is",
+      "subtitle": "Martidu waxay geli karaan anagoon nala kulmin",
+      "helpText": "Martidu waxay u heli karaan hantidaada iyadoo la isticmaalayo koodka furaha ama sanduuqa xidhka."
+    },
+    "keyPickup": {
+      "title": "Qaadashada Furaha Loo Baahan yahay",
+      "subtitle": "Martidu waa inay ka qaadaan furayaasha goob gaar ah",
+      "helpText": "Martidu waxay ka qaadan doonaan furayaasha goob ama qof loo qoondeeyay."
+    },
+    "meetAndGreet": {
+      "title": "Kulmin & Salaan",
+      "subtitle": "Waxaad door biddaa inaad si qof ula kulanto martida",
+      "helpText": "Waxaad si qof ah ula kulmi doontaa martida si aad u siiso furayaasha iyo tilmaamaha."
+    },
+    "instructions": {
+      "title": "Tilmaamaha Galitaanka",
+      "placeholder": "Siiso tilmaamo faahfaahsan oo galitaanka...",
+      "helpText": "Ku dar tilmaamo gaar ah oo loogu talagalay martida sida ay u geli karaan hantidaada."
+    }
+  }
+}

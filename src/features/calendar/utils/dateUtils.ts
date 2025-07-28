@@ -515,7 +515,7 @@ export function formatMonthName(date: Date, short: boolean = false): string {
     
     // Return the translation key that can be used with t() function
     const monthKey = short ? monthShortKeys[monthIndex] : monthKeys[monthIndex];
-    const translationKey = short ? `calendar.monthsShort.${monthKey}` : `calendar.months.${monthKey}`;
+    const translationKey = short ? `features.calendar.monthsShort.${monthKey}` : `features.calendar.months.${monthKey}`;
     
     // For now, return the key - the actual translation will be handled by the component using this function
     return short ? `${translationKey} ${year}` : `${translationKey} ${year}`;
@@ -538,23 +538,23 @@ export function formatDayNumber(date: Date): string {
 export function getWeekdayHeaders(short: boolean = true): string[] {
   if (short) {
     return [
-      "calendar.weekdaysShort.sun",
-      "calendar.weekdaysShort.mon", 
-      "calendar.weekdaysShort.tue",
-      "calendar.weekdaysShort.wed",
-      "calendar.weekdaysShort.thu",
-      "calendar.weekdaysShort.fri",
-      "calendar.weekdaysShort.sat"
+      "features.calendar.weekdaysShort.sun",
+      "features.calendar.weekdaysShort.mon", 
+      "features.calendar.weekdaysShort.tue",
+      "features.calendar.weekdaysShort.wed",
+      "features.calendar.weekdaysShort.thu",
+      "features.calendar.weekdaysShort.fri",
+      "features.calendar.weekdaysShort.sat"
     ];
   } else {
     return [
-      "calendar.weekdays.sunday",
-      "calendar.weekdays.monday",
-      "calendar.weekdays.tuesday", 
-      "calendar.weekdays.wednesday",
-      "calendar.weekdays.thursday",
-      "calendar.weekdays.friday",
-      "calendar.weekdays.saturday"
+      "features.calendar.weekdays.sunday",
+      "features.calendar.weekdays.monday",
+      "features.calendar.weekdays.tuesday", 
+      "features.calendar.weekdays.wednesday",
+      "features.calendar.weekdays.thursday",
+      "features.calendar.weekdays.friday",
+      "features.calendar.weekdays.saturday"
     ];
   }
 }

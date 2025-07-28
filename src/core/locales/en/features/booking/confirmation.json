@@ -1,0 +1,33 @@
+{
+  "success": {
+    "bookingConfirmed": "Booking Confirmed",
+    "confirmationMessage": "Your booking has been confirmed"
+  },
+  "actions": {
+    "addToCalendar": "Add to Calendar",
+    "directions": "Get Directions",
+    "shareBooking": "Share Booking",
+    "cancelBooking": "Cancel Booking",
+    "viewBookingDetails": "View Booking Details",
+    "contactHost": "Contact Host",
+    "getDirections": "Get Directions"
+  },
+  "calendar": {
+    "calendarPermissionDenied": "Calendar permission denied",
+    "noCalendarFound": "No calendar found",
+    "addedToCalendar": "Added to calendar",
+    "calendarError": "Calendar error",
+    "calendarTitle": "{{property}} - Booking",
+    "calendarDetails": "Check-in: {{checkIn}}, Check-out: {{checkOut}}, Guests: {{guests}}"
+  },
+  "contact": {
+    "whatsappContact": "WhatsApp Contact",
+    "whatsappError": "WhatsApp contact not available"
+  },
+  "errors": {
+    "bookingNotFound": "Booking Not Found",
+    "bookingNotFoundMessage": "We couldn't find this booking",
+    "locationError": "Location information not available",
+    "mapsError": "Unable to open maps"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "title": "Astaanta Martigelinta",
+  "subtitle": "Samee astaan soo dhaweyn leh oo martida ka caawisa inay si fiican kuu ogaadaan.",
+  "photo": {
+    "title": "Sawirka Astaanta",
+    "subtitle": "Ku dar sawir saaxiibtinimo leh si aad uga caawiso martida inay ku aqoonsadaan",
+    "add": "Ku dar Sawir",
+    "change": "Bedel Sawirka",
+    "remove": "Ka saar Sawirka",
+    "selectPhoto": "Dooro Sawir",
+    "selectPhotoDescription": "Dooro sida aad jeceshahay inaad ku darto sawirkaaga",
+    "camera": "Qaado Sawir",
+    "library": "Ka dooro Maktabadda",
+    "permissionRequired": "Ruqsadda maktabadda sawirrada ayaa loo baahan yahay",
+    "cameraPermissionRequired": "Ruqsadda kaamirka ayaa loo baahan yahay",
+    "uploadError": "Soo gelinta sawirka ayaa fashilantay",
+    "cameraError": "Qaadista sawirka ayaa fashilantay",
+    "helpText": "Sawir cad oo saaxiibtinimo leh ayaa martida ka caawiya inay dareemaan raaxo marka ay kula buukaan."
+  },
+  "bio": {
+    "title": "Adiga ku saabsan",
+    "subtitle": "Uga sheeg martida adiga iyo waxa kaa dhiga martigale fiican",
+    "placeholder": "Wadaag wax yar oo ku saabsan adiga, xiisahaaga, iyo waxa aad ka jeceshahay martigelinta martida...",
+    "tips": "Noqo mid run ah oo soo dhaweyn",
+    "words": "kalmado",
+    "minLength": "Taariikh nololeedku waa inuu ugu yaraan 50 xaraf yahay",
+    "helpText": "Taariikh nololeed fikirsan ayaa martida ka caawiya inay ku ogaadaan oo kalsoni dhisa."
+  },
+  "details": {
+    "title": "Faahfaahinta Shakhsiga",
+    "subtitle": "Wadaag macluumad aasaasi ah oo ku saabsan adiga",
+    "location": {
+      "title": "Goobta",
+      "placeholder": "tusaale ahaan, Muqdisho, Soomaaliya",
+      "helpText": "Goobtuhu waxay martida ka caawisaa inay fahmaan aqoontaada maxalliga ah."
+    },
+    "occupation": {
+      "title": "Shaqada",
+      "placeholder": "tusaale ahaan, Injineer Software",
+      "helpText": "Wadaagista shaqadaada ayaa martida ka caawiya inay kula xidhiidhaan."
+    }
+  },
+  "interests": {
+    "title": "Xiisaha",
+    "subtitle": "Maxaad xamaasad u qabaa? (Dooro ilaa 10)",
+    "travel": "Safar",
+    "food": "Cunto & Cunista",
+    "music": "Muusig",
+    "art": "Farshaxan & Dhaqan",
+    "sports": "Ciyaaraha",
+    "nature": "Dabeecad",
+    "photography": "Sawir qaadis",
+    "reading": "Akhrinta",
+    "cooking": "Karinta",
+    "history": "Taariikh",
+    "culture": "Dhaqan",
+    "business": "Ganacsi",
+    "selected": "{{count}} xiise ayaa la doortay",
+    "helpText": "Wadaagista xiisahaaga ayaa martida ka caawiya inay kula xiriiraan heer shakhsi ah."
+  }
+}

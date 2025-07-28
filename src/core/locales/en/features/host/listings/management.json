@@ -1,0 +1,40 @@
+{
+  "title": "My Listings",
+  "noListings": "No listings yet",
+  "noListingsDescription": "Start creating your first property listing",
+  "createListing": "Create Listing",
+  "status": {
+    "draft": "Draft",
+    "active": "Active",
+    "inactive": "Inactive",
+    "published": "Published",
+    "pending": "Pending Review",
+    "rejected": "Rejected"
+  },
+  "actions": {
+    "edit": "Edit",
+    "delete": "Delete",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "view": "View"
+  },
+  "stats": {
+    "stats": "Statistics",
+    "bookings": "Bookings",
+    "revenue": "Revenue",
+    "rating": "Rating",
+    "reviews": "Reviews",
+    "noReviews": "No reviews yet",
+    "averageRating": "Average Rating",
+    "totalBookings": "Total Bookings",
+    "totalRevenue": "Total Revenue",
+    "lastBooking": "Last Booking",
+    "noBookings": "No bookings yet",
+    "noRevenue": "No revenue yet"
+  },
+  "loading": "Loading listings...",
+  "error": "Error loading listings",
+  "retry": "Retry",
+  "emptyTitle": "No listings yet",
+  "emptyMessage": "Start creating your first property listing"
+}

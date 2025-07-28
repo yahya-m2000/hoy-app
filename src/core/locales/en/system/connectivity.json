@@ -1,0 +1,84 @@
+{
+  "status": {
+    "online": "Online",
+    "offline": "Offline",
+    "connecting": "Connecting...",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "reconnecting": "Reconnecting...",
+    "reconnected": "Reconnected",
+    "unstable": "Connection unstable",
+    "slow": "Slow connection detected"
+  },
+  "types": {
+    "wifi": "Wi-Fi",
+    "cellular": "Cellular",
+    "ethernet": "Ethernet",
+    "bluetooth": "Bluetooth",
+    "unknown": "Unknown connection type"
+  },
+  "quality": {
+    "excellent": "Excellent connection",
+    "good": "Good connection",
+    "fair": "Fair connection",
+    "poor": "Poor connection",
+    "terrible": "Very poor connection"
+  },
+  "messages": {
+    "noInternet": "No internet connection",
+    "internetRequired": "Internet connection required",
+    "checkConnection": "Please check your internet connection",
+    "connectionLost": "Internet connection lost",
+    "connectionRestored": "Internet connection restored",
+    "tryingToReconnect": "Trying to reconnect...",
+    "reconnectSuccessful": "Successfully reconnected",
+    "reconnectFailed": "Failed to reconnect",
+    "workingOffline": "Working in offline mode",
+    "syncWhenOnline": "Changes will sync when you're back online",
+    "offlineDataAvailable": "Some data is available offline",
+    "offlineFeaturesLimited": "Some features are not available offline"
+  },
+  "errors": {
+    "networkError": "Network error occurred",
+    "serverUnreachable": "Server is unreachable",
+    "timeoutError": "Connection timed out",
+    "dnsError": "DNS resolution failed",
+    "sslError": "SSL connection error",
+    "proxyError": "Proxy connection error",
+    "firewallBlocked": "Connection blocked by firewall"
+  },
+  "actions": {
+    "retry": "Retry",
+    "refresh": "Refresh",
+    "goOffline": "Work Offline",
+    "checkSettings": "Check Network Settings",
+    "troubleshoot": "Troubleshoot",
+    "contactSupport": "Contact Support",
+    "switchNetwork": "Switch Network",
+    "turnOnWifi": "Turn On Wi-Fi",
+    "turnOnCellular": "Turn On Cellular Data"
+  },
+  "sync": {
+    "syncing": "Syncing...",
+    "synced": "All data synced",
+    "syncFailed": "Sync failed",
+    "syncPending": "Sync pending",
+    "lastSynced": "Last synced {{time}}",
+    "neverSynced": "Never synced",
+    "syncInProgress": "Sync in progress",
+    "syncComplete": "Sync complete",
+    "syncConflict": "Sync conflict detected",
+    "resolveConflict": "Resolve conflict",
+    "keepLocal": "Keep local version",
+    "keepRemote": "Keep server version",
+    "mergeBoth": "Merge both versions"
+  },
+  "bandwidth": {
+    "high": "High-speed connection",
+    "medium": "Medium-speed connection",
+    "low": "Low-speed connection",
+    "limited": "Limited bandwidth detected",
+    "saving": "Data saver mode active",
+    "unlimited": "Unlimited data plan"
+  }
+}

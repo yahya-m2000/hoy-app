@@ -133,23 +133,23 @@ export const PropertyCard: React.FC<CombinedPropertyCardProps> = ({
       propType.charAt(0).toUpperCase() + propType.slice(1).toLowerCase();
 
     if (cityName) {
-      return `${formattedType} ${t("home.in")} ${cityName}`;
+      return `${formattedType} ${t("features.property.details.common.general.in")} ${cityName}`;
     }
     return formattedType;
   };
 
   const getHostTypeDisplay = () => {
-    if (!hostType) return t("home.individualHost");
+    if (!hostType) return t("features.property.details.common.general.individualHost");
 
     switch (hostType.toLowerCase()) {
       case "individual":
-        return t("home.individualHost");
+        return t("features.property.details.common.general.individualHost");
       case "business":
-        return t("home.businessHost");
+        return t("features.property.details.common.general.businessHost");
       case "organization":
-        return t("home.organizationHost");
+        return t("features.property.details.common.general.organizationHost");
       default:
-        return t("home.individualHost");
+        return t("features.property.details.common.general.individualHost");
     }
   };
 
@@ -216,20 +216,20 @@ export const PropertyCard: React.FC<CombinedPropertyCardProps> = ({
         ? {
             text:
               hostStatus === "active"
-                ? t("property.deactivate")
-                : t("property.activate"),
+                ? t("features.property.management.actions.deactivate")
+                : t("features.property.management.actions.activate"),
             onPress: onToggleStatus,
           }
         : undefined,
       onDelete
         ? {
-            text: t("property.delete"),
+            text: t("features.property.management.actions.delete"),
             style: "destructive" as const,
             onPress: () => {
-              Alert.alert(t("property.delete"), t("property.deleteConfirm"), [
+              Alert.alert(t("features.property.management.actions.delete"), t("features.property.management.actions.deleteConfirm"), [
                 { text: t("common.cancel"), style: "cancel" as const },
                 {
-                  text: t("property.delete"),
+                  text: t("features.property.management.actions.delete"),
                   style: "destructive" as const,
                   onPress: onDelete,
                 },
@@ -242,7 +242,7 @@ export const PropertyCard: React.FC<CombinedPropertyCardProps> = ({
         style: "cancel" as const,
       },
     ].filter(Boolean);
-    Alert.alert(t("property.title"), undefined, buttons as any);
+    Alert.alert(t("features.property.management.general.title"), undefined, buttons as any);
   };
 
   return (
@@ -349,7 +349,7 @@ export const PropertyCard: React.FC<CombinedPropertyCardProps> = ({
               },
             ]}
           >
-            {`${formatPrice(price, currency)} ${t("home.perNight")}`}
+            {`${formatPrice(price, currency)} ${t("features.property.details.pricing.perNight")}`}
           </Text>
           <RatingDisplay
             rating={rating || 0}

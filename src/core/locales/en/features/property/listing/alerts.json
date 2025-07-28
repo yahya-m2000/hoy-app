@@ -1,0 +1,12 @@
+{
+  "errorTitle": "Error",
+  "loadError": "Failed to load property data",
+  "submitError": "Failed to submit property. Please try again.",
+  "noMeaningfulData": "No meaningful data to save yet",
+  "requiredFieldsTitle": "Required Fields",
+  "requiredFieldsMessage": "Please fill in all required fields before proceeding.",
+  "saveAndExitTitle": "Save and Exit",
+  "saveAndExitMessage": "Would you like to save your progress before exiting?",
+  "exitWithoutSaving": "Exit Without Saving",
+  "saveAndExit": "Save and Exit"
+}

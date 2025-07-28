@@ -46,11 +46,11 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
       <Container marginBottom="xl">
         <Container marginBottom="lg">
           <Text variant="h4" weight="bold" style={{ marginBottom: 8 }}>
-            {t("reservation.bookingDetails", "Booking Details")}
+            {t("features.booking.flow.bookingDetails", "Booking Details")}
           </Text>
           <Text variant="body">
             {t(
-              "reservation.bookingDetailsDescription",
+              "features.booking.flow.bookingDetailsDescription",
               "Review your reservation details before confirming"
             )}
           </Text>
@@ -64,7 +64,7 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
             marginBottom="md"
           >
             <Text variant="caption" weight="semibold" style={{ flex: 1 }}>
-              {t("reservation.dates", "Dates")}
+              {t("features.booking.flow.dates", "Dates")}
             </Text>
             <Text
               variant="body"
@@ -73,7 +73,10 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
             >
               {startDate && endDate
                 ? `${formatDate(startDate)} - ${formatDate(endDate)}`
-                : t("reservation.noDatesSelected", "No dates selected yet")}
+                : t(
+                    "features.booking.flow.noDatesSelected",
+                    "No dates selected yet"
+                  )}
             </Text>
           </Container>
 
@@ -84,21 +87,29 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
             marginBottom="md"
           >
             <Text variant="caption" weight="semibold" style={{ flex: 1 }}>
-              {t("reservation.guests", "Guests")}
+              {t("features.booking.flow.guests", "Guests")}
             </Text>
             <Text
               variant="body"
               weight="medium"
               style={{ flex: 2, textAlign: "right" }}
             >
-              {adults} {t("reservation.adults", "adults")}
+              {adults} {t("features.booking.flow.adults", "adults")}
               {childrenCount > 0
-                ? `, ${childrenCount} ${t("reservation.children", "children")}`
+                ? `, ${childrenCount} ${t(
+                    "features.booking.flow.children",
+                    "children"
+                  )}`
                 : ""}
               {infants > 0
-                ? `, ${infants} ${t("reservation.infants", "infants")}`
+                ? `, ${infants} ${t(
+                    "features.booking.flow.infants",
+                    "infants"
+                  )}`
                 : ""}
-              {pets > 0 ? `, ${pets} ${t("reservation.pets", "pets")}` : ""}
+              {pets > 0
+                ? `, ${pets} ${t("features.booking.flow.pets", "pets")}`
+                : ""}
             </Text>
           </Container>
 
@@ -109,7 +120,7 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
             marginBottom="md"
           >
             <Text variant="caption" weight="semibold" style={{ flex: 1 }}>
-              {t("reservation.paymentMethod", "Payment Method")}
+              {t("features.booking.flow.paymentMethod", "Payment Method")}
             </Text>
             <Text
               variant="body"
@@ -117,7 +128,10 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
               style={{ flex: 2, textAlign: "right" }}
             >
               {selectedPaymentMethod?.name ||
-                t("reservation.paymentMethodNotSelected", "Not selected")}
+                t(
+                  "features.booking.flow.paymentMethodNotSelected",
+                  "Not selected"
+                )}
             </Text>
           </Container>
         </Container>
@@ -128,11 +142,11 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
         <Container>
           <Container marginBottom="lg">
             <Text variant="h4" weight="bold" style={{ marginBottom: 8 }}>
-              {t("reservation.priceBreakdown", "Price Breakdown")}
+              {t("features.booking.flow.priceBreakdown", "Price Breakdown")}
             </Text>
             <Text variant="body">
               {t(
-                "reservation.priceBreakdownDescription",
+                "features.booking.flow.priceBreakdownDescription",
                 "Detailed breakdown of your total cost"
               )}
             </Text>
@@ -147,7 +161,7 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
             >
               <Text variant="caption" style={{ flex: 1 }}>
                 {formatCurrency(safePropertyPrice)} x {calculateNights()}{" "}
-                {t("reservation.nights", "nights")}
+                {t("features.booking.flow.nights", "nights")}
               </Text>
               <Text variant="body" weight="medium">
                 {formatCurrency(safePropertyPrice * calculateNights())}
@@ -162,7 +176,7 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
                 marginBottom="sm"
               >
                 <Text variant="caption" style={{ flex: 1 }}>
-                  {t("reservation.cleaningFee", "Cleaning fee")}
+                  {t("features.booking.flow.cleaningFee", "Cleaning fee")}
                 </Text>
                 <Text variant="body" weight="medium">
                   {formatCurrency(priceDetails.cleaningFee)}
@@ -178,7 +192,7 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
                 marginBottom="sm"
               >
                 <Text variant="caption" style={{ flex: 1 }}>
-                  {t("reservation.serviceFee", "Service fee")}
+                  {t("features.booking.flow.serviceFee", "Service fee")}
                 </Text>
                 <Text variant="body" weight="medium">
                   {formatCurrency(priceDetails.serviceFee)}
@@ -194,7 +208,7 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
                 marginBottom="sm"
               >
                 <Text variant="caption" style={{ flex: 1 }}>
-                  {t("reservation.taxes", "Taxes")}
+                  {t("features.booking.flow.taxes", "Taxes")}
                 </Text>
                 <Text variant="body" weight="medium">
                   {formatCurrency(priceDetails.taxes)}
@@ -214,7 +228,7 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
               marginTop="md"
             >
               <Text variant="body" weight="semibold">
-                {t("reservation.total", "Total")}
+                {t("features.booking.flow.total", "Total")}
               </Text>
 
               <Text variant="h3" weight="bold">

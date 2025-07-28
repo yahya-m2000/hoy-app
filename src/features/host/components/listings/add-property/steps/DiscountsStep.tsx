@@ -21,13 +21,13 @@ export default function DiscountsStep({
   const discounts = [
     {
       key: "newListingPromo",
-      label: t("property.pricing.newListingDiscount"),
-      description: t("property.pricing.newListingDiscountDescription"),
+      label: t("features.property.listing.pricing.discounts.newListing.title"),
+      description: t("features.property.listing.pricing.discounts.newListing.description"),
     },
     {
       key: "lastMinuteDiscount",
-      label: t("property.pricing.lastMinuteDiscount"),
-      description: t("property.pricing.lastMinuteDiscountDescription"),
+      label: t("features.property.listing.pricing.discounts.lastMinute.title"),
+      description: t("features.property.listing.pricing.discounts.lastMinute.description"),
     },
   ];
 
@@ -43,8 +43,8 @@ export default function DiscountsStep({
   return (
     <Container>
       <StepHeader
-        title={t("property.steps.discounts.title")}
-        description={t("property.steps.discounts.description")}
+        title={t("features.property.listing.steps.discounts.title")}
+        description={t("features.property.listing.steps.discounts.description")}
       />
 
       <Container marginTop="lg">

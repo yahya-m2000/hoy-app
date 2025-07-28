@@ -82,7 +82,7 @@ const PolicyTypeCard: React.FC<PolicyTypeCardProps> = ({
                 paddingVertical="xs"
               >
                 <Text variant="caption" color="white" style={{ fontSize: 10 }}>
-                  {t("host.policies.recommended")}
+                  {t("features.host.setup.policies.recommended")}
                 </Text>
               </Container>
             )}
@@ -125,7 +125,7 @@ const PolicyTypeCard: React.FC<PolicyTypeCardProps> = ({
 
       <Button
         title={
-          isSelected ? t("host.policies.selected") : t("host.policies.select")
+          isSelected ? t("features.host.setup.policies.selected") : t("features.host.setup.policies.select")
         }
         variant={isSelected ? "outline" : "primary"}
         onPress={onSelect}
@@ -314,7 +314,7 @@ export const DefaultPoliciesStep: React.FC<DefaultPoliciesStepProps> = ({
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Container paddingHorizontal="lg" paddingVertical="md">
         <Text variant="h2" color="primary" marginBottom="sm">
-          {t("host.policies.defaultPolicies.title")}
+          {t("features.host.setup.policies.defaultPolicies.title")}
         </Text>
 
         <Text
@@ -323,13 +323,13 @@ export const DefaultPoliciesStep: React.FC<DefaultPoliciesStepProps> = ({
           marginBottom="xl"
           style={{ lineHeight: 22 }}
         >
-          {t("host.policies.defaultPolicies.subtitle")}
+          {t("features.host.setup.policies.defaultPolicies.subtitle")}
         </Text>
 
         {/* Cancellation Policy Section */}
         <Container marginBottom="xl">
           <Text variant="h3" color="primary" marginBottom="md">
-            {t("host.policies.cancellation.title")}
+            {t("features.host.setup.policies.cancellation.title")}
           </Text>
 
           <Text
@@ -338,23 +338,23 @@ export const DefaultPoliciesStep: React.FC<DefaultPoliciesStepProps> = ({
             marginBottom="lg"
             style={{ lineHeight: 20 }}
           >
-            {t("host.policies.cancellation.description")}
+            {t("features.host.setup.policies.cancellation.description")}
           </Text>
 
           <PolicyTypeCard
             type="flexible"
-            title={t("host.policies.cancellation.flexible.title")}
-            subtitle={t("host.policies.cancellation.flexible.subtitle")}
-            refundDetails={t("host.policies.cancellation.flexible.details")}
+            title={t("features.host.setup.policies.cancellation.flexible.title")}
+            subtitle={t("features.host.setup.policies.cancellation.flexible.subtitle")}
+            refundDetails={t("features.host.setup.policies.cancellation.flexible.details")}
             isSelected={currentPolicy === "flexible"}
             onSelect={() => handleCancellationPolicyChange("flexible")}
           />
 
           <PolicyTypeCard
             type="moderate"
-            title={t("host.policies.cancellation.moderate.title")}
-            subtitle={t("host.policies.cancellation.moderate.subtitle")}
-            refundDetails={t("host.policies.cancellation.moderate.details")}
+            title={t("features.host.setup.policies.cancellation.moderate.title")}
+            subtitle={t("features.host.setup.policies.cancellation.moderate.subtitle")}
+            refundDetails={t("features.host.setup.policies.cancellation.moderate.details")}
             isSelected={currentPolicy === "moderate"}
             onSelect={() => handleCancellationPolicyChange("moderate")}
             isRecommended={true}
@@ -362,9 +362,9 @@ export const DefaultPoliciesStep: React.FC<DefaultPoliciesStepProps> = ({
 
           <PolicyTypeCard
             type="strict"
-            title={t("host.policies.cancellation.strict.title")}
-            subtitle={t("host.policies.cancellation.strict.subtitle")}
-            refundDetails={t("host.policies.cancellation.strict.details")}
+            title={t("features.host.setup.policies.cancellation.strict.title")}
+            subtitle={t("features.host.setup.policies.cancellation.strict.subtitle")}
+            refundDetails={t("features.host.setup.policies.cancellation.strict.details")}
             isSelected={currentPolicy === "strict"}
             onSelect={() => handleCancellationPolicyChange("strict")}
           />
@@ -373,7 +373,7 @@ export const DefaultPoliciesStep: React.FC<DefaultPoliciesStepProps> = ({
         {/* House Rules Section */}
         <Container marginBottom="xl">
           <Text variant="h3" color="primary" marginBottom="md">
-            {t("host.policies.houseRules.title")}
+            {t("features.host.setup.policies.houseRules.title")}
           </Text>
 
           <Text
@@ -382,19 +382,19 @@ export const DefaultPoliciesStep: React.FC<DefaultPoliciesStepProps> = ({
             marginBottom="lg"
             style={{ lineHeight: 20 }}
           >
-            {t("host.policies.houseRules.description")}
+            {t("features.host.setup.policies.houseRules.description")}
           </Text>
 
           {/* Check-in/Check-out Times */}
           <Container marginBottom="lg">
             <Text variant="subtitle" color="primary" marginBottom="md">
-              {t("host.policies.houseRules.checkInOut")}
+              {t("features.host.setup.policies.houseRules.checkInOut")}
             </Text>
 
             <Container flexDirection="row" style={{ gap: spacing.md }}>
               <Container flex={1}>
                 <Input
-                  label={t("host.policies.houseRules.checkInTime")}
+                  label={t("features.host.setup.policies.houseRules.checkInTime")}
                   value={currentHouseRules.checkInTime || ""}
                   onChangeText={(value) =>
                     handleTimeChange("checkInTime", value)
@@ -405,7 +405,7 @@ export const DefaultPoliciesStep: React.FC<DefaultPoliciesStepProps> = ({
               </Container>
               <Container flex={1}>
                 <Input
-                  label={t("host.policies.houseRules.checkOutTime")}
+                  label={t("features.host.setup.policies.houseRules.checkOutTime")}
                   value={currentHouseRules.checkOutTime || ""}
                   onChangeText={(value) =>
                     handleTimeChange("checkOutTime", value)
@@ -419,8 +419,8 @@ export const DefaultPoliciesStep: React.FC<DefaultPoliciesStepProps> = ({
 
           {/* House Rules Toggles */}
           <HouseRuleToggle
-            title={t("host.policies.houseRules.smoking.title")}
-            subtitle={t("host.policies.houseRules.smoking.subtitle")}
+            title={t("features.host.setup.policies.houseRules.smoking.title")}
+            subtitle={t("features.host.setup.policies.houseRules.smoking.subtitle")}
             value={currentHouseRules.smokingAllowed || false}
             onToggle={(value) =>
               handleHouseRulesChange("smokingAllowed", value)
@@ -429,16 +429,16 @@ export const DefaultPoliciesStep: React.FC<DefaultPoliciesStepProps> = ({
           />
 
           <HouseRuleToggle
-            title={t("host.policies.houseRules.pets.title")}
-            subtitle={t("host.policies.houseRules.pets.subtitle")}
+            title={t("features.host.setup.policies.houseRules.pets.title")}
+            subtitle={t("features.host.setup.policies.houseRules.pets.subtitle")}
             value={currentHouseRules.petsAllowed || false}
             onToggle={(value) => handleHouseRulesChange("petsAllowed", value)}
             icon="paw-outline"
           />
 
           <HouseRuleToggle
-            title={t("host.policies.houseRules.parties.title")}
-            subtitle={t("host.policies.houseRules.parties.subtitle")}
+            title={t("features.host.setup.policies.houseRules.parties.title")}
+            subtitle={t("features.host.setup.policies.houseRules.parties.subtitle")}
             value={currentHouseRules.partiesAllowed || false}
             onToggle={(value) =>
               handleHouseRulesChange("partiesAllowed", value)
@@ -449,8 +449,8 @@ export const DefaultPoliciesStep: React.FC<DefaultPoliciesStepProps> = ({
           {/* Quiet Hours */}
           <Container marginBottom="lg">
             <HouseRuleToggle
-              title={t("host.policies.houseRules.quietHours.title")}
-              subtitle={t("host.policies.houseRules.quietHours.subtitle")}
+              title={t("features.host.setup.policies.houseRules.quietHours.title")}
+              subtitle={t("features.host.setup.policies.houseRules.quietHours.subtitle")}
               value={currentHouseRules.quietHours?.enabled || false}
               onToggle={(value) =>
                 handleHouseRulesChange("quietHours", {
@@ -472,7 +472,7 @@ export const DefaultPoliciesStep: React.FC<DefaultPoliciesStepProps> = ({
               >
                 <Container flex={1}>
                   <Input
-                    label={t("host.policies.houseRules.quietHours.start")}
+                    label={t("features.host.setup.policies.houseRules.quietHours.start")}
                     value={currentHouseRules.quietHours?.start || "22:00"}
                     onChangeText={(value) =>
                       handleQuietHoursChange("start", value)
@@ -483,7 +483,7 @@ export const DefaultPoliciesStep: React.FC<DefaultPoliciesStepProps> = ({
                 </Container>
                 <Container flex={1}>
                   <Input
-                    label={t("host.policies.houseRules.quietHours.end")}
+                    label={t("features.host.setup.policies.houseRules.quietHours.end")}
                     value={currentHouseRules.quietHours?.end || "08:00"}
                     onChangeText={(value) =>
                       handleQuietHoursChange("end", value)
@@ -500,7 +500,7 @@ export const DefaultPoliciesStep: React.FC<DefaultPoliciesStepProps> = ({
         {/* Check-in Preferences Section */}
         <Container marginBottom="xl">
           <Text variant="h3" color="primary" marginBottom="md">
-            {t("host.policies.checkInPreferences.title")}
+            {t("features.host.setup.policies.checkInPreferences.title")}
           </Text>
 
           <Text
@@ -509,13 +509,13 @@ export const DefaultPoliciesStep: React.FC<DefaultPoliciesStepProps> = ({
             marginBottom="lg"
             style={{ lineHeight: 20 }}
           >
-            {t("host.policies.checkInPreferences.description")}
+            {t("features.host.setup.policies.checkInPreferences.description")}
           </Text>
 
           <HouseRuleToggle
-            title={t("host.policies.checkInPreferences.selfCheckIn.title")}
+            title={t("features.host.setup.policies.checkInPreferences.selfCheckIn.title")}
             subtitle={t(
-              "host.policies.checkInPreferences.selfCheckIn.subtitle"
+              "features.host.setup.policies.checkInPreferences.selfCheckIn.subtitle"
             )}
             value={currentCheckInPrefs.selfCheckIn || false}
             onToggle={(value) =>
@@ -525,8 +525,8 @@ export const DefaultPoliciesStep: React.FC<DefaultPoliciesStepProps> = ({
           />
 
           <HouseRuleToggle
-            title={t("host.policies.checkInPreferences.keyPickup.title")}
-            subtitle={t("host.policies.checkInPreferences.keyPickup.subtitle")}
+            title={t("features.host.setup.policies.checkInPreferences.keyPickup.title")}
+            subtitle={t("features.host.setup.policies.checkInPreferences.keyPickup.subtitle")}
             value={currentCheckInPrefs.keyPickup || false}
             onToggle={(value) =>
               handleCheckInPreferencesChange("keyPickup", value)
@@ -535,9 +535,9 @@ export const DefaultPoliciesStep: React.FC<DefaultPoliciesStepProps> = ({
           />
 
           <HouseRuleToggle
-            title={t("host.policies.checkInPreferences.meetAndGreet.title")}
+            title={t("features.host.setup.policies.checkInPreferences.meetAndGreet.title")}
             subtitle={t(
-              "host.policies.checkInPreferences.meetAndGreet.subtitle"
+              "features.host.setup.policies.checkInPreferences.meetAndGreet.subtitle"
             )}
             value={currentCheckInPrefs.meetAndGreet || false}
             onToggle={(value) =>
@@ -563,11 +563,11 @@ export const DefaultPoliciesStep: React.FC<DefaultPoliciesStepProps> = ({
               color={theme.colors.primary}
             />
             <Text variant="subtitle" color="primary" marginLeft="sm">
-              {t("host.policies.summary.title")}
+              {t("features.host.setup.policies.summary.title")}
             </Text>
           </Container>
           <Text variant="body" color="secondary" style={{ lineHeight: 20 }}>
-            {t("host.policies.summary.description")}
+            {t("features.host.setup.policies.summary.description")}
           </Text>
         </Container>
       </Container>

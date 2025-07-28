@@ -1,0 +1,7 @@
+{
+  "selectLocationFirst": "Please select a location first",
+  "invalidDates": "Please select valid dates",
+  "invalidGuestCount": "Please select a valid number of guests",
+  "locationRequired": "Location is required",
+  "dateRequired": "Check-in and check-out dates are required"
+}

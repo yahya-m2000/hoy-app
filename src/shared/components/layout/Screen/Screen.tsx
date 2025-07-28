@@ -72,6 +72,7 @@ const Screen: React.FC<ScreenProps> = ({
     const {
       variant = "solid",
       title,
+      titleStyle,
       left,
       right,
       scrollThreshold = 50,
@@ -82,6 +83,7 @@ const Screen: React.FC<ScreenProps> = ({
     return (
       <Header
         title={title}
+        titleStyle={titleStyle}
         variant={variant}
         left={left}
         right={right}

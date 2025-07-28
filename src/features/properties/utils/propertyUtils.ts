@@ -212,7 +212,7 @@ export const handleGetDirectionsToProperty = (
   t: (key: string) => string
 ) => {
   if (!coordinates?.latitude || !coordinates?.longitude) {
-    showToast({ message: t("property.locationError"), type: "error" });
+    showToast({ message: t("system.errors.device.locationUnavailable"), type: "error" });
     return;
   }
   
@@ -228,6 +228,6 @@ export const handleGetDirectionsToProperty = (
   }
   
   LinkingExpo.openURL(url).catch(() => {
-    showToast({ message: t("property.mapsError"), type: "error" });
+    showToast({ message: t("system.errors.data.loadFailed"), type: "error" });
   });
 };

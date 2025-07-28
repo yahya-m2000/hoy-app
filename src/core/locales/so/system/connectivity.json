@@ -1,0 +1,84 @@
+{
+  "status": {
+    "online": "Online",
+    "offline": "Offline",
+    "connecting": "Isku xiraya...",
+    "connected": "Ku xiran",
+    "disconnected": "La gooyay",
+    "reconnecting": "Dib u xiraya...",
+    "reconnected": "Dib u xiran",
+    "unstable": "Xidhiidhku ma xasilo",
+    "slow": "Xidhiidh gaabis ah ayaa la helay"
+  },
+  "types": {
+    "wifi": "Wi-Fi",
+    "cellular": "Gacanta",
+    "ethernet": "Ethernet",
+    "bluetooth": "Bluetooth",
+    "unknown": "Nooca xidhiidhka aan la garanayn"
+  },
+  "quality": {
+    "excellent": "Xidhiidh aad u fiican",
+    "good": "Xidhiidh fiican",
+    "fair": "Xidhiidh dhexdhexaad ah",
+    "poor": "Xidhiidh liidata",
+    "terrible": "Xidhiidh aad u liidata"
+  },
+  "messages": {
+    "noInternet": "Xidhiidh internet ma jiro",
+    "internetRequired": "Xidhiidh internet ayaa loo baahan yahay",
+    "checkConnection": "Fadlan hubi xidhiidhka internetka",
+    "connectionLost": "Xidhiidhka internetka ayaa la waayay",
+    "connectionRestored": "Xidhiidhka internetka ayaa dib loo soo celiyay",
+    "tryingToReconnect": "Dib u xidhiidh ayaa la isku dayayaa...",
+    "reconnectSuccessful": "Si guul leh ayaa dib loogu xidhay",
+    "reconnectFailed": "Dib u xidhiidhu wuu fashilmay",
+    "workingOffline": "Shaqo ka tirsan offline ayaa la sameynayaa",
+    "syncWhenOnline": "Isbeddellada ayaa la isku duubi doona markaad online noqoto",
+    "offlineDataAvailable": "Xog qaar ayaa offline la heli karaa",
+    "offlineFeaturesLimited": "Sifooyin qaar offline kuma jiraan"
+  },
+  "errors": {
+    "networkError": "Khalad shabakad ayaa dhacay",
+    "serverUnreachable": "Server-ka lama gaari karo",
+    "timeoutError": "Xidhiidhka waqtigii wuu dhamaaday",
+    "dnsError": "Xallinta DNS wuu fashilmay",
+    "sslError": "Khalad xidhiidh SSL",
+    "proxyError": "Khalad xidhiidh proxy",
+    "firewallBlocked": "Xidhiidhka waxaa xanibay firewall"
+  },
+  "actions": {
+    "retry": "Dib u isku day",
+    "refresh": "Cusboonaysii",
+    "goOffline": "Offline ka shaqee",
+    "checkSettings": "Hubi goobaha shabakadda",
+    "troubleshoot": "Xalli dhibaatada",
+    "contactSupport": "La soo xidhiidh taageerada",
+    "switchNetwork": "Bedel shabakadda",
+    "turnOnWifi": "Daar Wi-Fi",
+    "turnOnCellular": "Daar xogta gacanta"
+  },
+  "sync": {
+    "syncing": "Isku dubarid...",
+    "synced": "Dhammaan xogta waa la isku dubay",
+    "syncFailed": "Isku dubku wuu fashilmay",
+    "syncPending": "Isku dubarid ayaa sugaysa",
+    "lastSynced": "Markii u dambaysay ee la isku dubay {{time}}",
+    "neverSynced": "Weligii lama isku dubin",
+    "syncInProgress": "Isku dubarid ayaa socda",
+    "syncComplete": "Isku dubku wuu dhamaaday",
+    "syncConflict": "Khilaaf isku dubarid ayaa la helay",
+    "resolveConflict": "Xalli khilaafka",
+    "keepLocal": "Hay nooca maxalliga ah",
+    "keepRemote": "Hay nooca server-ka",
+    "mergeBoth": "Isku dhufasho labada nooc"
+  },
+  "bandwidth": {
+    "high": "Xidhiidh xawaare sare leh",
+    "medium": "Xidhiidh xawaare dhexe leh",
+    "low": "Xidhiidh xawaare hoose leh",
+    "limited": "Bandwith xaddidan ayaa la helay",
+    "saving": "Qaabka kaydinta xogta ayaa firfircoon",
+    "unlimited": "Qorshe xog aan xaddidnayn"
+  }
+}

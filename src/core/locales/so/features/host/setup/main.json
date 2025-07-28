@@ -1,0 +1,38 @@
+{
+  "title": "Dejinta hosting",
+  "welcome": "Ku soo dhawaaw hosting",
+  "welcomeSubtitle": "Aan ku dejino si aad u bilowdo martiqaadka martida",
+  "getStarted": "Bilow",
+  "calendarIcon": "📅",
+  "promptTitle": "Dhammaystir dejinta hostingkaaga",
+  "promptMessage": "Deji siyaasadaha hosting iyo doorashooyinkaaga si aad u bilowdo aqbalida buukinta",
+  "startSetup": "Sii wad dejinta",
+  "finish": "Dhammaystir dejinta",
+  "setupComplete": "Dejintu waa dhammaatay",
+  "setupCompleteMessage": "Dejinta hostingkaagu waa dhammaatay! Hadda waxaad bilaabi kartaa aqbalida buukinta.",
+  "cancelTitle": "Jooji dejinta",
+  "cancelMessage": "Ma hubtaa inaad doonayso inaad joojiso? Waxaad dhammaystiri kartaa dejinta markale, laakiin ma awoodin doontid inaad aqbasho buukin ilaa dejintu dhammaato.",
+  "cancelConfirm": "Jooji dejinta",
+  "prompts": {
+    "listings": {
+      "title": "Dejin ayaa loo baahan yahay",
+      "message": "Dhammaystir dejinta hostingkaaga si aad u bilowdo ku daridda iyo maamulidda hantidaada"
+    },
+    "today": {
+      "title": "Dejin ayaa loo baahan yahay", 
+      "message": "Dhammaystir dejinta hostingkaaga si aad u aragto buukintaada iyo dashboard dakhliga"
+    },
+    "calendar": {
+      "title": "Dejin ayaa loo baahan yahay",
+      "message": "Dhammaystir dejinta hostingkaaga si aad u maamulso kalanderka buukinta"
+    },
+    "profile": {
+      "title": "Dejin ayaa loo baahan yahay",
+      "message": "Dhammaystir dejinta hostingkaaga si aad u gasho dejinta astaanta hostingkaaga"
+    }
+  },
+  "todayPromptTitle": "Dejin ayaa loo baahan yahay",
+  "todayPromptMessage": "Dhammaystir dejinta hostingkaaga si aad u aragto buukintaada iyo dashboard dakhliga",
+  "calendarPromptTitle": "Dejin ayaa loo baahan yahay",
+  "calendarPromptMessage": "Dhammaystir dejinta hostingkaaga si aad u maamulso kalanderka buukinta"
+}

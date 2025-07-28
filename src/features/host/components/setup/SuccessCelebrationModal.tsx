@@ -98,7 +98,7 @@ export const SuccessCelebrationModal: React.FC<
             marginBottom="xl"
           >
             <Text variant="h1" style={[styles.title, { textAlign: "center" }]}>
-              {t("host.setup.success.title")}
+              {t("features.host.setup.success.title")}
             </Text>
 
             <Container marginTop="md">
@@ -107,7 +107,7 @@ export const SuccessCelebrationModal: React.FC<
                 color="secondary"
                 style={[styles.subtitle, { textAlign: "center" }]}
               >
-                {t("host.setup.success.subtitle")}
+                {t("features.host.setup.success.subtitle")}
               </Text>
             </Container>
           </Container>
@@ -115,30 +115,30 @@ export const SuccessCelebrationModal: React.FC<
           {/* Features Unlocked */}
           <Container paddingHorizontal="lg" marginBottom="xl">
             <Text variant="h3" style={styles.sectionTitle}>
-              {t("host.setup.success.featuresUnlocked")}
+              {t("features.host.setup.success.featuresUnlocked")}
             </Text>
 
             <Container marginTop="md">
               {[
                 {
                   icon: "home",
-                  title: t("host.setup.success.features.listings"),
-                  description: t("host.setup.success.features.listingsDesc"),
+                  title: t("features.host.setup.success.features.listings"),
+                  description: t("features.host.setup.success.features.listingsDesc"),
                 },
                 {
                   icon: "calendar",
-                  title: t("host.setup.success.features.calendar"),
-                  description: t("host.setup.success.features.calendarDesc"),
+                  title: t("features.host.setup.success.features.calendar"),
+                  description: t("features.host.setup.success.features.calendarDesc"),
                 },
                 {
                   icon: "chatbubbles",
-                  title: t("host.setup.success.features.messaging"),
-                  description: t("host.setup.success.features.messagingDesc"),
+                  title: t("features.host.setup.success.features.messaging"),
+                  description: t("features.host.setup.success.features.messagingDesc"),
                 },
                 {
                   icon: "analytics",
-                  title: t("host.setup.success.features.insights"),
-                  description: t("host.setup.success.features.insightsDesc"),
+                  title: t("features.host.setup.success.features.insights"),
+                  description: t("features.host.setup.success.features.insightsDesc"),
                 },
               ].map((feature, index) => (
                 <Container
@@ -182,7 +182,7 @@ export const SuccessCelebrationModal: React.FC<
           {/* Next Steps */}
           <Container paddingHorizontal="lg">
             <Text variant="h3" style={styles.sectionTitle}>
-              {t("host.setup.success.nextSteps")}
+              {t("features.host.setup.success.nextSteps")}
             </Text>
 
             <Container marginTop="lg">
@@ -191,7 +191,7 @@ export const SuccessCelebrationModal: React.FC<
                 color="secondary"
                 style={styles.nextStepsText}
               >
-                {t("host.setup.success.nextStepsDesc")}
+                {t("features.host.setup.success.nextStepsDesc")}
               </Text>
             </Container>
           </Container>
@@ -209,7 +209,7 @@ export const SuccessCelebrationModal: React.FC<
         >
           <Container paddingTop="lg">
             <Button
-              title={t("host.setup.success.addProperty")}
+              title={t("features.host.setup.success.addProperty")}
               variant="primary"
               onPress={handleAddProperty}
               style={styles.primaryButton}
@@ -217,7 +217,7 @@ export const SuccessCelebrationModal: React.FC<
 
             <Container marginTop="md">
               <Button
-                title={t("host.setup.success.exploreDashboard")}
+                title={t("features.host.setup.success.exploreDashboard")}
                 variant="outline"
                 onPress={handleExploreDashboard}
                 style={styles.secondaryButton}

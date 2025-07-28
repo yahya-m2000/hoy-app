@@ -1,0 +1,141 @@
+{
+  "toast": {
+    "success": "Success!",
+    "error": "Error occurred",
+    "warning": "Warning",
+    "info": "Information",
+    "stackedNotifications": "{{count}} notifications",
+    "dismissAll": "Dismiss All",
+    "viewAll": "View All",
+    "queued": "{{count}} queued",
+    "skipToNext": "Skip to Next",
+    "dismiss": "Dismiss",
+    "retry": "Retry",
+    "undo": "Undo",
+    "details": "Details"
+  },
+  "alerts": {
+    "confirm": "Confirm",
+    "warning": "Warning",
+    "danger": "Danger",
+    "info": "Information",
+    "success": "Success",
+    "error": "Error",
+    "title": {
+      "confirm": "Please Confirm",
+      "warning": "Warning",
+      "danger": "Danger!",
+      "info": "Information",
+      "success": "Success!",
+      "error": "Error Occurred"
+    },
+    "actions": {
+      "ok": "OK",
+      "cancel": "Cancel",
+      "yes": "Yes",
+      "no": "No",
+      "continue": "Continue",
+      "abort": "Abort",
+      "retry": "Retry",
+      "ignore": "Ignore",
+      "close": "Close",
+      "dismiss": "Dismiss"
+    }
+  },
+  "confirmations": {
+    "delete": {
+      "title": "Delete {{item}}?",
+      "message": "Are you sure you want to delete this {{item}}? This action cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel"
+    },
+    "discard": {
+      "title": "Discard Changes?",
+      "message": "You have unsaved changes. Are you sure you want to discard them?",
+      "confirm": "Discard",
+      "cancel": "Keep Editing"
+    },
+    "save": {
+      "title": "Save Changes?",
+      "message": "Would you like to save your changes before leaving?",
+      "confirm": "Save",
+      "discard": "Don't Save",
+      "cancel": "Cancel"
+    },
+    "exit": {
+      "title": "Exit {{feature}}?",
+      "message": "Are you sure you want to exit? Your progress may be lost.",
+      "confirm": "Exit",
+      "cancel": "Stay"
+    },
+    "overwrite": {
+      "title": "Overwrite {{item}}?",
+      "message": "A {{item}} with this name already exists. Do you want to overwrite it?",
+      "confirm": "Overwrite",
+      "cancel": "Cancel"
+    },
+    "logout": {
+      "title": "Sign Out?",
+      "message": "Are you sure you want to sign out?",
+      "confirm": "Sign Out",
+      "cancel": "Cancel"
+    }
+  },
+  "loading": {
+    "default": "Loading...",
+    "saving": "Saving...",
+    "uploading": "Uploading...",
+    "processing": "Processing...",
+    "submitting": "Submitting...",
+    "fetching": "Fetching data...",
+    "initializing": "Initializing...",
+    "please_wait": "Please wait...",
+    "almost_done": "Almost done...",
+    "finalizing": "Finalizing..."
+  },
+  "empty": {
+    "noData": "No data available",
+    "noResults": "No results found",
+    "noItems": "No {{items}} found",
+    "noContent": "No content to display",
+    "emptyList": "This list is empty",
+    "emptyFolder": "This folder is empty",
+    "noMatches": "No matches found for \"{{query}}\"",
+    "tryDifferent": "Try a different search term",
+    "createFirst": "Create your first {{item}}",
+    "getStarted": "Get started by {{action}}"
+  },
+  "status": {
+    "online": "Online",
+    "offline": "Offline",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "synced": "Up to date",
+    "syncing": "Syncing...",
+    "outdated": "Outdated",
+    "failed": "Failed to load",
+    "retry": "Tap to retry"
+  },
+  "notifications": {
+    "zaadPaymentTitle": "ZAAD Payment Required",
+    "zaadPaymentBody": "Complete payment for {{propertyName}} using ZAAD",
+    "generalTitle": "Notification",
+    "generalBody": "You have a new notification",
+    "empty": "No Notifications",
+    "emptyDescription": "When you receive notifications, they will appear here.",
+    "clearAll": "Clear all",
+    "clearAllConfirm": "Are you sure you want to clear all notifications?",
+    "markAllRead": "Mark all read",
+    "zaadPayment": "ZAAD Payment",
+    "zaadPaymentOptions": "Choose an action for your payment:",
+    "dialNow": "Dial Now",
+    "saveContact": "Save to Contacts",
+    "copyCode": "Copy Code",
+    "permissionRequired": "Permission Required",
+    "contactsPermissionMessage": "Contacts permission is required to save payment details.",
+    "zaadPaymentInstructions": "ZAAD Payment Instructions",
+    "paymentInstructions": "To complete your payment:\n\n1. Dial: {{ussdCode}}\n2. Follow the prompts\n3. Enter your ZAAD PIN\n\nPayment Details:\nHost: {{hostName}}\nProperty: {{propertyName}}\nAmount: {{amount}}",
+    "paymentError": "Payment Error",
+    "paymentErrorMessage": "There was an error processing your payment request. Please try again."
+  }
+}
