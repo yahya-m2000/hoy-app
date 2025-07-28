@@ -103,10 +103,8 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
         hostName,
       };
 
-      // Get current language preference
-      const currentLanguage = t('common.language') === 'Somali' ? 'so' : 'en';
-
-      await ZaadUtils.processZaadPayment(paymentDetails, currentLanguage);
+      // Pass translation function instead of language parameter
+      await ZaadUtils.processZaadPayment(paymentDetails, t);
 
     } catch (error) {
       console.error('Error processing ZAAD payment:', error);

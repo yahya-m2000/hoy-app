@@ -15,7 +15,12 @@
     "listings": "Listings",
     "properties": "Properties",
     "reservations": "Reservations",
-    "settings": "Settings"
+    "settings": "Settings",
+    "inbox": "Inbox"
+  },
+  "inbox": {
+    "messages": "Messages",
+    "notifications": "Notifications"
   },
   "sections": {
     "overview": "Overview",

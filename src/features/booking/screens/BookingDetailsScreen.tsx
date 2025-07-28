@@ -40,7 +40,7 @@ import {
   Screen,
 } from "@shared/components";
 
-import { PropertyImageContainer } from "src/features/properties/components/details";
+import { PropertyImageContainer, PropertyMap } from "src/features/properties/components/details";
 
 // Utils
 import {
@@ -463,6 +463,18 @@ export default function BookingDetailsScreen({
                 </Container>
               </TouchableOpacity>
             </Section>
+          </Container>
+        )}
+
+        {/* Property Location Map */}
+        {property?.coordinates && (
+          <Container marginBottom="lg">
+            <PropertyMap
+              coordinates={property.coordinates}
+              propertyName={property.name}
+              address={property.address}
+              showToast={showToast}
+            />
           </Container>
         )}
 

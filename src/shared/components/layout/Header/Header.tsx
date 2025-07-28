@@ -18,6 +18,7 @@ import { spacing, iconSize, radius } from "@core/design";
  */
 const Header: React.FC<HeaderProps> = ({
   title,
+  titleStyle,
   leftIcon,
   rightIcon,
   onLeftPress,
@@ -218,6 +219,7 @@ const Header: React.FC<HeaderProps> = ({
               weight="semibold"
               align="center"
               numberOfLines={1}
+              style={titleStyle}
             >
               {title}
             </Text>

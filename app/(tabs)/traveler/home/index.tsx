@@ -11,7 +11,6 @@ import { ScrollView, Image, TouchableOpacity, Platform } from "react-native";
 // Expo and third-party libraries
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 
 // App context and hooks
 import { useAuth, useToast, useLocation } from "src/core/context";
@@ -21,7 +20,15 @@ import { useTrendingCities } from "src/features/properties/hooks/useTrendingCiti
 import { useProperties } from "src/features/properties/hooks/useProperties";
 
 // Base components
-import { Container, Text, Button, AnimatedContainer, Icon } from "@shared/components";
+import {
+  Container,
+  Text,
+  Button,
+  AnimatedContainer,
+  Icon,
+  Screen,
+  Header,
+} from "@shared/components";
 
 // Services
 import { notificationService } from "@core/services/notification.service";
@@ -266,7 +273,7 @@ export default function HomeScreen() {
   } = useLocation();
 
   const router = useRouter();
-  
+
   // Notification state
   const [notificationCount, setNotificationCount] = useState(0);
 
@@ -286,8 +293,8 @@ export default function HomeScreen() {
         updateNotificationCount();
       },
       (response) => {
-        // Handle notification tap - navigate to notifications screen
-        router.push('/(tabs)/traveler/profile/notifications');
+        // Handle notification tap - navigate to inbox screen
+        router.push("/(tabs)/traveler/inbox");
       }
     );
 
@@ -335,7 +342,7 @@ export default function HomeScreen() {
 
   // Handle notification bell press
   const handleNotificationPress = () => {
-    router.push('/(tabs)/traveler/profile/notifications');
+    router.push("/(tabs)/traveler/inbox");
   };
 
   if (allError) {
@@ -371,84 +378,23 @@ export default function HomeScreen() {
   // Debug: log trendingCities before rendering carousels
   // console.log("trendingCities at render:", trendingCities);
   return (
-    <Container
-      flex={1}
-      backgroundColor={isDark ? theme.colors.gray[900] : theme.colors.gray[50]}
-    >
+    <Container backgroundColor={theme.background} flex={1}>
+      <Header
+        title="Hoybnb"
+        titleStyle={{ fontWeight: "900", fontSize: 24 }}
+        right={{
+          icon:
+            notificationCount > 0 ? "notifications" : "notifications-outline",
+          onPress: handleNotificationPress,
+        }}
+        showDivider={false}
+      />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.content}
         contentInsetAdjustmentBehavior="automatic"
       >
         <StatusBar style={isDark ? "light" : "dark"} />
-
-        {/* Header Section with Notification Bell */}
-        <Container
-          flexDirection="row"
-          alignItems="center"
-          justifyContent="space-between"
-          paddingHorizontal="lg"
-          paddingTop={Platform.OS === "android" ? "xxl" : "lg"}
-          paddingBottom="md"
-        >
-          {/* App Title */}
-          <Container flex={1} alignItems="center">
-            <Text 
-              variant="h3" 
-              weight="bold" 
-              color={isDark ? theme.colors.gray[100] : theme.colors.gray[900]}
-            >
-              Hoy
-            </Text>
-          </Container>
-
-          {/* Notification Bell */}
-          <Container style={{ position: 'relative' }}>
-            <TouchableOpacity
-              onPress={handleNotificationPress}
-              style={{
-                padding: 12,
-                borderRadius: 24,
-                backgroundColor: isDark 
-                  ? theme.colors.gray[800] 
-                  : theme.colors.gray[100],
-              }}
-            >
-              <Ionicons
-                name="notifications-outline"
-                size={24}
-                color={isDark ? theme.colors.gray[100] : theme.colors.gray[700]}
-              />
-              
-              {/* Notification Badge */}
-              {notificationCount > 0 && (
-                <Container
-                  style={{
-                    position: 'absolute',
-                    top: 8,
-                    right: 8,
-                    backgroundColor: theme.colors.error,
-                    borderRadius: 10,
-                    minWidth: 20,
-                    height: 20,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    paddingHorizontal: 4,
-                  }}
-                >
-                  <Text
-                    variant="caption"
-                    weight="bold"
-                    color="white"
-                    style={{ fontSize: 12, lineHeight: 14 }}
-                  >
-                    {notificationCount > 99 ? '99+' : notificationCount}
-                  </Text>
-                </Container>
-              )}
-            </TouchableOpacity>
-          </Container>
-        </Container>
 
         {/* Header Section */}
         {allLoading || allError ? (

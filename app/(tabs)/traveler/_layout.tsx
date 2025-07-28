@@ -5,8 +5,8 @@
  */
 
 // React Native core
-import React, { useRef, useState } from "react";
-import { Platform, Animated, Easing } from "react-native";
+import React, { useRef, useState, useEffect } from "react";
+import { Platform, Animated, Easing, View } from "react-native";
 
 // Expo and third-party libraries
 import { useTranslation } from "react-i18next";
@@ -17,6 +17,9 @@ import { Ionicons } from "@expo/vector-icons";
 // App context
 import { useTheme } from "@core/hooks";
 import { useUserRole } from "@core/context";
+
+// Services
+import { notificationService } from "@core/services/notification.service";
 
 // Components
 // (RoleChangeLoadingOverlay handled at root level)
@@ -31,6 +34,25 @@ const TravelerLayout = () => {
   const tabBarTranslateY = useRef(new Animated.Value(0)).current;
   const tabIconOpacity = useRef(new Animated.Value(1)).current;
   const [shouldHideTabBar, setShouldHideTabBar] = useState(false);
+
+  // Notification unread count state
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  // Track unread notifications
+  useEffect(() => {
+    const updateUnreadCount = () => {
+      const notifications = notificationService.getNotificationHistory();
+      const count = notifications.filter((n) => !n.read).length;
+      setUnreadCount(count);
+    };
+
+    // Update count initially
+    updateUnreadCount();
+
+    // Set up a polling interval to check for changes
+    const interval = setInterval(updateUnreadCount, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Adjusted tab bar height including bottom inset for safe area
   const tabBarHeight = Platform.OS === "ios" ? 50 + insets.bottom : 60;
@@ -70,6 +92,40 @@ const TravelerLayout = () => {
   }) => (
     <Animated.View style={{ opacity: tabIconOpacity }}>
       <Ionicons name={name} size={size} color={color} />
+    </Animated.View>
+  );
+
+  // Inbox Icon with Badge
+  const InboxIconWithBadge = ({
+    color,
+    size,
+  }: {
+    color: string;
+    size: number;
+  }) => (
+    <Animated.View style={{ opacity: tabIconOpacity }}>
+      <View style={{ position: "relative" }}>
+        <Ionicons name="mail-outline" size={size} color={color} />
+        {unreadCount > 0 && (
+          <View
+            style={{
+              position: "absolute",
+              top: -0,
+              right: -2,
+              backgroundColor: theme.colors.primary,
+              borderRadius: 100,
+              borderColor: theme.background,
+              borderWidth: 2,
+              minWidth: 6,
+              height: 6,
+              justifyContent: "center",
+              alignItems: "center",
+              padding: 3,
+              // paddingHorizontal: 4,
+            }}
+          ></View>
+        )}
+      </View>
     </Animated.View>
   ); // Helper function to check if we're on a property details screen or search results
   const isOnPropertyDetailsScreen = (navigationState: any) => {
@@ -235,6 +291,17 @@ const TravelerLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <AnimatedTabIcon name="heart-outline" size={size} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="inbox"
+          options={{
+            title: t("common.tabs.inbox"),
+            tabBarLabel: t("common.tabs.inbox"),
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <InboxIconWithBadge color={color} size={size} />
             ),
           }}
         />

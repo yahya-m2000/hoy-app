@@ -15,7 +15,12 @@
     "listings": "Liisaska",
     "properties": "Hantida",
     "reservations": "Buukinada",
-    "settings": "Dejinta"
+    "settings": "Dejinta",
+    "inbox": "Sanduuqa"
+  },
+  "inbox": {
+    "messages": "Fariimaha",
+    "notifications": "Ogeysiisyo"
   },
   "sections": {
     "overview": "Dulmar",

@@ -11,4 +11,4 @@ export { CurrencySetting } from "./CurrencySetting";
 export { LanguageSetting } from "./LanguageSetting";
 export { PersonalInfoSetting } from "./PersonalInfoSetting";
 export { InfoSetting } from "./InfoSetting";
-export { DebugSetting } from "./DebugSetting"; 
+export { DebugSetting } from "./DebugSetting";

@@ -4,14 +4,24 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { Modal, View, ScrollView, TouchableOpacity, Alert, Platform } from "react-native";
+import {
+  Modal,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  Platform,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTheme } from "src/core/hooks/useTheme";
 import { Container, Button, Text, Icon } from "@shared/components";
 import { Ionicons } from "@expo/vector-icons";
 import { fontSize, spacing, radius } from "@core/design";
 import { useTranslation } from "react-i18next";
-import { notificationService, NotificationData } from "@core/services/notification.service";
+import {
+  notificationService,
+  NotificationData,
+} from "@core/services/notification.service";
 import { ZaadUtils } from "@core/utils/zaad.utils";
 
 interface NotificationsModalProps {
@@ -26,7 +36,7 @@ export default function NotificationsModal({
   const { theme, isDark } = useTheme();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
-  
+
   const [notifications, setNotifications] = useState<NotificationData[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -60,13 +70,16 @@ export default function NotificationsModal({
 
   const handleClearAll = () => {
     Alert.alert(
-      t('notifications.clearAll', 'Clear All Notifications'),
-      t('notifications.clearAllConfirm', 'Are you sure you want to clear all notifications?'),
+      t("notifications.clearAll", "Clear All Notifications"),
+      t(
+        "notifications.clearAllConfirm",
+        "Are you sure you want to clear all notifications?"
+      ),
       [
-        { text: t('common.cancel', 'Cancel'), style: 'cancel' },
+        { text: t("common.cancel", "Cancel"), style: "cancel" },
         {
-          text: t('common.clear', 'Clear'),
-          style: 'destructive',
+          text: t("common.clear", "Clear"),
+          style: "destructive",
           onPress: () => {
             notificationService.clearHistory();
             loadNotifications();
@@ -78,33 +91,42 @@ export default function NotificationsModal({
 
   const handleZaadPayment = async (zaadData: any) => {
     try {
-      if (Platform.OS === 'android') {
+      if (Platform.OS === "android") {
         // Android: Show options for auto-dial and save contact
         Alert.alert(
-          t('notifications.zaadPayment', 'ZAAD Payment'),
-          t('notifications.zaadPaymentOptions', 'Choose an action for your payment:'),
+          t("notifications.zaadPayment", "ZAAD Payment"),
+          t(
+            "notifications.zaadPaymentOptions",
+            "Choose an action for your payment:"
+          ),
           [
             {
-              text: t('notifications.dialNow', 'Dial Now'),
-              onPress: () => ZaadUtils.dialUSSD(zaadData.zaadNumber, zaadData.amount),
+              text: t("notifications.dialNow", "Dial Now"),
+              onPress: () =>
+                ZaadUtils.dialUSSD(zaadData.zaadNumber, zaadData.amount),
             },
             {
-              text: t('notifications.saveContact', 'Save to Contacts'),
-              onPress: () => ZaadUtils.addToContacts({
-                hostPhone: zaadData.hostPhone,
-                zaadNumber: zaadData.zaadNumber,
-                amount: zaadData.amount,
-                currency: zaadData.currency,
-                reservationId: zaadData.reservationId,
-                propertyName: zaadData.propertyName,
-                hostName: zaadData.hostName || 'Host',
-              }),
+              text: t("notifications.saveContact", "Save to Contacts"),
+              onPress: () =>
+                ZaadUtils.addToContacts({
+                  hostPhone: zaadData.hostPhone,
+                  zaadNumber: zaadData.zaadNumber,
+                  amount: zaadData.amount,
+                  currency: zaadData.currency,
+                  reservationId: zaadData.reservationId,
+                  propertyName: zaadData.propertyName,
+                  hostName: zaadData.hostName || "Host",
+                }, t),
             },
             {
-              text: t('notifications.copyCode', 'Copy Code'),
-              onPress: () => ZaadUtils.copyUSSDToClipboard(zaadData.zaadNumber, zaadData.amount),
+              text: t("notifications.copyCode", "Copy Code"),
+              onPress: () =>
+                ZaadUtils.copyUSSDToClipboard(
+                  zaadData.zaadNumber,
+                  zaadData.amount
+                ),
             },
-            { text: t('common.cancel', 'Cancel'), style: 'cancel' },
+            { text: t("common.cancel", "Cancel"), style: "cancel" },
           ]
         );
       } else {
@@ -116,29 +138,33 @@ export default function NotificationsModal({
           currency: zaadData.currency,
           reservationId: zaadData.reservationId,
           propertyName: zaadData.propertyName,
-          hostName: zaadData.hostName || 'Host',
-        });
+          hostName: zaadData.hostName || "Host",
+        }, t);
       }
     } catch (error) {
-      console.error('Error handling ZAAD payment:', error);
+      console.error("Error handling ZAAD payment:", error);
     }
   };
 
   const renderNotificationItem = (notification: NotificationData) => {
-    const isZaadPayment = notification.type === 'zaad_payment';
-    
+    const isZaadPayment = notification.type === "zaad_payment";
+
     return (
       <TouchableOpacity
         key={notification.id}
         style={{
-          backgroundColor: notification.read 
-            ? (isDark ? theme.colors.gray[800] : theme.colors.gray[50])
-            : (isDark ? theme.colors.gray[700] : theme.colors.gray[100]),
+          backgroundColor: notification.read
+            ? isDark
+              ? theme.colors.gray[800]
+              : theme.colors.gray[50]
+            : isDark
+            ? theme.colors.gray[700]
+            : theme.colors.gray[100],
           padding: spacing.lg,
           borderRadius: radius.lg,
           marginBottom: spacing.md,
           borderLeftWidth: 4,
-          borderLeftColor: isZaadPayment ? '#00A651' : theme.colors.primary,
+          borderLeftColor: isZaadPayment ? "#00A651" : theme.colors.primary,
         }}
         onPress={() => {
           if (!notification.read) {
@@ -149,9 +175,17 @@ export default function NotificationsModal({
           }
         }}
       >
-        <Container flexDirection="row" alignItems="flex-start" justifyContent="space-between">
+        <Container
+          flexDirection="row"
+          alignItems="flex-start"
+          justifyContent="space-between"
+        >
           <Container flex={1}>
-            <Container flexDirection="row" alignItems="center" marginBottom="xs">
+            <Container
+              flexDirection="row"
+              alignItems="center"
+              marginBottom="xs"
+            >
               {isZaadPayment && (
                 <Container
                   backgroundColor="#00A651"
@@ -169,9 +203,9 @@ export default function NotificationsModal({
                 {notification.title}
               </Text>
             </Container>
-            
-            <Text 
-              variant="caption" 
+
+            <Text
+              variant="caption"
               style={{ marginBottom: spacing.sm, lineHeight: 18 }}
             >
               {notification.body}
@@ -180,22 +214,31 @@ export default function NotificationsModal({
             {isZaadPayment && notification.data && (
               <Container marginTop="sm">
                 <Text variant="caption" weight="semibold">
-                  {t('notifications.paymentDetails', 'Payment Details:')}
+                  {t("notifications.paymentDetails", "Payment Details:")}
                 </Text>
                 <Text variant="caption">
-                  {t('notifications.amount', 'Amount')}: {ZaadUtils.formatAmount(notification.data.amount, notification.data.currency)}
+                  {t("notifications.amount", "Amount")}:{" "}
+                  {ZaadUtils.formatAmount(
+                    notification.data.amount,
+                    notification.data.currency
+                  )}
                 </Text>
                 <Text variant="caption">
-                  {t('notifications.property', 'Property')}: {notification.data.propertyName}
+                  {t("notifications.property", "Property")}:{" "}
+                  {notification.data.propertyName}
                 </Text>
                 <Text variant="caption">
-                  {t('notifications.ussdCode', 'USSD Code')}: {ZaadUtils.generateUSSDCode(notification.data.zaadNumber, notification.data.amount)}
+                  {t("notifications.ussdCode", "USSD Code")}:{" "}
+                  {ZaadUtils.generateUSSDCode(
+                    notification.data.zaadNumber,
+                    notification.data.amount
+                  )}
                 </Text>
               </Container>
             )}
 
-            <Text 
-              variant="caption" 
+            <Text
+              variant="caption"
               color={isDark ? theme.colors.gray[400] : theme.colors.gray[600]}
               style={{ marginTop: spacing.xs }}
             >
@@ -242,7 +285,7 @@ export default function NotificationsModal({
         >
           <View style={{ width: 40 }} />
           <Text style={{ fontSize: fontSize.lg, fontWeight: "600" }}>
-            {t('notifications.title', 'Notifications')}
+            {t("notifications.title", "Notifications")}
           </Text>
           <Button
             onPress={onClose}
@@ -268,13 +311,21 @@ export default function NotificationsModal({
             }}
           >
             <TouchableOpacity onPress={handleMarkAllAsRead}>
-              <Text variant="caption" color={theme.colors.primary} weight="semibold">
-                {t('notifications.markAllRead', 'Mark All Read')}
+              <Text
+                variant="caption"
+                color={theme.colors.primary}
+                weight="semibold"
+              >
+                {t("notifications.markAllRead", "Mark All Read")}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleClearAll}>
-              <Text variant="caption" color={theme.colors.error} weight="semibold">
-                {t('notifications.clearAll', 'Clear All')}
+              <Text
+                variant="caption"
+                color={theme.colors.error}
+                weight="semibold"
+              >
+                {t("notifications.clearAll", "Clear All")}
               </Text>
             </TouchableOpacity>
           </Container>
@@ -283,18 +334,33 @@ export default function NotificationsModal({
         {/* Content */}
         <Container flex={1} style={{ paddingBottom: insets.bottom }}>
           {notifications.length === 0 ? (
-            <Container flex={1} alignItems="center" justifyContent="center" padding="xl">
+            <Container
+              flex={1}
+              alignItems="center"
+              justifyContent="center"
+              padding="xl"
+            >
               <Icon
                 name="notifications-outline"
                 size={64}
                 color={isDark ? theme.colors.gray[600] : theme.colors.gray[400]}
                 style={{ marginBottom: spacing.lg }}
               />
-              <Text variant="h6" weight="semibold" style={{ marginBottom: spacing.sm }}>
-                {t('notifications.empty', 'No Notifications')}
+              <Text
+                variant="h6"
+                weight="semibold"
+                style={{ marginBottom: spacing.sm }}
+              >
+                {t("notifications.empty", "No Notifications")}
               </Text>
-              <Text variant="body" style={{ textAlign: 'center', lineHeight: 22 }}>
-                {t('notifications.emptyDescription', 'When you receive notifications, they will appear here.')}
+              <Text
+                variant="body"
+                style={{ textAlign: "center", lineHeight: 22 }}
+              >
+                {t(
+                  "notifications.emptyDescription",
+                  "When you receive notifications, they will appear here."
+                )}
               </Text>
             </Container>
           ) : (

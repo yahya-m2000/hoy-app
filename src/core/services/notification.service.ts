@@ -5,6 +5,7 @@
 
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 
@@ -27,15 +28,21 @@ export interface NotificationData {
   data?: any;
   timestamp: number;
   read: boolean;
+  // Add language-agnostic data for ZAAD notifications
+  zaadData?: ZaadPaymentNotification;
 }
 
 class NotificationService {
   private expoPushToken: string | null = null;
   private notificationHistory: NotificationData[] = [];
+  private readonly STORAGE_KEY = 'notification_history';
 
   constructor() {
     this.setupNotificationHandler();
     this.setupNotificationChannels();
+    // Initialize push token and load stored notifications
+    this.getExpoPushToken().catch(console.error);
+    this.loadStoredNotifications().catch(console.error);
   }
 
   /**
@@ -44,9 +51,10 @@ class NotificationService {
   private setupNotificationHandler() {
     Notifications.setNotificationHandler({
       handleNotification: async () => ({
-        shouldShowBanner: true,
         shouldPlaySound: true,
         shouldSetBadge: true,
+        shouldShowBanner: true,
+        shouldShowList: true,
       }),
     });
   }
@@ -56,6 +64,13 @@ class NotificationService {
    */
   private async setupNotificationChannels() {
     if (Platform.OS === 'android') {
+      await Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+
       await Notifications.setNotificationChannelAsync('zaad-payments', {
         name: 'ZAAD Payments',
         description: 'Notifications for ZAAD payment instructions',
@@ -115,26 +130,93 @@ class NotificationService {
       return this.expoPushToken;
     }
 
+    if (!Device.isDevice) {
+      console.warn('Must use physical device for push notifications');
+      return null;
+    }
+
     try {
       const hasPermission = await this.requestPermissions();
       if (!hasPermission) {
         return null;
       }
 
-      const projectId = Constants.expoConfig?.extra?.eas?.projectId;
+      const projectId =
+        Constants?.expoConfig?.extra?.eas?.projectId ??
+        Constants?.easConfig?.projectId;
+      
       if (!projectId) {
         throw new Error('Project ID not found');
       }
 
-      const token = await Notifications.getExpoPushTokenAsync({
-        projectId: projectId,
-      });
-
-      this.expoPushToken = token.data;
-      return token.data;
+      const pushTokenString = (
+        await Notifications.getExpoPushTokenAsync({
+          projectId,
+        })
+      ).data;
+      
+      console.log('Push token obtained:', pushTokenString);
+      this.expoPushToken = pushTokenString;
+      return pushTokenString;
     } catch (error) {
       console.error('Error getting push token:', error);
       return null;
+    }
+  }
+
+  /**
+   * Send push notification using Expo push service
+   */
+  async sendPushNotification(expoPushToken: string, title: string, body: string, data?: any): Promise<void> {
+    const message = {
+      to: expoPushToken,
+      sound: 'default',
+      title,
+      body,
+      data: data || {},
+    };
+
+    try {
+      const response = await fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Accept-encoding': 'gzip, deflate',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(message),
+      });
+
+      const result = await response.json();
+      console.log('Push notification sent:', result);
+    } catch (error) {
+      console.error('Error sending push notification:', error);
+    }
+  }
+
+  /**
+   * Load stored notifications from AsyncStorage
+   */
+  private async loadStoredNotifications(): Promise<void> {
+    try {
+      const stored = await AsyncStorage.getItem(this.STORAGE_KEY);
+      if (stored) {
+        this.notificationHistory = JSON.parse(stored);
+        console.log('Loaded stored notifications:', this.notificationHistory.length);
+      }
+    } catch (error) {
+      console.error('Error loading stored notifications:', error);
+    }
+  }
+
+  /**
+   * Save notifications to AsyncStorage
+   */
+  private async saveNotifications(): Promise<void> {
+    try {
+      await AsyncStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.notificationHistory));
+    } catch (error) {
+      console.error('Error saving notifications:', error);
     }
   }
 
@@ -147,6 +229,7 @@ class NotificationService {
   ): Promise<void> {
     const isEnglish = language === 'en';
     
+    // Generate localized text for push notification only
     const title = isEnglish 
       ? 'ZAAD Payment Required' 
       : 'Bixinta ZAAD waa loo baahan yahay';
@@ -158,17 +241,28 @@ class NotificationService {
     const notificationData: NotificationData = {
       id: `zaad_${zaadData.reservationId}_${Date.now()}`,
       type: 'zaad_payment',
-      title,
-      body,
+      title: '', // Will be generated dynamically in UI
+      body: '', // Will be generated dynamically in UI
       data: zaadData,
       timestamp: Date.now(),
       read: false,
+      zaadData, // Store language-agnostic data for dynamic generation
     };
 
-    // Add to local history
+    // Add to local history and save to storage
     this.notificationHistory.unshift(notificationData);
+    await this.saveNotifications();
 
-    // Schedule local notification
+    // Get push token and send push notification
+    const pushToken = await this.getExpoPushToken();
+    if (pushToken) {
+      await this.sendPushNotification(pushToken, title, body, {
+        type: 'zaad_payment',
+        ...zaadData,
+      });
+    }
+
+    // Also schedule local notification as fallback
     await Notifications.scheduleNotificationAsync({
       content: {
         title,
@@ -177,11 +271,12 @@ class NotificationService {
           type: 'zaad_payment',
           ...zaadData,
         },
-        categoryIdentifier: 'zaad-payment',
         sound: 'default',
       },
       trigger: null, // Immediate
     });
+
+    console.log('ZAAD payment notification sent and stored:', { title, body });
   }
 
   /**
@@ -194,27 +289,30 @@ class NotificationService {
   /**
    * Mark notification as read
    */
-  markAsRead(notificationId: string): void {
+  async markAsRead(notificationId: string): Promise<void> {
     const notification = this.notificationHistory.find(n => n.id === notificationId);
     if (notification) {
       notification.read = true;
+      await this.saveNotifications();
     }
   }
 
   /**
    * Mark all notifications as read
    */
-  markAllAsRead(): void {
+  async markAllAsRead(): Promise<void> {
     this.notificationHistory.forEach(notification => {
       notification.read = true;
     });
+    await this.saveNotifications();
   }
 
   /**
    * Clear notification history
    */
-  clearHistory(): void {
+  async clearHistory(): Promise<void> {
     this.notificationHistory = [];
+    await this.saveNotifications();
   }
 
   /**
@@ -222,6 +320,68 @@ class NotificationService {
    */
   getUnreadCount(): number {
     return this.notificationHistory.filter(n => !n.read).length;
+  }
+
+  /**
+   * Debug function to check notification storage
+   */
+  async debugNotificationStorage(): Promise<void> {
+    console.log('=== NOTIFICATION STORAGE DEBUG ===');
+    
+    // Check in-memory notifications
+    console.log('In-memory notifications:', this.notificationHistory.length);
+    this.notificationHistory.forEach((notification, index) => {
+      console.log(`${index + 1}. ${notification.title} (${notification.read ? 'read' : 'unread'}) - ${new Date(notification.timestamp).toLocaleString()}`);
+    });
+
+    // Check AsyncStorage
+    try {
+      const stored = await AsyncStorage.getItem(this.STORAGE_KEY);
+      if (stored) {
+        const parsedNotifications = JSON.parse(stored);
+        console.log('AsyncStorage notifications:', parsedNotifications.length);
+        parsedNotifications.forEach((notification: NotificationData, index: number) => {
+          console.log(`Storage ${index + 1}. ${notification.title} (${notification.read ? 'read' : 'unread'}) - ${new Date(notification.timestamp).toLocaleString()}`);
+        });
+      } else {
+        console.log('No notifications found in AsyncStorage');
+      }
+    } catch (error) {
+      console.error('Error reading from AsyncStorage:', error);
+    }
+
+    console.log('=== END DEBUG ===');
+  }
+
+  /**
+   * Test function to create a sample notification
+   */
+  async createTestNotification(): Promise<void> {
+    const zaadData: ZaadPaymentNotification = {
+      hostPhone: '+252123456789',
+      zaadNumber: '123456789',
+      amount: '50.00',
+      currency: 'USD', 
+      reservationId: 'test_reservation',
+      propertyName: 'Test Property',
+      checkInDate: new Date().toISOString(),
+      checkOutDate: new Date().toISOString(),
+    };
+
+    const testNotification: NotificationData = {
+      id: `test_${Date.now()}`,
+      type: 'zaad_payment',
+      title: '', // Will be generated dynamically in UI
+      body: '', // Will be generated dynamically in UI
+      data: zaadData,
+      timestamp: Date.now(),
+      read: false,
+      zaadData, // Store language-agnostic data for dynamic generation
+    };
+
+    this.notificationHistory.unshift(testNotification);
+    await this.saveNotifications();
+    console.log('Test notification created and saved');
   }
 
   /**

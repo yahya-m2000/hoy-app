@@ -115,5 +115,27 @@
     "outdated": "Outdated",
     "failed": "Failed to load",
     "retry": "Tap to retry"
+  },
+  "notifications": {
+    "zaadPaymentTitle": "ZAAD Payment Required",
+    "zaadPaymentBody": "Complete payment for {{propertyName}} using ZAAD",
+    "generalTitle": "Notification",
+    "generalBody": "You have a new notification",
+    "empty": "No Notifications",
+    "emptyDescription": "When you receive notifications, they will appear here.",
+    "clearAll": "Clear all",
+    "clearAllConfirm": "Are you sure you want to clear all notifications?",
+    "markAllRead": "Mark all read",
+    "zaadPayment": "ZAAD Payment",
+    "zaadPaymentOptions": "Choose an action for your payment:",
+    "dialNow": "Dial Now",
+    "saveContact": "Save to Contacts",
+    "copyCode": "Copy Code",
+    "permissionRequired": "Permission Required",
+    "contactsPermissionMessage": "Contacts permission is required to save payment details.",
+    "zaadPaymentInstructions": "ZAAD Payment Instructions",
+    "paymentInstructions": "To complete your payment:\n\n1. Dial: {{ussdCode}}\n2. Follow the prompts\n3. Enter your ZAAD PIN\n\nPayment Details:\nHost: {{hostName}}\nProperty: {{propertyName}}\nAmount: {{amount}}",
+    "paymentError": "Payment Error",
+    "paymentErrorMessage": "There was an error processing your payment request. Please try again."
   }
 }

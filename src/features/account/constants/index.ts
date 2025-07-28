@@ -5,7 +5,6 @@ export const ACCOUNT_ACTIONS: Record<AccountAction, AccountAction> = {
   // Common actions
   "edit-profile": "edit-profile",
   "personal-info": "personal-info",
-  notifications: "notifications",
   "payment-methods": "payment-methods",
   privacy: "privacy",
   security: "security",

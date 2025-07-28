@@ -68,7 +68,10 @@ export const HorizontalListingsCarousel: React.FC<
   const CATEGORIES = useMemo(
     () => [
       { id: "popular", label: t("features.home.content.categories.popular") },
-      { id: "available", label: t("features.home.content.categories.available") },
+      {
+        id: "available",
+        label: t("features.home.content.categories.available"),
+      },
       { id: "topRated", label: t("features.home.content.categories.topRated") },
       { id: "new", label: t("features.home.content.categories.new") },
       { id: "featured", label: t("features.home.content.categories.featured") },
@@ -196,7 +199,8 @@ export const HorizontalListingsCarousel: React.FC<
       >
         {/* Title */}
         <Text variant="h6" weight="medium">
-          {CATEGORIES[currentCategoryIndex].label} {t("features.home.content.location.in")} {city}
+          {CATEGORIES[currentCategoryIndex].label}{" "}
+          {t("features.home.content.location.in")} {city}
         </Text>
       </Container>
     );

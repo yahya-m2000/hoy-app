@@ -5,7 +5,8 @@
 
 import { Platform, Linking, Alert } from 'react-native';
 import * as Contacts from 'expo-contacts';
-import { notificationService } from '../services/notification.service';
+import * as Clipboard from 'expo-clipboard';
+import { notificationService } from '@core/services/notification.service';
 
 export interface ZaadPaymentDetails {
   hostPhone: string;
@@ -22,9 +23,22 @@ export class ZaadUtils {
    * Validate ZAAD number format
    */
   static validateZaadNumber(zaadNumber: string): boolean {
-    // ZAAD numbers are typically 6-10 digits
-    const zaadRegex = /^\d{6,10}$/;
-    return zaadRegex.test(zaadNumber.replace(/\s+/g, ''));
+    if (!zaadNumber || typeof zaadNumber !== 'string') {
+      return false;
+    }
+    
+    // Remove all spaces, dashes, parentheses, and plus signs
+    const cleanNumber = zaadNumber.replace(/[\s+\-()]/g, '');
+    
+    // Accept phone numbers starting with 252 (after cleaning +)
+    if (cleanNumber.startsWith('252')) {
+      // Should be 252 followed by 8-9 digits (total 11-12 digits)
+      return cleanNumber.length >= 11 && cleanNumber.length <= 12 && /^\d+$/.test(cleanNumber);
+    }
+    
+    // Accept shorter ZAAD account numbers (6-12 digits only)
+    const zaadRegex = /^\d{6,12}$/;
+    return zaadRegex.test(cleanNumber);
   }
 
   /**
@@ -88,7 +102,10 @@ export class ZaadUtils {
   /**
    * Add ZAAD payment contact to phone book (Android only)
    */
-  static async addToContacts(paymentDetails: ZaadPaymentDetails): Promise<boolean> {
+  static async addToContacts(
+    paymentDetails: ZaadPaymentDetails, 
+    t: (key: string, fallback: string) => string
+  ): Promise<boolean> {
     if (Platform.OS !== 'android') {
       console.warn('Adding contacts is only supported on Android');
       return false;
@@ -99,8 +116,8 @@ export class ZaadUtils {
       const { status } = await Contacts.requestPermissionsAsync();
       if (status !== 'granted') {
         Alert.alert(
-          'Permission Required',
-          'Contacts permission is required to save payment details.'
+          t('ui.feedback.notifications.permissionRequired', 'Permission Required'),
+          t('ui.feedback.notifications.contactsPermissionMessage', 'Contacts permission is required to save payment details.')
         );
         return false;
       }
@@ -138,24 +155,31 @@ export class ZaadUtils {
    */
   static showPaymentInstructions(
     paymentDetails: ZaadPaymentDetails,
-    language: 'en' | 'so' = 'en',
+    t: (key: string, fallback: string, params?: any) => string,
     onDialPress?: () => void,
     onAddContactPress?: () => void
   ): void {
-    const isEnglish = language === 'en';
+    const title = t('ui.feedback.notifications.zaadPaymentInstructions', 'ZAAD Payment Instructions');
     
-    const title = isEnglish ? 'ZAAD Payment Instructions' : 'Tilmaamahaaga Bixinta ZAAD';
+    const ussdCode = this.generateUSSDCode(paymentDetails.zaadNumber, paymentDetails.amount);
+    const formattedAmount = this.formatAmount(paymentDetails.amount, paymentDetails.currency);
     
-    const instructions = isEnglish 
-      ? `To complete your payment:\n\n1. Dial: ${this.generateUSSDCode(paymentDetails.zaadNumber, paymentDetails.amount)}\n2. Follow the prompts\n3. Enter your ZAAD PIN\n\nPayment Details:\nHost: ${paymentDetails.hostName}\nProperty: ${paymentDetails.propertyName}\nAmount: ${this.formatAmount(paymentDetails.amount, paymentDetails.currency)}`
-      : `Si aad u dhamaysaysid bixintaada:\n\n1. Geli: ${this.generateUSSDCode(paymentDetails.zaadNumber, paymentDetails.amount)}\n2. Raac tilmaamaha\n3. Geli PIN-kaaga ZAAD\n\nFaahfaahinta Bixinta:\nMartida: ${paymentDetails.hostName}\nHantida: ${paymentDetails.propertyName}\nLacagta: ${this.formatAmount(paymentDetails.amount, paymentDetails.currency)}`;
+    const instructions = t('ui.feedback.notifications.paymentInstructions', 
+      'To complete your payment:\n\n1. Dial: {{ussdCode}}\n2. Follow the prompts\n3. Enter your ZAAD PIN\n\nPayment Details:\nHost: {{hostName}}\nProperty: {{propertyName}}\nAmount: {{amount}}',
+      {
+        ussdCode,
+        hostName: paymentDetails.hostName,
+        propertyName: paymentDetails.propertyName,
+        amount: formattedAmount
+      }
+    );
 
     const buttons = [];
 
     // Add dial button for Android
     if (Platform.OS === 'android') {
       buttons.push({
-        text: isEnglish ? 'Dial Now' : 'Hadda Wac',
+        text: t('ui.feedback.notifications.dialNow', 'Dial Now'),
         onPress: () => {
           if (onDialPress) {
             onDialPress();
@@ -166,19 +190,19 @@ export class ZaadUtils {
       });
 
       buttons.push({
-        text: isEnglish ? 'Save Contact' : 'Keydi Xiriirka',
+        text: t('ui.feedback.notifications.saveContact', 'Save Contact'),
         onPress: () => {
           if (onAddContactPress) {
             onAddContactPress();
           } else {
-            this.addToContacts(paymentDetails);
+            this.addToContacts(paymentDetails, t);
           }
         },
       });
     }
 
     buttons.push({
-      text: isEnglish ? 'OK' : 'Haa',
+      text: t('ui.feedback.alerts.actions.ok', 'OK'),
       style: 'cancel' as const,
     });
 
@@ -191,17 +215,10 @@ export class ZaadUtils {
   static async copyUSSDToClipboard(zaadNumber: string, amount: string): Promise<void> {
     const ussdCode = this.generateUSSDCode(zaadNumber, amount);
     
-    // Use Expo's Clipboard if available, otherwise try React Native's
     try {
-      const { Clipboard } = await import('expo-clipboard');
       await Clipboard.setStringAsync(ussdCode);
-    } catch {
-      try {
-        const { Clipboard } = await import('@react-native-clipboard/clipboard');
-        Clipboard.setString(ussdCode);
-      } catch (error) {
-        console.error('Could not copy to clipboard:', error);
-      }
+    } catch (error) {
+      console.error('Could not copy to clipboard:', error);
     }
   }
 
@@ -210,10 +227,10 @@ export class ZaadUtils {
    */
   static async processZaadPayment(
     paymentDetails: ZaadPaymentDetails,
-    language: 'en' | 'so' = 'en'
+    t: (key: string, fallback: string, params?: any) => string
   ): Promise<void> {
     try {
-      // Send notification
+      // Send notification (service will store language-agnostic data)
       await notificationService.sendZaadPaymentNotification({
         hostPhone: paymentDetails.hostPhone,
         zaadNumber: paymentDetails.zaadNumber,
@@ -223,21 +240,18 @@ export class ZaadUtils {
         propertyName: paymentDetails.propertyName,
         checkInDate: '', // Will be passed from reservation context
         checkOutDate: '', // Will be passed from reservation context
-      }, language);
+      });
 
       // Show instructions immediately
-      this.showPaymentInstructions(paymentDetails, language);
+      this.showPaymentInstructions(paymentDetails, t);
 
     } catch (error) {
       console.error('Error processing ZAAD payment:', error);
       
-      const isEnglish = language === 'en';
       Alert.alert(
-        isEnglish ? 'Payment Error' : 'Khalad Bixin',
-        isEnglish 
-          ? 'There was an error processing your payment request. Please try again.'
-          : 'Khalad ayaa ka dhacay bixintaada. Fadlan isku day mar kale.',
-        [{ text: isEnglish ? 'OK' : 'Haa' }]
+        t('ui.feedback.notifications.paymentError', 'Payment Error'),
+        t('ui.feedback.notifications.paymentErrorMessage', 'There was an error processing your payment request. Please try again.'),
+        [{ text: t('ui.feedback.alerts.actions.ok', 'OK') }]
       );
     }
   }

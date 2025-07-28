@@ -115,5 +115,27 @@
     "outdated": "Duugoobay",
     "failed": "Rarista ayaa fashilantay",
     "retry": "Taabo si aad dib u isku daydo"
+  },
+  "notifications": {
+    "zaadPaymentTitle": "Bixinta ZAAD waa loo baahan yahay",
+    "zaadPaymentBody": "Dhammaystir bixinta {{propertyName}} iyadoo la adeegsanayo ZAAD",
+    "generalTitle": "Ogeysiis",
+    "generalBody": "Waxaad leedahay ogeysiis cusub",
+    "empty": "Ogeysiis ma jirto",
+    "emptyDescription": "Markii aad hesho ogeysiisyo, halkan ayay ka muuqan doonaan.",
+    "clearAll": "Tirtir dhammaan",
+    "clearAllConfirm": "Ma hubtaa inaad rabto inaad tirtirto dhammaan ogeysiisyada?",
+    "markAllRead": "Dhammaan u aqri",
+    "zaadPayment": "Bixinta ZAAD",
+    "zaadPaymentOptions": "Dooro ficil ah bixintaada:",
+    "dialNow": "Hadda wac",
+    "saveContact": "Kaydi Tijaabada",
+    "copyCode": "Koobiyee Koodka",
+    "permissionRequired": "Ruqsad loo baahan yahay",
+    "contactsPermissionMessage": "Ruqsad nambarada waa loo baahan yahay in la kaydiyo faahfaahinta bixinta.",
+    "zaadPaymentInstructions": "Tilmaamahaaga Bixinta ZAAD",
+    "paymentInstructions": "Si aad u dhamaysaysid bixintaada:\n\n1. Geli: {{ussdCode}}\n2. Raac tilmaamaha\n3. Geli PIN-kaaga ZAAD\n\nFaahfaahinta Bixinta:\nMartida: {{hostName}}\nHantida: {{propertyName}}\nLacagta: {{amount}}",
+    "paymentError": "Khalad Bixin",
+    "paymentErrorMessage": "Khalad ayaa ka dhacay bixintaada. Fadlan isku day mar kale."
   }
 }
