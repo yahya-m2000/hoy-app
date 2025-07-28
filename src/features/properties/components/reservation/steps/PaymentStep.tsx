@@ -1,14 +1,17 @@
 /**
  * Payment Step Component for Reservation Flow
  * Modern, clean design with improved visual hierarchy and user experience
+ * Enhanced with ZAAD payment integration and notification support
  */
 
 import React, { useState } from "react";
-import { TouchableOpacity } from "react-native";
-import { Text, Container, Icon } from "@shared/components";
+import { TouchableOpacity, Platform, Alert } from "react-native";
+import { Text, Container, Icon, Button } from "@shared/components";
 import { PaymentMethodSelector } from "@features/booking";
 import { useTheme } from "@core/hooks/useTheme";
 import { useTranslation } from "react-i18next";
+import { ZaadUtils } from "@core/utils/zaad.utils";
+import { notificationService } from "@core/services/notification.service";
 
 interface PaymentStepProps {
   startDate: Date | null;
@@ -21,6 +24,10 @@ interface PaymentStepProps {
   formatDate: (date: Date | null) => string;
   onEditDates: () => void;
   onEditGuests: () => void;
+  property?: any;
+  unit?: any;
+  totalAmount?: string;
+  currency?: string;
 }
 
 export const PaymentStep: React.FC<PaymentStepProps> = ({
@@ -34,11 +41,16 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
   formatDate,
   onEditDates,
   onEditGuests,
+  property,
+  unit,
+  totalAmount = "0",
+  currency = "USD",
 }) => {
   const { theme, isDark } = useTheme();
   const { t } = useTranslation();
   const [isEditingDates, setIsEditingDates] = useState(false);
   const [isEditingGuests, setIsEditingGuests] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   // Create debounced versions to prevent multiple rapid calls
   const handleEditDates = () => {
@@ -61,6 +73,54 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
         setIsEditingGuests(false);
       }, 1000);
     }, 300);
+  };
+
+  // Handle ZAAD payment processing
+  const handleZaadPayment = async () => {
+    if (!selectedPaymentMethod || selectedPaymentMethod.type !== 'zaad') {
+      return;
+    }
+
+    setIsProcessingPayment(true);
+
+    try {
+      const zaadNumber = selectedPaymentMethod.details?.phone || '';
+      const hostPhone = property?.host?.phone || property?.owner?.phone || '';
+      const hostName = property?.host?.name || property?.owner?.name || 'Host';
+      const propertyName = property?.title || property?.name || 'Property';
+
+      if (!zaadNumber || !ZaadUtils.validateZaadNumber(zaadNumber.replace(/\D/g, ''))) {
+        throw new Error('Invalid ZAAD number');
+      }
+
+      const paymentDetails = {
+        hostPhone,
+        zaadNumber: zaadNumber.replace(/\D/g, ''),
+        amount: totalAmount.replace(/[^\d.]/g, ''),
+        currency,
+        reservationId: `temp_${Date.now()}`, // Will be replaced with actual reservation ID
+        propertyName,
+        hostName,
+      };
+
+      // Get current language preference
+      const currentLanguage = t('common.language') === 'Somali' ? 'so' : 'en';
+
+      await ZaadUtils.processZaadPayment(paymentDetails, currentLanguage);
+
+    } catch (error) {
+      console.error('Error processing ZAAD payment:', error);
+      const isEnglish = t('common.language') !== 'Somali';
+      Alert.alert(
+        isEnglish ? 'Payment Error' : 'Khalad Bixin',
+        isEnglish 
+          ? 'There was an error processing your payment request. Please try again.'
+          : 'Khalad ayaa ka dhacay bixintaada. Fadlan isku day mar kale.',
+        [{ text: isEnglish ? 'OK' : 'Haa' }]
+      );
+    } finally {
+      setIsProcessingPayment(false);
+    }
   };
 
   return (
@@ -186,6 +246,86 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
           onSelect={onSelectPaymentMethod}
         />
       </Container>
+
+      {/* ZAAD Payment Instructions */}
+      {selectedPaymentMethod?.type === 'zaad' && (
+        <Container marginTop="lg" marginBottom="lg">
+          <Container
+            backgroundColor={isDark ? theme.colors.gray[800] : theme.colors.gray[50]}
+            padding="lg"
+            borderRadius="lg"
+            marginBottom="md"
+          >
+            <Container flexDirection="row" alignItems="center" marginBottom="sm">
+              <Icon 
+                name="information-circle" 
+                size={20} 
+                color={theme.colors.primary} 
+                style={{ marginRight: 8 }}
+              />
+              <Text variant="body" weight="semibold">
+                {t("reservation.zaadInstructions", "ZAAD Payment Instructions")}
+              </Text>
+            </Container>
+            
+            <Text variant="caption" style={{ lineHeight: 18, marginBottom: 12 }}>
+              {t("reservation.zaadDescription", 
+                "You will receive a notification with payment details. Use the ZAAD code to complete your payment."
+              )}
+            </Text>
+
+            {Platform.OS === 'android' && (
+              <Container marginTop="sm">
+                <Text variant="caption" weight="semibold" color={theme.colors.success}>
+                  {t("reservation.androidFeature", "✓ Auto-dial ZAAD code")}
+                </Text>
+                <Text variant="caption" weight="semibold" color={theme.colors.success}>
+                  {t("reservation.androidContact", "✓ Save to contacts")}
+                </Text>
+              </Container>
+            )}
+          </Container>
+
+          {/* Test Payment Button (for demo purposes) */}
+          <Button
+            title={t("reservation.previewPayment", "Preview Payment Instructions")}
+            variant="outline"
+            onPress={handleZaadPayment}
+            loading={isProcessingPayment}
+            disabled={isProcessingPayment}
+            style={{ marginBottom: 16 }}
+          />
+        </Container>
+      )}
+
+      {/* Payment Summary */}
+      {selectedPaymentMethod && totalAmount && (
+        <Container marginBottom="lg">
+          <Container
+            backgroundColor={isDark ? theme.colors.gray[800] : theme.colors.gray[50]}
+            padding="lg"
+            borderRadius="lg"
+          >
+            <Text variant="body" weight="semibold" style={{ marginBottom: 12 }}>
+              {t("reservation.paymentSummary", "Payment Summary")}
+            </Text>
+            
+            <Container flexDirection="row" justifyContent="space-between" marginBottom="sm">
+              <Text variant="body">{t("reservation.total", "Total Amount")}</Text>
+              <Text variant="body" weight="semibold">
+                {ZaadUtils.formatAmount(totalAmount, currency)}
+              </Text>
+            </Container>
+            
+            <Container flexDirection="row" justifyContent="space-between">
+              <Text variant="caption">{t("reservation.paymentMethod", "Payment Method")}</Text>
+              <Text variant="caption" weight="semibold">
+                {selectedPaymentMethod.details?.name || 'ZAAD'}
+              </Text>
+            </Container>
+          </Container>
+        </Container>
+      )}
 
       {/* Payment Security Notice */}
       <Container marginTop="lg">

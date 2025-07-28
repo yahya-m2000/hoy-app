@@ -1,6 +1,7 @@
 { "common": {
   "test": "tijaabo",
   "clear": "Nadiifi",
+  "cancel": "Jooji",
   "loading": "Waa la rarayaa...",
   "keepBooking": "Sii wad Boos celinta",
   "confirmCancel": "Xaqiiji Joojinta",

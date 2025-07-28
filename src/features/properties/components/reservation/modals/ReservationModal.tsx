@@ -13,6 +13,9 @@ import { useTranslation } from "react-i18next";
 // Shared components
 import { Screen, Container, Text } from "@shared/components";
 
+// Hooks
+import { useTheme } from "@core/hooks/useTheme";
+
 // Step navigation tab
 import { StepNavigationTab } from "../StepNavigationTab";
 
@@ -40,6 +43,7 @@ export default function ReservationModal({
   initialEndDate,
 }: ReservationModalProps) {
   const { t } = useTranslation();
+  const { theme, isDark } = useTheme();
 
   // Use the custom hook for state management
   const [state, actions] = useReservationState(
@@ -182,6 +186,13 @@ export default function ReservationModal({
           bottom: 0,
           left: 0,
           right: 0,
+          borderTopWidth: 1,
+          borderTopColor: isDark ? theme.colors.gray[700] : theme.colors.gray[200],
+          shadowColor: theme.colors.gray[900],
+          shadowOffset: { width: 0, height: -2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 8,
+          elevation: 8,
         }}
         borderTopLeftRadius="lg"
         borderTopRightRadius="lg"

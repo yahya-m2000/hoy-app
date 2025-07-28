@@ -1,6 +1,7 @@
 { "common": {
   "test": "test",
   "clear": "Clear",
+  "cancel": "Cancel",
   "loading": "Loading...",
   "keepBooking": "Keep Booking",
   "confirmCancel": "Confirm Cancel",

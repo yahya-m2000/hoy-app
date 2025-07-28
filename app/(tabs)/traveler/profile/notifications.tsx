@@ -1,41 +1,36 @@
 /**
- * Notifications Modal Component
+ * Notifications Screen for Traveler Profile
  * Displays ZAAD payment notifications and other app notifications
  */
 
 import React, { useState, useEffect } from "react";
-import { Modal, View, ScrollView, TouchableOpacity, Alert, Platform } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useTheme } from "src/core/hooks/useTheme";
-import { Container, Button, Text, Icon } from "@shared/components";
-import { Ionicons } from "@expo/vector-icons";
-import { fontSize, spacing, radius } from "@core/design";
+import { ScrollView, TouchableOpacity, Alert, Platform } from "react-native";
+import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
+
+// Components
+import { Container, Text, Icon, Button } from "@shared/components";
+import { Screen } from "@shared/components";
+
+// Hooks and context
+import { useTheme } from "@core/hooks/useTheme";
+
+// Services and utils
 import { notificationService, NotificationData } from "@core/services/notification.service";
 import { ZaadUtils } from "@core/utils/zaad.utils";
+import { spacing, radius } from "@core/design";
 
-interface NotificationsModalProps {
-  visible: boolean;
-  onClose: () => void;
-}
-
-export default function NotificationsModal({
-  visible,
-  onClose,
-}: NotificationsModalProps) {
+export default function NotificationsScreen() {
   const { theme, isDark } = useTheme();
   const { t } = useTranslation();
-  const insets = useSafeAreaInsets();
   
   const [notifications, setNotifications] = useState<NotificationData[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  // Load notifications
+  // Load notifications on mount
   useEffect(() => {
-    if (visible) {
-      loadNotifications();
-    }
-  }, [visible]);
+    loadNotifications();
+  }, []);
 
   const loadNotifications = () => {
     const notificationHistory = notificationService.getNotificationHistory();
@@ -219,94 +214,71 @@ export default function NotificationsModal({
   };
 
   return (
-    <Modal
-      visible={visible}
-      animationType="slide"
-      presentationStyle="pageSheet"
-      onRequestClose={onClose}
+    <Screen
+      header={{
+        variant: "solid",
+        title: t('notifications.title', 'Notifications'),
+        left: {
+          icon: "arrow-back",
+          onPress: () => router.back(),
+        },
+      }}
     >
-      <Container flex={1} backgroundColor="background">
-        {/* Header */}
+      {/* Actions Header */}
+      {notifications.length > 0 && (
         <Container
           flexDirection="row"
-          alignItems="center"
           justifyContent="space-between"
           paddingHorizontal="lg"
-          paddingVertical="md"
+          paddingVertical="sm"
           style={{
             borderBottomWidth: 1,
             borderBottomColor: isDark
-              ? theme.colors.gray[700]
-              : theme.colors.gray[200],
+              ? theme.colors.gray[800]
+              : theme.colors.gray[100],
           }}
         >
-          <View style={{ width: 40 }} />
-          <Text style={{ fontSize: fontSize.lg, fontWeight: "600" }}>
-            {t('notifications.title', 'Notifications')}
-          </Text>
-          <Button
-            onPress={onClose}
-            variant="ghost"
-            title=""
-            style={{ width: 40, height: 40 }}
-            icon={<Ionicons name="close" size={24} />}
-          />
+          <TouchableOpacity onPress={handleMarkAllAsRead}>
+            <Text variant="caption" color={theme.colors.primary} weight="semibold">
+              {t('notifications.markAllRead', 'Mark All Read')}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleClearAll}>
+            <Text variant="caption" color={theme.colors.error} weight="semibold">
+              {t('notifications.clearAll', 'Clear All')}
+            </Text>
+          </TouchableOpacity>
         </Container>
+      )}
 
-        {/* Actions Header */}
-        {notifications.length > 0 && (
-          <Container
-            flexDirection="row"
-            justifyContent="space-between"
-            paddingHorizontal="lg"
-            paddingVertical="sm"
-            style={{
-              borderBottomWidth: 1,
-              borderBottomColor: isDark
-                ? theme.colors.gray[800]
-                : theme.colors.gray[100],
-            }}
-          >
-            <TouchableOpacity onPress={handleMarkAllAsRead}>
-              <Text variant="caption" color={theme.colors.primary} weight="semibold">
-                {t('notifications.markAllRead', 'Mark All Read')}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleClearAll}>
-              <Text variant="caption" color={theme.colors.error} weight="semibold">
-                {t('notifications.clearAll', 'Clear All')}
-              </Text>
-            </TouchableOpacity>
+      {/* Content */}
+      <Container flex={1}>
+        {notifications.length === 0 ? (
+          <Container flex={1} alignItems="center" justifyContent="center" padding="xl">
+            <Icon
+              name="notifications-outline"
+              size={64}
+              color={isDark ? theme.colors.gray[600] : theme.colors.gray[400]}
+              style={{ marginBottom: spacing.lg }}
+            />
+            <Text variant="h6" weight="semibold" style={{ marginBottom: spacing.sm }}>
+              {t('notifications.empty', 'No Notifications')}
+            </Text>
+            <Text variant="body" style={{ textAlign: 'center', lineHeight: 22 }}>
+              {t('notifications.emptyDescription', 'When you receive notifications, they will appear here.')}
+            </Text>
           </Container>
+        ) : (
+          <ScrollView
+            contentContainerStyle={{ padding: spacing.lg }}
+            showsVerticalScrollIndicator={false}
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+          >
+            {notifications.map(renderNotificationItem)}
+          </ScrollView>
         )}
-
-        {/* Content */}
-        <Container flex={1} style={{ paddingBottom: insets.bottom }}>
-          {notifications.length === 0 ? (
-            <Container flex={1} alignItems="center" justifyContent="center" padding="xl">
-              <Icon
-                name="notifications-outline"
-                size={64}
-                color={isDark ? theme.colors.gray[600] : theme.colors.gray[400]}
-                style={{ marginBottom: spacing.lg }}
-              />
-              <Text variant="h6" weight="semibold" style={{ marginBottom: spacing.sm }}>
-                {t('notifications.empty', 'No Notifications')}
-              </Text>
-              <Text variant="body" style={{ textAlign: 'center', lineHeight: 22 }}>
-                {t('notifications.emptyDescription', 'When you receive notifications, they will appear here.')}
-              </Text>
-            </Container>
-          ) : (
-            <ScrollView
-              contentContainerStyle={{ padding: spacing.lg }}
-              showsVerticalScrollIndicator={false}
-            >
-              {notifications.map(renderNotificationItem)}
-            </ScrollView>
-          )}
-        </Container>
       </Container>
-    </Modal>
+    </Screen>
   );
 }

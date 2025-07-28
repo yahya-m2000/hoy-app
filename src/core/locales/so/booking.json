@@ -118,7 +118,16 @@
     "guestDetails": "Faahfaahinta Martida",
     "confirmReservation": "Xaqiiji Boos celinta",
     "many": "boos celinno",
-    "one": "boos celin"
+    "one": "boos celin",
+    "previewPayment": "Ka-eeg tilmaamaha bixinta",
+    "paymentSummary": "Kooban Bixinta",
+    "androidFeature": "✓ Isla markaaga u wac kodhka ZAAD",
+    "androidContact": "✓ Keydi xiriirka",
+    "zaadInstructions": "Tilmaamaha Bixinta ZAAD",
+    "zaadDescription": "Waxaad heli doontaa ogeysiin leh faahfaahinta bixinta. Isticmaal kodhka ZAAD si aad u dhamayso bixintaada.",
+    "noPaymentMethodTitle": "Hab bixin ma jiro",
+    "noPaymentMethodDescription": "Si aad u bixiso, waxaad u baahan tahay inaad ku dadiso lambarkaga telefoonka ee barfil profile-kaaga.",
+    "goToProfile": "Tag profile-ka"
   },
   "bookings": {
     "title": "Boos celinno",
@@ -198,5 +207,22 @@
     },
     "child": "ilmo",
     "infant": "dhallaan"
+  },
+  "notifications": {
+    "title": "Ogeysiisyada",
+    "empty": "Ogeysiis ma jiro",
+    "emptyDescription": "Marka aad heshid ogeysiisyo, halkan ayay ka muuqan doontaa.",
+    "markAllRead": "Dhammaan u calaamadee sidii la akhriyay",
+    "clearAll": "Dhammaan nadiifi",
+    "clearAllConfirm": "Ma hubtaa inaad nadiifin rabto dhammaan ogeysiisyada?",
+    "zaadPayment": "Bixinta ZAAD",
+    "zaadPaymentOptions": "Dooro ficil loogu talagalay bixintaada:",
+    "dialNow": "Hadda wac",
+    "saveContact": "Keydi xiriirka",
+    "copyCode": "Koobiyee kodhka",
+    "paymentDetails": "Faahfaahinta bixinta:",
+    "amount": "Lacagta",
+    "property": "Hantida",
+    "ussdCode": "Kodhka USSD"
   }
 } 

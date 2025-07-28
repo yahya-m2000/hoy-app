@@ -118,7 +118,16 @@
     "guestDetails": "Guest Details",
     "confirmReservation": "Confirm Reservation",
     "many": "reservations",
-    "one": "reservation"
+    "one": "reservation",
+    "previewPayment": "Preview Payment Instructions",
+    "paymentSummary": "Payment Summary",
+    "androidFeature": "✓ Auto-dial ZAAD code",
+    "androidContact": "✓ Save to contacts",
+    "zaadInstructions": "ZAAD Payment Instructions",
+    "zaadDescription": "You will receive a notification with payment details. Use the ZAAD code to complete your payment.",
+    "noPaymentMethodTitle": "No Payment Method",
+    "noPaymentMethodDescription": "To make a payment, you need to add your phone number in your profile settings.",
+    "goToProfile": "Go to Profile"
   },
   "bookings": {
     "title": "Bookings",
@@ -198,5 +207,22 @@
     },
     "child": "child",
     "infant": "infant"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No Notifications",
+    "emptyDescription": "When you receive notifications, they will appear here.",
+    "markAllRead": "Mark All Read",
+    "clearAll": "Clear All",
+    "clearAllConfirm": "Are you sure you want to clear all notifications?",
+    "zaadPayment": "ZAAD Payment",
+    "zaadPaymentOptions": "Choose an action for your payment:",
+    "dialNow": "Dial Now",
+    "saveContact": "Save to Contacts",
+    "copyCode": "Copy Code",
+    "paymentDetails": "Payment Details:",
+    "amount": "Amount",
+    "property": "Property",
+    "ussdCode": "USSD Code"
   }
 } 

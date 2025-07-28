@@ -5,12 +5,13 @@
  */
 
 // React Native core
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ScrollView, Image, TouchableOpacity, Platform } from "react-native";
 
 // Expo and third-party libraries
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 // App context and hooks
 import { useAuth, useToast, useLocation } from "src/core/context";
@@ -20,7 +21,10 @@ import { useTrendingCities } from "src/features/properties/hooks/useTrendingCiti
 import { useProperties } from "src/features/properties/hooks/useProperties";
 
 // Base components
-import { Container, Text, Button, AnimatedContainer } from "@shared/components";
+import { Container, Text, Button, AnimatedContainer, Icon } from "@shared/components";
+
+// Services
+import { notificationService } from "@core/services/notification.service";
 
 // Module components
 import { HorizontalListingsCarousel } from "@modules/properties";
@@ -262,6 +266,33 @@ export default function HomeScreen() {
   } = useLocation();
 
   const router = useRouter();
+  
+  // Notification state
+  const [notificationCount, setNotificationCount] = useState(0);
+
+  // Setup notification listeners
+  useEffect(() => {
+    const updateNotificationCount = () => {
+      setNotificationCount(notificationService.getUnreadCount());
+    };
+
+    // Update count initially
+    updateNotificationCount();
+
+    // Setup notification listeners
+    const cleanup = notificationService.setupNotificationListeners(
+      (notification) => {
+        // Update count when notification received
+        updateNotificationCount();
+      },
+      (response) => {
+        // Handle notification tap - navigate to notifications screen
+        router.push('/(tabs)/traveler/profile/notifications');
+      }
+    );
+
+    return cleanup;
+  }, [router]);
 
   // Track status of each carousel
   const [carouselStatus, setCarouselStatus] = React.useState<{
@@ -300,6 +331,11 @@ export default function HomeScreen() {
   // Handle sign in button press
   const handleSignInPress = () => {
     router.push("/(auth)/sign-in");
+  };
+
+  // Handle notification bell press
+  const handleNotificationPress = () => {
+    router.push('/(tabs)/traveler/profile/notifications');
   };
 
   if (allError) {
@@ -344,16 +380,72 @@ export default function HomeScreen() {
       >
         <StatusBar style={isDark ? "light" : "dark"} />
 
-        {/* Logo Section */}
+        {/* Header Section with Notification Bell */}
         <Container
+          flexDirection="row"
           alignItems="center"
-          marginTop={Platform.OS === "android" ? "xxl" : "md"}
+          justifyContent="space-between"
+          paddingHorizontal="lg"
+          paddingTop={Platform.OS === "android" ? "xxl" : "lg"}
+          paddingBottom="md"
         >
-          <Image
-            source={require("../../../../assets/image.png")}
-            style={styles.logo}
-            resizeMode="contain"
-          />
+          {/* App Title */}
+          <Container flex={1} alignItems="center">
+            <Text 
+              variant="h3" 
+              weight="bold" 
+              color={isDark ? theme.colors.gray[100] : theme.colors.gray[900]}
+            >
+              Hoy
+            </Text>
+          </Container>
+
+          {/* Notification Bell */}
+          <Container style={{ position: 'relative' }}>
+            <TouchableOpacity
+              onPress={handleNotificationPress}
+              style={{
+                padding: 12,
+                borderRadius: 24,
+                backgroundColor: isDark 
+                  ? theme.colors.gray[800] 
+                  : theme.colors.gray[100],
+              }}
+            >
+              <Ionicons
+                name="notifications-outline"
+                size={24}
+                color={isDark ? theme.colors.gray[100] : theme.colors.gray[700]}
+              />
+              
+              {/* Notification Badge */}
+              {notificationCount > 0 && (
+                <Container
+                  style={{
+                    position: 'absolute',
+                    top: 8,
+                    right: 8,
+                    backgroundColor: theme.colors.error,
+                    borderRadius: 10,
+                    minWidth: 20,
+                    height: 20,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    paddingHorizontal: 4,
+                  }}
+                >
+                  <Text
+                    variant="caption"
+                    weight="bold"
+                    color="white"
+                    style={{ fontSize: 12, lineHeight: 14 }}
+                  >
+                    {notificationCount > 99 ? '99+' : notificationCount}
+                  </Text>
+                </Container>
+              )}
+            </TouchableOpacity>
+          </Container>
         </Container>
 
         {/* Header Section */}
