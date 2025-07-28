@@ -43,9 +43,13 @@ export default function SignInScreen() {
   // Form validation for login form
   const validateLoginForm = () => {
     if (!email.trim())
-      return t("validation.required", { field: t("features.auth.forms.fields.email") });
+      return t("validation.required", {
+        field: t("features.auth.forms.fields.email"),
+      });
     if (!password)
-      return t("validation.required", { field: t("features.auth.forms.fields.password") });
+      return t("validation.required", {
+        field: t("features.auth.forms.fields.password"),
+      });
     return "";
   };
 
@@ -82,7 +86,9 @@ export default function SignInScreen() {
         // Only log and set error for actual errors
         console.error("Auth0 login error:", err);
         setError(
-          err instanceof Error ? err.message : t("features.auth.social.sso.auth0LoginFailed")
+          err instanceof Error
+            ? err.message
+            : t("features.auth.social.sso.auth0LoginFailed")
         );
       }
     } finally {
@@ -116,7 +122,9 @@ export default function SignInScreen() {
     } catch (err) {
       console.error("Login error:", err);
       setError(
-        err instanceof Error ? err.message : t("features.auth.forms.validation.emailInvalid")
+        err instanceof Error
+          ? err.message
+          : t("features.auth.forms.validation.emailInvalid")
       );
     } finally {
       setLoading(false);
