@@ -45,7 +45,7 @@ export default function SocialLogin({
             paddingHorizontal: spacing.md,
           }}
         >
-          {t("auth.orContinueWith")}
+          {t("features.auth.forms.orContinueWith")}
         </Text>
         <View
           style={{

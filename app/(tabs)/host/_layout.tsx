@@ -250,7 +250,7 @@ const HostLayout = () => {
           <Tabs.Screen
             name="today"
             options={{
-              title: t("host.dashboard.title"),
+              title: t("features.host.dashboard.main.title"),
               tabBarIcon: ({ color, size }) => (
                 <AnimatedTabIcon
                   name="today-outline"
@@ -263,7 +263,7 @@ const HostLayout = () => {
           <Tabs.Screen
             name="calendar"
             options={{
-              title: t("calendar.title"),
+              title: t("features.calendar.title"),
               headerShown: false,
               tabBarIcon: ({ color, size }) => (
                 <AnimatedTabIcon
@@ -277,7 +277,7 @@ const HostLayout = () => {
           <Tabs.Screen
             name="listings"
             options={{
-              title: t("navigation.listings"),
+              title: t("common.tabs.listings"),
               tabBarIcon: ({ color, size }) => (
                 <AnimatedTabIcon
                   name="home-outline"
@@ -290,7 +290,7 @@ const HostLayout = () => {
           <Tabs.Screen
             name="profile"
             options={{
-              title: t("navigation.profile"),
+              title: t("common.tabs.profile"),
               tabBarIcon: ({ color, size }) => (
                 <AnimatedTabIcon
                   name="person-outline"

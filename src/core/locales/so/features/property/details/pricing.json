@@ -1,0 +1,40 @@
+{
+  "title": "Dejiso qiimaha {{type}}",
+  "pricing": "Qiimaha",
+  "weekday": "maalin shaqo",
+  "weekend": "dabaadhejiska",
+  "description": "Qiime tartan ku dejiso si aad u soo jiidato buukin badan",
+  "weekdayPrice": "Qiimaha maalinta shaqada",
+  "weekendPrice": "Qiimaha dabaadhejiska",
+  "pricePlaceholder": "0",
+  "perNight": "habeenkii",
+  "total": "wadarta",
+  "lowPriceWarning": "Ka fiirso dejinta qiime sare si aad u hubiso marti tayada leh",
+  "adjustments": {
+    "minusTen": "-$10",
+    "minusFive": "-$5",
+    "plusFive": "+$5",
+    "plusTen": "+$10"
+  },
+  "tip": "💡 Talo: Baadh hantiyo kula mid ah aagagaaga si aad qiime tartan u dejiso",
+  "discounts": {
+    "activeDiscounts": "Qiimaha dhimista firfircoon",
+    "newListingDiscount": "Dallacaad hanti cusub (20% dhimis 3-da buukin ee ugu horreeya)",
+    "lastMinuteDiscount": "Dhimis dambe (buukinta 24 saacadood gudahood)",
+    "newListingDiscountDescription": "Soo jiidado buukin hore dhimis gaar ah oo ah hantiyo cusub",
+    "lastMinuteDiscountDescription": "Buuxiyo taariikho maran buukin dambe"
+  },
+  "management": {
+    "manageAvailability": "Maamulo helitaanka",
+    "updateCalendarAndPricing": "Cusboonaysii kalanderka iyo qiimaha",
+    "viewBookings": "Arag buukinta"
+  },
+  "policies": {
+    "moderateCancellationPolicy": "Siyaasadda joojinta dhexdhexaadka ah",
+    "cancellationPolicy": "Siyaasadda joojinta",
+    "cancellationPolicyDescription": "Dhexdhexaad - Lacag dhammaystiran 5 maalmood ka hor iman",
+    "houseRules": "Xeerarka guriga",
+    "houseRulesDescription": "Gal: 3:00 PM, Bax: 11:00 AM",
+    "moderate": "Dhexdhexaad"
+  }
+}

@@ -66,7 +66,7 @@ export const HouseRulesSection: React.FC<HouseRulesSectionProps> = ({
       {shouldShowToggle && (
         <TouchableOpacity onPress={() => setShowAll(!showAll)}>
           <Text variant="body" weight="medium" color="primary">
-            {showAll ? t("property.showLess") : t("property.showMore")}
+            {showAll ? t("features.property.details.houseRules.showLess") : t("features.property.details.houseRules.showMore")}
           </Text>
         </TouchableOpacity>
       )}

@@ -57,7 +57,7 @@ export const EditOverlay: React.FC<EditOverlayProps> = ({
     <View style={styles.overlayContainer}>
       {/* Header with close button and selected days */}
       <View style={styles.editHeader}>
-        &nbsp;
+        {" "}
         <AnimatedPressableContainer
           fadeInDelay={0}
           animationDuration={300}
@@ -77,7 +77,7 @@ export const EditOverlay: React.FC<EditOverlayProps> = ({
           ]}
         >
           <Text style={styles.selectedDaysText}>
-            {t("calendar.daysSelected", { count: selectedDaysCount })}
+            {t("features.calendar.daysSelected", { count: selectedDaysCount })}
           </Text>
         </AnimatedPressableContainer>
       </View>
@@ -86,17 +86,18 @@ export const EditOverlay: React.FC<EditOverlayProps> = ({
       <View style={styles.gridContainer}>
         {/* 1x2 Grid */}
         <View style={styles.topGrid}>
-          &nbsp;
+          {" "}
           <AnimatedContainer
             style={[styles.gridItem, { backgroundColor: theme.black }]}
             fadeInDelay={20}
             animationDuration={300}
             isExiting={!isVisible}
           >
-            &nbsp;{" "}
-            <Text style={styles.gridItemText}>{t("calendar.editItem1")}</Text>
-          </AnimatedContainer>
-          &nbsp;
+            {" "}
+            <Text style={styles.gridItemText}>
+              {t("features.calendar.editItem1")}
+            </Text>
+          </AnimatedContainer>{" "}
           <AnimatedPressableContainer
             onPress={handleItem2Press}
             style={[styles.gridItem, { backgroundColor: theme.black }]}
@@ -104,13 +105,15 @@ export const EditOverlay: React.FC<EditOverlayProps> = ({
             animationDuration={300}
             isExiting={!isVisible}
           >
-            <Text style={styles.gridItemText}>{t("calendar.editItem2")}</Text>
+            <Text style={styles.gridItemText}>
+              {t("features.calendar.editItem2")}
+            </Text>
           </AnimatedPressableContainer>
         </View>
 
         {/* 1x1 Grid */}
         <View style={styles.bottomGrid}>
-          &nbsp;
+          {" "}
           <AnimatedPressableContainer
             onPress={handleItem3Press}
             style={[styles.gridItem, { backgroundColor: theme.black }]}
@@ -118,9 +121,10 @@ export const EditOverlay: React.FC<EditOverlayProps> = ({
             animationDuration={300}
             isExiting={!isVisible}
           >
-            <Text style={styles.gridItemText}>{t("calendar.editItem3")}</Text>
-          </AnimatedPressableContainer>
-          &nbsp;
+            <Text style={styles.gridItemText}>
+              {t("features.calendar.editItem3")}
+            </Text>
+          </AnimatedPressableContainer>{" "}
         </View>
       </View>
     </View>

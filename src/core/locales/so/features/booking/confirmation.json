@@ -1,0 +1,33 @@
+{
+  "success": {
+    "bookingConfirmed": "Buukinta la xaqiijiyey",
+    "confirmationMessage": "Buukintaada waa la xaqiijiyey"
+  },
+  "actions": {
+    "addToCalendar": "Ku dar kalanderka",
+    "directions": "Hel jihada",
+    "shareBooking": "Wadaag buukinta",
+    "cancelBooking": "Jooji buukinta",
+    "viewBookingDetails": "Arag faahfaahinta buukinta",
+    "contactHost": "La soo xiriir hosting",
+    "getDirections": "Hel jihada"
+  },
+  "calendar": {
+    "calendarPermissionDenied": "Fasaxa kalanderka la diiday",
+    "noCalendarFound": "Kalander lama helin",
+    "addedToCalendar": "Kalanderka lagu daray",
+    "calendarError": "Khalad kalander",
+    "calendarTitle": "{{property}} - Buukin",
+    "calendarDetails": "Soo galid: {{checkIn}}, Ka bixid: {{checkOut}}, Marti: {{guests}}"
+  },
+  "contact": {
+    "whatsappContact": "WhatsApp Xiriir",
+    "whatsappError": "WhatsApp xiriir lama heli karo"
+  },
+  "errors": {
+    "bookingNotFound": "Buukinta lama helin",
+    "bookingNotFoundMessage": "Ma heli karaynay buukintan",
+    "locationError": "Macluumaadka goobta lama heli karo",
+    "mapsError": "Lama furi karo khariidadda"
+  }
+}

@@ -1,0 +1,207 @@
+{
+  "types": {
+    // "individual": "Individual Property", // USE features.property.listing.common.individual
+    "shared": "Shared Property",
+    "entirePlace": "Entire Place",
+    "entirePlaceDescription": "Guests have the whole place to themselves",
+    "privateRoom": "Private Room", 
+    "privateRoomDescription": "Guests have their own room but share some spaces",
+    "sharedSpace": "Shared Space",
+    "sharedSpaceDescription": "Guests share the space with others",
+    "entire_place": "Entire Place",
+    "entire_placeDescription": "Guests have the whole place to themselves",
+    "private_room": "Private Room", 
+    "private_roomDescription": "Guests have their own room but share some spaces",
+    "shared_space": "Shared Space",
+    "shared_spaceDescription": "Guests share the space with others"
+  },
+  "sections": {
+    "basicInfo": {
+      "title": "Basic Information",
+      "description": "Tell us about your property's basic details"
+    },
+    "propertyType": {
+      "title": "Property Type", 
+      "description": "Select the type of property you're listing",
+      "placeholder": "Select property type"
+    },
+    "guestAccess": {
+      "title": "Guest Access",
+      "description": "Choose how guests will access your property",
+      "placeholder": "Select guest access type",
+      "help": "Choose how guests will access your property",
+      "types": {
+        "ENTIRE": {
+          "label": "Entire place",
+          "description": "Guests have the whole property to themselves."
+        },
+        "PRIVATE": {
+          "label": "Private room",
+          "description": "Guests have their own room but share some spaces."
+        },
+        "SHARED": {
+          "label": "Shared room",
+          "description": "Guests sleep in a room or area that may be shared with others."
+        }
+      }
+    },
+    "location": {
+      "title": "Location Details",
+      "description": "Provide the exact location of your property"
+    },
+    "details": {
+      "title": "Share some basics about your place",
+      "description": "You can always change these later",
+      "detailsHelp": "Accurate details help guests know what to expect",
+      "pricePerNight": "Price per night",
+      "pricePlaceholder": "0",
+      "bedrooms": "Bedrooms", 
+      "beds": "Beds",
+      "bathrooms": "Bathrooms",
+      "maxGuests": "Maximum guests"
+    },
+    "address": {
+      "country": "Country",
+      "countryPlaceholder": "Select your country",
+      "city": "City",
+      "cityPlaceholder": "Select your city", 
+      "street": "Street address",
+      "streetPlaceholder": "Enter street address",
+      "state": "State/Province",
+      "statePlaceholder": "Enter state or province",
+      "postalCode": "Postal code",
+      "postalCodePlaceholder": "Enter postal code",
+      "privacyTitle": "Privacy & Safety",
+      "privacyNote": "Your exact address is only shared with confirmed guests."
+    },
+    "coordinates": {
+      "title": "Property Location",
+      "help": "Pin your property's exact location on the map",
+      "latitude": "Latitude",
+      "longitude": "Longitude", 
+      "pickLocation": "Pick Location on Map",
+      "confirmLocation": "Confirm Location",
+      "selectedCoordinates": "Selected coordinates"
+    },
+    "title": {
+      "title": "Give your property a title",
+      "description": "Catch guests' attention with a catchy title",
+      "placeholder": "e.g., Cozy Downtown Apartment",
+      "charLimit": "32 characters maximum",
+      "titleHelp": "A great title helps guests find and remember your property",
+      "tipTitle": "Title Tips",
+      "tipContent": "A great title helps guests find and remember your property. Use descriptive, memorable words and keep it under 32 characters.",
+      "label": "Title"
+    },
+    "description": {
+      "title": "Property Description",
+      "description": "Describe your property to help guests understand what to expect",
+      "label": "Description",
+      "placeholder": "Describe your property, what makes it special, nearby attractions, and what guests can expect during their stay...",
+      "minLengthWarning": "At least {{min}} characters required ({{remaining}} more needed)",
+      "tipTitle": "Writing Tips",
+      "tipContent": "Be descriptive and honest. Mention unique features, nearby attractions, and any important details guests should know."
+    },
+    "tags": {
+      "title": "Choose tags that describe your place",
+      "description": "Help guests find your property",
+      "FamilyFriendly": "Family Friendly",
+      "PetFriendly": "Pet Friendly",
+      "Luxury": "Luxury",
+      "Budget": "Budget",
+      "Business": "Business",
+      "Romantic": "Romantic",
+      "Unique": "Unique",
+      "EcoFriendly": "Eco Friendly",
+      "Beachfront": "Beachfront",
+      "MountainView": "Mountain View",
+      "CityCenter": "City Center",
+      "Countryside": "Countryside"
+    },
+    "images": {
+      "title": "Property Photos",
+      "description": "Add high-quality photos to showcase your property",
+      "tipTitle": "Photo Tips",
+      "tipContent": "High-quality photos help guests get a better sense of your property and increase bookings. Use natural lighting and show off your best features."
+    },
+    "pricing": {
+      "title": "Set your {{type}} price",
+      "weekday": "weekday",
+      "weekend": "weekend",
+      "description": "Price competitively to attract more bookings",
+      "weekdayPrice": "Weekday Price",
+      "weekendPrice": "Weekend Price",
+      "currency": "Currency",
+      "pricePlaceholder": "0",
+      "perNight": "per night",
+      "lowPriceWarning": "Consider setting a higher price to ensure quality guests",
+      "competitiveTip": "Price competitively to attract more bookings",
+      "priceHelp": "Set different prices for weekdays and weekends",
+      "currencyHelp": "Select your preferred currency",
+      "minusTen": "-$10",
+      "minusFive": "-$5",
+      "plusFive": "+$5",
+      "plusTen": "+$10",
+      "tip": "💡 Tip: Research similar properties in your area to set a competitive price"
+    },
+    "discounts": {
+      "title": "Offer discounts to attract guests",
+      "description": "Optional: Increase bookings with strategic discounts",
+      "newListingPromo": {
+        "label": "New listing promotion",
+        "description": "20% off first 3 bookings"
+      },
+      "lastMinuteDiscount": {
+        "label": "Last-minute discount",
+        "description": "For bookings within 24 hours"
+      },
+      "weekly": "Weekly discount",
+      "monthly": "Monthly discount",
+      "percentage": "Discount percentage",
+      "enableWeekly": "Enable weekly discount",
+      "enableMonthly": "Enable monthly discount",
+      "weeklyPercentage": "Weekly discount percentage",
+      "monthlyPercentage": "Monthly discount percentage",
+      "discountHelp": "Discounts can help you attract more bookings"
+    },
+    "policies": {
+      "title": "Set Default Policies",
+      "subtitle": "Configure your cancellation policy and house rules",
+      "description": "These are your default policies. You can customize them for this property.",
+      // "modify": "Modify", // USE features.property.listing.actions.modify
+      "cancellationPolicy": {
+        "title": "Cancellation Policy",
+        "description": "Moderate - Full refund 5 days before arrival"
+      },
+      "houseRules": {
+        "title": "House Rules",
+        "description": "Check-in: 3:00 PM, Check-out: 11:00 AM"
+      },
+      "safetyInfo": {
+        "title": "Safety Information",
+        "description": "Standard safety features included"
+      }
+    },
+    "hostInfo": {
+      "title": "Tell us about yourself",
+      "subtitle": "Complete verification to ensure guest safety and trust",
+      "description": "Are you listing as an individual or business?",
+      // "individual": "Individual", // USE features.property.listing.common.individual
+      // "business": "Business", // USE features.property.listing.common.business
+      "safetyDisclosures": {
+        "title": "Safety disclosures",
+        "weaponsOnProperty": "Are there any weapons on the property?",
+        "securityCameras": "Are there security cameras on the property?"
+      },
+      "infoBox": {
+        "title": "Safety & Legal",
+        "content": "Being transparent about safety features and potential risks helps build trust with guests and ensures compliance with local regulations."
+      }
+    }
+  },
+  "validation": {
+    "invalidLatitude": "Latitude must be between -90 and 90",
+    "invalidLongitude": "Longitude must be between -180 and 180",
+    "minLengthWarning": "At least {{min}} characters required"
+  }
+}

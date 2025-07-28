@@ -1,0 +1,9 @@
+{
+  "title": "Pricing",
+  "weekdayPrice": "Weekday Price",
+  "weekendPrice": "Weekend Price", 
+  "night": "night",
+  "activeDiscounts": "Active Discounts",
+  "newListingDiscount": "New listing discount",
+  "lastMinuteDiscount": "Last minute discount"
+}

@@ -59,8 +59,14 @@ export default function SearchTravelersModal({
   const handleApply = () => {
     // Format the display text
     const displayTravelers = `${totalGuests} ${
-      totalGuests === 1 ? t("search.guest") : t("search.guests")
-    }, ${rooms} ${rooms === 1 ? t("search.room") : t("search.rooms")}`;
+      totalGuests === 1
+        ? t("features.search.travelers.guest")
+        : t("features.search.travelers.guests")
+    }, ${rooms} ${
+      rooms === 1
+        ? t("features.search.travelers.room")
+        : t("features.search.travelers.rooms")
+    }`;
 
     // Update our centralized search state
     updateSearchState({
@@ -111,7 +117,9 @@ export default function SearchTravelersModal({
       </Text>
       <Container flexDirection="row" alignItems="center">
         <TouchableOpacity
-          accessibilityLabel={t("search.decrement") || "Decrease"}
+          accessibilityLabel={
+            t("features.search.actions.decrement") || "Decrease"
+          }
           style={{
             width: 44,
             height: 44,
@@ -148,7 +156,9 @@ export default function SearchTravelersModal({
           {value}
         </Text>
         <TouchableOpacity
-          accessibilityLabel={t("search.increment") || "Increase"}
+          accessibilityLabel={
+            t("features.search.actions.increment") || "Increase"
+          }
           style={{
             width: 44,
             height: 44,
@@ -190,7 +200,7 @@ export default function SearchTravelersModal({
     >
       <Container flex={1} backgroundColor="background">
         <Header
-          title={t("search.travelers") || "Who's coming?"}
+          title={t("features.search.travelers.title") || "Who's coming?"}
           left={{
             icon: "close",
             onPress: onClose,
@@ -199,7 +209,7 @@ export default function SearchTravelersModal({
         <Container flex={1}>
           {/* Adults Counter */}
           <Counter
-            label={t("search.adults") || "Adults"}
+            label={t("features.search.travelers.adults") || "Adults"}
             value={adults}
             onIncrement={() => setAdults(Math.min(adults + 1, 10))}
             onDecrement={() => setAdults(Math.max(adults - 1, 1))}
@@ -207,14 +217,14 @@ export default function SearchTravelersModal({
           />
           {/* Children Counter */}
           <Counter
-            label={t("search.children") || "Children"}
+            label={t("features.search.travelers.children") || "Children"}
             value={children}
             onIncrement={() => setChildren(Math.min(children + 1, 10))}
             onDecrement={() => setChildren(Math.max(children - 1, 0))}
           />
           {/* Rooms Counter */}
           <Counter
-            label={t("search.rooms") || "Rooms"}
+            label={t("features.search.travelers.rooms") || "Rooms"}
             value={rooms}
             onIncrement={() => setRooms(Math.min(rooms + 1, 10))}
             onDecrement={() => setRooms(Math.max(rooms - 1, 1))}
@@ -236,10 +246,14 @@ export default function SearchTravelersModal({
               color={isDark ? theme.colors.gray[200] : theme.colors.gray[700]}
               style={{ textAlign: "center" }}
             >
-              {totalGuests}&nbsp;
-              {totalGuests === 1 ? t("search.guest") : t("search.guests")}
-              ,&nbsp;
-              {rooms} {rooms === 1 ? t("search.room") : t("search.rooms")}
+              {totalGuests}{" "}
+              {totalGuests === 1
+                ? t("features.search.travelers.guest")
+                : t("features.search.travelers.guests")}
+              , {rooms}{" "}
+              {rooms === 1
+                ? t("features.search.travelers.room")
+                : t("features.search.travelers.rooms")}
             </Text>
           </Container>
         </Container>
@@ -254,7 +268,9 @@ export default function SearchTravelersModal({
         >
           <Button
             onPress={handleApply}
-            title={t("common.apply") || t("search.apply") || "Apply"}
+            title={
+              t("common.apply") || t("features.search.actions.apply") || "Apply"
+            }
             variant="primary"
           />
         </Container>

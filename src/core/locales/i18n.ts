@@ -28,8 +28,8 @@ const getAsyncStorage = () => {
 
 // Import translations
 import en from "./en";
-import fr from "./fr/translation.json";
-import ar from "./ar/translation.json";
+// import fr from "./fr/translation.json";
+// import ar from "./ar/translation.json";
 import so from "./so";
 import { logger } from "../utils/sys/log";
 
@@ -84,8 +84,8 @@ const initI18n = async () => {
       .init({
         resources: {
           en: { translation: en },
-          fr: { translation: fr },
-          ar: { translation: ar },
+          // fr: { translation: fr },
+          // ar: { translation: ar },
           so: { translation: so },
         },
         fallbackLng: "en",

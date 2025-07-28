@@ -1,0 +1,76 @@
+{
+  "account": "Akoon",
+  "personalInfo": "Macluumaadka Shakhsiga",
+  "personalInfoDesc": "Cusboonaysii faahfaahinta shakhsiga iyo macluumaadka astaanta",
+  "languageDesc": "Dooro luqadda aad rabto in app-ka ku shaqeeyo",
+  "currencyDesc": "Dooro lacagta aad rabto in qiimaha lagu muujiyo",
+  "signOut": "Ka Bax",
+  "preferences": "Doorashada",
+  "language": "Luqadda",
+  "currency": "Lacagta",
+  "theme": "Qaabka Muuqaalka",
+  "themeDesc": "Dooro qaabka muuqaalka aad jeceshahay",
+  "switchToTraveler": "U Bedel Qaabka Safarka",
+  "switchToHost": "U Bedel Qaabka Martigelinta",
+  "hostModeDesc": "Ka beddel qaabka martigelinta iyo safarrada",
+  "support": "Taageero",
+  "helpCenter": "Xarunta Caawinta",
+  "helpCenterDesc": "Hel caawimaad oo ka hel jawaabo su'aalaha caadiga ah",
+  "giveFeedback": "Sii Fikradaada",
+  "giveFeedbackDesc": "Wadaag fikradahaaga iyo soo jeedintaada nala",
+  "resetApp": "Dib u deji Xogta App-ka",
+  "resetAppDesc": "Xalinta dhibaatooyinka iyadoo la nadiifiyo xogta kaydsan",
+  "termsOfService": "Shuruudaha Adeegga",
+  "termsOfServiceDesc": "Daawo shuruudaheenna iyo xaaladaha",
+  "currencyChanged": "Lacagtu waxay u beddeshatay {{currency}}",
+  "themeSystem": "Nidaamka",
+  "themeSystemDesc": "Isticmaal qaabka muuqaalka aaladda",
+  "themeLight": "Cadaan",
+  "themeLightDesc": "Qaabka cadaan",
+  "themeDark": "Madow",
+  "themeDarkDesc": "Qaabka madow",
+  "guestUser": "Isticmaale Marti ah",
+  "notSignedIn": "Lama soo gelin",
+  "hostLabel": "Martigale",
+  "travelerLabel": "Saafir",
+  "joinedDate": "Ku biiray {{date}}",
+  "becomeAHost": "Noqo Martigale",
+  "signIn": "Soo Gal",
+  "createProfile": "Samee Astaan",
+  "getStarted": "Bilow",
+  "currentLanguage": "Luqadda Hadda",
+  "selectLanguage": "Dooro Luqadda",
+  "personalInfoForm": {
+    "title": "Macluumaadka Shakhsiga",
+    "description": "Cusboonaysii faahfaahinta shakhsiga",
+    "firstName": "Magaca Koowaad",
+    "lastName": "Magaca Dambe",
+    "phone": "Lambarka Telefoonka",
+    "city": "Magaalada",
+    "country": "Dalka"
+  },
+  "currencyInfo": {
+    "title": "Macluumaadka Lacagta",
+    "description": "Dooro lacagta aad door bidaysid ee qiimaha lagu muujiyo"
+  },
+  "languageInfo": {
+    "title": "Macluumaadka Luqadda",
+    "description": "Dooro luqadda aad door bidaysid"
+  },
+  "helpCenterInfo": {
+    "title": "Xarunta Caawinta",
+    "description": "Hel jawaabo su'aalaha caadiga ah"
+  },
+  "feedbackInfo": {
+    "title": "Fikradaada",
+    "description": "Ka caawo inaan wax ka hagaajino app-ka"
+  },
+  "termsInfo": {
+    "title": "Shuruudaha Adeegga",
+    "description": "Daawo shuruudaheenna iyo xaaladaha"
+  },
+  "themeInfo": {
+    "title": "Dejinta Qaabka Muuqaalka",
+    "description": "Hagaaji muuqaalka app-kaaga"
+  }
+}

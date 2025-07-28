@@ -1,0 +1,39 @@
+{
+  "providers": {
+    "google": "Ku sii wad Google",
+    "facebook": "Ku sii wad Facebook", 
+    "apple": "Ku sii wad Apple"
+  },
+  "sso": {
+    "loginWithAuth0": "Ku sii wad SSO",
+    "auth0LoginSuccess": "Gelitaanka guul ahaa",
+    "auth0LoginFailed": "Gelitaanku fashilmay. Fadlan mar kale isku day.",
+    "ssoSignupRequired": "Fadlan dhamaystir diiwaan gelintaada",
+    "ssoSignupInfo": "Waxaan horay u buuxinay macluumaadkaaga akoonkaaga bulshada. Fadlan dhamaystir goobaha hadhay."
+  },
+  "accountLinking": {
+    "accountLinkingRequired": "Isku xirka akoonku wuu loo baahan yahay",
+    "accountLinking": "Isku Xirka Akoonta",
+    "accountLinkingTitle": "Ku Xir Akoonkaaga",
+    "accountLinkingDescription": "Waxaan helnay akoon horay u jiray oo leh email-ka {{email}}. Ma jeclaan lahayd inaad ku xirto akoonkaaga {{newProvider}}?",
+    "existingAccount": "Akoonta Jirta",
+    "connectedProviders": "Bixiyayaasha Xiran",
+    "verifyPassword": "Xaqiiji Furaha Sirta",
+    "verifyPasswordDescription": "Fadlan geli furaha sirtaada si aad u xaqiijiso in kani yahay akoonkaaga oo aad ku xirto akoonkaaga {{newProvider}}.",
+    "linkAccount": "Ku Xir Akoonta",
+    "accountLinkedSuccessfully": "Akoonta si guul leh ayaa loo xiray!",
+    "accountLinkingFailed": "Isku xirka akoonta ayaa fashilmay. Fadlan mar kale isku day."
+  },
+  "avatar": {
+    "selectPhoto": "Dooro Sawir",
+    "takePhoto": "Qaado Sawir",
+    "removePhoto": "Ka Saar Sawirka",
+    "cameraPermissionDenied": "Ruqsadda kaamirka waa la diiday",
+    "photoLibraryPermissionDenied": "Ruqsadda maktabadda sawirrada waa la diiday"
+  },
+  "passwordManager": {
+    "savePrompt": "Aaladaadu waxay ku siinin doontaa inaad si ammaan ah u kaydo furahan sirta",
+    "autofillHint": "Isticmaal Face ID/Touch ID ama maamulaha furayaasha aaladaada si otomaatig ah ugu buuxiso aqoonsiga",
+    "biometricHint": "Daar xaqiijinta bayometriska ee goobaha aaladaada si ammaan leh ugu buuxiso otomaatigga"
+  }
+}

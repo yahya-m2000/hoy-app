@@ -1,0 +1,18 @@
+{
+  "title": "Property Options",
+  "edit": "Edit",
+  "delete": "Delete",
+  "activate": "Activate",
+  "deactivate": "Deactivate",
+  "editProperty": "Edit Property",
+  "editDetails": "Edit Details",
+  "toggleStatus": "Toggle Status",
+  "activateProperty": "Activate Property",
+  "deactivateProperty": "Deactivate Property",
+  "activateConfirm": "Activate",
+  "deactivateConfirm": "Deactivate",
+  "activateMessage": "Are you sure you want to activate this property? It will become visible to guests.",
+  "deactivateMessage": "Are you sure you want to deactivate this property? It will no longer be visible to guests.",
+  "statusUpdated": "Property {{action}}d successfully",
+  "statusUpdateFailed": "Failed to update property status"
+}

@@ -59,7 +59,7 @@ const HostInfoSection: React.FC<HostInfoSectionProps> = ({ host }) => {
       {/* Section Header */}
       <Container marginVertical="md">
         <Text variant="h6" weight="semibold">
-          {t("property.details.meetYourHost")}
+          {t("features.property.details.host.meetYourHost")}
         </Text>
       </Container>
 
@@ -110,10 +110,13 @@ const HostInfoSection: React.FC<HostInfoSectionProps> = ({ host }) => {
               <Container marginBottom="xs">
                 <Text variant="body" color={theme.text.secondary}>
                   {host.yearsHosting === 0
-                    ? t("property.common.newHost")
-                    : `${host.yearsHosting} ${t("property.year", {
-                        count: host.yearsHosting,
-                      })} ${t("property.hosting")}`}
+                    ? t("features.property.details.host.newHost")
+                    : `${host.yearsHosting} ${t(
+                        "features.property.details.host.year",
+                        {
+                          count: host.yearsHosting,
+                        }
+                      )} ${t("features.property.details.host.hosting")}`}
                 </Text>
               </Container>
             )}
@@ -122,7 +125,9 @@ const HostInfoSection: React.FC<HostInfoSectionProps> = ({ host }) => {
             {host.location && (
               <Container flexDirection="row" alignItems="center">
                 <Text variant="body" color={theme.text.secondary}>
-                  {t("property.common.livesIn", { location: host.location })}
+                  {t("features.property.details.host.livesIn", {
+                    location: host.location,
+                  })}
                 </Text>
               </Container>
             )}
@@ -173,7 +178,7 @@ const HostInfoSection: React.FC<HostInfoSectionProps> = ({ host }) => {
                       );
                     }
               }
-              title={t("common.whatsapp")}
+              title={t("features.property.details.common.general.whatsapp")}
               icon={
                 <Icon
                   name="logo-whatsapp"

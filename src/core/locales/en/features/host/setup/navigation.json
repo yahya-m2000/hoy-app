@@ -1,0 +1,10 @@
+{
+  "next": "Continue",
+  "back": "Back", 
+  "finish": "Finish Setup",
+  "cancel": "Cancel",
+  "skip": "Skip for now",
+  "save": "Save Progress",
+  "loading": "Saving...",
+  "saved": "Progress saved"
+}

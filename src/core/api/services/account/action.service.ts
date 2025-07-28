@@ -167,8 +167,8 @@ export class AccountActionService {
     const { t, toggleUserRole, showToast } = this.dependencies;
 
     Alert.alert(
-      t("host.settings.switchToTraveler"),
-      t("host.settings.switchToTravelerDesc"),
+      t("features.account.settings.switchToTraveler"),
+      t("features.account.settings.switchToTravelerDesc"),
       [
         {
           text: t("common.cancel"),
@@ -190,7 +190,7 @@ export class AccountActionService {
               logger.error("Error switching to traveler mode:", error);
               showToast({
                 type: "error",
-                message: t("errors.generic"),
+                message: t("system.errors.generic.unknown"),
               });
             }
           },
@@ -297,7 +297,7 @@ export class AccountActionService {
               logger.error("Error switching to host mode:", error);
               showToast({
                 type: "error",
-                message: t("errors.generic"),
+                message: t("system.errors.generic.unknown"),
               });
             }
           },

@@ -47,12 +47,12 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ priceDetails }) => {
           { color: isDark ? theme.white : theme.colors.gray[900] },
         ]}
       >
-        {t("booking.paymentDetails")}
+        {t("features.booking.payment.paymentDetails")}
       </Text>
       <View style={styles.contentContainer}>
         <View style={styles.priceRow}>
           <Text style={[styles.priceLabel, { color: theme.colors.gray[600] }]}>
-            {t("booking.basePrice")}
+            {t("features.booking.payment.basePrice")}
           </Text>
           <Text
             style={[
@@ -66,7 +66,7 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ priceDetails }) => {
 
         <View style={styles.priceRow}>
           <Text style={[styles.priceLabel, { color: theme.colors.gray[600] }]}>
-            {t("booking.cleaningFee")}
+            {t("features.booking.payment.cleaningFee")}
           </Text>
           <Text
             style={[
@@ -80,7 +80,7 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ priceDetails }) => {
 
         <View style={styles.priceRow}>
           <Text style={[styles.priceLabel, { color: theme.colors.gray[600] }]}>
-            {t("booking.serviceFee")}
+            {t("features.booking.payment.serviceFee")}
           </Text>
           <Text
             style={[
@@ -94,7 +94,7 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ priceDetails }) => {
 
         <View style={styles.priceRow}>
           <Text style={[styles.priceLabel, { color: theme.colors.gray[600] }]}>
-            {t("booking.taxes")}
+            {t("features.booking.payment.taxes")}
           </Text>
           <Text
             style={[
@@ -113,7 +113,7 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ priceDetails }) => {
               { color: isDark ? theme.white : theme.colors.gray[900] },
             ]}
           >
-            {t("booking.total")}
+            {t("features.booking.payment.total")}
           </Text>
           <Text
             style={[

@@ -1,0 +1,27 @@
+{
+  "property": "Property",
+  "detailsTitle": "Booking Details",
+  "newProperty": "New",
+  "tripDetailsTitle": "Trip Details",
+  "contactInfoTitle": "Contact Information",
+  "duration": "Duration",
+  "contactName": "Contact Name",
+  "contactEmail": "Contact Email",
+  "contactPhone": "Contact Phone",
+  "priceDetailsTitle": "Price Details",
+  "total": "Total",
+  "specialRequestsTitle": "Special Requests",
+  "adult": "adult",
+  "child": "child",
+  "infant": "infant",
+  "bookedOn": "Booked on",
+  "checkIn": "Check-in",
+  "checkOut": "Check-out", 
+  "guests": "Guests",
+  "night": "night",
+  "nights": "nights",
+  "bookingId": "Booking ID",
+  "status": {
+    "title": "Status"
+  }
+}

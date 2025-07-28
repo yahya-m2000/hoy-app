@@ -81,7 +81,7 @@ export default function EarningsOverview({
     return (
       <View style={styles.container}>
         <Text variant="h3" style={styles.sectionTitle}>
-          {t("host.today.earnings.title")}
+          {t("features.host.dashboard.earnings.title")}
         </Text>
         <BaseCard style={styles.earningsCard}>
           <View style={styles.loadingContainer}>
@@ -91,7 +91,7 @@ export default function EarningsOverview({
               color={theme.colors.gray[400]}
             />
             <Text variant="body" color={theme.text.secondary}>
-              {t("host.today.earnings.loadingEarnings")}
+              {t("features.host.dashboard.earnings.loadingEarnings")}
             </Text>
           </View>
         </BaseCard>
@@ -103,11 +103,11 @@ export default function EarningsOverview({
     <View style={styles.container}>
       <View style={styles.sectionHeader}>
         <Text variant="h3" style={styles.sectionTitle}>
-          {t("host.today.earnings.title")}
+          {t("features.host.dashboard.earnings.title")}
         </Text>
         <TouchableOpacity style={styles.viewAllButton}>
           <Text variant="caption" color={theme.colors.primary}>
-            {t("host.today.earnings.viewAll")}
+            {t("features.host.dashboard.earnings.viewAll")}
           </Text>
           <Ionicons
             name="chevron-forward"
@@ -127,7 +127,7 @@ export default function EarningsOverview({
               color={theme.colors.success}
             />
             <Text variant="body" style={styles.payoutTitle}>
-              {t("host.today.earnings.nextPayout")}
+              {t("features.host.dashboard.earnings.nextPayout")}
             </Text>
           </View>
           <Text variant="h2" color={theme.colors.success}>
@@ -136,7 +136,7 @@ export default function EarningsOverview({
           </Text>
           <Text variant="caption" color={theme.text.secondary}>
             {convertedData.nextPayout.date ||
-              t("host.today.earnings.noUpcomingPayouts")}
+              t("features.host.dashboard.earnings.noUpcomingPayouts")}
           </Text>
         </View>
 
@@ -146,7 +146,7 @@ export default function EarningsOverview({
         <View style={styles.earningsBreakdown}>
           <View style={styles.earningsRow}>
             <Text variant="body" color={theme.text.secondary}>
-              {t("host.today.earnings.thisWeek")}
+              {t("features.host.dashboard.earnings.thisWeek")}
             </Text>
             <Text variant="body" style={styles.earningsAmount}>
               {getCurrencySymbol()}{" "}
@@ -155,7 +155,7 @@ export default function EarningsOverview({
           </View>
           <View style={styles.earningsRow}>
             <Text variant="body" color={theme.text.secondary}>
-              {t("host.today.earnings.thisMonth")}
+              {t("features.host.dashboard.earnings.thisMonth")}
             </Text>
             <Text variant="body" style={styles.earningsAmount}>
               {getCurrencySymbol()}{" "}
@@ -164,7 +164,7 @@ export default function EarningsOverview({
           </View>
           <View style={styles.earningsRow}>
             <Text variant="body" color={theme.text.secondary}>
-              {t("host.today.earnings.lastMonth")}
+              {t("features.host.dashboard.earnings.lastMonth")}
             </Text>
             <Text variant="body" style={styles.earningsAmount}>
               {getCurrencySymbol()}{" "}
@@ -173,7 +173,7 @@ export default function EarningsOverview({
           </View>
           <View style={styles.earningsRow}>
             <Text variant="body" color={theme.text.secondary}>
-              {t("host.today.earnings.yearToDate")}
+              {t("features.host.dashboard.earnings.yearToDate")}
             </Text>
             <Text variant="h4" color={theme.colors.primary}>
               {getCurrencySymbol()}{" "}

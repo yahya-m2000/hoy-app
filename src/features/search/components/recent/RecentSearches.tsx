@@ -25,8 +25,9 @@ export const RecentSearches: React.FC<RecentSearchesProps> = ({
 
   const handleClearAll = () => {
     Alert.alert(
-      t("search.clearRecentSearches") || "Clear Recent Searches",
-      t("search.clearRecentSearchesMessage") ||
+      t("features.search.history.clearRecentSearches") ||
+        "Clear Recent Searches",
+      t("features.search.history.clearRecentSearchesMessage") ||
         "Are you sure you want to clear all recent searches?",
       [
         {
@@ -44,8 +45,8 @@ export const RecentSearches: React.FC<RecentSearchesProps> = ({
 
   const handleRemoveSearch = (id: string, location: string) => {
     Alert.alert(
-      t("search.removeSearch") || "Remove Search",
-      t("search.removeSearchMessage", { location }) ||
+      t("features.search.history.removeSearch") || "Remove Search",
+      t("features.search.history.removeSearchMessage", { location }) ||
         `Remove "${location}" from recent searches?`,
       [
         {
@@ -162,7 +163,7 @@ export const RecentSearches: React.FC<RecentSearchesProps> = ({
           color={isDark ? theme.colors.gray[50] : theme.colors.gray[900]}
           variant="h6"
         >
-          {t("search.recentSearches") || "Recent Searches"}
+          {t("features.search.history.recentSearches") || "Recent Searches"}
         </Text>
         <TouchableOpacity onPress={handleClearAll}>
           <Text
@@ -170,7 +171,7 @@ export const RecentSearches: React.FC<RecentSearchesProps> = ({
             size="sm"
             weight="semibold"
           >
-            {t("search.clear") || "Clear All"}
+            {t("common.clear") || "Clear All"}
           </Text>
         </TouchableOpacity>
       </Container>

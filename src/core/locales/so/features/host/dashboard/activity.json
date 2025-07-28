@@ -1,0 +1,46 @@
+{
+  "title": "Waxqabadka maanta",
+  "noActivity": "Waxqabad maanta ma jiro",
+  "noActivitySubtitle": "Markaad hesho buukin ama cusboonaysiinno, halkan ayay ka muuqan doonaan",
+  "quickActions": {
+    "title": "Ficillada degdega ah",
+    "addProperty": "Ku dar hanti",
+    "viewCalendar": "Arag kalanderka", 
+    "manageBookings": "Maamul buukinta",
+    "earningsReport": "Warbixinta dakhliga",
+    "calendar": {
+      "title": "Kalander",
+      "description": "Arag buukinta"
+    },
+    "listings": {
+      "title": "Listingada", 
+      "description": "Maamul hantida"
+    },
+    "settings": {
+      "title": "Dejinada",
+      "description": "Doorashooyinka hosting"
+    }
+  },
+  "activities": {
+    "checkIns": {
+      "title": "Soo galida maanta",
+      "description": "Marti soo socda"
+    },
+    "checkOuts": {
+      "title": "Ka bixida maanta", 
+      "description": "Marti ka tagaya"
+    },
+    "newReservations": {
+      "title": "Buukin cusub",
+      "description": "Shalay ka bilaabay"
+    },
+    "messages": {
+      "title": "Fariimaha aan la akhriyin",
+      "description": "Waxay u baahan yihiin jawaab"
+    },
+    "reviewsToRespond": {
+      "title": "Diiwaangelinta laga jawaabayo",
+      "description": "Jawaab la sugayo"
+    }
+  }
+}

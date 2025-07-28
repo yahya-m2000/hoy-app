@@ -78,7 +78,7 @@ const YearGridComponent: React.FC<YearGridProps> = ({
         "december",
       ];
       const monthKey = monthKeys[monthIndex];
-      const translationKey = `calendar.months.${monthKey}`;
+      const translationKey = `features.calendar.months.${monthKey}`;
       const translatedMonthName = t(translationKey);
       const year = monthData.month.getFullYear();
 

@@ -29,8 +29,8 @@ export const SetupPrompt: React.FC<SetupPromptProps> = ({
   const { t } = useTranslation();
   const { theme, isDark } = useTheme();
 
-  const defaultTitle = t("host.setup.promptTitle");
-  const defaultMessage = t("host.setup.promptMessage");
+  const defaultTitle = t("features.host.setup.main.promptTitle");
+  const defaultMessage = t("features.host.setup.main.promptMessage");
 
   if (variant === "compact") {
     return (
@@ -54,7 +54,7 @@ export const SetupPrompt: React.FC<SetupPromptProps> = ({
           </Text>
         </Container>
         <Button
-          title={t("host.setup.startSetup")}
+          title={t("features.host.setup.navigation.startSetup")}
           variant="primary"
           size="small"
           onPress={onStartSetup}
@@ -105,7 +105,7 @@ export const SetupPrompt: React.FC<SetupPromptProps> = ({
         </Text>
 
         <Button
-          title={t("host.setup.startSetup")}
+          title={t("features.host.setup.navigation.startSetup")}
           variant="primary"
           onPress={onStartSetup}
           style={{ minWidth: 200 }}
@@ -154,7 +154,7 @@ export const SetupPrompt: React.FC<SetupPromptProps> = ({
       </Text>
 
       <Button
-        title={t("host.setup.startSetup")}
+        title={t("features.host.setup.navigation.startSetup")}
         variant="primary"
         size="large"
         onPress={onStartSetup}

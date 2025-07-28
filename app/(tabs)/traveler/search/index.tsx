@@ -65,7 +65,7 @@ export default function SearchScreen() {
       console.error("Error loading recent searches:", error);
       showToast({
         message:
-          t("search.errorLoadingRecent") || "Error loading recent searches",
+          t("system.errors.data.loadFailed") || "Error loading recent searches",
         type: "error",
       });
     }
@@ -107,14 +107,17 @@ export default function SearchScreen() {
         await RecentSearchManager.removeRecentSearch(id);
         await loadRecentSearches();
         showToast({
-          message: t("search.recentSearchRemoved") || "Recent search removed",
+          message:
+            t("features.search.actions.recentSearchRemoved") ||
+            "Recent search removed",
           type: "success",
         });
       } catch (error) {
         console.error("Error removing recent search:", error);
         showToast({
           message:
-            t("search.errorRemovingRecent") || "Error removing recent search",
+            t("system.errors.data.deleteFailed") ||
+            "Error removing recent search",
           type: "error",
         });
       }
@@ -129,14 +132,16 @@ export default function SearchScreen() {
       setRecentSearches([]);
       showToast({
         message:
-          t("search.allRecentSearchesCleared") || "All recent searches cleared",
+          t("features.search.actions.allRecentSearchesCleared") ||
+          "All recent searches cleared",
         type: "success",
       });
     } catch (error) {
       console.error("Error clearing recent searches:", error);
       showToast({
         message:
-          t("search.errorClearingRecent") || "Error clearing recent searches",
+          t("system.errors.data.deleteFailed") ||
+          "Error clearing recent searches",
         type: "error",
       });
     }
@@ -149,7 +154,8 @@ export default function SearchScreen() {
     if (!location) {
       showToast({
         message:
-          t("search.selectLocationFirst") || "Please select a location first",
+          t("features.search.validation.selectLocationFirst") ||
+          "Please select a location first",
         type: "warning",
         duration: 3000,
       });
@@ -208,7 +214,8 @@ export default function SearchScreen() {
       // Show toast to indicate search is in progress
       showToast({
         message:
-          t("search.searchingProperties") || "Searching for properties...",
+          t("features.search.actions.searchingProperties") ||
+          "Searching for properties...",
         type: "info",
         duration: 2000,
       });
@@ -220,7 +227,8 @@ export default function SearchScreen() {
     } catch (error) {
       console.error("Error performing search:", error);
       showToast({
-        message: t("search.errorPerformingSearch") || "Error performing search",
+        message:
+          t("system.errors.network.requestFailed") || "Error performing search",
         type: "error",
       });
     } finally {
@@ -274,14 +282,15 @@ export default function SearchScreen() {
             color="secondary"
             style={{ marginTop: spacing.md, textAlign: "center" }}
           >
-            {t("search.noRecentSearches") || "No recent searches yet"}
+            {t("features.search.history.noSearches") ||
+              "No recent searches yet"}
           </Text>
           <Text
             variant="caption"
             color="tertiary"
             style={{ marginTop: spacing.sm, textAlign: "center" }}
           >
-            {t("search.startSearchingToSeeHistory") ||
+            {t("features.search.history.startSearching") ||
               "Start searching to see your search history here"}
           </Text>
         </Container>
@@ -292,7 +301,7 @@ export default function SearchScreen() {
   return (
     <Container flex={1} backgroundColor={theme.background}>
       <Header
-        title={t("search.title") || "Search"}
+        title={t("common.tabs.search") || "Search"}
         // right={{
         //   children: (
         //     <Icon

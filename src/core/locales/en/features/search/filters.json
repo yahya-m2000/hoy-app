@@ -1,0 +1,75 @@
+{
+  "title": "Search",
+  "description": "Search for a property",
+  "anyLocation": "Any location",
+  "anyDates": "Any dates", 
+  "anyGuests": "Any guests",
+  "resultsFound": "{{count}} properties found",
+  "actions": {
+    "search": "Search",
+    "clear": "Clear",
+    "apply": "Apply",
+    "newSearch": "New Search",
+    "recentSearchRemoved": "Recent search removed",
+    "allRecentSearchesCleared": "All recent searches cleared",
+    "searchingProperties": "Searching for properties..."
+  },
+  "fields": {
+    "goingTo": "Going to",
+    "when": "When",
+    "who": "Who",
+    "where": "Where",
+    "checkIn": "Check-in",
+    "checkOut": "Check-out",
+    "guests": "Guests",
+    "selectDates": "Select dates"
+  },
+  "travelers": {
+    "title": "Who's coming?",
+    "adults": "Adults",
+    "children": "Children",
+    "rooms": "Rooms",
+    "guest": "guest",
+    "room": "room",
+    "decrement": "Decrease",
+    "increment": "Increase"
+  },
+  "destinations": {
+    "whereToGo": "Where to go?",
+    "searchDestinations": "Search destinations...",
+    "popularDestinations": "Popular destinations",
+    "searchingLocations": "Searching locations...",
+    "anyLocation": "Any location"
+  },
+  "dates": {
+    "anyDates": "Any dates",
+    "nights": "nights",
+    "night": "night"
+  },
+  "placeholders": {
+    "anyGuests": "Any guests"
+  },
+  "actions": {
+    "search": "Search",
+    "clear": "Clear",
+    "apply": "Apply",
+    "newSearch": "New Search",
+    "recentSearchRemoved": "Recent search removed",
+    "allRecentSearchesCleared": "All recent searches cleared",
+    "searchingProperties": "Searching for properties..."
+  },
+  "validation": {
+    "selectLocationFirst": "Please select a location first"
+  },
+  "history": {
+    "recentSearches": "Recent searches",
+    "noSearches": "No recent searches yet",
+    "startSearching": "Start searching to see your search history here",
+    "clearRecentSearches": "Clear recent searches",
+    "clearRecentSearchesMessage": "This will remove all your recent searches",
+    "allRecentSearchesCleared": "All recent searches have been cleared"
+  },
+  "validation": {
+    "selectLocationFirst": "Please select a location first"
+  }
+}

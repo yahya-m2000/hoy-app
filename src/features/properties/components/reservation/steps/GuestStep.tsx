@@ -73,14 +73,14 @@ export const GuestStep: React.FC<GuestStepProps> = ({
           color={isDark ? theme.colors.gray[50] : theme.colors.gray[900]}
           style={{ marginBottom: 8 }}
         >
-          {t("reservation.whoIsComing", "Who's coming?")}
+          {t("features.booking.flow.whoIsComing", "Who's coming?")}
         </Text>
         <Text
           variant="body"
           color={isDark ? theme.colors.gray[400] : theme.colors.gray[600]}
         >
           {t(
-            "reservation.selectGuestCount",
+            "features.booking.flow.selectGuestCount",
             "Select the number of guests for your stay"
           )}
         </Text>
@@ -94,7 +94,7 @@ export const GuestStep: React.FC<GuestStepProps> = ({
             weight="semibold"
             style={{ textTransform: "uppercase", letterSpacing: 0.5 }}
           >
-            {t("reservation.selectedDates", "Selected Dates")}
+            {t("features.booking.flow.selectedDates", "Selected Dates")}
           </Text>
         </Container>
 
@@ -112,7 +112,7 @@ export const GuestStep: React.FC<GuestStepProps> = ({
               >
                 {startDate && endDate
                   ? `${formatDate(startDate)} - ${formatDate(endDate)}`
-                  : t("reservation.selectDates", "Select dates")}
+                  : t("features.booking.flow.selectDates", "Select dates")}
               </Text>
               <Container flexDirection="row" alignItems="center" marginTop="xs">
                 <Icon
@@ -129,7 +129,8 @@ export const GuestStep: React.FC<GuestStepProps> = ({
                   }
                   style={{ marginLeft: 6 }}
                 >
-                  {calculateNights()} {t("reservation.nights", "nights")}
+                  {calculateNights()}{" "}
+                  {t("features.booking.flow.nights", "nights")}
                 </Text>
               </Container>
             </Container>
@@ -148,15 +149,15 @@ export const GuestStep: React.FC<GuestStepProps> = ({
             weight="semibold"
             color={isDark ? theme.colors.gray[100] : theme.colors.gray[900]}
           >
-            {t("reservation.guestInformation", "Guest Information")}
+            {t("features.booking.flow.guestInformation", "Guest Information")}
           </Text>
           <Text
             variant="caption"
             color={isDark ? theme.colors.gray[400] : theme.colors.gray[600]}
             style={{ marginTop: 4 }}
           >
-            {t("reservation.maxGuests", "Maximum")} {maxGuests}{" "}
-            {t("reservation.guests", "guests")}
+            {t("features.booking.flow.maxGuests", "Maximum")} {maxGuests}{" "}
+            {t("features.booking.flow.guests", "guests")}
           </Text>
         </Container>
 

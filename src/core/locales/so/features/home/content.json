@@ -1,0 +1,38 @@
+{
+  "greetings": {
+    "hello": "Salaan",
+    "discoverAmazingPlaces": "Baadhay meelo ajaaiib ah oo aad ku noolaato"
+  },
+  "hosting": {
+    "individualHost": "Martigale Shakhsi ah",
+    "businessHost": "Martigale Ganacsi",
+    "organizationHost": "Martigale Urur",
+    "monthlyPotential": "Awoodda Bisha",
+    "analytics": "Falanqaynta"
+  },
+  "property": {
+    "perNight": "habeenkii",
+    "night": "habeen",
+    "whatThisPlaceOffers": "Waxa meeshan ay siiso",
+    "showAll": "Tus Dhammaan",
+    "meetYourHost": "La kulma Martigalkaaga"
+  },
+  "categories": {
+    "popular": "Caanka ah",
+    "available": "La heli karo", 
+    "topRated": "Ugu Qiimaha Badan",
+    "new": "Cusub",
+    "featured": "La Muujiyay"
+  },
+  "location": {
+    "in": "gudaha"
+  },
+  "auth": {
+    "signIn": "Soo Gal"
+  },
+  "noPropertiesInCategory": "Hanti lama helin qaybtan gudaheeda",
+  "errors": {
+    "cannotConnect": "Lama xiri karo. Fadlan hubi xidhiidhka internetka.",
+    "pleaseTryAgainLater": "Fadlan mar kale isku day."
+  }
+}

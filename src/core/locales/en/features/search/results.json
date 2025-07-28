@@ -1,0 +1,13 @@
+{
+  "title": "Search Results",
+  "loading": {
+    "searchingProperties": "Searching properties..."
+  },
+  "results": {
+    "resultsFound": "{{count}} properties found",
+    "noResults": "No results found",
+    "noResultsFound": "No results found",
+    "noPropertiesFound": "No properties found",
+    "tryAdjustingFilters": "Try adjusting your search filters"
+  }
+}

@@ -46,7 +46,7 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({
       if (permission.status !== "granted") {
         showToast({
           type: "error",
-          message: t("auth.avatar.cameraPermissionDenied"),
+          message: t("features.auth.social.avatar.cameraPermissionDenied"),
         });
         return;
       }
@@ -89,7 +89,7 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({
       }
     } catch (error) {
       console.error("AvatarPicker error", error);
-      showToast({ type: "error", message: t("errors.generic") });
+      showToast({ type: "error", message: t("system.errors.generic.unknown") });
     }
   };
 
@@ -131,7 +131,7 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({
             <ActivityIndicator size="small" color="#666" />
           ) : (
             <Text variant="caption" color="secondary">
-              {t("auth.avatar.selectPhoto")}
+              {t("features.auth.social.avatar.selectPhoto")}
             </Text>
           )}
         </Container>

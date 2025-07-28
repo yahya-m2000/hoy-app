@@ -97,7 +97,7 @@ const AgreementCard: React.FC<AgreementCardProps> = ({
           </Text>
 
           <Button
-            title={t("host.agreement.viewDocument")}
+            title={t("features.host.setup.agreement.viewDocument")}
             variant="ghost"
             size="small"
             onPress={onViewDocument}
@@ -131,16 +131,16 @@ const AgreementCard: React.FC<AgreementCardProps> = ({
             style={{ fontSize: 14 }}
           >
             {isAccepted
-              ? t("host.agreement.accepted")
-              : t("host.agreement.notAccepted")}
+              ? t("features.host.setup.agreement.accepted")
+              : t("features.host.setup.agreement.notAccepted")}
           </Text>
         </Container>
 
         <Button
           title={
             isAccepted
-              ? t("host.agreement.accepted")
-              : t("host.agreement.accept")
+              ? t("features.host.setup.agreement.accepted")
+              : t("features.host.setup.agreement.accept")
           }
           variant={isAccepted ? "outline" : "primary"}
           size="small"
@@ -209,10 +209,10 @@ export const HostAgreementStep: React.FC<HostAgreementStepProps> = ({
       if (canOpen) {
         await Linking.openURL(url);
       } else {
-        Alert.alert(t("common.error"), t("host.agreement.cannotOpenDocument"));
+        Alert.alert(t("common.error"), t("features.host.setup.agreement.cannotOpenDocument"));
       }
     } catch (error) {
-      Alert.alert(t("common.error"), t("host.agreement.documentError"));
+      Alert.alert(t("common.error"), t("features.host.setup.agreement.documentError"));
     }
   };
 
@@ -227,7 +227,7 @@ export const HostAgreementStep: React.FC<HostAgreementStepProps> = ({
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Container paddingHorizontal="lg" paddingVertical="md">
         <Text variant="h2" color="primary" marginBottom="sm">
-          {t("host.agreement.title")}
+          {t("features.host.setup.agreement.title")}
         </Text>
 
         <Text
@@ -236,13 +236,13 @@ export const HostAgreementStep: React.FC<HostAgreementStepProps> = ({
           marginBottom="xl"
           style={{ lineHeight: 22 }}
         >
-          {t("host.agreement.subtitle")}
+          {t("features.host.setup.agreement.subtitle")}
         </Text>
 
         {/* Terms of Service */}
         <AgreementCard
-          title={t("host.agreement.terms.title")}
-          subtitle={t("host.agreement.terms.subtitle")}
+          title={t("features.host.setup.agreement.terms.title")}
+          subtitle={t("features.host.setup.agreement.terms.subtitle")}
           icon="document-text-outline"
           isAccepted={data.termsAccepted || false}
           onToggle={handleTermsToggle}
@@ -252,8 +252,8 @@ export const HostAgreementStep: React.FC<HostAgreementStepProps> = ({
 
         {/* Privacy Policy */}
         <AgreementCard
-          title={t("host.agreement.privacy.title")}
-          subtitle={t("host.agreement.privacy.subtitle")}
+          title={t("features.host.setup.agreement.privacy.title")}
+          subtitle={t("features.host.setup.agreement.privacy.subtitle")}
           icon="shield-outline"
           isAccepted={data.privacyPolicyAccepted || false}
           onToggle={handlePrivacyToggle}
@@ -263,8 +263,8 @@ export const HostAgreementStep: React.FC<HostAgreementStepProps> = ({
 
         {/* Host Guarantee (Optional) */}
         <AgreementCard
-          title={t("host.agreement.guarantee.title")}
-          subtitle={t("host.agreement.guarantee.subtitle")}
+          title={t("features.host.setup.agreement.guarantee.title")}
+          subtitle={t("features.host.setup.agreement.guarantee.subtitle")}
           icon="shield-checkmark-outline"
           isAccepted={data.hostGuaranteeAccepted || false}
           onToggle={handleHostGuaranteeToggle}
@@ -288,10 +288,10 @@ export const HostAgreementStep: React.FC<HostAgreementStepProps> = ({
             marginBottom="sm"
           >
             <Text variant="subtitle" color="primary">
-              {t("host.agreement.progress")}
+              {t("features.host.setup.agreement.progress")}
             </Text>
             <Text variant="body" color="secondary">
-              {completionPercentage}/3 {t("host.agreement.completed")}
+              {completionPercentage}/3 {t("features.host.setup.agreement.completed")}
             </Text>
           </Container>
 
@@ -317,8 +317,8 @@ export const HostAgreementStep: React.FC<HostAgreementStepProps> = ({
             style={{ lineHeight: 20, fontSize: 13 }}
           >
             {allRequiredAccepted
-              ? t("host.agreement.allRequiredCompleted")
-              : t("host.agreement.requiredRemaining")}
+              ? t("features.host.setup.agreement.allRequiredCompleted")
+              : t("features.host.setup.agreement.requiredRemaining")}
           </Text>
         </Container>
 
@@ -344,7 +344,7 @@ export const HostAgreementStep: React.FC<HostAgreementStepProps> = ({
               color={theme.colors.primary}
             />
             <Text variant="subtitle" color="primary" marginLeft="sm">
-              {t("host.agreement.legalNotice")}
+              {t("features.host.setup.agreement.legalNotice")}
             </Text>
           </Container>
           <Text
@@ -352,7 +352,7 @@ export const HostAgreementStep: React.FC<HostAgreementStepProps> = ({
             color="secondary"
             style={{ lineHeight: 20, fontSize: 13 }}
           >
-            {t("host.agreement.legalNoticeText")}
+            {t("features.host.setup.agreement.legalNoticeText")}
           </Text>
         </Container>
       </Container>

@@ -1,0 +1,7 @@
+{
+  "calendarTitle": "{{property}} Stay",
+  "calendarDetails": "Check-in: {{checkIn}}, Check-out: {{checkOut}}, Guests: {{guests}}",
+  "calendarError": "Failed to add to calendar",
+  "permissionDenied": "Calendar permission denied",
+  "noCalendarFound": "No calendar app found"
+}

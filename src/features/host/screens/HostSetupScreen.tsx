@@ -61,8 +61,8 @@ export const HostSetupScreen: React.FC = () => {
         const errorMessages = Object.values(validationErrors).join("\n");
         const alertMessage =
           errorMessages.length > 0
-            ? `${t("host.errors.validationError")}\n\n${errorMessages}`
-            : t("host.errors.validationError");
+            ? `${t("system.errors.validation.invalidInput")}\n\n${errorMessages}`
+            : t("system.errors.validation.invalidInput");
 
         Alert.alert(t("common.error"), alertMessage);
         return;
@@ -75,8 +75,8 @@ export const HostSetupScreen: React.FC = () => {
       console.log("Setup result:", result);
 
       Alert.alert(
-        t("host.setup.setupComplete"),
-        t("host.setup.setupCompleteMessage"),
+        t("features.host.setup.success.title"),
+        t("features.host.setup.success.message"),
         [
           {
             text: t("common.ok"),
@@ -87,7 +87,7 @@ export const HostSetupScreen: React.FC = () => {
     } catch (error) {
       console.error("Setup failed with error:", error);
       console.error("Error details:", JSON.stringify(error, null, 2));
-      Alert.alert(t("common.error"), t("host.errors.setupFailed"), [
+      Alert.alert(t("common.error"), t("system.errors.data.saveFailed"), [
         { text: t("common.ok") },
       ]);
     } finally {
@@ -96,13 +96,13 @@ export const HostSetupScreen: React.FC = () => {
   };
 
   const handleCancel = () => {
-    Alert.alert(t("host.setup.cancelTitle"), t("host.setup.cancelMessage"), [
+    Alert.alert(t("features.host.setup.navigation.cancelTitle"), t("features.host.setup.navigation.cancelMessage"), [
       {
         text: t("common.continue"),
         style: "default",
       },
       {
-        text: t("host.setup.cancelConfirm"),
+        text: t("features.host.setup.navigation.cancelConfirm"),
         style: "destructive",
         onPress: () => router.back(),
       },
@@ -188,14 +188,14 @@ export const HostSetupScreen: React.FC = () => {
       {/* Header */}
       <View style={[styles.header, { borderBottomColor: theme.border }]}>
         <Text variant="h2" style={styles.title}>
-          {t("host.setup.title")}
+          {t("features.host.setup.main.title")}
         </Text>
         <Text
           variant="body"
           color={theme.text.secondary}
           style={styles.subtitle}
         >
-          {t("host.setup.subtitle")}
+          {t("features.host.setup.main.subtitle")}
         </Text>
       </View>
 
@@ -237,7 +237,7 @@ export const HostSetupScreen: React.FC = () => {
               disabled={isSaving}
               loading={isSaving}
               style={styles.navButton}
-              title={isLastStep ? t("host.setup.finish") : t("common.continue")}
+              title={isLastStep ? t("features.host.setup.navigation.finish") : t("common.continue")}
             />
           </View>
         </View>

@@ -1,17 +1,17 @@
 {
-    "beachfront": "Xeebta hore",
-    "mountainView": "Muuqaal Buureed",
-    "cityCenter": "Bartamaha Magaalada",
+    "beachfront": "Xeebta horeeda",
+    "mountainView": "Muuqaalka buurta",
+    "cityCenter": "Badhtamaha magaalada",
     "quietNeighborhood": "Xaafad deggan",
     "nearPublicTransport": "U dhow gaadiidka dadweynaha",
-    "familyFriendly": "Qoyska ku habboon",
-    "businessReady": "Ganacsi diyaar u ah",
-    "petFriendly": "Xayawaan la ogol yahay",
-    "romanticGetaway": "Meel jaceyl",
+    "familyFriendly": "Qoyska u habboon",
+    "businessReady": "Ganacsi u diyaar",
+    "petFriendly": "Xayawaanka u habboon",
+    "romanticGetaway": "Socod jacayl",
     "luxury": "Raaxo",
-    "budgetFriendly": "Qiimo jaban",
-    "ecoFriendly": "Deegaanka u roon",
-    "historic": "Taariikhi ah",
+    "budgetFriendly": "Miisaaniyadda u habboon",
+    "ecoFriendly": "Deegaanka u saaxiibtinimo",
+    "historic": "Taariikhi",
     "modern": "Casri ah",
-    "uniqueStay": "Hoy gaar ah"
+        "uniqueStay": "Joog gaar ah"
 }

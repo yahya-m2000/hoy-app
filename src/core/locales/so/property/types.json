@@ -1,32 +1,32 @@
 {
-    "apartment": "Guri dabaq ah",
+    "apartment": "Apartment",
     "house": "Guri",
     "villa": "Villa",
-    "condo": "Kondo",
-    "townhouse": "Guri xaafadeed",
-    "bungalow": "Bangalow",
-    "cabin": "Kabin",
-    "chalet": "Shaleet",
-    "cottage": "Guri yar",
-    "loft": "Loof",
-    "penthouse": "Dabaq sare",
+    "condo": "Condo",
+    "townhouse": "Guri magaalo",
+    "bungalow": "Bungalow",
+    "cabin": "Cabin",
+    "chalet": "Chalet",
+    "cottage": "Cottage",
+    "loft": "Loft",
+    "penthouse": "Penthouse",
     "studio": "Studio",
     "other": "Kale",
-    "entire_place": "Guri dhan",
-    "entire_placeDescription": "Martidu waxay heli doonaan guriga oo dhan",
-    "private_room": "Qol gaar ah",
-    "private_roomDescription": "Martidu waxay heli doonaan qol gaar ah balse waxay la wadaagi doonaan meelaha guud",
-    "shared_space": "Meel la wadaago",
-    "shared_spaceDescription": "Martidu waxay la wadaagi doonaan meelaha dadka kale",
+    "entirePlace": "Meelaha oo dhan",
+    "entirePlaceDescription": "Martidu meelaha oo dhan ayay u leeyihiin",
+    "privateRoom": "Qolka gaarka ah",
+    "privateRoomDescription": "Martidu qol gaar ah ayay leeyihiin laakiin waxay wadaagaan meelaha guud",
+    "sharedSpace": "Meel la wadaago",
+    "sharedSpaceDescription": "Martidu meelaha waxay la wadaagaan kuwa kale",
   
   "listing": {
-    "individual": "Hanti shaqsiyeed",
+    "individual": "Hanti shakhsi",
     "shared": "Hanti la wadaago"
   },
   "status": {
     "active": "Firfircoon",
-    "inactive": "Aan firfircoonayn",
-    "draft": "Qoraal qabyo ah",
-    "label": "Xaaladda:"
+    "inactive": "Ma firfircona",
+    "draft": "Qoraal",
+    "label": "Xaalada:"
   }
 } 

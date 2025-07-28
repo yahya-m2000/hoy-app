@@ -1,0 +1,10 @@
+{
+  "title": "Property Options",
+  "host": "Host",
+  "unknown": "Unknown",
+  "defaultName": "Property",
+  "label": "Status",
+  "featured": "Featured",
+  "totalBookings": "total bookings",
+  "noDescriptionAvailable": "No description available."
+}

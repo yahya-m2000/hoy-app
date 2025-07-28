@@ -1,0 +1,38 @@
+{
+  "title": "Host Setup",
+  "welcome": "Welcome to Hosting",
+  "welcomeSubtitle": "Let's get you set up to start hosting guests",
+  "getStarted": "Get Started",
+  "calendarIcon": "📅",
+  "promptTitle": "Complete Your Host Setup",
+  "promptMessage": "Set up your hosting policies and preferences to start accepting bookings",
+  "startSetup": "Continue Setup",
+  "finish": "Finish Setup",
+  "setupComplete": "Setup Complete",
+  "setupCompleteMessage": "Your host setup is complete! You can now start accepting bookings.",
+  "cancelTitle": "Cancel Setup",
+  "cancelMessage": "Are you sure you want to cancel? You can complete setup later, but you won't be able to accept bookings until setup is finished.",
+  "cancelConfirm": "Cancel Setup",
+  "prompts": {
+    "listings": {
+      "title": "Setup Required",
+      "message": "Complete your host setup to start adding and managing your properties"
+    },
+    "today": {
+      "title": "Setup Required", 
+      "message": "Complete your host setup to view your bookings and earnings dashboard"
+    },
+    "calendar": {
+      "title": "Setup Required",
+      "message": "Complete your host setup to manage your booking calendar"
+    },
+    "profile": {
+      "title": "Setup Required",
+      "message": "Complete your host setup to access your host profile settings"
+    }
+  },
+  "todayPromptTitle": "Setup Required",
+  "todayPromptMessage": "Complete your host setup to view your bookings and earnings dashboard",
+  "calendarPromptTitle": "Setup Required",
+  "calendarPromptMessage": "Complete your host setup to manage your booking calendar"
+}

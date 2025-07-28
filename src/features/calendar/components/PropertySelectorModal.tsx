@@ -34,7 +34,7 @@ const PropertySelectorModal: React.FC<PropertySelectorModalProps> = memo(
 
     return (
       <BottomSheetModal
-        title={t("calendar.selectProperty")}
+        title={t("features.calendar.selectProperty")}
         onClose={onClose}
         showSaveButton={false}
         testID="property-selector-modal"
@@ -127,7 +127,7 @@ const PropertySelectorModal: React.FC<PropertySelectorModalProps> = memo(
                           ]}
                         >
                           <Text style={styles.activeText}>
-                            {t("property.status.active")}
+                            {t("features.property.management.status.active")}
                           </Text>
                         </View>
                       )}

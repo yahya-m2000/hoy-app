@@ -82,7 +82,7 @@ export default function AccountLinkingScreen() {
     if (!linkingData || !password.trim()) {
       showToast({
         type: "error",
-        message: t("auth.passwordRequired"),
+        message: t("features.auth.forms.validation.passwordRequired"),
       });
       return;
     }
@@ -129,7 +129,9 @@ export default function AccountLinkingScreen() {
 
       showToast({
         type: "success",
-        message: t("auth.accountLinkedSuccessfully"),
+        message: t(
+          "features.auth.social.accountLinking.accountLinkedSuccessfully"
+        ),
       });
 
       router.back();
@@ -139,12 +141,14 @@ export default function AccountLinkingScreen() {
       if (error.message === "Invalid email or password") {
         showToast({
           type: "error",
-          message: t("auth.invalidPassword"),
+          message: t("features.auth.forms.validation.invalidPassword"),
         });
       } else {
         showToast({
           type: "error",
-          message: error.message || t("auth.accountLinkingFailed"),
+          message:
+            error.message ||
+            t("features.auth.social.accountLinking.accountLinkingFailed"),
         });
       }
     } finally {
@@ -173,7 +177,7 @@ export default function AccountLinkingScreen() {
     return (
       <Container flex={1}>
         <Header
-          title={t("auth.accountLinking")}
+          title={t("features.auth.social.accountLinking.accountLinking")}
           left={{
             icon: "chevron-back-outline",
             onPress: handleCancel,
@@ -191,7 +195,7 @@ export default function AccountLinkingScreen() {
   return (
     <Container flex={1}>
       <Header
-        title={t("auth.accountLinking")}
+        title={t("features.auth.social.accountLinking.accountLinking")}
         left={{
           icon: "chevron-back-outline",
           onPress: handleCancel,
@@ -216,7 +220,7 @@ export default function AccountLinkingScreen() {
               borderRadius="md"
             >
               <Text variant="h6" color="white" align="center" marginBottom="md">
-                {t("auth.accountLinkingTitle")}
+                {t("features.auth.social.accountLinking.accountLinkingTitle")}
               </Text>
 
               <Text
@@ -225,10 +229,15 @@ export default function AccountLinkingScreen() {
                 align="center"
                 marginBottom="md"
               >
-                {t("auth.accountLinkingDescription", {
-                  email: linkingData.existingUser.email,
-                  newProvider: getProviderDisplayName(linkingData.newProvider),
-                })}
+                {t(
+                  "features.auth.social.accountLinking.accountLinkingDescription",
+                  {
+                    email: linkingData.existingUser.email,
+                    newProvider: getProviderDisplayName(
+                      linkingData.newProvider
+                    ),
+                  }
+                )}
               </Text>
 
               <Container
@@ -243,7 +252,7 @@ export default function AccountLinkingScreen() {
                     color="white"
                     style={{ fontWeight: "bold" }}
                   >
-                    {t("auth.existingAccount")}:
+                    {t("features.auth.social.accountLinking.existingAccount")}:
                   </Text>
                 </Text>
                 <Text variant="body" color="white" marginBottom="sm">
@@ -255,7 +264,10 @@ export default function AccountLinkingScreen() {
                 </Text>
                 {linkingData.existingUser.existingProviders.length > 0 && (
                   <Text variant="body" color="white">
-                    {t("auth.connectedProviders")}:{" "}
+                    {t(
+                      "features.auth.social.accountLinking.connectedProviders"
+                    )}
+                    :{" "}
                     {linkingData.existingUser.existingProviders
                       .map(getProviderDisplayName)
                       .join(", ")}
@@ -267,20 +279,27 @@ export default function AccountLinkingScreen() {
             {/* Password Verification */}
             <Container marginBottom="lg">
               <Text variant="h6" color="primary" marginBottom="md">
-                {t("auth.verifyPassword")}
+                {t("features.auth.social.accountLinking.verifyPassword")}
               </Text>
 
               <Text variant="body" color="secondary" marginBottom="md">
-                {t("auth.verifyPasswordDescription", {
-                  newProvider: getProviderDisplayName(linkingData.newProvider),
-                })}
+                {t(
+                  "features.auth.social.accountLinking.verifyPasswordDescription",
+                  {
+                    newProvider: getProviderDisplayName(
+                      linkingData.newProvider
+                    ),
+                  }
+                )}
               </Text>
 
               <Input
-                label={t("auth.password")}
+                label={t("features.auth.forms.fields.password")}
                 value={password}
                 onChangeText={setPassword}
-                placeholder={t("auth.enterPassword")}
+                placeholder={t(
+                  "features.auth.forms.placeholders.enterPassword"
+                )}
                 secureTextEntry={!showPassword}
                 autoCapitalize="none"
                 rightIcon={showPassword ? "eye-off" : "eye"}
@@ -291,7 +310,7 @@ export default function AccountLinkingScreen() {
               />
 
               <Button
-                title={t("auth.linkAccount")}
+                title={t("features.auth.social.accountLinking.linkAccount")}
                 onPress={handleLinkAccount}
                 loading={loading}
                 variant="primary"

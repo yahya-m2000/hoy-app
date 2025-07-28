@@ -1,0 +1,76 @@
+{
+  "general": {
+    // "guest": "guest", // MOVED TO property.common
+    // "guests": "Guests", // MOVED TO property.common
+    "adults": "Adults",
+    "children": "Children",
+    "infants": "Infants",
+    "pets": "Pets",
+    "host": "Host",
+    "hostedBy": "Hosted by",
+    "newHost": "New Host",
+    "livesIn": "Lives in",
+    "featured": "Featured",
+    "unknown": "Unknown",
+    // "modify": "Modify", // USE features.property.listing.actions.modify
+    "showAll": "Show All",
+    "viewListing": "View Listing",
+    "addAnother": "Add Another Property",
+    "createNew": "Create New Property",
+    "selectProperty": "Select Property",
+    "monthlyPotential": "Monthly Potential",
+    "analytics": "Analytics",
+    // "individual": "Individual", // USE features.property.listing.common.individual
+    // "business": "Business", // USE features.property.listing.common.business
+    "in": "in",
+    "individualHost": "Individual Host",
+    "businessHost": "Business Host", 
+    "organizationHost": "Organization Host",
+    "whatsapp": "WhatsApp"
+  },
+  "fields": {
+    "name": "Property Name",
+    "namePlaceholder": "Enter a descriptive name for your property",
+    "title": "Property Title",
+    "description": "Description",
+    "descriptionPlaceholder": "Describe your property, what makes it special, nearby attractions...",
+    "descriptionHelp": "A good description helps guests understand what to expect",
+    "type": "Property Type",
+    "typePlaceholder": "Select property type",
+    "listingType": "Listing Type",
+    "listingTypePlaceholder": "Select listing type",
+    "listingTypeHelp": "Individual: Entire property • Shared: Room in property",
+    "bedrooms": "Bedrooms",
+    // "beds": "Beds", // MOVED TO property.common
+    "bathrooms": "Bathrooms",
+    "maxGuests": "Maximum Guests",
+    "pricePerNight": "Price per Night",
+    "pricePlaceholder": "0",
+    "perNight": "/ night",
+    "night": "night"
+  },
+  "measurements": {
+    "bedroom": "Bedroom",
+    // "bath": "Bath", // MOVED TO property.common
+    // "baths": "Baths", // MOVED TO property.common
+    "totalBeds": "Total Beds",
+    "totalBookings": "total bookings"
+  },
+  "booking": {
+    "reserve": "Reserve",
+    "checkAvailability": "Check Availability",
+    "availability": "Availability",
+    "checkAvailableDates": "Check Available Dates",
+    "selectDates": "Select Dates",
+    "selectGuests": "Select Guests",
+    "checkin": "Checkin",
+    "checkout": "Checkout",
+    "checkinAfter": "Check-in after",
+    "checkIn": "Check-in"
+  },
+  "defaults": {
+    "defaultName": "Property", 
+    "noName": "Untitled Property",
+    "noDescriptionAvailable": "No description available."
+  }
+}

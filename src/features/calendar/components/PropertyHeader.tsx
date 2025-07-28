@@ -24,7 +24,7 @@ const PropertyHeader: React.FC<PropertyHeaderProps> = memo(
     const { theme } = useTheme();
 
     // Use translation for default property name if not provided
-    const displayPropertyName = propertyName || t("property.defaultName");
+    const displayPropertyName = propertyName || t("features.property.details.defaultName");
 
     return (
       <TouchableOpacity

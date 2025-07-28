@@ -1,0 +1,12 @@
+{
+  "errorTitle": "Khalad",
+  "loadError": "Waxaa fashilmay rarista xogta hantida",
+  "submitError": "Waxaa fashilmay dirista hantida. Fadlan mar kale isku day.",
+  "noMeaningfulData": "Xog macno leh oo la kaydiyo weli ma jirto",
+  "requiredFieldsTitle": "Goobaha loo baahan yahay",
+  "requiredFieldsMessage": "Fadlan buuxi dhammaan goobaha loo baahan yahay ka hor intaadan sii wadin.",
+  "saveAndExitTitle": "Kaydi oo bax",
+  "saveAndExitMessage": "Ma doonaysaa inaad kaydsato horumarka ka hor intaadan bixin?",
+  "exitWithoutSaving": "Ka bax iyada oo aan la kaydin",
+  "saveAndExit": "Kaydi oo bax"
+}

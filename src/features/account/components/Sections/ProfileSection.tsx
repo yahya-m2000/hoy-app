@@ -139,8 +139,8 @@ export default function ProfileSection({
       {
         id: "personal",
         icon: "person-outline",
-        title: t("profile.personalInfo"),
-        subtitle: t("profile.personalInfoDesc"),
+        title: t("features.account.profile.personalInfo"),
+        subtitle: t("features.account.profile.personalInfoDesc"),
         action: () =>
           router.push(
             isHostTab
@@ -151,7 +151,7 @@ export default function ProfileSection({
       {
         id: "logout",
         icon: "log-out-outline",
-        title: t("profile.signOut"),
+        title: t("features.account.profile.signOut"),
         isDanger: true,
         action: onLogout,
       },
@@ -160,7 +160,7 @@ export default function ProfileSection({
     sections.push(
       <SettingsSection
         key="account"
-        title={t("profile.account")}
+        title={t("features.account.profile.account")}
         items={accountSettings}
       />
     );
@@ -170,7 +170,7 @@ export default function ProfileSection({
       {
         id: "language",
         icon: "language-outline",
-        title: t("profile.language"),
+        title: t("features.account.profile.language"),
         subtitle: getLanguageDisplayName(),
         action: () => {
           const pathname = isHostTab
@@ -188,7 +188,7 @@ export default function ProfileSection({
       {
         id: "currency",
         icon: "cash-outline",
-        title: t("profile.currency"),
+        title: t("features.account.profile.currency"),
         subtitle: `${currency} (${getSymbol(currency)})`,
         action: () => {
           const pathname = isHostTab
@@ -206,8 +206,8 @@ export default function ProfileSection({
       {
         id: "theme",
         icon: isDark ? "moon-outline" : "sunny-outline",
-        title: t("profile.theme"),
-        subtitle: t("profile.themeDesc"),
+        title: t("features.account.profile.theme"),
+        subtitle: t("features.account.profile.themeDesc"),
         action: () => {
           const pathname = isHostTab
             ? "/(tabs)/host/profile/[setting]"
@@ -229,9 +229,9 @@ export default function ProfileSection({
               icon: "swap-horizontal-outline",
               title:
                 userRole === "host"
-                  ? t("profile.switchToTraveler")
-                  : t("profile.switchToHost"),
-              subtitle: t("profile.hostModeDesc"),
+                  ? t("features.account.profile.switchToTraveler")
+                  : t("features.account.profile.switchToHost"),
+              subtitle: t("features.account.profile.hostModeDesc"),
               action: async () => {
                 const newRole = userRole === "host" ? "traveler" : "host";
                 await setUserRole(newRole);
@@ -261,7 +261,7 @@ export default function ProfileSection({
     sections.push(
       <SettingsSection
         key="preferences"
-        title={t("profile.preferences")}
+        title={t("features.account.profile.preferences")}
         items={preferenceSettings}
       />
     );
@@ -271,8 +271,8 @@ export default function ProfileSection({
       {
         id: "help",
         icon: "help-circle-outline",
-        title: t("profile.helpCenter"),
-        subtitle: t("profile.helpCenterDesc"),
+        title: t("features.account.profile.helpCenter"),
+        subtitle: t("features.account.profile.helpCenterDesc"),
         action: () =>
           router.push({
             pathname: isHostTab
@@ -284,8 +284,8 @@ export default function ProfileSection({
       {
         id: "feedback",
         icon: "chatbubble-outline",
-        title: t("profile.giveFeedback"),
-        subtitle: t("profile.giveFeedbackDesc"),
+        title: t("features.account.profile.giveFeedback"),
+        subtitle: t("features.account.profile.giveFeedbackDesc"),
         action: () =>
           router.push(
             isHostTab
@@ -296,16 +296,16 @@ export default function ProfileSection({
       {
         id: "resetApp",
         icon: "refresh-circle-outline",
-        title: t("profile.resetApp") || "Reset App Data",
+        title: t("features.account.profile.resetApp") || "Reset App Data",
         subtitle:
-          t("profile.resetAppDesc") || "Fix issues by clearing cached data",
+          t("features.account.profile.resetAppDesc") || "Fix issues by clearing cached data",
         action: () => showCleanSlateAlert(),
       },
       {
         id: "terms",
         icon: "document-text-outline",
-        title: t("profile.termsOfService"),
-        subtitle: t("profile.termsOfServiceDesc"),
+        title: t("features.account.profile.termsOfService"),
+        subtitle: t("features.account.profile.termsOfServiceDesc"),
         action: () =>
           router.push({
             pathname: isHostTab
@@ -319,7 +319,7 @@ export default function ProfileSection({
     sections.push(
       <SettingsSection
         key="support"
-        title={t("profile.support")}
+        title={t("features.account.profile.support")}
         items={supportSettings}
       />
     );
@@ -336,7 +336,7 @@ export default function ProfileSection({
       {
         id: "language",
         icon: "language-outline",
-        title: t("profile.language"),
+        title: t("features.account.profile.language"),
         subtitle: getLanguageDisplayName(),
         action: () => {
           console.log(
@@ -348,7 +348,7 @@ export default function ProfileSection({
       {
         id: "currency",
         icon: "cash-outline",
-        title: t("profile.currency"),
+        title: t("features.account.profile.currency"),
         subtitle: `${currency} (${getSymbol(currency)})`,
         action: () => {
           console.log(
@@ -360,8 +360,8 @@ export default function ProfileSection({
       {
         id: "theme",
         icon: isDark ? "moon-outline" : "sunny-outline",
-        title: t("profile.theme"),
-        subtitle: t("profile.themeDesc"),
+        title: t("features.account.profile.theme"),
+        subtitle: t("features.account.profile.themeDesc"),
         action: () => {
           console.log(
             "Unauthenticated theme navigation - pathname: /(tabs)/traveler/profile/theme"
@@ -374,7 +374,7 @@ export default function ProfileSection({
     sections.push(
       <SettingsSection
         key="preferences"
-        title={t("profile.preferences")}
+        title={t("features.account.profile.preferences")}
         items={preferenceSettings}
       />
     );
@@ -384,8 +384,8 @@ export default function ProfileSection({
       {
         id: "help",
         icon: "help-circle-outline",
-        title: t("profile.helpCenter"),
-        subtitle: t("profile.helpCenterDesc"),
+        title: t("features.account.profile.helpCenter"),
+        subtitle: t("features.account.profile.helpCenterDesc"),
         action: () =>
           router.push({
             pathname: "/(tabs)/traveler/profile/[setting]",
@@ -395,8 +395,8 @@ export default function ProfileSection({
       {
         id: "terms",
         icon: "document-text-outline",
-        title: t("profile.termsOfService"),
-        subtitle: t("profile.termsOfServiceDesc"),
+        title: t("features.account.profile.termsOfService"),
+        subtitle: t("features.account.profile.termsOfServiceDesc"),
         action: () =>
           router.push({
             pathname: "/(tabs)/traveler/profile/[setting]",
@@ -408,7 +408,7 @@ export default function ProfileSection({
     sections.push(
       <SettingsSection
         key="support"
-        title={t("profile.support")}
+        title={t("features.account.profile.support")}
         items={supportSettings}
       />
     );

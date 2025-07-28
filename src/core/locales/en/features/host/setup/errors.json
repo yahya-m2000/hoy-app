@@ -1,0 +1,20 @@
+{
+  "validationError": "Please fix the following errors:",
+  "setupFailed": "Failed to complete setup. Please try again.",
+  "incompleteSetup": "Please complete all required steps before finishing setup.",
+  "verificationFailed": "Verification failed. Please try again.",
+  "codeExpired": "Verification code has expired. Please request a new one.",
+  "invalidCode": "Invalid verification code. Please try again.",
+  "emailAlreadyVerified": "This email is already verified.",
+  "phoneAlreadyVerified": "This phone number is already verified.",
+  "identityVerificationFailed": "Identity verification failed. Please try again.",
+  "documentUploadFailed": "Failed to upload document. Please try again.",
+  "agreementUpdateFailed": "Failed to update agreement. Please try again.",
+  "policiesUpdateFailed": "Failed to update policies. Please try again.",
+  "preferencesUpdateFailed": "Failed to update preferences. Please try again.",
+  "profileUpdateFailed": "Failed to update profile. Please try again.",
+  "autoSaveFailed": "Failed to save progress. Please try again.",
+  "networkError": "Network error. Please check your connection and try again.",
+  "serverError": "Server error. Please try again later.",
+  "unknownError": "An unexpected error occurred. Please try again."
+}

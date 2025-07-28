@@ -98,7 +98,7 @@ export default function HostTodayScreen() {
   const metricItems: MetricItem[] = [
     {
       icon: "trending-up",
-      label: t("host.dashboard.metrics.earnings"),
+      label: t("features.host.dashboard.metrics.earnings"),
       value: `${getCurrencySymbol()}${
         convertedEarnings?.toLocaleString() ||
         dashboardData?.stats.totalEarnings?.toLocaleString() ||
@@ -108,7 +108,7 @@ export default function HostTodayScreen() {
     },
     {
       icon: "star",
-      label: t("host.dashboard.metrics.insights"),
+      label: t("features.host.dashboard.metrics.insights"),
       value: insightsData?.averageRating?.toFixed(1) || t("common.zeroDecimal"),
       onPress: () => setShowInsightsModal(true),
     },
@@ -117,7 +117,7 @@ export default function HostTodayScreen() {
   if (setupLoading) {
     return (
       <Container flex={1} backgroundColor={theme.background}>
-        <Header title={t("host.dashboard.title")} />
+        <Header title={t("features.host.dashboard.main.title")} />
         <StatusBar style={isDark ? "light" : "dark"} />
         <Container flex={1} justifyContent="center" alignItems="center">
           <LoadingSpinner size="large" />
@@ -126,7 +126,7 @@ export default function HostTodayScreen() {
             color="secondary"
             style={{ marginTop: spacing.md }}
           >
-            {t("host.common.loading")}
+            {t("features.host.dashboard.main.loading")}
           </Text>
         </Container>
       </Container>
@@ -138,12 +138,12 @@ export default function HostTodayScreen() {
     return (
       <>
         <Container flex={1} backgroundColor={theme.background}>
-          <Header title={t("host.dashboard.title")} />
+          <Header title={t("features.host.dashboard.main.title")} />
           <StatusBar style={isDark ? "light" : "dark"} />
           <SetupPrompt
             onStartSetup={() => setShowHostSetup(true)}
-            title={t("host.setup.todayPromptTitle")}
-            message={t("host.setup.todayPromptMessage")}
+            title={t("features.host.setup.main.todayPromptTitle")}
+            message={t("features.host.setup.main.todayPromptMessage")}
             variant="default"
           />
         </Container>
@@ -161,7 +161,7 @@ export default function HostTodayScreen() {
 
   return (
     <Container flex={1} backgroundColor={theme.background}>
-      <Header title={t("host.dashboard.title")} />
+      <Header title={t("features.host.dashboard.main.title")} />
       <StatusBar style={isDark ? "light" : "dark"} />
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -202,14 +202,16 @@ export default function HostTodayScreen() {
             >
               <EmptyState
                 icon="calendar-outline"
-                title={t("host.today.reservations.noReservations")}
-                message={t("host.today.reservations.noReservationsSubtitle")}
+                title={t("features.host.dashboard.reservations.noReservations")}
+                message={t(
+                  "features.host.dashboard.reservations.noReservationsSubtitle"
+                )}
               />
             </Container>
           )}
           {/* <Container paddingHorizontal="lg">
             <MetricGrid
-              title={t("host.dashboard.overview")}
+              title={t("features.host.dashboard.main.overview")}
               items={metricItems}
               columns={2}
             />

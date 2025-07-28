@@ -35,7 +35,7 @@ export const CancellationPolicyForm: React.FC<CancellationPolicyFormProps> = ({
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
         <Text variant="h3" style={styles.title}>
-          {t("host.policies.cancellation.title")}
+          {t("features.host.setup.policies.cancellation.title")}
         </Text>
 
         <Text
@@ -43,21 +43,21 @@ export const CancellationPolicyForm: React.FC<CancellationPolicyFormProps> = ({
           color={theme.text.secondary}
           style={styles.subtitle}
         >
-          {t("host.policies.cancellation.subtitle")}
+          {t("features.host.setup.policies.cancellation.subtitle")}
         </Text>
 
         <View style={styles.form}>
           {/* Refund Period Days */}
           <View style={styles.field}>
             <Text variant="label" style={styles.label}>
-              {t("host.policies.cancellation.refundPeriod")}
+              {t("features.host.setup.policies.cancellation.refundPeriod")}
             </Text>
             <Text
               variant="caption"
               color={theme.text.secondary}
               style={styles.hint}
             >
-              {t("host.policies.cancellation.refundPeriodHint")}
+              {t("features.host.setup.policies.cancellation.refundPeriodHint")}
             </Text>
             <Input
               value={data.refundPeriodDays?.toString() || ""}
@@ -73,20 +73,20 @@ export const CancellationPolicyForm: React.FC<CancellationPolicyFormProps> = ({
               color={theme.text.secondary}
               style={styles.suffix}
             >
-              {t("host.policies.cancellation.days")}
+              {t("features.host.setup.policies.cancellation.days")}
             </Text>
           </View>
           {/* Full Refund Days */}
           <View style={styles.field}>
             <Text variant="label" style={styles.label}>
-              {t("host.policies.cancellation.fullRefund")}
+              {t("features.host.setup.policies.cancellation.fullRefund")}
             </Text>
             <Text
               variant="caption"
               color={theme.text.secondary}
               style={styles.hint}
             >
-              {t("host.policies.cancellation.fullRefundHint")}
+              {t("features.host.setup.policies.cancellation.fullRefundHint")}
             </Text>
             <Input
               value={data.fullRefundDays?.toString() || ""}
@@ -102,20 +102,20 @@ export const CancellationPolicyForm: React.FC<CancellationPolicyFormProps> = ({
               color={theme.text.secondary}
               style={styles.suffix}
             >
-              {t("host.policies.cancellation.days")}
+              {t("features.host.setup.policies.cancellation.days")}
             </Text>
           </View>
           {/* Partial Refund Days */}
           <View style={styles.field}>
             <Text variant="label" style={styles.label}>
-              {t("host.policies.cancellation.partialRefund")}
+              {t("features.host.setup.policies.cancellation.partialRefund")}
             </Text>
             <Text
               variant="caption"
               color={theme.text.secondary}
               style={styles.hint}
             >
-              {t("host.policies.cancellation.partialRefundHint")}
+              {t("features.host.setup.policies.cancellation.partialRefundHint")}
             </Text>
             <Input
               value={data.partialRefundDays?.toString() || ""}
@@ -131,20 +131,20 @@ export const CancellationPolicyForm: React.FC<CancellationPolicyFormProps> = ({
               color={theme.text.secondary}
               style={styles.suffix}
             >
-              {t("host.policies.cancellation.days")}
+              {t("features.host.setup.policies.cancellation.days")}
             </Text>
           </View>
           {/* No Refund Days */}
           <View style={styles.field}>
             <Text variant="label" style={styles.label}>
-              {t("host.policies.cancellation.noRefund")}
+              {t("features.host.setup.policies.cancellation.noRefund")}
             </Text>
             <Text
               variant="caption"
               color={theme.text.secondary}
               style={styles.hint}
             >
-              {t("host.policies.cancellation.noRefundHint")}
+              {t("features.host.setup.policies.cancellation.noRefundHint")}
             </Text>
             <Input
               value={data.noRefundDays?.toString() || ""}
@@ -160,20 +160,20 @@ export const CancellationPolicyForm: React.FC<CancellationPolicyFormProps> = ({
               color={theme.text.secondary}
               style={styles.suffix}
             >
-              {t("host.policies.cancellation.days")}
+              {t("features.host.setup.policies.cancellation.days")}
             </Text>
           </View>
           {/* Policy Preview */}
           <View style={[styles.preview, { backgroundColor: theme.surface }]}>
             <Text variant="label" style={styles.previewTitle}>
-              {t("host.policies.cancellation.preview")}
+              {t("features.host.setup.policies.cancellation.preview")}
             </Text>
             <Text
               variant="caption"
               color={theme.text.secondary}
               style={styles.previewSubtitle}
             >
-              {t("host.policies.cancellation.previewSubtitle")}
+              {t("features.host.setup.policies.cancellation.previewSubtitle")}
             </Text>
 
             <View style={styles.previewContent}>

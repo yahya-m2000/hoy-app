@@ -138,12 +138,12 @@ export default function SearchResultsScreen() {
   // Render search summary
   const renderSearchSummary = () => {
     const locationText =
-      (params.location as string) || t("search.anyLocation") || "Any location";
+      (params.location as string) || t("features.search.anyLocation") || "Any location";
     const datesText =
-      (params.displayDates as string) || t("search.anyDates") || "Any dates";
+      (params.displayDates as string) || t("features.search.anyDates") || "Any dates";
     const guestsText =
       (params.displayTravelers as string) ||
-      t("search.anyGuests") ||
+      t("features.search.anyGuests") ||
       "Any guests";
 
     return (
@@ -220,14 +220,14 @@ export default function SearchResultsScreen() {
           style={{ marginBottom: 4 }}
         >
           {properties.length === 0
-            ? t("search.noResults") || "No results found"
+            ? t("features.search.results.noResults") || "No results found"
             : `${properties.length} ${
                 properties.length === 1 ? "property" : "properties"
               } found`}
         </Text>
         {properties.length > 0 && (
           <Text variant="caption" color={theme.text.secondary}>
-            {t("search.resultsFound") ||
+            {t("features.search.resultsFound", { count: properties.length }) ||
               `${properties.length} properties found`}
           </Text>
         )}
@@ -239,12 +239,12 @@ export default function SearchResultsScreen() {
   const renderEmptyState = () => (
     <EmptyState
       icon="search-outline"
-      title={t("search.noPropertiesFound") || "No properties found"}
+      title={t("features.search.results.noPropertiesFound") || "No properties found"}
       message={
-        t("search.tryAdjustingFilters") || "Try adjusting your search filters"
+        t("features.search.results.tryAdjustingFilters") || "Try adjusting your search filters"
       }
       action={{
-        label: t("search.newSearch") || "New Search",
+        label: t("features.search.actions.newSearch") || "New Search",
         onPress: () => router.back(),
       }}
     />
@@ -360,7 +360,7 @@ export default function SearchResultsScreen() {
 
   return (
     <ListScreen
-      title={t("search.results") || "Search Results"}
+      title={t("features.search.results.title") || "Search Results"}
       showFilter={false}
       onFilter={handleFiltersPress}
       scrollable={false}

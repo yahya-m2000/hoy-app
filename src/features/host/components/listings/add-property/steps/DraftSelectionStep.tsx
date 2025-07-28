@@ -37,18 +37,18 @@ const DraftSelectionStep: React.FC<DraftSelectionStepProps> = ({
   const { t } = useTranslation();
   const getProgressText = (draft: DraftProperty) => {
     if (!draft.currentStep)
-      return t("property.steps.draftSelection.justStarted");
+      return t("features.property.listing.steps.draftSelection.justStarted");
 
     const stepNames = [
-      t("property.steps.draftSelection.step1"),
-      t("property.steps.draftSelection.step2"),
-      t("property.steps.draftSelection.step3"),
+      t("features.property.listing.steps.draftSelection.step1"),
+      t("features.property.listing.steps.draftSelection.step2"),
+      t("features.property.listing.steps.draftSelection.step3"),
     ];
     const stepName =
       stepNames[draft.currentStep - 1] ||
-      t("property.steps.draftSelection.inProgress");
+      t("features.property.listing.steps.draftSelection.inProgress");
 
-    return t("property.steps.draftSelection.progress", {
+    return t("features.property.listing.steps.draftSelection.progress", {
       step: draft.currentStep,
       stepName,
     });
@@ -57,10 +57,10 @@ const DraftSelectionStep: React.FC<DraftSelectionStepProps> = ({
   const getDraftTitle = (draft: DraftProperty) => {
     if (draft.name?.trim()) return draft.name;
     if (draft.address.city)
-      return t("property.steps.draftSelection.propertyInCity", {
+      return t("features.property.listing.steps.draftSelection.propertyInCity", {
         city: draft.address.city,
       });
-    return t("property.steps.draftSelection.listingOfType", {
+    return t("features.property.listing.steps.draftSelection.listingOfType", {
       type:
         draft.propertyType.charAt(0).toUpperCase() +
         draft.propertyType.slice(1),
@@ -113,7 +113,7 @@ const DraftSelectionStep: React.FC<DraftSelectionStepProps> = ({
           alignItems="center"
         >
           <Text variant="caption" color="onSurfaceVariant">
-            {t("property.steps.draftSelection.lastEdited", {
+            {t("features.property.listing.steps.draftSelection.lastEdited", {
               time: formatDistanceToNow(new Date(draft.updatedAt), {
                 addSuffix: true,
               }),
@@ -136,18 +136,18 @@ const DraftSelectionStep: React.FC<DraftSelectionStepProps> = ({
       <Container marginBottom="xl">
         <Container marginBottom="sm">
           <Text variant="h2" color="onBackground">
-            {t("property.steps.draftSelection.continueYourListing")}
+            {t("features.property.listing.steps.draftSelection.continueYourListing")}
           </Text>
         </Container>
         <Text variant="body" color="onBackgroundVariant">
-          {t("property.steps.draftSelection.savedProperties")}
+          {t("features.property.listing.steps.draftSelection.savedProperties")}
         </Text>
       </Container>
 
       {/* Create New Button */}
       <Container marginBottom="xl">
         <Button
-          title={t("property.createNew")}
+          title={t("features.property.listing.actions.createNew")}
           variant="primary"
           onPress={onCreateNew}
           disabled={loading}
@@ -159,7 +159,7 @@ const DraftSelectionStep: React.FC<DraftSelectionStepProps> = ({
         <Container flex={1}>
           <Container marginBottom="md">
             <Text variant="h6" color="onBackground">
-              {t("property.steps.draftSelection.yourDrafts", {
+              {t("features.property.listing.steps.draftSelection.yourDrafts", {
                 count: drafts.length,
               })}
             </Text>

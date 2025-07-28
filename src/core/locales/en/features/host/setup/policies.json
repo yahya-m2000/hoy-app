@@ -1,0 +1,185 @@
+{
+  "title": "Default Policies",
+  "subtitle": "Set your default hosting policies. These will apply to all your properties unless you customize them individually.",
+  "cancellation": {
+    "title": "Cancellation Policy",
+    "subtitle": "Choose your default cancellation policy for all listings",
+    "description": "Your cancellation policy affects guest refunds and your earnings. Choose carefully as it impacts guest booking decisions.",
+    "types": {
+      "flexible": {
+        "title": "Flexible",
+        "subtitle": "Full refund if canceled at least 7 days before check-in",
+        "description": "Guests get a full refund if they cancel at least 7 days before check-in. After that, guests pay for each night they stay, plus 1 additional night.",
+        "recommended": "Recommended for new hosts",
+        "refundPolicy": "Full refund 7+ days before • Partial refund 1-6 days before • No refund day of check-in"
+      },
+      "moderate": {
+        "title": "Moderate",
+        "subtitle": "Full refund if canceled at least 5 days before check-in",
+        "description": "Guests get a full refund if they cancel at least 5 days before check-in. After that, guests pay for each night they stay, plus 1 additional night.",
+        "recommended": "Most popular choice",
+        "refundPolicy": "Full refund 5+ days before • Partial refund 1-4 days before • No refund day of check-in"
+      },
+      "strict": {
+        "title": "Strict",
+        "subtitle": "Full refund if canceled at least 14 days before check-in",
+        "description": "Guests get a full refund if they cancel at least 14 days before check-in. After that, guests pay for each night they stay, plus 1 additional night.",
+        "recommended": "For experienced hosts",
+        "refundPolicy": "Full refund 14+ days before • Partial refund 7-13 days before • No refund 1-6 days before"
+      }
+    },
+    "helpText": "Your cancellation policy affects guest refunds and your earnings. You can customize this for individual properties later.",
+    "customForm": {
+      "refundPeriod": "Refund Period",
+      "refundPeriodHint": "Number of days before check-in when refunds are still possible",
+      "fullRefund": "Full Refund Days",
+      "fullRefundHint": "Days before check-in when guests get 100% refund",
+      "partialRefund": "Partial Refund Days", 
+      "partialRefundHint": "Days before check-in when guests get 50% refund",
+      "noRefund": "No Refund Days",
+      "noRefundHint": "Days before check-in when no refund is given",
+      "days": "days",
+      "preview": "Policy Preview",
+      "previewSubtitle": "This is how your cancellation policy will appear to guests"
+    }
+  },
+  "houseRules": {
+    "title": "House Rules",
+    "subtitle": "Set clear expectations for guests",
+    "description": "Set your default house rules. These will apply to all your listings unless you customize them individually.",
+    "checkInOut": {
+      "title": "Check-in & Check-out Times",
+      "checkInTime": "Check-in Time",
+      "checkOutTime": "Check-out Time",
+      "helpText": "Set standard check-in and check-out times for your properties."
+    },
+    "smoking": {
+      "title": "Smoking Allowed",
+      "subtitle": "Allow guests to smoke on your property",
+      "allowed": "Smoking allowed",
+      "notAllowed": "No smoking",
+      "helpText": "Clearly state your smoking policy to avoid misunderstandings."
+    },
+    "pets": {
+      "title": "Pets Allowed",
+      "subtitle": "Allow guests to bring pets",
+      "allowed": "Pets allowed",
+      "notAllowed": "No pets",
+      "helpText": "Specify if guests can bring pets and any restrictions."
+    },
+    "parties": {
+      "title": "Parties & Events Allowed",
+      "subtitle": "Allow guests to host parties or events",
+      "allowed": "Parties allowed",
+      "notAllowed": "No parties",
+      "helpText": "Set clear expectations about parties and events."
+    },
+    "quietHours": {
+      "title": "Quiet Hours",
+      "subtitle": "Set quiet hours for your property",
+      "enabled": "Quiet hours enabled",
+      "disabled": "No quiet hours",
+      "start": "Start Time",
+      "end": "End Time",
+      "helpText": "Set quiet hours to ensure peaceful stays for all guests."
+    },
+    "additionalRules": {
+      "title": "Additional Rules",
+      "placeholder": "Add any additional house rules...",
+      "addRule": "Add Rule",
+      "helpText": "Add any other rules specific to your properties."
+    },
+    "checkIn": "Check-in Time",
+    "checkOut": "Check-out Time",
+    "smoking": "Smoking Allowed",
+    "pets": "Pets Allowed", 
+    "parties": "Parties & Events Allowed",
+    "quietHours": "Quiet Hours",
+    "quietHoursStart": "Start Time",
+    "quietHoursEnd": "End Time",
+    "rulePlaceholder": "Add any additional house rules..."
+  },
+  "safety": {
+    "title": "Safety Information",
+    "subtitle": "Help guests understand what safety features are available at your property",
+    "smokeDetector": "Smoke detector",
+    "carbonMonoxideDetector": "Carbon monoxide detector", 
+    "fireExtinguisher": "Fire extinguisher",
+    "firstAidKit": "First aid kit",
+    "securityCamera": "Security camera",
+    "securityCameraLocation": "Security camera location",
+    "weaponsOnProperty": "Weapons on property",
+    "dangerousAnimals": "Dangerous animals",
+    "additionalSafety": "Additional safety information",
+    "safetyPlaceholder": "Add any additional safety information for guests...",
+    "addSafetyInfo": "Add Safety Info"
+  },
+  "property": {
+    "title": "Property Information",
+    "subtitle": "Provide essential information about your property for guests",
+    "wifi": {
+      "title": "WiFi Information",
+      "network": "Network Name",
+      "password": "WiFi Password",
+      "networkPlaceholder": "e.g. MyHome_WiFi",
+      "passwordPlaceholder": "Enter WiFi password"
+    },
+    "checkin": {
+      "title": "Check-in Instructions",
+      "instructions": "Check-in Instructions",
+      "keyLocation": "Key Location",
+      "instructionsPlaceholder": "Provide detailed instructions for guests on how to access your property...",
+      "keyLocationPlaceholder": "e.g. Under the flower pot, lockbox code 1234"
+    },
+    "parking": {
+      "title": "Parking Information",
+      "instructions": "Parking Instructions",
+      "instructionsPlaceholder": "Describe where guests can park and any special instructions..."
+    },
+    "amenities": {
+      "title": "Amenities",
+      "subtitle": "Select the amenities available at your property",
+      "wifi": "WiFi",
+      "parking": "Parking",
+      "kitchen": "Kitchen",
+      "washer": "Washer",
+      "dryer": "Dryer",
+      "ac": "Air Conditioning",
+      "heating": "Heating",
+      "tv": "TV",
+      "pool": "Pool",
+      "gym": "Gym",
+      "balcony": "Balcony",
+      "garden": "Garden"
+    },
+    "notes": {
+      "title": "Additional Notes",
+      "additional": "Additional Notes",
+      "additionalPlaceholder": "Add any other important information for guests..."
+    }
+  },
+  "checkInPreferences": {
+    "title": "Check-in Preferences",
+    "description": "How would you like guests to check in to your property?",
+    "selfCheckIn": {
+      "title": "Self Check-in",
+      "subtitle": "Guests can check in without meeting you",
+      "helpText": "Guests can access your property using a key code or lockbox."
+    },
+    "keyPickup": {
+      "title": "Key Pickup Required",
+      "subtitle": "Guests must pick up keys from a specific location",
+      "helpText": "Guests will pick up keys from a designated location or person."
+    },
+    "meetAndGreet": {
+      "title": "Meet & Greet",
+      "subtitle": "You prefer to meet guests in person",
+      "helpText": "You'll meet guests in person to provide keys and orientation."
+    },
+    "instructions": {
+      "title": "Check-in Instructions",
+      "placeholder": "Provide detailed check-in instructions...",
+      "helpText": "Add specific instructions for guests about how to access your property."
+    }
+  }
+}

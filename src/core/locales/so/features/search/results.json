@@ -1,0 +1,13 @@
+{
+  "title": "Natiijooyinka Raadinta",
+  "loading": {
+    "searchingProperties": "Hantida raadinaya..."
+  },
+  "results": {
+    "resultsFound": "{{count}} hanti la helay",
+    "noResults": "Natiijo lama helin",
+    "noResultsFound": "Natiijo lama helin",
+    "noPropertiesFound": "Hanti lama helin",
+    "tryAdjustingFilters": "Isku day in aad wax ka beddesho shaandhahaaga raadinta"
+  }
+}

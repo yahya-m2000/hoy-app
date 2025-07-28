@@ -1,0 +1,46 @@
+{
+  "title": "Today's Activity",
+  "noActivity": "No activity today",
+  "noActivitySubtitle": "When you have reservations or updates, they'll appear here",
+  "quickActions": {
+    "title": "Quick Actions",
+    "addProperty": "Add Property",
+    "viewCalendar": "View Calendar", 
+    "manageBookings": "Manage Bookings",
+    "earningsReport": "Earnings Report",
+    "calendar": {
+      "title": "Calendar",
+      "description": "View bookings"
+    },
+    "listings": {
+      "title": "Listings", 
+      "description": "Manage properties"
+    },
+    "settings": {
+      "title": "Settings",
+      "description": "Host preferences"
+    }
+  },
+  "activities": {
+    "checkIns": {
+      "title": "Check-ins Today",
+      "description": "Guests arriving"
+    },
+    "checkOuts": {
+      "title": "Check-outs Today", 
+      "description": "Guests departing"
+    },
+    "newReservations": {
+      "title": "New Reservations",
+      "description": "Since yesterday"
+    },
+    "messages": {
+      "title": "Unread Messages",
+      "description": "Require response"
+    },
+    "reviewsToRespond": {
+      "title": "Reviews to Respond",
+      "description": "Awaiting response"
+    }
+  }
+}

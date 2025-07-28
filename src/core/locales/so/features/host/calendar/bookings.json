@@ -1,0 +1,15 @@
+{
+  "title": "Buukinada Kalandarka",
+  "checkIn": "Gelitaan",
+  "checkOut": "Bixitaan",
+  "guest": "Marti",
+  "guests": "Martiyaal",
+  "viewDetails": "Eeg Faahfaahinta",
+  "upcoming": "Soo socda",
+  "past": "Hore",
+  "cancelled": "La joojiyay",
+  "confirmed": "La xaqiijiyay",
+  "pending": "Sugaya",
+  "noBookings": "Buukin lama helin",
+  "bookingDetails": "Faahfaahinta Buukinta"
+}

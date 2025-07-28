@@ -1,21 +1,21 @@
 {
-    "title": "Adeegyo",
-    "description": "Dooro adeegyada uu hantiyeedkaagu bixiyo",
-    "selectedCount": "{{count}} adeegyo ayaa la doortay",
-    "tipTitle": "Maxaa loogu daraa adeegyo?",
-    "tipContent": "Adeegyadu waxay ka dhigaan hantiyeedkaaga mid soo jiidasho leh waxayna soo jiitaan marti badan. Dooro dhammaan kuwa khuseeya hantiyeedkaaga.",
+    "title": "Adeegyada",
+    "description": "Dooro adeegyada ay hantidaadu bixiso",
+    "selectedCount": "{{count}} adeegyo la doortay",
+    "tipTitle": "Maxaa loo kordhiyaa adeegyada?",
+    "tipContent": "Adeegyadu waxay ka caawiyaan hantidaada inay mudnaato oo ay soo jiidato marti badan. Dooro kuwa oo dhan ee ku habboon hantidaada.",
     "popular": "Adeegyada caanka ah",
-    "kitchen": "Jikada & Cuntada",
-    "entertainment": "Madadaalo",
-    "comfort": "Raaxo",
-    "safety": "Badbaado & Amni",
+    "kitchen": "Jikada & Cunista",
+    "entertainment": "Madadaalada",
+    "comfort": "Raaxada",
+    "safety": "Badbaadada & Ammaanka",
     "categories": {
-      "essentials": "Muhiim",
-      "features": "Astaamo",
+      "essentials": "Waxyaabaha muhiimka ah",
+      "features": "Sifooyinka",
       "location": "Goobta",
-      "safety": "Badbaado"
+      "safety": "Badbaadada"
     },
-    "searchPlaceholder": "Raadi adeegyo",
-    "noAmenitiesSelected": "Wax adeegyo ah lama dooran",
-    "selectAtLeastOne": "Fadlan doora ugu yaraan hal adeeg"
+    "searchPlaceholder": "Raadi adeegyada",
+    "noAmenitiesSelected": "Adeegyo lama dooran",
+    "selectAtLeastOne": "Fadlan dooro ugu yaraan hal adeeg"
   }

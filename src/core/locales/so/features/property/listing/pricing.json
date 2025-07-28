@@ -1,0 +1,12 @@
+{
+  "discounts": {
+    "newListing": {
+      "title": "Dallacaad hanti cusub",
+      "description": "20% dhimis 3-da buukin ee ugu horreeya"
+    },
+    "lastMinute": {
+      "title": "Dhimis dambe", 
+      "description": "Buukinta 24 saacadood gudahood"
+    }
+  }
+}

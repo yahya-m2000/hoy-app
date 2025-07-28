@@ -1,0 +1,11 @@
+{
+  "loadError": "Failed to load property data",
+  "saveError": "Failed to save property data",
+  "submitError": "Error submitting property. Please try again.",
+  "deleteError": "Failed to delete property",
+  "updateError": "Failed to update property",
+  "createError": "Failed to create property",
+  "notFound": "Property not found",
+  "unauthorized": "You don't have permission to access this property",
+  "validationError": "Please check your input and try again"
+}

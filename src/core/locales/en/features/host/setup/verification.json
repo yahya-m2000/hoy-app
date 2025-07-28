@@ -1,0 +1,76 @@
+{
+  "title": "Account Verification",
+  "subtitle": "Complete verification to ensure guest safety and trust",
+  "email": {
+    "title": "Email Verification",
+    "subtitle": "Verify your email address for secure communication",
+    "status": {
+      "pending": "Not verified",
+      "inProgress": "Verifying...",
+      "completed": "Verified",
+      "failed": "Verification failed"
+    },
+    "sendCode": "Send Code",
+    "resendCode": "Resend Code",
+    "codeSent": "Code sent to {{email}}",
+    "enterCode": "Enter 6-digit code",
+    "codePlaceholder": "000000",
+    "verifyCode": "Verify Code",
+    "codeExpired": "Code expired. Please request a new one.",
+    "invalidCode": "Invalid code. Please try again.",
+    "verificationSuccess": "Email verified successfully!",
+    "helpText": "We'll send a verification code to your email address. This helps ensure secure communication with guests."
+  },
+  "phone": {
+    "title": "Phone Verification",
+    "subtitle": "Verify your phone number for urgent communications",
+    "status": {
+      "pending": "Not verified",
+      "inProgress": "Verifying...",
+      "completed": "Verified",
+      "failed": "Verification failed"
+    },
+    "sendCode": "Send SMS Code",
+    "resendCode": "Resend SMS",
+    "codeSent": "SMS sent to {{phone}}",
+    "enterCode": "Enter 6-digit SMS code",
+    "codePlaceholder": "000000",
+    "verifyCode": "Verify SMS",
+    "codeExpired": "SMS code expired. Please request a new one.",
+    "invalidCode": "Invalid SMS code. Please try again.",
+    "verificationSuccess": "Phone verified successfully!",
+    "helpText": "We'll send an SMS with a verification code. This enables urgent communication with guests if needed."
+  },
+  "identity": {
+    "title": "Identity Verification",
+    "subtitle": "Verify your identity for guest safety and trust",
+    "status": {
+      "pending": "Not verified",
+      "inProgress": "Verifying...",
+      "completed": "Verified",
+      "failed": "Verification failed"
+    },
+    "startVerification": "Start Verification",
+    "continueVerification": "Continue Verification",
+    "verificationInProgress": "Verification in progress...",
+    "verificationSuccess": "Identity verified successfully!",
+    "helpText": "Identity verification helps build trust with guests and ensures platform safety. This process is secure and confidential.",
+    "documents": {
+      "title": "Required Documents",
+      "governmentId": "Government-issued ID",
+      "passport": "Passport",
+      "driversLicense": "Driver's License",
+      "nationalId": "National ID Card"
+    },
+    "uploadDocument": "Upload Document",
+    "documentUploaded": "Document uploaded successfully",
+    "documentError": "Failed to upload document. Please try again.",
+    "privacyNote": "Your identity documents are encrypted and stored securely. We only use them for verification purposes."
+  },
+  "progress": {
+    "title": "Verification Progress",
+    "description": "Complete all verifications to proceed",
+    "allComplete": "All verifications complete!",
+    "remaining": "{{count}} verification(s) remaining"
+  }
+}
