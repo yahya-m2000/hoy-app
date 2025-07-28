@@ -1,6 +1,6 @@
 {
   "name": "hoy-app",
-  "version": "1.0.0",
+  "version": "0.2.0-alpha.1",
   "main": "expo-router/entry",
   "scripts": {
     "start": "npx expo start",
