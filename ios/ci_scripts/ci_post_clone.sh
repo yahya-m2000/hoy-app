@@ -13,7 +13,7 @@ else
 fi
 
 # Navigate to iOS directory and install pods
-cd ios
+cd ../
 echo "Running pod install..."
 pod install
 
