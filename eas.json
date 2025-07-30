@@ -13,7 +13,9 @@
     "beta": {
       "extends": "production",
       "android": {
-        "buildType": "app-bundle"
+        "buildType": "app-bundle",
+        "autoIncrement": "versionCode",
+        "image": "latest"
       },
       "ios": {
         "autoIncrement": true,
@@ -24,6 +26,14 @@
       "extends": "production",
       "android": {
         "buildType": "apk"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "track": "internal",
+        "releaseStatus": "draft"
       }
     }
   },

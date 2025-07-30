@@ -1,0 +1,106 @@
+name: Android Production Build and Submit
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: {} # Allow manual trigger
+
+jobs:
+  build_and_submit_android:
+    name: Build and Submit Android
+    type: build
+    environment: production
+    params:
+      platform: android
+      profile: beta
+    env:
+      # These will be set via EAS secrets
+      EXPO_PUBLIC_API_URL: https://hoy-api.onrender.com/api/v1
+      EXPO_PUBLIC_ENVIRONMENT: production
+    steps:
+      - name: Checkout code
+        uses: eas/checkout
+
+      - name: Install dependencies
+        uses: eas/install_node_modules
+
+      - name: Create Google Services file
+        run: |
+          # Check if we have the Firebase google-services.json file
+          if [ -n "$GOOGLE_SERVICES_JSON" ]; then
+            echo "Using GOOGLE_SERVICES_JSON for Firebase configuration..."
+            echo "$GOOGLE_SERVICES_JSON" | base64 -d > ./config/google/google-services.json
+            echo "✓ Created google-services.json from GOOGLE_SERVICES_JSON"
+          elif [ -f "./config/google/google-services.json" ]; then
+            echo "✓ google-services.json already exists in project"
+          else
+            echo "⚠️  WARNING: No google-services.json found"
+            echo "⚠️  This may cause build issues if Firebase features are used"
+            echo "⚠️  Consider adding GOOGLE_SERVICES_JSON environment variable with your Firebase config"
+            # Create a minimal placeholder to prevent build errors
+            echo '{"project_info":{"project_number":"000000000000","project_id":"placeholder-project"},"client":[{"client_info":{"mobilesdk_app_id":"1:000000000000:android:placeholder","android_client_info":{"package_name":"com.ym2000.hoy"}}}]}' > ./config/google/google-services.json
+            echo "✓ Created placeholder google-services.json"
+          fi
+          
+          # Verify the JSON file was created
+          if [ -f "./config/google/google-services.json" ]; then
+            echo "✓ Created google-services.json file"
+            echo "File size: $(wc -c < ./config/google/google-services.json) bytes"
+            
+            # Show first and last few characters to debug without exposing secrets
+            echo "File starts with: $(head -c 20 ./config/google/google-services.json)..."
+            echo "File ends with: ...$(tail -c 20 ./config/google/google-services.json)"
+            
+            # Validate JSON syntax
+            if command -v python3 >/dev/null 2>&1; then
+              if python3 -c "import json; json.load(open('./config/google/google-services.json'))" 2>/dev/null; then
+                echo "✓ JSON is valid"
+              else
+                echo "✗ JSON is invalid - attempting to fix common issues"
+                # Try to clean up the JSON (remove any extra quotes or escape characters)
+                python3 -c "import json,sys; content=open('./config/google/google-services.json').read().strip(); data=json.loads(content); json.dump(data,open('./config/google/google-services.json','w'),indent=2); print('✓ JSON cleaned and reformatted')" || (echo "✗ Could not fix JSON" && exit 1)
+              fi
+            fi
+          else
+            echo "ERROR: Failed to create google-services.json file"
+            exit 1
+          fi
+
+      - name: Increment version
+        run: |
+          # Read current versions
+          CURRENT_VERSION=$(node -p "require('./app.json').expo.version")
+          CURRENT_VERSION_CODE=$(node -p "require('./app.json').expo.android.versionCode")
+          
+          # Increment version code
+          NEW_VERSION_CODE=$((CURRENT_VERSION_CODE + 1))
+          
+          # Update version code in app.json
+          node -e "
+            const fs = require('fs');
+            const appJson = require('./app.json');
+            appJson.expo.android.versionCode = $NEW_VERSION_CODE;
+            fs.writeFileSync('./app.json', JSON.stringify(appJson, null, 2));
+          "
+          
+          echo "Updated versionCode from $CURRENT_VERSION_CODE to $NEW_VERSION_CODE"
+          echo "App version: $CURRENT_VERSION"
+
+      - name: Prebuild
+        uses: eas/prebuild
+
+      - name: Build Android
+        uses: eas/build
+
+  submit_to_play_store:
+    name: Submit to Google Play Store
+    type: submit
+    environment: production
+    needs: [build_and_submit_android]
+    params:
+      platform: android
+      profile: production
+      build_id: ${{ needs.build_and_submit_android.outputs.build_id }}
+    env:
+      EXPO_DEBUG: "1"
