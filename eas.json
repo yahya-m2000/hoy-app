@@ -17,6 +17,7 @@
         "autoIncrement": "versionCode",
         "image": "latest",
         "distribution": "store"
+
       },
       "ios": {
         "autoIncrement": true,

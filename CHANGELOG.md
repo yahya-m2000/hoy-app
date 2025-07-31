@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.0-alpha.1](https://github.com/yahya-m2000/hoy-app/compare/v1.0.0-alpha.1...v1.1.0-alpha.1) (2025-07-30)
+
+
+### Features
+
+* organize project configuration files into structured folders ([#7](https://github.com/yahya-m2000/hoy-app/issues/7)) ([29d003b](https://github.com/yahya-m2000/hoy-app/commit/29d003b267df13942920b6488ce176a3d49ce843))
+
+
+### Bug Fixes
+
+* correct path navigation in ci_post_clone.sh and set executable permissions ([91179d1](https://github.com/yahya-m2000/hoy-app/commit/91179d10e6d9cefb20ce57c4697a53084d4d0340))
+* install Node.js and npm dependencies before pod install in CI ([9e87508](https://github.com/yahya-m2000/hoy-app/commit/9e875081b77202727bd68933f7ffa71c27f6f165))
+
 ## [1.0.0-alpha.1](https://github.com/yahya-m2000/hoy-app/compare/v0.2.0-alpha.1...v1.0.0-alpha.1) (2025-07-28)
 
 

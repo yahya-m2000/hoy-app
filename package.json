@@ -1,6 +1,6 @@
 {
   "name": "hoy-app",
-  "version": "1.0.0-alpha.1",
+  "version": "1.1.0-alpha.1",
   "main": "expo-router/entry",
   "scripts": {
     "start": "npx expo start",
@@ -24,7 +24,6 @@
     "version:major": "node scripts/increment-versions.js major",
     "workflow:android": "eas workflow:run android-production.yml",
     "workflow:test-submit": "eas workflow:run test-submit-android.yml",
-
     "security:check": "npm audit --production",
     "test:certificate-pinning": "jest src/core/security/__tests__/certificate-pinning.test.ts",
     "env:setup": "cp .env.example .env && echo 'Please update .env with your values'",
