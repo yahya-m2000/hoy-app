@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1-alpha.1](https://github.com/yahya-m2000/hoy-app/compare/v1.1.0-alpha.1...v1.1.1-alpha.1) (2025-07-31)
+
+
+### Bug Fixes
+
+* feature/organize config files ([#10](https://github.com/yahya-m2000/hoy-app/issues/10)) ([6454503](https://github.com/yahya-m2000/hoy-app/commit/645450311ab9d4c4ab39bfc021207993e7b59dc8))
+
 ## [1.1.0-alpha.1](https://github.com/yahya-m2000/hoy-app/compare/v1.0.0-alpha.1...v1.1.0-alpha.1) (2025-07-30)
 
 
