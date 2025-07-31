@@ -7,7 +7,6 @@ node_modules/
 .expo/
 dist/
 web-build/
-android/
 expo-env.d.ts
 
 # Ignore IDE and OS files
