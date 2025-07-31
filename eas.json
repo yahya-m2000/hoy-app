@@ -15,7 +15,8 @@
       "android": {
         "buildType": "app-bundle",
         "autoIncrement": "versionCode",
-        "image": "latest"
+        "image": "latest",
+        "distribution": "store"
       },
       "ios": {
         "autoIncrement": true,

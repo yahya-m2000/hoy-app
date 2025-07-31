@@ -56,8 +56,6 @@ src/shared/config/secure.config.ts
 *.tsbuildinfo
 
 # eas - config files now organized in config/ directory
-config/google/google-play-service-account.json
-config/google/google-services.json
+config/google*
 config/credentials.json
-config/keystore/*.jks
-credentials* 
+config/keystore*

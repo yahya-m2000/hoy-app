@@ -98,7 +98,7 @@
         "RECORD_AUDIO",
         "ACCESS_WIFI_STATE"
       ],
-      "googleServicesFile": "./config/google/google-services.json"
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png",
