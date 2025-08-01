@@ -3,7 +3,7 @@
     "name": "hoy",
     "slug": "hoy",
     "scheme": "hoy",
-    "version": "1.1.1-alpha.1",
+    "version": "1.1.2-alpha.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
