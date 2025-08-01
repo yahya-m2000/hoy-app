@@ -3,7 +3,7 @@
     "name": "hoy",
     "slug": "hoy",
     "scheme": "hoy",
-    "version": "1.0.0",
+    "version": "1.1.2-alpha.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -38,7 +38,10 @@
         "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "This app uses your location to show nearby properties and provide relevant services even when the app is in the background.",
         "NSLocationAlwaysUsageDescription": "This app uses your location to show nearby properties and provide relevant services even when the app is in the background.",
-        "UIBackgroundModes": ["remote-notification", "location"],
+        "UIBackgroundModes": [
+          "remote-notification",
+          "location"
+        ],
         "CFBundleAllowMixedLocalizations": true
       }
     },
@@ -61,14 +64,42 @@
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES",
+        "READ_MEDIA_VIDEO",
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
         "FOREGROUND_SERVICE",
         "VIBRATE",
         "RECEIVE_BOOT_COMPLETED",
+        "READ_CONTACTS",
+        "SEND_SMS",
+        "READ_CALENDAR",
+        "WRITE_CALENDAR",
         "com.google.android.gms.permission.AD_ID",
         "com.google.android.c2dm.permission.RECEIVE",
         "com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"
+      ],
+      "permissionsPolicy": {
+        "CAMERA": "This app needs access to your camera to let you take photos for your profile and property listings.",
+        "READ_EXTERNAL_STORAGE": "This app needs access to your photo library to let you upload images for your profile and property listings.",
+        "WRITE_EXTERNAL_STORAGE": "This app needs to save photos and documents to your device storage.",
+        "READ_MEDIA_IMAGES": "This app needs access to your photo library to let you upload images for your profile and property listings.",
+        "READ_MEDIA_VIDEO": "This app needs access to your video library to let you upload videos for your property listings.",
+        "ACCESS_FINE_LOCATION": "This app uses your location to show nearby properties and improve your search experience.",
+        "ACCESS_COARSE_LOCATION": "This app uses your location to show nearby properties and improve your search experience.",
+        "ACCESS_BACKGROUND_LOCATION": "This app uses your location to show nearby properties and provide relevant services even when the app is in the background.",
+        "READ_CONTACTS": "This app needs access to your contacts to help you invite friends and connect with people you know.",
+        "SEND_SMS": "This app needs permission to send SMS messages for verification and sharing properties.",
+        "READ_CALENDAR": "Allow Hoy to access your calendar to help schedule property viewings and bookings.",
+        "WRITE_CALENDAR": "Allow Hoy to access your calendar to help schedule property viewings and bookings.",
+        "USE_BIOMETRIC": "This app uses biometric authentication to securely access your account.",
+        "USE_FINGERPRINT": "This app uses fingerprint authentication to securely access your account."
+      },
+      "blockedPermissions": [
+        "READ_PHONE_STATE",
+        "RECORD_AUDIO",
+        "ACCESS_WIFI_STATE"
       ],
       "googleServicesFile": "./google-services.json"
     },
@@ -77,7 +108,9 @@
       "bundler": "metro",
       "output": "server"
     },
-    "assetBundlePatterns": ["assets/fonts/*"],
+    "assetBundlePatterns": [
+      "assets/fonts/*"
+    ],
     "extra": {
       "environment": "production",
       "minApiCallInterval": 10000,

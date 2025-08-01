@@ -1,6 +1,6 @@
 {
   "name": "hoy-app",
-  "version": "0.2.0-alpha.1",
+  "version": "1.1.2-alpha.1",
   "main": "expo-router/entry",
   "scripts": {
     "start": "npx expo start",
@@ -17,6 +17,14 @@
     "build:all": "eas build --platform all --profile production",
     "submit:ios": "eas submit --platform ios --profile production",
     "submit:android": "eas submit --platform android --profile production",
+    "version:increment": "node scripts/increment-versions.js",
+    "version:android": "node scripts/increment-versions.js versionCode",
+    "version:patch": "node scripts/increment-versions.js patch",
+    "version:minor": "node scripts/increment-versions.js minor",
+    "version:major": "node scripts/increment-versions.js major",
+    "version:sync": "node scripts/sync-versions.js",
+    "workflow:android": "eas workflow:run android-production.yml",
+    "workflow:android:submit": "eas workflow:run android-submit.yml",
     "security:check": "npm audit --production",
     "test:certificate-pinning": "jest src/core/security/__tests__/certificate-pinning.test.ts",
     "env:setup": "cp .env.example .env && echo 'Please update .env with your values'",
