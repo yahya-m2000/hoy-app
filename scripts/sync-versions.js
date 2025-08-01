@@ -35,7 +35,6 @@ function syncVersions() {
   if (fs.existsSync(readmePath)) {
     let readmeContent = fs.readFileSync(readmePath, 'utf8');
     
-    // Look for version badge pattern in shields.io URLs (handles both single and double dashes)
     const versionBadgePattern = /(https:\/\/img\.shields\.io\/badge\/version-)[0-9]+\.[0-9]+\.[0-9]+(-{1,2}[a-zA-Z0-9\.]+)?(-[a-zA-Z0-9]+\.svg)/g;
     
     const originalContent = readmeContent;
