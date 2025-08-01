@@ -3,6 +3,9 @@
 # dependencies
 node_modules/
 
+# Claude
+CLAUDE.md
+
 # Expo
 .expo/
 dist/
@@ -14,7 +17,6 @@ expo-env.d.ts
 .vscode/
 .idea/
 *.iml
-
 
 # Native
 *.orig.*
@@ -58,3 +60,4 @@ src/shared/config/secure.config.ts
 config/google*
 config/credentials.json
 config/keystore*
+credentials.json
