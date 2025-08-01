@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'README.md'
-      - 'package.json'
-      - 'app.json'
 
 permissions:
   contents: read
