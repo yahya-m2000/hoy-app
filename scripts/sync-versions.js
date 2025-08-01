@@ -30,42 +30,33 @@ function syncVersions() {
     console.log('📱 app.json version already up to date');
   }
 
-  // Update README.md version references
+  // Update README.md version references  
   const readmePath = path.join(__dirname, '../README.md');
   if (fs.existsSync(readmePath)) {
     let readmeContent = fs.readFileSync(readmePath, 'utf8');
     
-    // Look for common version patterns in README
-    const patterns = [
-      { 
-        regex: /(version-)[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+(\.[0-9]+)?)?/g,
-        replacement: `$1${sourceVersion}`
-      },
-      {
-        regex: /(Version: )[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+(\.[0-9]+)?)?/g,
-        replacement: `$1${sourceVersion}`
-      },
-      {
-        regex: /(v)[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+(\.[0-9]+)?)?(?=\s|$|[^\d\.])/g,
-        replacement: `$1${sourceVersion}`
-      }
-    ];
+    const versionBadgePattern = /(https:\/\/img\.shields\.io\/badge\/version-)[0-9]+\.[0-9]+\.[0-9]+(-{1,2}[a-zA-Z0-9\.]+)?(-[a-zA-Z0-9]+\.svg)/g;
     
-    let updated = false;
-    patterns.forEach(({ regex, replacement }) => {
-      const originalContent = readmeContent;
-      readmeContent = readmeContent.replace(regex, replacement);
-      if (originalContent !== readmeContent) {
-        updated = true;
-      }
+    const originalContent = readmeContent;
+    // Replace the version part while keeping the rest of the URL intact
+    // Convert single dash in version to double dash for shields.io URL encoding
+    const shieldsVersion = sourceVersion.replace(/-/g, '--');
+    readmeContent = readmeContent.replace(versionBadgePattern, (match, prefix, prerelease, suffix) => {
+      return `${prefix}${shieldsVersion}${suffix}`;
     });
     
-    if (updated) {
+    if (originalContent !== readmeContent) {
       fs.writeFileSync(readmePath, readmeContent);
-      console.log('📄 Updated README.md version references');
+      console.log('📄 Updated README.md version badge');
     } else {
-      console.log('📄 No version references found in README.md to update');
+      console.log('📄 README.md version badge already up to date or not found');
     }
+  }
+
+  // Note: Release-please config doesn't need version syncing as it manages its own versioning
+  const releasePleaseConfigPath = path.join(__dirname, '../config/release/release-please-config.json');
+  if (fs.existsSync(releasePleaseConfigPath)) {
+    console.log('📄 Release-please config found (manages its own versioning)');
   }
 
   console.log('✅ Version sync complete!');
