@@ -19,6 +19,7 @@
         "image": "latest",
         "distribution": "store",
         "credentialsSource": "local"
+
       },
       "ios": {
         "autoIncrement": true,
