@@ -2,7 +2,8 @@
   "build": {
     "production": {
       "android": {
-        "buildType": "app-bundle"
+        "buildType": "app-bundle",
+        "credentialsSource": "local"
       },
       "ios": {}
     },
@@ -13,7 +14,12 @@
     "beta": {
       "extends": "production",
       "android": {
-        "buildType": "app-bundle"
+        "buildType": "app-bundle",
+        "autoIncrement": "versionCode",
+        "image": "latest",
+        "distribution": "store",
+        "credentialsSource": "local"
+
       },
       "ios": {
         "autoIncrement": true,
@@ -24,6 +30,14 @@
       "extends": "production",
       "android": {
         "buildType": "apk"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "track": "internal",
+        "releaseStatus": "draft"
       }
     }
   },
