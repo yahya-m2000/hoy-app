@@ -134,6 +134,142 @@ A modern, secure, and feature-rich **React Native mobile application** for the H
 
 2. **Install dependencies**
    ```bash
+# Hoy Mobile App
+
+[![Version](https://img.shields.io/badge/version-1.1.1--alpha.1-blue.svg)](https://github.com/yahya-m2000/hoy-app)
+[![React Native](https://img.shields.io/badge/React%20Native-0.79.5-blue.svg)](https://reactnative.dev/)
+[![Expo](https://img.shields.io/badge/Expo-53.0.20-black.svg)](https://expo.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue.svg)](https://www.typescriptlang.org/)
+[![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20Android-lightgrey.svg)](https://reactnative.dev/)
+
+A modern, secure, and feature-rich **React Native mobile application** for the Hoy platform. This cross-platform app enables property discovery, booking management, and real-time communication between hosts and travelers.
+
+---
+
+## ✨ Features
+
+### 🔍 **Property Discovery & Search**
+- **Advanced Search & Filters** with location, price, amenities, and date filtering
+- **Interactive Maps** with platform-specific integration (Apple Maps for iOS, Google Maps for Android)
+- **Property Listings** with high-quality images and detailed information
+- **Real-time Availability** checking and booking status updates
+
+### 📅 **Booking Management**
+- **Seamless Booking Flow** with calendar integration and date selection
+- **Payment Processing** with Stripe integration for secure transactions
+- **Booking Status Tracking** with real-time updates and notifications
+- **Calendar Sync** with device calendars (iOS Calendar, Google Calendar)
+- **Location Services** with directions and navigation to properties
+
+### 💬 **Communication & Messaging**
+- **Real-time Messaging** between hosts and guests using Socket.IO
+- **Push Notifications** for booking updates and messages
+- **WhatsApp Integration** for direct host-guest communication
+- **Multi-language Support** (English, Somali, Arabic, French) with RTL support
+
+### 🏠 **Host Management Features**
+- **Property Listing Management** with photo uploads and details
+- **Reservation Dashboard** with booking status management
+- **Guest Communication Tools** with integrated messaging
+- **Revenue Tracking** with multi-currency conversion support
+
+### 🔐 **Security & Authentication**
+- **Multi-provider Authentication** (Auth0, Apple ID, Facebook)
+- **Biometric Authentication** (Touch ID, Face ID)
+- **Certificate Pinning** for secure API communication
+- **Encrypted Local Storage** with Expo SecureStore
+- **Token Management** with automatic refresh and encryption
+
+### 🌐 **Internationalization & Accessibility**
+- **4 Language Support** with complete i18n implementation
+- **RTL Layout Support** for Arabic language
+- **Currency Conversion** with real-time exchange rates
+- **Accessibility Features** with screen reader support
+
+---
+
+## 🛠️ Tech Stack & Dependencies
+
+### **Core Framework & Runtime**
+- **React Native:** `0.79.5` (Cross-platform mobile development)
+- **Expo:** `53.0.20` (Development platform and toolchain)
+- **TypeScript:** `5.8.3` (Type-safe JavaScript with strict mode)
+- **Expo Router:** `5.1.4` (File-based navigation system)
+
+### **State Management & Data**
+- **Context API** - Global state management
+- **React Query:** `5.75.1` - Server state management and caching
+- **AsyncStorage:** `2.1.2` - Local data persistence
+- **Axios:** `1.9.0` - HTTP client with interceptors
+
+### **UI/UX & Design System**
+- **Custom Design System** - Consistent, modern UI components
+- **React Native Reanimated:** `3.17.4` - Smooth animations and gestures
+- **React Native Paper:** `5.14.5` - Material Design components
+- **Expo Vector Icons:** `14.1.0` - Comprehensive icon library
+- **React Native Gesture Handler:** `2.24.0` - Advanced gesture recognition
+
+### **Maps & Location Services**
+- **Expo Maps:** `0.11.0` - Native map integration
+- **Expo Location:** `18.1.6` - GPS and location services
+- **Platform-specific Maps** (Apple Maps for iOS, Google Maps for Android)
+
+### **Authentication & Security**
+- **React Native Auth0:** `5.0.0-beta.3` - Enterprise authentication
+- **Expo Apple Authentication:** `7.2.4` - Sign in with Apple
+- **React Native FBSDK:** `13.4.1` - Facebook authentication
+- **Expo Local Authentication:** `16.0.5` - Biometric authentication
+- **Expo Secure Store:** `14.2.3` - Encrypted storage
+- **Crypto-JS:** `4.2.0` - Encryption utilities
+- **JWT Decode:** `4.0.0` - Token management
+
+### **Communication & Real-time Features**
+- **Socket.IO Client:** `4.8.1` - Real-time messaging
+- **Expo Notifications:** `0.31.4` - Push notifications
+- **Expo Linking:** `7.1.7` - Deep linking and external app integration
+
+### **Media & Device Features**
+- **Expo Image:** `2.4.0` - Optimized image handling
+- **Expo Image Picker:** `16.1.4` - Camera and photo library access
+- **Expo Camera:** `16.1.10` - Camera functionality
+- **Expo Media Library:** `17.1.7` - Media access and management
+- **React Native QR Code SVG:** `6.3.15` - QR code generation
+
+### **Internationalization & Localization**
+- **i18next:** `25.0.2` - Internationalization framework
+- **React i18next:** `15.5.1` - React integration for i18n
+- **Expo Localization:** `16.1.6` - Device locale detection
+
+### **Payment & Business Logic**
+- **Stripe React Native:** `0.45.0` - Payment processing
+- **Date-fns:** `4.1.0` - Date manipulation and formatting
+- **React Native Calendars:** `1.1312.0` - Calendar components
+
+### **Development & Testing**
+- **Expo Dev Client:** `5.2.4` - Custom development client
+- **TypeScript:** `5.8.3` - Static type checking
+- **ESLint:** `9.25.0` - Code linting and quality
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+- iOS Simulator (macOS) or Android Studio
+- Expo CLI (`npm install -g @expo/cli`)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd hoy-app
+   ```
+
+2. **Install dependencies**
+   ```bash
    npm install
    ```
 

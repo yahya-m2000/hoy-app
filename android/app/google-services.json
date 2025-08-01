@@ -1,0 +1,43 @@
+{
+  "project_info": {
+    "project_number": "537349351433",
+    "project_id": "hoy-bf5a0",
+    "storage_bucket": "hoy-bf5a0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537349351433:android:2e423c20dca3edba3430d8",
+        "android_client_info": {
+          "package_name": "com.ym2000.hoy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "537349351433-s37ddfrhqav55ofglhahi98q5frvat7k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ym2000.hoy",
+            "certificate_hash": "b7fb5ab6f3ce5f4878ff8d77c04106058d9093f0"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_kqnTi5wG1xSRJicvybovbQMf0oYMO9s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "537349351433-0h1jvkljtuuvoodri9jb5aoajuf70i1h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
