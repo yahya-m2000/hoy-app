@@ -3,11 +3,13 @@
 # dependencies
 node_modules/
 
+# Claude
+CLAUDE.md
+
 # Expo
 .expo/
 dist/
 web-build/
-android/
 expo-env.d.ts
 
 # Ignore IDE and OS files
@@ -15,7 +17,6 @@ expo-env.d.ts
 .vscode/
 .idea/
 *.iml
-
 
 # Native
 *.orig.*
@@ -54,3 +55,9 @@ src/shared/config/secure.config.ts
 
 # typescript
 *.tsbuildinfo
+
+# eas - config files now organized in config/ directory
+config/google*
+config/credentials.json
+config/keystore*
+credentials.json
