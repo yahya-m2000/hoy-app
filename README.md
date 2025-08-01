@@ -6,7 +6,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue.svg)](https://www.typescriptlang.org/)
 [![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20Android-lightgrey.svg)](https://reactnative.dev/)
 
-A modern, secure, and feature-rich **React Native mobile application** for the Hoy platform. This cross-platform app enables property discovery, booking management, and real-time communication between hosts and travelers.
+A modern, secure, and feature rich **React Native mobile application** for the Hoy platform. This cross-platform app enables property discovery, booking management, and real-time communication between hosts and travelers.
 
 ---
 
