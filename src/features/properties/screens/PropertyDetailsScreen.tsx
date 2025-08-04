@@ -17,6 +17,10 @@ import {
   PropertyImage,
   Toast,
 } from "@shared/components";
+
+// Loading components
+import { FadeTransition } from "@shared/components/feedback/Loading";
+import { useCoordinatedLoading } from "@shared/hooks/useCoordinatedLoading";
 import type { PropertyType } from "@core/types";
 import { useCalendarDateSelection } from "@features/calendar/context/CalendarContext";
 import { useCalendar } from "@features/calendar/hooks/useCalendar";
@@ -42,6 +46,8 @@ import {
   PropertyImageCarousel,
   HostInfoSection,
   PropertyMap,
+  PropertyDetailsSkeletons,
+  PropertyDetailsContent,
 } from "../components/details";
 
 // Import modal components
@@ -60,6 +66,7 @@ import CollectionsModal from "@features/properties/modals/collections/Collection
 import ReservationModal from "@features/properties/components/reservation/modals/ReservationModal";
 import { useReservationModal } from "@features/properties/hooks/useReservationModal";
 import { showAuthPrompt } from "@core/auth/utils";
+import { logger } from "src/core/utils/sys/log";
 
 /**
  * PropertyDetailsScreen - Displays detailed property information
@@ -107,7 +114,11 @@ const PropertyDetailsScreen = () => {
   }, [propertyParam]);
 
   // Data fetching
-  const { data: property, refetch: refetchProperty } = useQuery({
+  const {
+    data: property,
+    refetch: refetchProperty,
+    isLoading: isPropertyLoading,
+  } = useQuery({
     queryKey: ["property", initialProperty?._id],
     queryFn: () => {
       if (!initialProperty?._id) {
@@ -121,31 +132,39 @@ const PropertyDetailsScreen = () => {
     gcTime: 1000 * 60 * 30, // 30 minutes
   });
 
+  // Coordinated loading system
+  const { isAllLoaded, skeletonOpacity, contentOpacity, shouldRenderContent } =
+    useCoordinatedLoading([isPropertyLoading], {
+      minimumLoadingTime: 500, // 1 second minimum for smooth transitions
+      transitionDuration: 600,
+      transitionDelay: 50,
+    });
+
   // Get selected dates from calendar context for this specific property
   const selectedDates = useMemo(() => {
     if (!property?._id) {
-      console.log("PropertyDetailsScreen: No property ID available");
+      logger.log("PropertyDetailsScreen: No property ID available");
       return { startDate: null, endDate: null };
     }
 
-    console.log(
+    logger.log(
       "PropertyDetailsScreen: Calculating selected dates for property:",
       property._id
     );
-    console.log(
+    logger.log(
       "PropertyDetailsScreen: propertyDates Map size:",
       propertyDates.size
     );
-    console.log(
+    logger.log(
       "PropertyDetailsScreen: All property dates keys:",
       Array.from(propertyDates.keys())
     );
 
     const propDates = propertyDates.get(property._id)?.selectedDates;
-    console.log("PropertyDetailsScreen: Property-specific dates:", propDates);
+    logger.log("PropertyDetailsScreen: Property-specific dates:", propDates);
 
     if (propDates && (propDates.startDate || propDates.endDate)) {
-      console.log("PropertyDetailsScreen: Using property-specific dates:", {
+      logger.log("PropertyDetailsScreen: Using property-specific dates:", {
         startDate: propDates.startDate?.toISOString(),
         endDate: propDates.endDate?.toISOString(),
       });
@@ -156,24 +175,24 @@ const PropertyDetailsScreen = () => {
     }
 
     // Fallback to global selected dates if property-specific dates are missing
-    console.log(
+    logger.log(
       "PropertyDetailsScreen: No property-specific dates, checking global dates"
     );
-    console.log(
+    logger.log(
       "PropertyDetailsScreen: Global selected dates:",
       globalSelectedDates
     );
 
     if (globalSelectedDates && globalSelectedDates.length > 0) {
       if (globalSelectedDates.length === 1) {
-        console.log(
+        logger.log(
           "PropertyDetailsScreen: Using single global date:",
           globalSelectedDates[0].toISOString()
         );
         return { startDate: globalSelectedDates[0], endDate: null };
       }
       if (globalSelectedDates.length === 2) {
-        console.log("PropertyDetailsScreen: Using global date range:", {
+        logger.log("PropertyDetailsScreen: Using global date range:", {
           startDate: globalSelectedDates[0].toISOString(),
           endDate: globalSelectedDates[1].toISOString(),
         });
@@ -184,7 +203,7 @@ const PropertyDetailsScreen = () => {
       }
     }
 
-    console.log("PropertyDetailsScreen: No dates found, returning null");
+    logger.log("PropertyDetailsScreen: No dates found, returning null");
     return { startDate: null, endDate: null };
   }, [property?._id, propertyDates, globalSelectedDates, dateSelectionKey]);
 
@@ -245,7 +264,7 @@ const PropertyDetailsScreen = () => {
     collectionId: string,
     isAdded: boolean
   ) => {
-    console.log(
+    logger.log(
       `Property ${property?._id} ${
         isAdded ? "added to" : "removed from"
       } collection ${collectionId}`
@@ -507,118 +526,42 @@ const PropertyDetailsScreen = () => {
 
   return (
     <Container flex={1} backgroundColor="background">
-      <DetailScreen
-        title=""
-        showFavorite
-        isFavorited={isFavorited}
-        onFavorite={() => handleFavorite(null)}
-        loading={!isValidProperty && !!initialProperty}
-        error={
-          !isValidProperty && !initialProperty
-            ? t("system.errors.data.dataNotFound")
-            : null
+      <FadeTransition
+        skeletonOpacity={skeletonOpacity}
+        contentOpacity={contentOpacity}
+        shouldRenderContent={shouldRenderContent}
+        skeleton={<PropertyDetailsSkeletons showImageCarousel={true} />}
+        content={
+          <DetailScreen
+            title=""
+            showFavorite
+            isFavorited={isFavorited}
+            onFavorite={() => handleFavorite(null)}
+            loading={false} // We handle loading via FadeTransition
+            error={
+              !isValidProperty && !initialProperty
+                ? t("system.errors.data.dataNotFound")
+                : null
+            }
+            style={{ paddingBottom: 80 }}
+          >
+            <PropertyDetailsContent
+              property={property}
+              host={host}
+              safeSelectedDates={safeSelectedDates}
+              experiences={experiences}
+              hostInfo={hostInfo}
+              transformedAmenities={transformAmenities(
+                property?.amenities || []
+              )}
+              onShowReviews={handleShowReviews}
+              onOpenModal={openModal}
+              onShowMapToast={showMapToast}
+              showImageCarousel={true}
+            />
+          </DetailScreen>
         }
-        style={{ paddingBottom: 80 }}
-      >
-        <Container height={300}>
-          <PropertyImageCarousel property={property} />
-        </Container>
-        <Container
-          paddingHorizontal="md"
-          backgroundColor="background"
-          borderTopLeftRadius="xl"
-          borderTopRightRadius="xl"
-        >
-          <PropertyHeader
-            title={property?.name || t("common.property")}
-            host={
-              host
-                ? {
-                    name:
-                      `${host.firstName || ""} ${host.lastName || ""}`.trim() ||
-                      t("common.host"),
-                    avatar: host.profileImage || host.avatarUrl,
-                  }
-                : undefined
-            }
-            rating={property?.rating || 0}
-            reviewCount={property?.reviewCount || 0}
-            onShowReviews={handleShowReviews}
-          />
-          <CheckInDatesSection
-            checkIn={{
-              date: safeSelectedDates.startDate,
-              time: "15:00",
-            }}
-            checkOut={{
-              date: safeSelectedDates.endDate,
-              time: "12:00",
-            }}
-            onPress={() => openModal("dateSelection")}
-          />
-          <SectionDivider />
-          <Container>
-            {experiences.map((experience: any, index: number) => (
-              <ExperienceCard
-                key={index}
-                title={experience.title}
-                description={experience.description}
-                icon={experience.icon}
-              />
-            ))}
-          </Container>
-          <SectionDivider />
-          <PropertyDescription
-            description={
-              property?.description || t("features.property.details.common.defaults.noDescriptionAvailable")
-            }
-          />
-          <SectionDivider />
-          <AmenitiesGrid
-            amenities={transformAmenities(property?.amenities || [])}
-          />
-          <SectionDivider />
-          <HostInfoSection host={hostInfo} />
-          <SectionDivider />
-          {property?.coordinates && (
-            <PropertyMap
-              coordinates={property.coordinates}
-              propertyName={property?.name || t("common.property")}
-              address={property?.address}
-              showToast={showMapToast}
-            />
-          )}
-          <SectionDivider />
-          <Container>
-            <PolicyNavigationItem
-              icon="calendar-outline"
-              title={t("features.property.details.policies.availability")}
-              subtitle={t("features.property.details.policies.checkAvailableDates")}
-              onPress={() => openModal("availability")}
-            />
-            <PolicyNavigationItem
-              icon="close-circle-outline"
-              title={t("features.property.details.policies.cancellationPolicy")}
-              subtitle={t("features.property.details.policies.moderateCancellationPolicy")}
-              onPress={() => openModal("cancellation")}
-            />
-            <PolicyNavigationItem
-              icon="home-outline"
-              title={t("features.property.details.policies.houseRules")}
-              subtitle={t("features.property.details.policies.checkinAfter")}
-              onPress={() => openModal("houseRules")}
-            />
-            <PolicyNavigationItem
-              icon="shield-outline"
-              title={t("features.property.details.policies.safetyAndProperty")}
-              subtitle={t("features.property.details.policies.safetyInformation")}
-              onPress={() => openModal("safety")}
-            />
-          </Container>
-          {/* Bottom spacing */}
-          <Container height={20}>{null}</Container>
-        </Container>
-      </DetailScreen>
+      />
 
       {/* Toast positioned above the fixed bottom tab */}
       <View
@@ -696,16 +639,16 @@ const PropertyDetailsScreen = () => {
             selectedDates={safeSelectedDates}
             propertyId={property?._id}
             onReserve={() => {
-              console.log("PropertyDetailsScreen: Reserve button pressed");
-              console.log(
+              logger.log("PropertyDetailsScreen: Reserve button pressed");
+              logger.log(
                 "PropertyDetailsScreen: Current propertyDates:",
                 propertyDates
               );
-              console.log(
+              logger.log(
                 "PropertyDetailsScreen: Current selectedDates:",
                 safeSelectedDates
               );
-              console.log("PropertyDetailsScreen: Property ID:", property?._id);
+              logger.log("PropertyDetailsScreen: Property ID:", property?._id);
 
               // Debug: Test manual date storage
               if (property?._id) {
@@ -713,7 +656,7 @@ const PropertyDetailsScreen = () => {
                   startDate: new Date(Date.now() + 24 * 60 * 60 * 1000), // Tomorrow
                   endDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days from now
                 };
-                console.log(
+                logger.log(
                   "PropertyDetailsScreen: Testing manual date storage:",
                   testDates
                 );

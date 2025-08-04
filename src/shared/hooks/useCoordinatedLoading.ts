@@ -15,7 +15,7 @@ export interface CoordinatedLoadingConfig {
   /** Minimum time to show loading state for graceful UX */
   minimumLoadingTime?: number;
   /** Easing function for smooth transitions */
-  easing?: typeof Easing.bezier;
+  easing?: any;
 }
 
 export interface CoordinatedLoadingReturn {
@@ -39,7 +39,7 @@ const DEFAULT_CONFIG: Required<CoordinatedLoadingConfig> = {
   transitionDuration: 600,
   transitionDelay: 100,
   minimumLoadingTime: 800,
-  easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+  easing: Easing.out(Easing.ease),
 };
 
 /**

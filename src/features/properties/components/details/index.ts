@@ -16,3 +16,5 @@ export { default as PropertyImageContainer } from "./PropertyImageContainer";
 export { default as PropertyMap } from "./PropertyMap";
 export { default as PropertyTab } from "./PropertyTab";
 export { default as SectionDivider } from "./SectionDivider";
+export { default as PropertyDetailsSkeletons } from "./PropertyDetailsSkeletons";
+export { default as PropertyDetailsContent } from "./PropertyDetailsContent";

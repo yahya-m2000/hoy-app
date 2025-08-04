@@ -13,7 +13,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "src/core/hooks/useTheme";
-import { spacing } from "@core/design";
+import { spacing, radius } from "@core/design";
 import { PropertyImageCarouselProps } from "@core/types";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("window");
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
   container: {
     position: "relative",
     width: "100%",
-    height: (screenHeight * 1) / 2.5, // 2/3 of screen height
+    height: (screenHeight * 1) / 2.5,
     overflow: "hidden",
   },
   image: {
@@ -233,8 +233,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: "40%", // Airbnb-style subtle gradient
-    zIndex: 1, // Above image, below overlays
+    height: "40%",
+    zIndex: 1,
   },
 
   fallbackContainer: {
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     bottom: spacing.lg,
     left: spacing.lg,
     right: spacing.lg,
-    zIndex: 2, // Above gradient and image
+    zIndex: 2,
   },
   propertyDetailsContainer: {
     alignItems: "flex-start",
@@ -304,14 +304,15 @@ const styles = StyleSheet.create({
   dot: {
     width: 8,
     height: 8,
-    borderRadius: 5,
+    borderRadius: radius.sm,
     backgroundColor: "rgba(255, 255, 255, 0.5)",
-    marginHorizontal: 4,
+    marginHorizontal: spacing.xs,
   },
   activeDot: {
     backgroundColor: "#fff",
     width: 10,
     height: 10,
+    borderRadius: radius.sm,
   },
 
   // Viewer styles
@@ -328,7 +329,7 @@ const styles = StyleSheet.create({
   closeButton: {
     position: "absolute",
     top: 50,
-    right: 20,
+    right: spacing.lg,
     zIndex: 10,
   },
 });

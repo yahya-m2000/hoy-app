@@ -254,7 +254,7 @@ export default function SearchDateModal({
               {nights}{" "}
               {nights === 1
                 ? t("features.search.dates.night") || "night"
-                : t("features.search.dates.nights") || "nights"
+                : t("features.search.dates.nights") || "nights"}
             </Text>
           </Container>
 

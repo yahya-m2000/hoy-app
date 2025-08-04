@@ -196,9 +196,11 @@ export const HorizontalListingsCarousel: React.FC<
         alignItems="center"
         marginBottom="md"
         marginHorizontal="md"
+        marginTop="sm"
+        paddingVertical="xs"
       >
         {/* Title */}
-        <Text variant="h6" weight="medium">
+        <Text variant="h6" weight="medium" numberOfLines={1} ellipsizeMode="tail">
           {CATEGORIES[currentCategoryIndex].label}{" "}
           {t("features.home.content.location.in")} {city}
         </Text>
@@ -229,7 +231,7 @@ export const HorizontalListingsCarousel: React.FC<
 
   // Main render
   return (
-    <Container backgroundColor="transparent" marginVertical="md">
+    <Container backgroundColor="transparent" marginVertical="md" style={{ minHeight: 280 }}>
       {/* Content */}
       {loading ? (
         <>

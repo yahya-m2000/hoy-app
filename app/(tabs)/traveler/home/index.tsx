@@ -473,6 +473,8 @@ export default function HomeScreen() {
                   alignItems="center"
                   marginBottom="md"
                   marginHorizontal="md"
+                  marginTop="sm"
+                  paddingVertical="xs"
                 >
                   <Skeleton
                     animation="pulse"
@@ -495,6 +497,8 @@ export default function HomeScreen() {
                   alignItems="center"
                   marginBottom="md"
                   marginHorizontal="md"
+                  marginTop="sm"
+                  paddingVertical="xs"
                 >
                   <Skeleton
                     animation="pulse"
@@ -528,6 +532,8 @@ export default function HomeScreen() {
                   alignItems="center"
                   marginBottom="md"
                   marginHorizontal="md"
+                  marginTop="sm"
+                  paddingVertical="xs"
                 >
                   <Skeleton
                     animation="pulse"
