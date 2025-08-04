@@ -18,15 +18,15 @@ interface PropertyCardSkeletonProps {
 const getDimensions = (variant: string) => {
   switch (variant) {
     case "small":
-      return { width: 120, imageHeight: 120 };
+      return { width: 120, imageHeight: 90 };
     case "medium":
-      return { width: 160, imageHeight: 160 };
+      return { width: 160, imageHeight: 120 };
     case "large":
-      return { width: 200, imageHeight: 200 };
+      return { width: 200, imageHeight: 150 };
     case "collection":
-      return { width: 180, imageHeight: 180 };
+      return { width: 180, imageHeight: 135 };
     default:
-      return { width: 180, imageHeight: 180 };
+      return { width: 180, imageHeight: 135 };
   }
 };
 

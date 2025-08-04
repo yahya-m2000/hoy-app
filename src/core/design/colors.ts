@@ -124,7 +124,7 @@ export const info = {
 export const wireframe = {
   background: "#FFFFFF",
   surface: gray[100],
-  skeleton: gray[200],
+  skeleton: gray[100], // Lighter, more subtle skeleton
   border: gray[200],
   text: {
     primary: gray[800],
@@ -140,7 +140,7 @@ export const wireframe = {
 export const darkMode = {
   background: gray[900],
   surface: gray[800],
-  skeleton: gray[800],
+  skeleton: gray[800], // Darker, more subtle skeleton for dark mode
 
   border: gray[700],
   text: {

@@ -110,30 +110,30 @@ const debugLog = (context: string, message: string, data?: any) => {
  * }
  */
 export function useCalendar() {
-  debugLog("useCalendar", "useCalendar hook called");
+  // debugLog("useCalendar", "useCalendar hook called");
   
   try {
-    debugLog("useCalendar", "About to call useCalendarState");
+    // debugLog("useCalendar", "About to call useCalendarState");
     const { state, dispatch } = useCalendarState();
-    debugLog("useCalendar", "useCalendarState completed", { stateKeys: Object.keys(state) });
+    // debugLog("useCalendar", "useCalendarState completed", { stateKeys: Object.keys(state) });
     
-    debugLog("useCalendar", "About to call useSelectedProperty");
+    // debugLog("useCalendar", "About to call useSelectedProperty");
     const { selectedProperty, setSelectedProperty } = useSelectedProperty();
-    debugLog("useCalendar", "useSelectedProperty completed");
+    // debugLog("useCalendar", "useSelectedProperty completed");
     
-    debugLog("useCalendar", "About to call useViewMode");
+    // debugLog("useCalendar", "About to call useViewMode");
     const { viewMode, setViewMode } = useViewMode();
-    debugLog("useCalendar", "useViewMode completed");
+    // debugLog("useCalendar", "useViewMode completed");
     
-    debugLog("useCalendar", "About to call useCurrentMonth");
+    // debugLog("useCalendar", "About to call useCurrentMonth");
     const { currentMonth, setCurrentMonth } = useCurrentMonth();
-    debugLog("useCalendar", "useCurrentMonth completed");
+    // debugLog("useCalendar", "useCurrentMonth completed");
     
-    debugLog("useCalendar", "About to call useSelectedDates");
+    // debugLog("useCalendar", "About to call useSelectedDates");
     const { selectedDates, setSelectedDates, isSelectingRange, setIsSelectingRange } = useSelectedDates();
-    debugLog("useCalendar", "useSelectedDates completed");
+    // debugLog("useCalendar", "useSelectedDates completed");
     
-    debugLog("useCalendar", "About to call useCalendarUI");
+    // debugLog("useCalendar", "About to call useCalendarUI");
     const { 
       isPropertySelectorVisible, 
       isEditOverlayVisible, 
@@ -142,13 +142,13 @@ export function useCalendar() {
       setEditOverlayVisible, 
       setCurrentViewExiting 
     } = useCalendarUI();
-    debugLog("useCalendar", "useCalendarUI completed");
+    // debugLog("useCalendar", "useCalendarUI completed");
     
-    debugLog("useCalendar", "About to call useCalendarBookings");
+    // debugLog("useCalendar", "About to call useCalendarBookings");
     const { bookings, isLoadingBookings, setBookings, setLoadingBookings } = useCalendarBookings();
-    debugLog("useCalendar", "useCalendarBookings completed");
+    // debugLog("useCalendar", "useCalendarBookings completed");
     
-    debugLog("useCalendar", "About to call useCalendarAvailability");
+    // debugLog("useCalendar", "About to call useCalendarAvailability");
     const { 
       isCheckingAvailability,
       isAvailable,
@@ -160,13 +160,13 @@ export function useCalendar() {
       checkDateAvailability,
       resetAvailabilityCheck
     } = useCalendarAvailability();
-    debugLog("useCalendar", "useCalendarAvailability completed", { 
-      bookedDatesType: typeof bookedDates,
-      isBookedDatesArray: Array.isArray(bookedDates),
-      bookedDatesLength: Array.isArray(bookedDates) ? bookedDates.length : 'N/A'
-    });
+    // debugLog("useCalendar", "useCalendarAvailability completed", { 
+     // bookedDatesType: typeof bookedDates,
+    //  isBookedDatesArray: Array.isArray(bookedDates),
+     // bookedDatesLength: Array.isArray(bookedDates) ? bookedDates.length : 'N/A'
+    //});
     
-    debugLog("useCalendar", "About to call useCalendarDateSelection");
+    // debugLog("useCalendar", "About to call useCalendarDateSelection");
     const { 
       searchDates,
       propertyDates,
@@ -177,10 +177,10 @@ export function useCalendar() {
       getOptimalDatesForProperty,
       getDisplayDatesForProperty
     } = useCalendarDateSelection();
-    debugLog("useCalendar", "useCalendarDateSelection completed");
+    // debugLog("useCalendar", "useCalendarDateSelection completed");
 
     // Enhanced date utilities
-    debugLog("useCalendar", "Creating enhanced date utilities");
+    // debugLog("useCalendar", "Creating enhanced date utilities");
     const getCurrentYear = useCallback(() => state.currentYear, [state.currentYear]);
     const setCurrentYear = useCallback((year: number) => {
       dispatch({ type: 'SET_CURRENT_YEAR', payload: year });
@@ -197,13 +197,13 @@ export function useCalendar() {
     }, [dispatch]);
 
     // Ensure bookedDates is always an array for safety
-    debugLog("useCalendar", "Creating safeBookedDates memo");
+    // debugLog("useCalendar", "Creating safeBookedDates memo");
     const safeBookedDates = useMemo(() => {
-      debugLog("useCalendar", "safeBookedDates memo executing", { 
-        bookedDates,
-        type: typeof bookedDates,
-        isArray: Array.isArray(bookedDates)
-      });
+      // debugLog("useCalendar", "safeBookedDates memo executing", { 
+      //   bookedDates,
+      //   type: typeof bookedDates,
+      //   isArray: Array.isArray(bookedDates)
+      // });
       
       if (!Array.isArray(bookedDates)) {
         debugLog("useCalendar", "bookedDates is not an array, returning empty array", { bookedDates });

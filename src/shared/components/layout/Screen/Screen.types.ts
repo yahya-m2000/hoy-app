@@ -1,5 +1,6 @@
 import { ViewStyle, ScrollViewProps, TextStyle } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { CoordinatedLoadingConfig } from "@shared/hooks/useCoordinatedLoading";
 
 export type ScreenPadding = "none" | "small" | "medium" | "large";
 
@@ -48,5 +49,15 @@ export interface ScreenProps {
       label: string;
       onPress: () => void;
     };
+  };
+
+  // Coordinated loading props
+  coordinatedLoading?: {
+    /** Array of loading states to coordinate */
+    loadingStates: boolean[];
+    /** Skeleton component to show during coordinated loading */
+    skeleton: React.ReactNode;
+    /** Configuration for transition timing and easing */
+    config?: CoordinatedLoadingConfig;
   };
 }

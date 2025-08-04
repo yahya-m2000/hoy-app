@@ -16,6 +16,7 @@ import { Text } from "../../base/Text";
 import { Button } from "../../base/Button";
 import { Icon } from "../../base/Icon";
 import { Header } from "../Header";
+import { CoordinatedLoadingWrapper } from "../../feedback/Loading";
 
 // Hooks
 import { useTheme } from "src/core/hooks/useTheme";
@@ -39,6 +40,7 @@ const Screen: React.FC<ScreenProps> = ({
   loading = false,
   error = null,
   emptyState,
+  coordinatedLoading,
 }) => {
   const { theme, isDark } = useTheme();
   const insets = useSafeAreaInsets();
@@ -235,7 +237,17 @@ const Screen: React.FC<ScreenProps> = ({
         }
         scrollEventThrottle={scrollable ? 16 : undefined}
       >
-        {children}
+        {coordinatedLoading ? (
+          <CoordinatedLoadingWrapper
+            loadingStates={coordinatedLoading.loadingStates}
+            skeleton={coordinatedLoading.skeleton}
+            config={coordinatedLoading.config}
+          >
+            {children}
+          </CoordinatedLoadingWrapper>
+        ) : (
+          children
+        )}
       </ContentComponent>
     </WrapperComponent>
   );

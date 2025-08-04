@@ -16,13 +16,14 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 // App context
-import { useTheme } from "@core/hooks";
+import { useTheme, useNavigationBarTheme } from "@core/hooks";
 import { useUserRole } from "@core/context";
 import {
   useTabBarVisibility,
   isOnAddPropertyScreen,
 } from "@core/navigation/useTabBarVisibility";
 import { useHostSetupStatus } from "@features/host/hooks";
+import { HostTabBarSkeleton } from "@shared/components/feedback/Loading";
 
 // Global state for edit modal communication
 let globalAnimateTabBarFn: ((hide: boolean) => void) | null = null;
@@ -44,6 +45,9 @@ const HostLayout = () => {
   const insets = useSafeAreaInsets();
   const { tabBarTranslateY, tabIconOpacity, animateTabBar, tabBarHeight } =
     useTabBarVisibility();
+    
+  // Initialize navigation bar theming
+  useNavigationBarTheme();
 
   // Check host setup status
   const {

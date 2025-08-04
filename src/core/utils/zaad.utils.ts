@@ -83,7 +83,9 @@ export class ZaadUtils {
 
     try {
       const ussdCode = this.generateUSSDCode(zaadNumber, amount);
-      const url = `tel:${ussdCode}`;
+      // Encode special characters for USSD codes
+      const encodedUssdCode = encodeURIComponent(ussdCode);
+      const url = `tel:${encodedUssdCode}`;
       
       const canOpen = await Linking.canOpenURL(url);
       if (canOpen) {

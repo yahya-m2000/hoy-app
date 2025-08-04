@@ -7,6 +7,7 @@
 // React Native core
 import React, { useRef, useState, useEffect } from "react";
 import { Platform, Animated, Easing, View } from "react-native";
+import ReanimatedAnimated, { useAnimatedStyle } from "react-native-reanimated";
 
 // Expo and third-party libraries
 import { useTranslation } from "react-i18next";
@@ -15,20 +16,24 @@ import { Tabs, Redirect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 // App context
-import { useTheme } from "@core/hooks";
+import { useTheme, useNavigationBarTheme } from "@core/hooks";
 import { useUserRole } from "@core/context";
 
 // Services
 import { notificationService } from "@core/services/notification.service";
 
 // Components
-// (RoleChangeLoadingOverlay handled at root level)
+import { TravelerTabBarSkeleton } from "@shared/components/feedback/Loading";
+import { getTabBarOpacity } from "@shared/stores/coordinatedLoadingStore";
 
 const TravelerLayout = () => {
   const { t } = useTranslation();
   const { theme, isDark } = useTheme();
   const { userRole, isRoleLoading } = useUserRole();
   const insets = useSafeAreaInsets();
+
+  // Initialize navigation bar theming
+  useNavigationBarTheme();
 
   // Animated values for tab bar slide animation and icon opacity
   const tabBarTranslateY = useRef(new Animated.Value(0)).current;
@@ -37,6 +42,33 @@ const TravelerLayout = () => {
 
   // Notification unread count state
   const [unreadCount, setUnreadCount] = useState(0);
+
+  // Get coordinated loading tab bar opacity
+  const coordinatedTabBarOpacity = getTabBarOpacity();
+
+  // Animated style for coordinated tab bar skeleton (inverse of tab bar opacity)
+  const coordinatedTabBarSkeletonStyle = useAnimatedStyle(() => {
+    if (coordinatedTabBarOpacity) {
+      return {
+        opacity: 1 - coordinatedTabBarOpacity.value, // Skeleton fades out as tabs fade in
+      };
+    }
+    return {
+      opacity: 0, // Default to hidden if no coordination is active
+    };
+  }, [coordinatedTabBarOpacity]);
+
+  // Animated style for real tab bar
+  const coordinatedTabBarStyle = useAnimatedStyle(() => {
+    if (coordinatedTabBarOpacity) {
+      return {
+        opacity: coordinatedTabBarOpacity.value, // Tab bar fades in
+      };
+    }
+    return {
+      opacity: 1, // Default to visible if no coordination is active
+    };
+  }, [coordinatedTabBarOpacity]);
 
   // Track unread notifications
   useEffect(() => {
@@ -202,13 +234,15 @@ const TravelerLayout = () => {
             : theme.colors.gray[500],
           tabBarStyle: [
             {
-              backgroundColor: theme.background,
+              backgroundColor: isDark ? theme.colors.gray[900] : theme.white,
               borderTopColor: isDark
                 ? theme.colors.gray[800]
                 : theme.colors.gray[200],
               height: tabBarHeight,
-              paddingBottom: insets.bottom,
+              paddingBottom: Platform.OS === "android" ? 0 : insets.bottom,
               position: "absolute",
+              // Hide tab bar during initial loading
+              display: isRoleLoading ? "none" : "flex",
             },
             {
               transform: [{ translateY: tabBarTranslateY }],
@@ -328,6 +362,54 @@ const TravelerLayout = () => {
           }}
         />
       </Tabs>
+
+      {/* Tab Bar Skeleton Overlay - coordinates with screen loading */}
+      {coordinatedTabBarOpacity && (
+        <ReanimatedAnimated.View
+          style={[
+            {
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: tabBarHeight,
+              backgroundColor: isDark ? theme.colors.gray[900] : theme.white,
+              borderTopColor: isDark
+                ? theme.colors.gray[800]
+                : theme.colors.gray[200],
+              borderTopWidth: 1,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-around",
+              paddingBottom: Platform.OS === "android" ? 0 : insets.bottom,
+            },
+            coordinatedTabBarSkeletonStyle,
+          ]}
+        >
+          {/* Tab Skeleton Items */}
+          {Array.from({ length: 5 }).map((_, index) => (
+            <View key={index} style={{ alignItems: "center", flex: 1 }}>
+              <View
+                style={{
+                  width: 24,
+                  height: 24,
+                  borderRadius: 12,
+                  backgroundColor: theme.skeleton,
+                  marginBottom: 4,
+                }}
+              />
+              <View
+                style={{
+                  width: 40,
+                  height: 12,
+                  borderRadius: 6,
+                  backgroundColor: theme.skeleton,
+                }}
+              />
+            </View>
+          ))}
+        </ReanimatedAnimated.View>
+      )}
     </>
   );
 };

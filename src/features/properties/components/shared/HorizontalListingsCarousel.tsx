@@ -144,7 +144,7 @@ export const HorizontalListingsCarousel: React.FC<
         marginBottom: spacing.lg,
       }}
     >
-      <PropertyCardSkeleton variant="large" />
+      <PropertyCardSkeleton variant="collection" />
     </Container>
   );
 
