@@ -6,7 +6,14 @@
 
 // React Native core
 import React, { useState, useEffect } from "react";
-import { ScrollView, Image, TouchableOpacity, Platform } from "react-native";
+import {
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Platform,
+  View,
+  Text as RNText,
+} from "react-native";
 
 // Expo and third-party libraries
 import { StatusBar } from "expo-status-bar";
@@ -189,7 +196,7 @@ const DebugLocation = () => {
 // Component wrapper that uses hooks properly
 function CityCarousel({ city }: { city: string }) {
   const { properties, loading, error } = useProperties({ city });
-  
+
   return (
     <HorizontalListingsCarousel
       city={city}
@@ -219,7 +226,7 @@ export default function HomeScreen() {
     setLocationServicesOverride,
     resetLocationServicesOverride,
   } = useLocation();
-  
+
   const insets = useSafeAreaInsets();
   const router = useRouter();
 
@@ -269,7 +276,7 @@ export default function HomeScreen() {
   // For now, let's use a simpler approach without conditional hooks
   // We'll just track the trending cities loading state and let carousels load independently
   // but coordinate them with the master loading state
-  
+
   // Master loading state - start with cities loading
   const isMasterLoading = loadingCities;
 
@@ -281,27 +288,41 @@ export default function HomeScreen() {
     tabBarOpacity,
     shouldRenderContent,
   } = useCoordinatedLoading([isMasterLoading], {
-    minimumLoadingTime: 1000,
+    minimumLoadingTime: 2000, // 2 seconds for demo
     transitionDuration: 800,
     transitionDelay: 200,
   });
 
   // Share tab bar opacity with the layout
   React.useEffect(() => {
+    console.log("🏠 Setting tab bar opacity:", tabBarOpacity.value);
     setTabBarOpacity(tabBarOpacity);
   }, [tabBarOpacity]);
 
   // Debug master loading state
-  console.log("🏠 Master Loading Debug:", {
-    loadingCities,
+  React.useEffect(() => {
+    console.log("🏠 Master Loading Debug:", {
+      loadingCities,
+      isMasterLoading,
+      isAllLoaded,
+      shouldRenderContent,
+      topCitiesCount: topCities.length,
+      skeletonOpacity: skeletonOpacity.value,
+      contentOpacity: contentOpacity.value,
+      tabBarOpacity: tabBarOpacity.value,
+    });
+  }, [isMasterLoading, isAllLoaded, shouldRenderContent]);
+
+  // Debug what's being rendered
+  console.log("🏠 RENDER DEBUG:", {
     isMasterLoading,
-    isAllLoaded,
-    shouldRenderContent,
-    topCitiesCount: topCities.length,
+    willShowDebugContainer: isMasterLoading,
+    themeBackground: theme.background,
   });
 
   // Check if we have data and it's loaded
-  const isContentReady = isAllLoaded && trendingCities && trendingCities.length > 0;
+  const isContentReady =
+    isAllLoaded && trendingCities && trendingCities.length > 0;
 
   // Helper: check for errors
   const allError = trendingCitiesError;
@@ -349,7 +370,7 @@ export default function HomeScreen() {
   return (
     <Container backgroundColor={theme.background} flex={1}>
       <StatusBar style={isDark ? "light" : "dark"} />
-      
+
       {/* Use FadeTransition for coordinated loading of entire screen */}
       <FadeTransition
         skeletonOpacity={skeletonOpacity}
@@ -357,122 +378,181 @@ export default function HomeScreen() {
         shouldRenderContent={shouldRenderContent}
         skeleton={
           <Container flex={1}>
-            {/* Header Skeleton - matches real header dimensions */}
+            {/* Header Skeleton - matches real header dimensions and layout */}
+            <Container
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center"
+              paddingHorizontal="lg"
+              paddingVertical="sm"
+              style={{
+                paddingTop: insets.top + spacing.sm,
+                minHeight: 56 + insets.top, // Match header minHeight
+              }}
+            >
+              {/* Left section - empty to match real header */}
+              <Container flex={1} />
+
+              {/* Center section - App title skeleton */}
+              <Container flex={2} alignItems="center">
+                <Skeleton
+                  animation="pulse"
+                  height={24}
+                  width={100}
+                  style={{
+                    borderRadius: 6,
+                    backgroundColor: theme.colors.gray[100],
+                  }}
+                  skeletonStyle={{ backgroundColor: theme.colors.gray[100] }}
+                />
+              </Container>
+
+              {/* Right section - Notification bell skeleton */}
+              <Container flex={1} alignItems="flex-end">
+                <Skeleton
+                  animation="pulse"
+                  height={28}
+                  width={28}
+                  style={{
+                    borderRadius: 14,
+                    backgroundColor: theme.colors.gray[100],
+                  }}
+                  skeletonStyle={{ backgroundColor: theme.colors.gray[100] }}
+                />
+              </Container>
+            </Container>
+
             <Container
               flexDirection="row"
               justifyContent="space-between"
               alignItems="center"
               paddingHorizontal="md"
-              paddingVertical="sm"
-              style={{ 
-                paddingTop: insets.top + spacing.sm,
-                minHeight: 56 + insets.top // Match header minHeight
-              }}
+              paddingVertical="md"
             >
+              <Container>
+                <Skeleton
+                  animation="pulse"
+                  height={28}
+                  width={200}
+                  style={{
+                    borderRadius: 8,
+                    backgroundColor: theme.colors.gray[100],
+                    marginBottom: spacing.xs,
+                  }}
+                  skeletonStyle={{ backgroundColor: theme.colors.gray[100] }}
+                />
+                <Skeleton
+                  animation="pulse"
+                  height={16}
+                  width={150}
+                  style={{
+                    borderRadius: 8,
+                    backgroundColor: theme.colors.gray[100],
+                  }}
+                  skeletonStyle={{ backgroundColor: theme.colors.gray[100] }}
+                />
+              </Container>
               <Skeleton
-                height={24}
+                animation="pulse"
+                height={32}
                 width={80}
                 style={{
-                  borderRadius: 6,
+                  borderRadius: 16,
                   backgroundColor: theme.colors.gray[100],
                 }}
-                skeletonStyle={{ backgroundColor: theme.skeleton }}
-              />
-              <Skeleton
-                height={24}
-                width={24}
-                style={{
-                  borderRadius: 4,
-                  backgroundColor: theme.colors.gray[100],
-                }}
-                skeletonStyle={{ backgroundColor: theme.skeleton }}
+                skeletonStyle={{ backgroundColor: theme.colors.gray[100] }}
               />
             </Container>
-            
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.content}
-              contentInsetAdjustmentBehavior="automatic"
-            >
-              {/* Content Header Section Skeleton */}
-              <Container
-                flexDirection="row"
-                justifyContent="space-between"
-                alignItems="center"
-                paddingHorizontal="md"
-                paddingVertical="md"
-              >
-                <Container>
+
+            <Container flex={1}>
+              <Container marginVertical="md">
+                {/* Carousel 1 */}
+                <Container
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  marginBottom="md"
+                  marginHorizontal="md"
+                >
                   <Skeleton
-                    height={28}
+                    animation="pulse"
+                    height={20}
                     width={200}
                     style={{
                       borderRadius: 8,
                       backgroundColor: theme.colors.gray[100],
-                      marginBottom: spacing.xs,
                     }}
-                    skeletonStyle={{ backgroundColor: theme.skeleton }}
+                    skeletonStyle={{ backgroundColor: theme.colors.gray[100] }}
                   />
+                </Container>
+              </Container>
+
+              <Container marginVertical="md">
+                {/* Carousel 2 */}
+                <Container
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  marginBottom="md"
+                  marginHorizontal="md"
+                >
                   <Skeleton
-                    height={16}
-                    width={150}
+                    animation="pulse"
+                    height={20}
+                    width={200}
                     style={{
                       borderRadius: 8,
                       backgroundColor: theme.colors.gray[100],
                     }}
-                    skeletonStyle={{ backgroundColor: theme.skeleton }}
+                    skeletonStyle={{ backgroundColor: theme.colors.gray[100] }}
                   />
                 </Container>
-                <Skeleton
-                  height={32}
-                  width={80}
-                  style={{
-                    borderRadius: 16,
-                    backgroundColor: theme.colors.gray[100],
-                  }}
-                  skeletonStyle={{ backgroundColor: theme.skeleton }}
-                />
+                <Container flexDirection="row" paddingHorizontal="md">
+                  <Container style={{ marginRight: spacing.md }}>
+                    <PropertyCardSkeleton variant="collection" />
+                  </Container>
+                  <Container style={{ marginRight: spacing.md }}>
+                    <PropertyCardSkeleton variant="collection" />
+                  </Container>
+                  <Container style={{ marginRight: spacing.md }}>
+                    <PropertyCardSkeleton variant="collection" />
+                  </Container>
+                </Container>
               </Container>
 
-              {/* Carousel Skeletons */}
-              {Array.from({ length: 3 }).map((_, idx) => (
-                <Container key={`carousel-skeleton-${idx}`} marginVertical="md">
-                  {/* Header skeleton */}
-                  <Container
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    marginBottom="md"
-                    marginHorizontal="md"
-                  >
-                    <Skeleton
-                      height={20}
-                      width={200}
-                      style={{
-                        borderRadius: 8,
-                        backgroundColor: theme.colors.gray[100],
-                      }}
-                      skeletonStyle={{ backgroundColor: theme.skeleton }}
-                    />
-                  </Container>
-                  {/* Cards skeleton */}
-                  <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ paddingHorizontal: spacing.md }}
-                  >
-                    {Array.from({ length: 3 }).map((_, cardIdx) => (
-                      <Container
-                        key={`carousel-skeleton-${idx}-card-${cardIdx}`}
-                        style={{ marginRight: spacing.md }}
-                      >
-                        <PropertyCardSkeleton variant="collection" />
-                      </Container>
-                    ))}
-                  </ScrollView>
+              <Container marginVertical="md">
+                {/* Carousel 3 */}
+                <Container
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  marginBottom="md"
+                  marginHorizontal="md"
+                >
+                  <Skeleton
+                    animation="pulse"
+                    height={20}
+                    width={200}
+                    style={{
+                      borderRadius: 8,
+                      backgroundColor: theme.colors.gray[100],
+                    }}
+                    skeletonStyle={{ backgroundColor: theme.colors.gray[100] }}
+                  />
                 </Container>
-              ))}
-            </ScrollView>
+                <Container flexDirection="row" paddingHorizontal="md">
+                  <Container style={{ marginRight: spacing.md }}>
+                    <PropertyCardSkeleton variant="collection" />
+                  </Container>
+                  <Container style={{ marginRight: spacing.md }}>
+                    <PropertyCardSkeleton variant="collection" />
+                  </Container>
+                  <Container style={{ marginRight: spacing.md }}>
+                    <PropertyCardSkeleton variant="collection" />
+                  </Container>
+                </Container>
+              </Container>
+            </Container>
           </Container>
         }
         content={
@@ -483,12 +563,14 @@ export default function HomeScreen() {
               titleStyle={{ fontWeight: "900", fontSize: 24 }}
               right={{
                 icon:
-                  notificationCount > 0 ? "notifications" : "notifications-outline",
+                  notificationCount > 0
+                    ? "notifications"
+                    : "notifications-outline",
                 onPress: handleNotificationPress,
               }}
               showDivider={false}
             />
-            
+
             <ScrollView
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.content}
@@ -523,7 +605,9 @@ export default function HomeScreen() {
                       color={theme.text.secondary}
                       weight="medium"
                     >
-                      {t("features.home.content.greetings.discoverAmazingPlaces")}
+                      {t(
+                        "features.home.content.greetings.discoverAmazingPlaces"
+                      )}
                     </Text>
                   </Container>
 

@@ -146,7 +146,8 @@ class NotificationService {
         Constants?.easConfig?.projectId;
       
       if (!projectId) {
-        throw new Error('Project ID not found');
+        console.warn('Project ID not found - push notifications may not work properly');
+        return null;
       }
 
       const pushTokenString = (
@@ -159,6 +160,13 @@ class NotificationService {
       this.expoPushToken = pushTokenString;
       return pushTokenString;
     } catch (error) {
+      // Handle specific Firebase/FIS authentication errors gracefully
+      if (error.message && error.message.includes('FIS_AUTH_ERROR')) {
+        console.warn('Firebase authentication error - this usually means google-services.json is missing or misconfigured. Push notifications will be disabled.');
+        console.warn('To fix: Add your google-services.json file to the project root and ensure your Firebase project is properly configured.');
+        return null;
+      }
+      
       console.error('Error getting push token:', error);
       return null;
     }

@@ -1,17 +1,36 @@
 /**
  * Default route for (tabs) directory
- * Redirects to the appropriate experience based on user role (host or traveler)
+ * Shows initialization screen while determining role experience
  */
 
-// Expo routing
-import { Redirect } from "expo-router";
-
-// App context
+import React, { useEffect } from "react";
+import { router, Stack } from "expo-router";
 import { useUserRole } from "@core/context/";
+import { AppInitializationScreen } from "@shared/components/feedback/Loading";
 
 export default function TabsIndex() {
-  const { userRole } = useUserRole();
+  const { userRole, isRoleLoading } = useUserRole();
 
-  // Redirect to the appropriate experience based on user role
-  return <Redirect href={userRole === "host" ? "host" : "traveler"} />;
+  useEffect(() => {
+    if (!isRoleLoading && userRole) {
+      // Smooth transition to the appropriate experience
+      const timer = setTimeout(() => {
+        const targetRoute = userRole === "host" ? "host" : "traveler";
+        router.replace(targetRoute);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [userRole, isRoleLoading]);
+
+  // Show initialization screen while determining role
+  return (
+    <>
+      <Stack.Screen options={{ headerShown: false }} />
+      <AppInitializationScreen
+        subtitle="Loading your dashboard..."
+        showAnimation={true}
+      />
+    </>
+  );
 }

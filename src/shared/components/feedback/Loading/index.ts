@@ -8,4 +8,5 @@ export { TravelerTabBarSkeleton } from "./TravelerTabBarSkeleton";
 export { HostTabBarSkeleton } from "./HostTabBarSkeleton";
 export { FadeTransition } from "./FadeTransition";
 export { CoordinatedLoadingWrapper, useCoordinatedLoadingWrappers } from "./CoordinatedLoadingWrapper";
+export { AppInitializationScreen } from "./AppInitializationScreen";
 export type * from "./Loading.types";

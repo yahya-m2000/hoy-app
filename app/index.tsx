@@ -1,22 +1,37 @@
 /**
  * Root index file for Hoy application
- * Acts as an entry point that redirects to the appropriate tab experience
+ * Shows a seamless initialization screen while determining user role
  */
 
-// Third-party libraries
-import { Redirect } from "expo-router";
-
-// App context
+import React, { useEffect } from "react";
+import { router, Stack } from "expo-router";
 import { useUserRole } from "@core/context";
+import { AppInitializationScreen } from "@shared/components/feedback/Loading";
 
 export default function Index() {
-  const { userRole } = useUserRole();
-  // Redirect to the appropriate experience based on user role
+  const { userRole, isRoleLoading } = useUserRole();
+
+  useEffect(() => {
+    if (!isRoleLoading && userRole) {
+      // Add a small delay for smooth transition
+      const timer = setTimeout(() => {
+        const targetRoute =
+          userRole === "host" ? "/(tabs)/host/today" : "/(tabs)/traveler/home";
+        router.replace(targetRoute);
+      }, 2000); // 5 seconds to see the gradient animation
+
+      return () => clearTimeout(timer);
+    }
+  }, [userRole, isRoleLoading]);
+
+  // Show initialization screen while loading or navigating
   return (
-    <Redirect
-      href={
-        userRole === "host" ? "/(tabs)/host/today" : "/(tabs)/traveler/home"
-      }
-    />
+    <>
+      <Stack.Screen options={{ headerShown: false }} />
+      <AppInitializationScreen
+        subtitle="Preparing your experience..."
+        showAnimation={true}
+      />
+    </>
   );
 }

@@ -4,13 +4,13 @@
  * Uses Reanimated 3 for performant 60fps animations
  */
 
-import React from 'react';
-import { StyleSheet } from 'react-native';
-import Animated, { 
+import React from "react";
+import { StyleSheet } from "react-native";
+import Animated, {
   useAnimatedStyle,
   SharedValue,
-} from 'react-native-reanimated';
-import { Container } from '@shared/components/layout';
+} from "react-native-reanimated";
+import { Container } from "@shared/components/layout";
 
 interface FadeTransitionProps {
   /** Animated opacity value for skeleton (0-1) */
@@ -40,25 +40,30 @@ export const FadeTransition: React.FC<FadeTransitionProps> = ({
   content,
   shouldRenderContent,
   style,
-  testID,
 }) => {
   // Animated style for skeleton
-  const skeletonAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: skeletonOpacity.value,
-  }), [skeletonOpacity]);
+  const skeletonAnimatedStyle = useAnimatedStyle(
+    () => ({
+      opacity: skeletonOpacity.value,
+    }),
+    [skeletonOpacity]
+  );
 
   // Animated style for content
-  const contentAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: contentOpacity.value,
-  }), [contentOpacity]);
+  const contentAnimatedStyle = useAnimatedStyle(
+    () => ({
+      opacity: contentOpacity.value,
+    }),
+    [contentOpacity]
+  );
 
   return (
-    <Container style={[styles.container, style]} testID={testID}>
+    <Container style={[styles.container, style]}>
       {/* Skeleton Layer - Always render, control with opacity */}
-      <Animated.View style={skeletonAnimatedStyle}>
+      <Animated.View style={[skeletonAnimatedStyle, { flex: 1 }]}>
         {skeleton}
       </Animated.View>
-      
+
       {/* Content Layer - Only render when needed, positioned over skeleton */}
       {shouldRenderContent && (
         <Animated.View style={[styles.contentLayer, contentAnimatedStyle]}>
@@ -72,10 +77,10 @@ export const FadeTransition: React.FC<FadeTransitionProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative',
+    position: "relative",
   },
   contentLayer: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,

@@ -19,7 +19,7 @@ export interface BaseTextProps {
     | "button"
     | "buttonSmall";
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
-  weight?: "normal" | "medium" | "semibold" | "bold";
+  weight?: "light" | "normal" | "medium" | "semibold" | "bold" | "black";
   color?:
     | string
     | "primary"
@@ -43,7 +43,7 @@ export interface BaseTextProps {
 export interface HeadingProps {
   children: React.ReactNode;
   variant?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
-  weight?: "normal" | "medium" | "semibold" | "bold";
+  weight?: "light" | "normal" | "medium" | "semibold" | "bold" | "black";
   color?:
     | string
     | "primary"

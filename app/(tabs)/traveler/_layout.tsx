@@ -45,7 +45,31 @@ const TravelerLayout = () => {
 
   // Get coordinated loading tab bar opacity
   const coordinatedTabBarOpacity = getTabBarOpacity();
+  
+  // Debug tab bar coordination
+  React.useEffect(() => {
+    console.log("🏷️ Tab Bar Debug:", {
+      coordinatedTabBarOpacity: coordinatedTabBarOpacity?.value,
+      hasCoordination: !!coordinatedTabBarOpacity,
+    });
+  }, [coordinatedTabBarOpacity]);
 
+  // State to track if we're in loading mode (show skeletons by default on fresh load)
+  const [isInitialLoad, setIsInitialLoad] = React.useState(true);
+  
+  // Clear initial load state after coordination is established OR after timeout
+  React.useEffect(() => {
+    if (coordinatedTabBarOpacity) {
+      setIsInitialLoad(false);
+    } else {
+      // Fallback: after 2 seconds, assume no coordination is coming
+      const timeout = setTimeout(() => {
+        setIsInitialLoad(false);
+      }, 2000);
+      return () => clearTimeout(timeout);
+    }
+  }, [coordinatedTabBarOpacity]);
+  
   // Animated style for coordinated tab bar skeleton (inverse of tab bar opacity)
   const coordinatedTabBarSkeletonStyle = useAnimatedStyle(() => {
     if (coordinatedTabBarOpacity) {
@@ -54,9 +78,9 @@ const TravelerLayout = () => {
       };
     }
     return {
-      opacity: 0, // Default to hidden if no coordination is active
+      opacity: isInitialLoad ? 1 : 0, // Show skeleton on initial load, hide otherwise
     };
-  }, [coordinatedTabBarOpacity]);
+  }, [coordinatedTabBarOpacity, isInitialLoad]);
 
   // Animated style for real tab bar
   const coordinatedTabBarStyle = useAnimatedStyle(() => {
@@ -66,9 +90,9 @@ const TravelerLayout = () => {
       };
     }
     return {
-      opacity: 1, // Default to visible if no coordination is active
+      opacity: isInitialLoad ? 0 : 1, // Hide tabs on initial load, show otherwise
     };
-  }, [coordinatedTabBarOpacity]);
+  }, [coordinatedTabBarOpacity, isInitialLoad]);
 
   // Track unread notifications
   useEffect(() => {
@@ -241,7 +265,7 @@ const TravelerLayout = () => {
               height: tabBarHeight,
               paddingBottom: Platform.OS === "android" ? 0 : insets.bottom,
               position: "absolute",
-              // Hide tab bar during initial loading
+              // Only hide during role loading, not during home screen loading
               display: isRoleLoading ? "none" : "flex",
             },
             {
@@ -364,8 +388,9 @@ const TravelerLayout = () => {
       </Tabs>
 
       {/* Tab Bar Skeleton Overlay - coordinates with screen loading */}
-      {coordinatedTabBarOpacity && (
+      {(coordinatedTabBarOpacity || isInitialLoad) && (
         <ReanimatedAnimated.View
+          pointerEvents="none"
           style={[
             {
               position: "absolute",

@@ -38,7 +38,7 @@ export type BackgroundColorVariant =
   | "transparent"; // Transparent background
 
 export interface ContainerProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   style?: ViewStyle | ViewStyle[] | readonly ViewStyle[];
 
   // Background - can be semantic variant or raw color

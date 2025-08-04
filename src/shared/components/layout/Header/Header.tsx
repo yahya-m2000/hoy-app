@@ -3,6 +3,8 @@ import { View, TouchableOpacity, Animated, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { LinearGradient } from "expo-linear-gradient";
+import MaskedView from "@react-native-masked-view/masked-view";
 
 import { HeaderProps } from "./Header.types";
 import { useTheme } from "@core/hooks/useTheme";
@@ -10,6 +12,52 @@ import { Icon } from "../../base/Icon";
 import { Container } from "../Container";
 import { Text } from "../../base/Text";
 import { spacing, iconSize, radius } from "@core/design";
+
+// Component to render Hoybnb with gradient "bnb"
+const HoybnbTitle: React.FC<{ style?: any }> = ({ style }) => {
+  const { theme } = useTheme();
+
+  return (
+    <View style={{ flexDirection: "row", alignItems: "center" }}>
+      <Text variant="h6" weight="black" align="center" numberOfLines={1}>
+        Hoy
+      </Text>
+      <MaskedView
+        maskElement={
+          <Text
+            variant="h6"
+            weight="black"
+            style={{
+              backgroundColor: "transparent",
+            }}
+          >
+            bnb
+          </Text>
+        }
+      >
+        <LinearGradient
+          colors={[
+            theme.colors.primary,
+            theme.colors.secondary,
+            theme.colors.tertiary,
+          ]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+        >
+          <Text
+            variant="h6"
+            weight="black"
+            style={{
+              opacity: 0,
+            }}
+          >
+            bnb
+          </Text>
+        </LinearGradient>
+      </MaskedView>
+    </View>
+  );
+};
 
 /**
  * Header component with multiple variants and smooth transitions
@@ -213,17 +261,20 @@ const Header: React.FC<HeaderProps> = ({
               : styles.centerSection
           }
         >
-          {title && (
-            <Text
-              variant="h6"
-              weight="semibold"
-              align="center"
-              numberOfLines={1}
-              style={titleStyle}
-            >
-              {title}
-            </Text>
-          )}
+          {title &&
+            (title === "Hoybnb" ? (
+              <HoybnbTitle style={titleStyle} />
+            ) : (
+              <Text
+                variant="h6"
+                weight="semibold"
+                align="center"
+                numberOfLines={1}
+                style={titleStyle}
+              >
+                {title}
+              </Text>
+            ))}
         </Container>
 
         {/* Right Section */}
