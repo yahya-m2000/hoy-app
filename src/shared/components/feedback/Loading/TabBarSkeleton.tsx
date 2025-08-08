@@ -44,7 +44,7 @@ export const TabBarSkeleton: React.FC<TabBarSkeletonProps> = ({
         backgroundColor,
         borderTopWidth: 1,
         borderTopColor: borderColor,
-        paddingBottom: insets.bottom,
+        paddingBottom: Platform.OS === "android" ? 0 : insets.bottom,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around',

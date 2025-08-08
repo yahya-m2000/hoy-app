@@ -4,5 +4,6 @@ export * from './Card';
 export * from './Carousel';
 export * from './ListItem';
 export * from './PropertyImage';
+export { default as SharedPropertyImage } from './SharedPropertyImage';
 export * from './Status';
 // Avatar component has been moved to base folder
